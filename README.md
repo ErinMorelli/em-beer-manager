@@ -1,4 +1,4 @@
-beer-manager
-============
+Beer Manager v1.0
+===================
 
-Beer Manager WordPress plugin
+A beer management plugin for WordPress.
