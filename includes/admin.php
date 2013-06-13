@@ -4,6 +4,25 @@
  *
  */
  
+ 
+// Styling for the custom post type icon
+
+add_action( 'admin_head', 'em_beermanage_icons' );
+
+function em_beermanage_icons() { ?>
+
+	<style type="text/css" media="screen">
+		#menu-posts-beer .wp-menu-image {
+            background: url(<?php echo EM_BEERMANAGE_URL.'assets/img/beer-icon.png'; ?>) no-repeat 6px 6px !important;
+        }
+        #menu-posts-beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
+        	background-position:6px -18px !important;
+        }
+        #icon-edit.icon32-posts-beer {background: url(<?php echo EM_BEERMANAGE_URL.'assets/img/beer-32x32.png';?>) no-repeat;}
+    </style>
+<?php }
+
+ 
  // ==== CUSTOM BEER ADMIN COLUMNS  === //
 
 function change_columns( $cols ) {
