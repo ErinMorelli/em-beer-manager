@@ -23,6 +23,7 @@ function em_beermanage_load(){
         require_once(EM_BEERMANAGE_DIR.'includes/admin.php');
         
     require_once(EM_BEERMANAGE_DIR.'includes/core.php');
+    require_once(EM_BEERMANAGE_DIR.'includes/output.php');
 }
 em_beermanage_load();
 

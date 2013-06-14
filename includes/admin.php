@@ -5,11 +5,11 @@
  */
  
  
-// Styling for the custom post type icon
+// Styling for the custom post type
 
-add_action( 'admin_head', 'em_beermanage_icons' );
+add_action( 'admin_head', 'em_beermanage_style' );
 
-function em_beermanage_icons() { ?>
+function em_beermanage_style() { ?>
 
 	<style type="text/css" media="screen">
 		#menu-posts-beer .wp-menu-image {
@@ -19,6 +19,8 @@ function em_beermanage_icons() { ?>
         	background-position:6px -18px !important;
         }
         #icon-edit.icon32-posts-beer {background: url(<?php echo EM_BEERMANAGE_URL.'assets/img/beer-32x32.png';?>) no-repeat;}
+        .widefat .column-id {width: 35px;}
+        
     </style>
 <?php }
 
@@ -28,6 +30,7 @@ function em_beermanage_icons() { ?>
 function change_columns( $cols ) {
   $cols = array(
     'cb'       => '<input type="checkbox" />',
+    'id'	=> __( 'ID',      'trans' ),
     'title'      => __( 'Beer',      'trans' ),
     'taxonomy-style' => __( 'Style', 'trans' ),
     'abv'     => __( 'ABV', 'trans' ),
@@ -42,6 +45,9 @@ add_filter( 'manage_beer_posts_columns', 'change_columns' );
 
 function custom_columns( $column, $post_id ) {
   switch ( $column ) {
+    case "id":
+      echo $post_id;
+      break;
     case "abv":
       echo get_beer($post_id, 'abv');
       break;
@@ -70,7 +76,6 @@ add_action( 'manage_beer_posts_custom_column', 'custom_columns', 10, 2 );
 function sortable_columns() {
   return array(
     'title' => 'title',
-    'taxonomy-style'  => 'taxonomy-style',
     'abv'  => 'abv',
     'ibu' => 'ibu',
     'avail' => 'avail',
@@ -78,6 +83,61 @@ function sortable_columns() {
   );
 }
 add_filter( 'manage_edit-beer_sortable_columns', 'sortable_columns' );
+
+
+/* Only run our customization on the 'edit.php' page in the admin. */
+add_action( 'load-edit.php', 'my_edit_beer_load' );
+
+function my_edit_beer_load() {
+	add_filter( 'request', 'my_sort_beers' );
+}
+
+/* Sorts the beers. */
+function my_sort_beers( $vars ) {
+
+	/* Check if we're viewing the 'beer' post type. */
+	if ( isset( $vars['post_type'] ) && 'beer' == $vars['post_type'] ) {
+
+		/* Check if 'orderby' is set to 'abv'. */
+		if ( isset( $vars['orderby'] ) && 'abv' == $vars['orderby'] ) {
+
+			/* Merge the query vars with our custom variables. */
+			$vars = array_merge(
+				$vars,
+				array(
+					'meta_key' => 'abv',
+					'orderby' => 'meta_value_num'
+				)
+			);
+		}
+		/* Check if 'orderby' is set to 'ibu'. */
+		if ( isset( $vars['orderby'] ) && 'ibu' == $vars['orderby'] ) {
+
+			/* Merge the query vars with our custom variables. */
+			$vars = array_merge(
+				$vars,
+				array(
+					'meta_key' => 'ibu',
+					'orderby' => 'meta_value_num'
+				)
+			);
+		}
+		/* Check if 'orderby' is set to 'avail'. */
+		if ( isset( $vars['orderby'] ) && 'avail' == $vars['orderby'] ) {
+
+			/* Merge the query vars with our custom variables. */
+			$vars = array_merge(
+				$vars,
+				array(
+					'meta_key' => 'avail',
+					'orderby' => 'meta_value'
+				)
+			);
+		}
+	}
+
+	return $vars;
+}
 
 
 ?>
