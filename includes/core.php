@@ -5,6 +5,9 @@
  */
 
 
+add_theme_support( 'post-thumbnails', array('beer') );
+
+
 // ==== CUSTOM BEER POST TYPE === //
 
 function custom_post_beer() {
@@ -194,7 +197,7 @@ function get_beer($postid, $attr) {
 function get_beer_style($postid) {
 	$types = wp_get_object_terms($postid, 'style'); 
 	foreach($types as $type) { 
-		echo $type->name; 
+		return $type->name; 
 	}
 }
 
@@ -223,7 +226,7 @@ function create_style_tax() {
 	);
 
 	$args = array(
-		'hierarchical'      => false,
+		'hierarchical'      => true,
 		'labels'            => $labels,
 		'show_ui'           => true,
 		'show_admin_column' => true,

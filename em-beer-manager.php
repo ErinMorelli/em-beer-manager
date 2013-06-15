@@ -16,6 +16,7 @@ define('EM_BEERMANAGE_DIR', plugin_dir_path(__FILE__));
 define('EM_BEERMANAGE_URL', plugin_dir_url(__FILE__));
 
 
+
 // Initiate plugin files
 function em_beermanage_load(){
 		
@@ -26,6 +27,12 @@ function em_beermanage_load(){
     require_once(EM_BEERMANAGE_DIR.'includes/output.php');
 }
 em_beermanage_load();
+
+
+// Load plugin styles
+wp_register_style( 'beer-output', EM_BEERMANAGE_URL.'assets/css/output.css' );
+
+wp_enqueue_style( 'beer-output' );
 
 
 
