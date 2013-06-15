@@ -2,7 +2,9 @@
 /* Beer Output */
 
 .single-beer {
-	margin: 30px 0;
+	margin: 20px 0 40px;
+	font-size: 14px;
+	line-height: 22px;
 }
 .single-beer .beer-title {
 	display: block;
@@ -66,10 +68,12 @@
     display: block;
     padding: 10px 0px 3px;	
 }
-
 .beer-list p,
 .single-beer p,
 .beer-description p {
 	margin: 0 !important;
 	padding: 0 !important;
+}
+.beer-list .nav-below {
+	text-align: right;
 }

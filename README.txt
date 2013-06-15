@@ -30,7 +30,7 @@ Use one of two shortcodes to display beers in your posts or use one of two templ
 ## Single Beer Display ##
 
      `[beer id={beer id}]`
-     `<?php em_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>`
+     `<?php echo em_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>`
 
 This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes:
 
@@ -45,7 +45,7 @@ Will display or hide the "More Information" section
 
 
      `[beer-list]'
-     `<?php em_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>`
+     `<?php echo em_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>`
      
 This will display a formatted listing all beers in the database. Optional attributes:
 
@@ -61,7 +61,7 @@ Will display or hide the "More Information" section for each listing
 * __style={"style name"}__ (String e.g. "India Pale Ale")
 Will display only beers belonging to a specific beer style
 
-* __post_per_page={number}__ (Default = -1, shows all beers on one page)
+* __beers_per_page={number}__ (Default = -1, shows all beers on one page)
 Will display the given number of beers per page
 
 *****

@@ -19,10 +19,12 @@ add_shortcode('beer', 'single_beer');
 
 
 // Single beer template code
-function em_beer_single($postid, $profile, $extras) {
+function em_beer_single($postid, $profile = 'true', $extras = 'true') {
 	$args = array('id' => $postid, 'profile' => $profile, 'extras' => $extras);
 	return em_beer_single_output ($args);
 }
+
+// Single beer display
 function em_beer_single_output ($beer) {
 
 	$bid = $beer['id'];
@@ -46,7 +48,7 @@ function em_beer_single_output ($beer) {
 	$output .= '<div class="beer-description">'."\n";
 	$output .= $the_beer->post_content."\n";
 	
-	if ( (get_beer($bid,'untappd') != '') && ($showextras == 'true') ) {
+	if ( (get_beer($bid,'untappd') != '') ) {
 		$output .= '<div class="untappd"><a href="'.get_beer($bid,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
 	}
 	
@@ -115,36 +117,29 @@ add_shortcode('beer-list', 'all_beers');
 
 
 // Beer list template code
-function em_beer_list($exclude, $profile, $extras, $style, $pagenum) {
+function em_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $pagenum = -1) {
 	$args = array('exclude' => $exclude, 'profile' => $profile, 'extras' => $extras, 'style' => $style, 'page_num' => $pagenum);
 	return em_beer_list_output ($args);
 }
+
+// Beer list display
 function em_beer_list_output ($beers) {
 	
+	// Declared shortcode variables
 	$excludes = explode(',', $beers['exclude']);
-
 	$showprofile = $beers['profile'];
-	echo $showprofile;
 	$showextras = $beers['extras'];
-	echo $showextras;
 	$showstyle = $beers['style'];
-	echo $showstyle;
 	$showpages = $beers['page_num']; 
-	echo $showpages;
 	
+	$output = '';	
 	
-	echo '<div class="beer-list">'."\n";
-	
-	wp_reset_postdata();
-	
+	// Set up new loop data
 	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-	
 	global $post;
-	
-	$temp = $wp_query; 
-	$wp_query = null; 
 	$wp_query = new WP_Query(); 
 	
+	// The query
 	$args = array (
 		'post_type' => 'beer',
 		'showposts' => $showpages,
@@ -164,97 +159,107 @@ function em_beer_list_output ($beers) {
 	}
 
 	$wp_query->query($args);
+	
+	$output .= '<div class="beer-list">'."\n";
 		
-	while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
+	while ($wp_query->have_posts()) : $wp_query->the_post();
 	  
-	  <div id="beer-<?php echo $post->ID; ?>'" class="single-beer beer beer-<?php echo $post->ID; ?>">
+	  $output .= '<div id="beer-'.$post->ID.'" class="single-beer beer beer-'.$post->ID.'">'."\n";
 
-		<div class="beer-title">
-			<h2><?php the_title(); ?></h2>
-			<span class="beer-style">(<?php echo get_beer_style($post->ID); ?>)</span>
-		</div>
+		$output .= '<div class="beer-title">'."\n";
+		$output .= '<h2>'.get_the_title($post->ID).'</h2>'."\n";
+		$output .= '<span class="beer-style">('.get_beer_style($post->ID).')</span>'."\n";
+		$output .= '</div>'."\n";
 		
-		<?php if ( get_the_post_thumbnail($post->ID) != '' ) : ?>
-			<div class="beer-image">
-				<?php echo get_the_post_thumbnail($post->ID, 'full'); ?>
-			</div>
-		<?php endif; ?>
+		if ( get_the_post_thumbnail($post->ID) != '' ) {
+			$output .= '<div class="beer-image">'."\n";
+			$output .= get_the_post_thumbnail($post->ID, 'full')."\n";
+			$output .= '</div>'."\n";
+		}
 		
-		<div class="beer-description">
+		$output .= '<div class="beer-description">'."\n";
 		
-			<?php the_content(); ?>
+			$output .= get_the_content($post->ID);
 		
-			<?php if ( (get_beer($post->ID,'untappd') != '') && ($showextras == 'true') ) : ?>
-				<div class="untappd"><a href="<?php get_beer($post->ID,'untappd'); ?>" target="_blank" title="Check In on Untappd"></a></div>
-			<?php endif; ?>
+			if ( (get_beer($post->ID,'untappd') != '') ) {
+				$output .= '<div class="untappd"><a href="'.get_beer($post->ID,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
+			}
 		
-		</div>
+		$output .= '</div>'."\n";
 		
-		<?php if ( ($showprofile == 'true') || ($showextras == 'true') ) : ?>
+		if ( ($showprofile == 'true') || ($showextras == 'true') ) {
 			
-			<div class="beer-meta">
+			$output .= '<div class="beer-meta">'."\n";
 			
-			<?php if ($showprofile == 'true') : ?>
+			if ($showprofile == 'true') {
 				
-				<div class="beer-profile">
+				$output .= '<div class="beer-profile">'."\n";
 				
-				<?php if (get_beer($post->ID,'abv') != '') {
-					echo '<div class="abv"><span class="label">ABV:</span><span class="value">'.get_beer($post->ID,'abv').'</span></div>'."\n";
+				if (get_beer($post->ID,'abv') != '') {
+					$output .= '<div class="abv"><span class="label">ABV:</span><span class="value">'.get_beer($post->ID,'abv').'</span></div>'."\n";
 				} 
 				if (get_beer($post->ID,'ibu') != '') {
-					echo '<div class="ibu"><span class="label">IBU:</span><span class="value">'.get_beer($post->ID,'ibu').'</span></div>'."\n";
+					$output .= '<div class="ibu"><span class="label">IBU:</span><span class="value">'.get_beer($post->ID,'ibu').'</span></div>'."\n";
 				} 
 				if (get_beer($post->ID,'malts') != '') {
-					echo '<div class="malts"><span class="label">Malts:</span><span class="value">'.get_beer($post->ID,'malts').'</span></div>'."\n";
+					$output .= '<div class="malts"><span class="label">Malts:</span><span class="value">'.get_beer($post->ID,'malts').'</span></div>'."\n";
 				}
 				if (get_beer($post->ID,'hops') != '') {
-					echo '<div class="hops"><span class="label">Hops:</span><span class="value">'.get_beer($post->ID,'hops').'</span></div>'."\n";
+					$output .= '<div class="hops"><span class="label">Hops:</span><span class="value">'.get_beer($post->ID,'hops').'</span></div>'."\n";
 				}
 				if (get_beer($post->ID,'adds') != '') {
-					echo '<div class="other"><span class="label">Other:</span><span class="value">'.get_beer($post->ID,'adds').'</span></div>'."\n";
+					$output .= '<div class="other"><span class="label">Other:</span><span class="value">'.get_beer($post->ID,'adds').'</span></div>'."\n";
 				}
 				if (get_beer($post->ID,'yeast') != '') {
-					echo '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.get_beer($post->ID,'yeast').'</span></div>'."\n";
-				} ?>
+					$output .= '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.get_beer($post->ID,'yeast').'</span></div>'."\n";
+				}
 				
-				</div>
+				$output .= '</div>'."\n";
 				
-			<?php endif; ?>
+			}
 			
-			<?php if ($showextras == 'true') : ?>
+			if ($showextras == 'true') {
 				
-				<div class="beer-extras">
+				$output .= '<div class="beer-extras">';
 				
-				<?php if (get_beer($post->ID,'avail') != '') {
-					echo '<div class="avail"><span class="label">Availability:</span><span class="value">'.get_beer($post->ID,'avail').'</span></div>'."\n";
+				if (get_beer($post->ID,'avail') != '') {
+					$output .= '<div class="avail"><span class="label">Availability:</span><span class="value">'.get_beer($post->ID,'avail').'</span></div>'."\n";
 				} 
 				if (get_beer($post->ID,'notes') != '') {
-					echo '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.get_beer($post->ID,'notes').'</span></div>'."\n";
-				} ?>
+					$output .= '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.get_beer($post->ID,'notes').'</span></div>'."\n";
+				}
 				
-				</div>
+				$output .= '</div>'."\n";
 				
-			<?php endif; ?>
+			}
+						
+			$output .= '</div>'."\n";
 			
-			</div>	
-			
-		<?php endif; ?>
+		}
 		
-	  </div>
+	 $output .= '</div>'."\n";
 		
-	<?php endwhile; ?>
+	endwhile;
 		
-	<!-- Display navigation to next/previous pages when applicable -->
-	<div class="nav-below">
+	// Display navigation to next/previous pages when applicable
+	$output .= '<div class="nav-below">'."\n";
 	
-		<div class="nav-previous"><?php next_posts_link('<span class="meta-nav">&larr;</span> Older brews'); ?></div>
-		<div class="nav-next"><?php previous_posts_link('Newer brews <span class="meta-nav">&rarr;</span>'); ?></div>
-
-	</div><!-- #nav-below -->
+		$big = 999999999; // need an unlikely integer
+		$output .= paginate_links( array(
+		  	'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+		  	'format' => '?paged=%#%',
+		  	'current' => max( 1, get_query_var('paged') ),
+		  	'total' => $wp_query->max_num_pages
+		  	) );
 	
-	<?php $wp_query = null; 
-		  $wp_query = $temp;  // Reset
+	$output .= '</div>'."\n";
+	$output .= '</div>'."\n";
+	
+	wp_reset_query();
+	wp_reset_postdata(); //reset
 
+	return $output;
+	
 }
 
 

@@ -33,7 +33,7 @@ function custom_post_beer() {
 		'capability_type' 	=> 'post',
 		'hierarchical' 		=> false,
 		'taxonomies'		=> array('style'),
-		'has-archive' 		=> 'beers',
+		'has-archive' 		=> true,
 		'menu_position' 	=> 5,
 		'rewrite' 			=> array( 'slug' => 'beers', 'with_front' => false),
 		'supports'      	=> array( 'title', 'editor', 'thumbnail', 'revisions'),
@@ -74,13 +74,13 @@ function beer_specs_cb() {
     	<tr>
     	<td>
 		    <p><label for="malts"><strong>Malts: </strong></label><br />
-		    	<input type="text" name="malts" id="malts" size="30" value="<?php echo $b_malts; ?>" /></p>
+		    	<input type="text" name="malts" id="malts" style="width:100%;" value="<?php echo $b_malts; ?>" /></p>
 		    <p><label for="hops"><strong>Hops: </strong></label><br />
-		    	<input type="text" name="hops" id="hops" size="30" value="<?php echo $b_hops; ?>" /></p>
+		    	<input type="text" name="hops" id="hops" style="width:100%;" value="<?php echo $b_hops; ?>" /></p>
 		    <p><label for="adds"><strong>Additions/Spices:</strong></label><br />
-		    	<input type="text" name="adds" id="adds" size="30" value="<?php echo $b_adds; ?>" /></p>
+		    	<input type="text" name="adds" id="adds" style="width:100%;" value="<?php echo $b_adds; ?>" /></p>
 		    <p><label for="yeast"><strong>Yeast:</strong></label><br />
-		    	<input type="text" name="yeast" id="yeast" size="30" value="<?php echo $b_yeast; ?>" /></p>
+		    	<input type="text" name="yeast" id="yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" /></p>
     	<hr />
 		    <p><label for="abv"><strong>ABV:</strong></label>
 		       <input type="number" name="abv" id="abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %</p>
@@ -142,12 +142,12 @@ function beer_info_cb() {
     	<tr>
     	<td width="60%" valign="top">
 		   <p><label for="notes"><strong>Additional Notes/Food Pairings:</strong></label><br />
-		     <textarea name="notes" id="notes" rows="7" cols="70"><?php echo $b_notes; ?></textarea></p>
+		     <textarea name="notes" id="notes" rows="7" cols="70" style="width:95%;"><?php echo $b_notes; ?></textarea></p>
     	</td><td valign="top">
 		    <p><label for="avail"><strong>Availability: </strong></label><br />
-		    	<input type="text" name="avail" id="avail" size="40" value="<?php echo $b_avail; ?>" /></p>
+		    	<input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
 		    <p><label for="untappd"><strong>Untappd Check-In URL:</strong></label><br />
-		       <input type="url" name="untappd" id="untappd" size="40" value="<?php echo $b_untap; ?>" /></p>
+		       <input type="url" name="untappd" id="untappd" style="width:95%;" value="<?php echo $b_untap; ?>" /></p>
     	</td>
     	</tr>
     </tbody>
