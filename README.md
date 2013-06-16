@@ -1,16 +1,11 @@
-=== EM Beer Manager ===
-Contributors: ErinMorelli
-Donate link: http://erinmorelli.com/wordpress/
-Tags: beer, beers, brewery, untappd
-Requires at least: 3.0.1
-Tested up to: 3.5.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+# EM Beer Manager #
+
+*by Erin Morelli*
 
 Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
 
 
-== Description ==
+### Overview ####
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
@@ -19,15 +14,40 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
 * Simple beer checkin integration with Untappd
 
+#### Planned Features ####
+
+* Sidebar widget for displaying beers
+* Option to add simple age verification check to site
+* Expanded Untappd integration
+
+#### Screenshots ####
+
+1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-1.jpg)
+2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-2.jpg)
+3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-3.jpg)
+4. [Special styles organization](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-4.jpg)
+5. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-5.jpg)
+
+
 *****
 
 
-## USAGE ##
+### Installation ###
+
+1. Unzip the `em-beer-manager.zip` file to the `/wp-content/plugins/` directory
+1. Activate the plugin through the 'Plugins' menu in WordPress
+1. See below to learn more about usage.
+
+
+*****
+
+### Usage ###
+
 
 Use these shortcodes to display beers in your posts or use the template tags in your theme files.
 
 
-### Single Beer Display ###
+#### Single Beer Display ####
 
      [beer id={beer id}]
 
@@ -44,7 +64,7 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
     *Displays or hides the "More Information" section*
 
 
-### List All Beers ###
+#### List All Beers ####
 
 
      [beer-list]
@@ -75,31 +95,7 @@ This will display a formatted listing of all beers in the database. Optional att
 
 *****
 
+### Changelog ###
 
-## Planned Features ##
-
-* Sidebar widget for displaying beers
-* Option to add simple age verification check to site
-* Expanded Untappd integration
-
-
-== Installation ==
-
-1. Unzip the `em-beer-manager.zip` file to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. See "Usage" section on the Description page to learn more.
-
-
-== Screenshots ==
-
-1. The "Beer" management screen
-2. Beer profile infomation
-3. Extra Beer information
-4. Special styles organizaion
-5. Single beer front-end display (with all options enabled)
-
-
-== Changelog ==
-
-= 1.0 =
+#### 1.0 ####
 * Initial plugin release
