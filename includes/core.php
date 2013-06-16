@@ -133,6 +133,10 @@ function beer_info_cb() {
 	$b_avail = isset( $beer_entry['avail'] ) ? esc_attr( $beer_entry['avail'][0] ) : '';
 	$b_untap = isset( $beer_entry['untappd'] ) ? esc_attr( $beer_entry['untappd'][0] ) : '';
 	$b_notes = isset( $beer_entry['notes'] ) ? esc_attr( $beer_entry['notes'][0] ) : '';
+	
+	$ut_option = get_option('embm_options');
+	$use_untappd = $ut_option['embm_untappd_check'];
+	
     // We'll use this nonce field later on when saving.  
     wp_nonce_field( 'my_meta_box_nonce_two', 'meta_box_nonce_two' ); 
     ?> 
@@ -146,8 +150,11 @@ function beer_info_cb() {
     	</td><td valign="top">
 		    <p><label for="avail"><strong>Availability: </strong></label><br />
 		    	<input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
-		    <p><label for="untappd"><strong>Untappd Check-In URL:</strong></label><br />
-		       <input type="url" name="untappd" id="untappd" style="width:95%;" value="<?php echo $b_untap; ?>" /></p>
+		    	
+		    <?php if ( $use_untappd != "1" ) : ?>
+		    	<p><label for="untappd"><strong>Untappd Check-In URL:</strong></label><br />
+		    	<input type="url" name="untappd" id="untappd" style="width:95%;" value="<?php echo $b_untap; ?>" /></p>
+		    <?php endif; ?>
     	</td>
     	</tr>
     </tbody>
