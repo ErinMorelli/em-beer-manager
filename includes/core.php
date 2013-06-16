@@ -10,7 +10,7 @@ add_theme_support( 'post-thumbnails', array('beer') );
 
 // ==== CUSTOM BEER POST TYPE === //
 
-function custom_post_beer() {
+function embm_custom_post_beer() {
 	$labels = array(
 		'name'               => _x( 'Beers', 'post type general name' ),
 		'singular_name'      => _x( 'Beer', 'post type singular name' ),
@@ -19,7 +19,7 @@ function custom_post_beer() {
 		'edit_item'          => __( 'Edit Beer' ),
 		'new_item'           => __( 'New Beer' ),
 		'all_items'          => __( 'All Beers' ),
-		'view_item'          => __( 'View Beer' ),
+		'view_item'          => null,
 		'search_items'       => __( 'Search Beers' ),
 		'not_found'          => __( 'No beers found' ),
 		'not_found_in_trash' => __( 'No beers found in the Trash' ), 
@@ -41,21 +41,21 @@ function custom_post_beer() {
 	register_post_type( 'beer', $args );	
 }
 
-add_action( 'init', 'custom_post_beer' );
+add_action( 'init', 'embm_custom_post_beer' );
 
 
 
 
 // ==== REGISTER BEER PROFILE META BOX === //
 
-add_action( 'add_meta_boxes', 'beer_specs_add' );  
+add_action( 'add_meta_boxes', 'embm_beer_specs_add' );  
 
-function beer_specs_add() {  
-	add_meta_box( 'beer-specs', 'Beer Profile', 'beer_specs_cb', 'beer', 'side', 'core' );
-	add_meta_box( 'beer-info', 'More Information', 'beer_info_cb', 'beer', 'normal', 'core' );
+function embm_beer_specs_add() {  
+	add_meta_box( 'beer-specs', 'Beer Profile', 'embm_beer_specs_cb', 'beer', 'side', 'core' );
+	add_meta_box( 'beer-info', 'More Information', 'embm_beer_info_cb', 'beer', 'normal', 'core' );
 }
 
-function beer_specs_cb() {  
+function embm_beer_specs_cb() {  
     // $post is already set, and contains an object: the WordPress post  
     global $post;  
     $beer_entry = get_post_custom( $post->ID );
@@ -96,9 +96,9 @@ function beer_specs_cb() {
 
 // Save Beer meta box inputs
 
-add_action( 'save_post', 'beer_specs_save' ); 
+add_action( 'save_post', 'embm_beer_specs_save' ); 
  
-function beer_specs_save( $post_id )  {  
+function embm_beer_specs_save( $post_id )  {  
    // Bail if we're doing an auto save  
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
     // if our nonce isn't there, or we can't verify it, bail 
@@ -126,7 +126,7 @@ function beer_specs_save( $post_id )  {
 
 // ==== REGISTER MORE INFO META BOX === //
 
-function beer_info_cb() {  
+function embm_beer_info_cb() {  
     // $post is already set, and contains an object: the WordPress post  
     global $post;  
     $beer_entry = get_post_custom( $post->ID );
@@ -165,9 +165,9 @@ function beer_info_cb() {
 
 // Save Beer meta box inputs
 
-add_action( 'save_post', 'beer_info_save' ); 
+add_action( 'save_post', 'embm_beer_info_save' ); 
  
-function beer_info_save( $post_id )  {  
+function embm_beer_info_save( $post_id )  {  
    // Bail if we're doing an auto save  
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
     // if our nonce isn't there, or we can't verify it, bail 
@@ -194,14 +194,14 @@ function beer_info_save( $post_id )  {
 
 // ==== CUSTOM BEER FUNCTIONS === //
 
-function get_beer($postid, $attr) {
+function embm_get_beer($postid, $attr) {
 	$b_attr = get_post_meta($postid, $attr, true); 
 	if ($attr == 'abv') {
 		return $b_attr . '%';
 	}
 	else {return $b_attr;}
 }
-function get_beer_style($postid) {
+function embm_get_beer_style($postid) {
 	$types = wp_get_object_terms($postid, 'style'); 
 	foreach($types as $type) { 
 		return $type->name; 
@@ -213,9 +213,9 @@ function get_beer_style($postid) {
 
 // ==== CUSTOM STYLE TAXONOMY === //
 
-add_action( 'init', 'create_style_tax', 0 );
+add_action( 'init', 'embm_create_style_tax', 0 );
 
-function create_style_tax() {
+function embm_create_style_tax() {
 	$labels = array(
 		'name'              => _x( 'Styles', 'taxonomy general name' ),
 		'singular_name'     => _x( 'Style', 'taxonomy singular name' ),

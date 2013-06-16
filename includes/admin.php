@@ -7,18 +7,18 @@
  
 // Styling for the custom post type
 
-add_action( 'admin_head', 'em_beermanage_style' );
+add_action( 'admin_head', 'embm_settings_style' );
 
-function em_beermanage_style() { ?>
+function embm_settings_style() { ?>
 
 	<style type="text/css" media="screen">
 		#menu-posts-beer .wp-menu-image {
-            background: url(<?php echo EM_BEERMANAGE_URL.'assets/img/beer-icon.png'; ?>) no-repeat 6px 6px !important;
+            background: url(<?php echo EMBM_PLUGIN_URL.'assets/img/beer-icon.png'; ?>) no-repeat 6px 6px !important;
         }
         #menu-posts-beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
         	background-position:6px -18px !important;
         }
-        #icon-edit.icon32-posts-beer {background: url(<?php echo EM_BEERMANAGE_URL.'assets/img/beer-32x32.png';?>) no-repeat;}
+        #icon-edit.icon32-posts-beer {background: url(<?php echo EMBM_PLUGIN_URL.'assets/img/beer-32x32.png';?>) no-repeat;}
         .widefat .column-id {width: 35px;}
         
     </style>
@@ -27,7 +27,7 @@ function em_beermanage_style() { ?>
  
  // ==== CUSTOM BEER ADMIN COLUMNS  === //
 
-function change_columns( $cols ) {
+function embm_change_columns( $cols ) {
   $cols = array(
     'cb'       => '<input type="checkbox" />',
     'id'	=> __( 'ID',      'trans' ),
@@ -49,26 +49,26 @@ function change_columns( $cols ) {
   
   return $cols;
 }
-add_filter( 'manage_beer_posts_columns', 'change_columns' );
+add_filter( 'manage_beer_posts_columns', 'embm_change_columns' );
 
-function custom_columns( $column, $post_id ) {
+function embm_custom_columns( $column, $post_id ) {
   switch ( $column ) {
     case "id":
       echo $post_id;
       break;
     case "abv":
-      echo get_beer($post_id, 'abv');
+      echo embm_get_beer($post_id, 'abv');
       break;
     case "ibu":
-      echo get_beer($post_id, 'ibu');
+      echo embm_get_beer($post_id, 'ibu');
       break;
     case "avail":
-      echo get_beer($post_id, 'avail');
+      echo embm_get_beer($post_id, 'avail');
       break;
     case "untappd":
-      $untap = get_beer($post_id, 'untappd');
+      $untap = embm_get_beer($post_id, 'untappd');
       if ($untap != '') {
-      	$uticon = EM_BEERMANAGE_URL.'assets/img/ut-icon.png';
+      	$uticon = EMBM_PLUGIN_URL.'assets/img/ut-icon.png';
       	echo '<a href="'.$untap.'" target="_blank"><img src="'.$uticon.'" border="0" alt="Untappd" /></a>';
       } else {
       	echo '';
@@ -76,12 +76,12 @@ function custom_columns( $column, $post_id ) {
       break;
   }
 }
-add_action( 'manage_beer_posts_custom_column', 'custom_columns', 10, 2 );
+add_action( 'manage_beer_posts_custom_column', 'embm_custom_columns', 10, 2 );
 
 
 // Make these columns sortable
 
-function sortable_columns() {
+function embm_sortable_columns() {
   return array(
     'title' => 'title',
     'abv'  => 'abv',
@@ -90,18 +90,18 @@ function sortable_columns() {
     'date' => 'date'
   );
 }
-add_filter( 'manage_edit-beer_sortable_columns', 'sortable_columns' );
+add_filter( 'manage_edit-beer_sortable_columns', 'embm_sortable_columns' );
 
 
 /* Only run our customization on the 'edit.php' page in the admin. */
-add_action( 'load-edit.php', 'my_edit_beer_load' );
+add_action( 'load-edit.php', 'embm_edit_beer_load' );
 
-function my_edit_beer_load() {
-	add_filter( 'request', 'my_sort_beers' );
+function embm_edit_beer_load() {
+	add_filter( 'request', 'embm_sort_beers' );
 }
 
 /* Sorts the beers. */
-function my_sort_beers( $vars ) {
+function embm_sort_beers( $vars ) {
 
 	/* Check if we're viewing the 'beer' post type. */
 	if ( isset( $vars['post_type'] ) && 'beer' == $vars['post_type'] ) {
@@ -199,7 +199,7 @@ add_action('admin_head', 'options_embm_add_js');
 
 
 // Register new settings
-function register_mysettings() { // whitelist options
+function embm_register_settings() { // whitelist options
   register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
   
   add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
@@ -209,7 +209,7 @@ function register_mysettings() { // whitelist options
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
 }
 
-add_action( 'admin_init', 'register_mysettings' );
+add_action( 'admin_init', 'embm_register_settings' );
 
 function embm_options_validate($input) {
 	return $input;
@@ -260,50 +260,50 @@ function embm_settings() {
      <p>These will display a single beer entry given it's ID number.</p>
 
      <p><code> [beer id={beer id}] </code></p>
-     <p><code><?php echo htmlentities('<?php echo em_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
 
      <p style="margin-top:2em;">Optional attributes (for both shortcode and template code):</p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
 	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
 	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Will display or hide the "Beer Profile" box</em></td>
+	     <td><em>Displays or hides the "Beer Profile" information</em></td>
 	 </tr><tr>
 		 <td><code><strong>show_extras=</strong>{true/false}</code></td> 
 		 <td>(Default = <code>true</code>)</td>
-		 <td><em>Will display or hide the "More Information" section</em></td>
+		 <td><em>Displays or hides the "More Information" section</em></td>
      </tr>
 	</table>
 	
 	<h3 style="margin-top:2em;">List All Beers</h3>
 
-	  <p>These will display a formatted listing all beers in the database.</p>
+	  <p>These will display a formatted listing of all beers in the database.</p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo em_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;">Optional attributes (for both shortcode and template code):</p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
 	     <td><code><strong>exclude=</strong>{"beer ids"}</code></td>
 	     <td>(String separated by commas e.g. <code>"4,23,24"</code>)</td>
-	     <td><em>Will hide listed beers from listing</em></td>
+	     <td><em>Hides listed beers from output</em></td>
      </tr><tr>
 	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
 	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Will display or hide the "Beer Profile" box for each listing</em></td>
+	     <td><em>Displays or hides the "Beer Profile" information for each listing</em></td>
      </tr><tr>
 	     <td><code><strong>show_extras=</strong>{true/false}</code></td>
 	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Will display or hide the "More Information" section for each listing</em></td>
+	     <td><em>Displays or hides the "More Information" section for each listing</em></td>
      </tr><tr>
 	     <td><code><strong>style=</strong>{"style name"}</code></td>
 	     <td>(String e.g. <code>"India Pale Ale"</code>)</td>
-	     <td><em>Will display only beers belonging to a specific beer style</em></td>
+	     <td><em>Displays only beers belonging to a specific beer style</em></td>
      </tr><tr>
 	     <td><code><strong>beers_per_page=</strong>{number}</code></td>
 	     <td>(Default = <code>-1</code>, shows all beers on one page)</td>
-	     <td><em>Will display the given number of beers per page</em></td>
+	     <td><em>Paginates output and displays the given number of beers per page</em></td>
      </tr>
      </table>
      <br />

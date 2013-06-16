@@ -6,26 +6,26 @@
  
 
 // Single Beer shortcode
-function single_beer($atts) {
+function embm_single_beer($atts) {
    extract(shortcode_atts(array(
       'id' => 0,
       'show_profile' => 'true',
       'show_extras' => 'true',
    ), $atts));
    
-   return em_beer_single($id, $show_profile, $show_extras);
+   return embm_beer_single($id, $show_profile, $show_extras);
 }
-add_shortcode('beer', 'single_beer');
+add_shortcode('beer', 'embm_single_beer');
 
 
 // Single beer template code
-function em_beer_single($postid, $profile = 'true', $extras = 'true') {
+function embm_beer_single($postid, $profile = 'true', $extras = 'true') {
 	$args = array('id' => $postid, 'profile' => $profile, 'extras' => $extras);
-	return em_beer_single_output ($args);
+	return embm_beer_single_output ($args);
 }
 
 // Single beer display
-function em_beer_single_output ($beer) {
+function embm_beer_single_output ($beer) {
 
 	$bid = $beer['id'];
 	$showprofile = $beer['profile'];
@@ -37,7 +37,7 @@ function em_beer_single_output ($beer) {
 	$output .= '<div id="beer-'.$bid.'" class="single-beer beer beer-'.$bid.'">'."\n";
 
 	$output .= '<div class="beer-title"><h2>'.$the_beer->post_title.'</h2>';
-	$output .= '<span class="beer-style">('.get_beer_style($bid).')</span></div>'."\n";
+	$output .= '<span class="beer-style">('.embm_get_beer_style($bid).')</span></div>'."\n";
 	
 	if ( get_the_post_thumbnail($bid) != '' ) {
 		$output .= '<div class="beer-image">';
@@ -52,8 +52,8 @@ function em_beer_single_output ($beer) {
 	$use_untappd = $ut_option['embm_untappd_check'];
 	
 	if ($use_untappd != "1") {
-		if ( (get_beer($bid,'untappd') != '') ) {
-			$output .= '<div class="untappd"><a href="'.get_beer($bid,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
+		if ( (embm_get_beer($bid,'untappd') != '') ) {
+			$output .= '<div class="untappd"><a href="'.embm_get_beer($bid,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
 		}
 	}
 	
@@ -64,34 +64,34 @@ function em_beer_single_output ($beer) {
 		
 		if ($showprofile == 'true') {
 			$output .= '<div class="beer-profile">'."\n";
-			if (get_beer($bid,'abv') != '') {
-				$output .= '<div class="abv"><span class="label">ABV:</span><span class="value">'.get_beer($bid,'abv').'</span></div>'."\n";
+			if (embm_get_beer($bid,'abv') != '') {
+				$output .= '<div class="abv"><span class="label">ABV:</span><span class="value">'.embm_get_beer($bid,'abv').'</span></div>'."\n";
 			} 
-			if (get_beer($bid,'ibu') != '') {
-				$output .= '<div class="ibu"><span class="label">IBU:</span><span class="value">'.get_beer($bid,'ibu').'</span></div>'."\n";
+			if (embm_get_beer($bid,'ibu') != '') {
+				$output .= '<div class="ibu"><span class="label">IBU:</span><span class="value">'.embm_get_beer($bid,'ibu').'</span></div>'."\n";
 			} 
-			if (get_beer($bid,'malts') != '') {
-				$output .= '<div class="malts"><span class="label">Malts:</span><span class="value">'.get_beer($bid,'malts').'</span></div>'."\n";
+			if (embm_get_beer($bid,'malts') != '') {
+				$output .= '<div class="malts"><span class="label">Malts:</span><span class="value">'.embm_get_beer($bid,'malts').'</span></div>'."\n";
 			}
-			if (get_beer($bid,'hops') != '') {
-				$output .= '<div class="hops"><span class="label">Hops:</span><span class="value">'.get_beer($bid,'hops').'</span></div>'."\n";
+			if (embm_get_beer($bid,'hops') != '') {
+				$output .= '<div class="hops"><span class="label">Hops:</span><span class="value">'.embm_get_beer($bid,'hops').'</span></div>'."\n";
 			}
-			if (get_beer($bid,'adds') != '') {
-				$output .= '<div class="other"><span class="label">Other:</span><span class="value">'.get_beer($bid,'adds').'</span></div>'."\n";
+			if (embm_get_beer($bid,'adds') != '') {
+				$output .= '<div class="other"><span class="label">Other:</span><span class="value">'.embm_get_beer($bid,'adds').'</span></div>'."\n";
 			}
-			if (get_beer($bid,'yeast') != '') {
-				$output .= '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.get_beer($bid,'yeast').'</span></div>'."\n";
+			if (embm_get_beer($bid,'yeast') != '') {
+				$output .= '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.embm_get_beer($bid,'yeast').'</span></div>'."\n";
 			}
 			$output .= '</div>'."\n";
 		}
 		
 		if ($showextras == 'true') {
 			$output .= '<div class="beer-extras">'."\n";
-			if (get_beer($bid,'avail') != '') {
-				$output .= '<div class="avail"><span class="label">Availability:</span><span class="value">'.get_beer($bid,'avail').'</span></div>'."\n";
+			if (embm_get_beer($bid,'avail') != '') {
+				$output .= '<div class="avail"><span class="label">Availability:</span><span class="value">'.embm_get_beer($bid,'avail').'</span></div>'."\n";
 			} 
-			if (get_beer($bid,'notes') != '') {
-				$output .= '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.get_beer($bid,'notes').'</span></div>'."\n";
+			if (embm_get_beer($bid,'notes') != '') {
+				$output .= '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.embm_get_beer($bid,'notes').'</span></div>'."\n";
 			} 
 			$output .= '</div>'."\n";
 		}
@@ -109,7 +109,7 @@ function em_beer_single_output ($beer) {
 
 
 // Beer list shortcode
-function all_beers($atts) {
+function embm_all_beers($atts) {
    extract(shortcode_atts(array(
       'exclude' => '',
       'show_profile' => 'true',
@@ -118,19 +118,19 @@ function all_beers($atts) {
       'beers_per_page' => -1,
    ), $atts));
    
-   return em_beer_list($exclude, $show_profile, $show_extras, $style, $beers_per_page);
+   return embm_beer_list($exclude, $show_profile, $show_extras, $style, $beers_per_page);
 }
-add_shortcode('beer-list', 'all_beers');
+add_shortcode('beer-list', 'embm_all_beers');
 
 
 // Beer list template code
-function em_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $pagenum = -1) {
+function embm_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $pagenum = -1) {
 	$args = array('exclude' => $exclude, 'profile' => $profile, 'extras' => $extras, 'style' => $style, 'page_num' => $pagenum);
-	return em_beer_list_output ($args);
+	return embm_beer_list_output ($args);
 }
 
 // Beer list display
-function em_beer_list_output ($beers) {
+function embm_beer_list_output ($beers) {
 	
 	// Declared shortcode variables
 	$excludes = explode(',', $beers['exclude']);
@@ -175,7 +175,7 @@ function em_beer_list_output ($beers) {
 
 		$output .= '<div class="beer-title">'."\n";
 		$output .= '<h2>'.get_the_title($post->ID).'</h2>'."\n";
-		$output .= '<span class="beer-style">('.get_beer_style($post->ID).')</span>'."\n";
+		$output .= '<span class="beer-style">('.embm_get_beer_style($post->ID).')</span>'."\n";
 		$output .= '</div>'."\n";
 		
 		if ( get_the_post_thumbnail($post->ID) != '' ) {
@@ -192,8 +192,8 @@ function em_beer_list_output ($beers) {
 			$use_untappd = $ut_option['embm_untappd_check'];
 			
 			if ($use_untappd != "1") {
-				if ( (get_beer($post->ID,'untappd') != '') ) {
-					$output .= '<div class="untappd"><a href="'.get_beer($post->ID,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
+				if ( (embm_get_beer($post->ID,'untappd') != '') ) {
+					$output .= '<div class="untappd"><a href="'.embm_get_beer($post->ID,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
 				}
 			}
 		
@@ -207,23 +207,23 @@ function em_beer_list_output ($beers) {
 				
 				$output .= '<div class="beer-profile">'."\n";
 				
-				if (get_beer($post->ID,'abv') != '') {
-					$output .= '<div class="abv"><span class="label">ABV:</span><span class="value">'.get_beer($post->ID,'abv').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'abv') != '') {
+					$output .= '<div class="abv"><span class="label">ABV:</span><span class="value">'.embm_get_beer($post->ID,'abv').'</span></div>'."\n";
 				} 
-				if (get_beer($post->ID,'ibu') != '') {
-					$output .= '<div class="ibu"><span class="label">IBU:</span><span class="value">'.get_beer($post->ID,'ibu').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'ibu') != '') {
+					$output .= '<div class="ibu"><span class="label">IBU:</span><span class="value">'.embm_get_beer($post->ID,'ibu').'</span></div>'."\n";
 				} 
-				if (get_beer($post->ID,'malts') != '') {
-					$output .= '<div class="malts"><span class="label">Malts:</span><span class="value">'.get_beer($post->ID,'malts').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'malts') != '') {
+					$output .= '<div class="malts"><span class="label">Malts:</span><span class="value">'.embm_get_beer($post->ID,'malts').'</span></div>'."\n";
 				}
-				if (get_beer($post->ID,'hops') != '') {
-					$output .= '<div class="hops"><span class="label">Hops:</span><span class="value">'.get_beer($post->ID,'hops').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'hops') != '') {
+					$output .= '<div class="hops"><span class="label">Hops:</span><span class="value">'.embm_get_beer($post->ID,'hops').'</span></div>'."\n";
 				}
-				if (get_beer($post->ID,'adds') != '') {
-					$output .= '<div class="other"><span class="label">Other:</span><span class="value">'.get_beer($post->ID,'adds').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'adds') != '') {
+					$output .= '<div class="other"><span class="label">Other:</span><span class="value">'.embm_get_beer($post->ID,'adds').'</span></div>'."\n";
 				}
-				if (get_beer($post->ID,'yeast') != '') {
-					$output .= '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.get_beer($post->ID,'yeast').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'yeast') != '') {
+					$output .= '<div class="yeast"><span class="label">Yeast:</span><span class="value">'.embm_get_beer($post->ID,'yeast').'</span></div>'."\n";
 				}
 				
 				$output .= '</div>'."\n";
@@ -234,11 +234,11 @@ function em_beer_list_output ($beers) {
 				
 				$output .= '<div class="beer-extras">';
 				
-				if (get_beer($post->ID,'avail') != '') {
-					$output .= '<div class="avail"><span class="label">Availability:</span><span class="value">'.get_beer($post->ID,'avail').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'avail') != '') {
+					$output .= '<div class="avail"><span class="label">Availability:</span><span class="value">'.embm_get_beer($post->ID,'avail').'</span></div>'."\n";
 				} 
-				if (get_beer($post->ID,'notes') != '') {
-					$output .= '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.get_beer($post->ID,'notes').'</span></div>'."\n";
+				if (embm_get_beer($post->ID,'notes') != '') {
+					$output .= '<div class="notes"><span class="label">Additional Notes</span><span class="value">'.embm_get_beer($post->ID,'notes').'</span></div>'."\n";
 				}
 				
 				$output .= '</div>'."\n";
