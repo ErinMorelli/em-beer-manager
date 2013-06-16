@@ -185,8 +185,11 @@ function options_embm_add_js() { ?>
 #beer-settings .usage tr:nth-child(even) td {
 	background: #fafafa;
 }
-.emdm-form-settings .form-table {
+.emdm-form-settings > .form-table {
     margin-bottom: 20px;    
+}
+.emdm-form-settings > .form-table:first-of-type tr th {
+	display: none;
 }
 </style>
 <?php
@@ -214,7 +217,7 @@ function embm_options_validate($input) {
 
 function embm_untappd_box() {
 	$options = get_option('embm_options');
-	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> Disable option';
+	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> Disable integration';
 } 
 function embm_css_url() {
 	$options = get_option('embm_options');
@@ -230,7 +233,7 @@ function embm_settings() {
 ?>
 <div class="wrap" id="beer-settings">
 
-    <div id="icon-edit" class="icon32 icon32-posts-beer"><br /></div><h2>EM Beer Manager</h2>
+    <div id="icon-edit" class="icon32 icon32-posts-beer"><br /></div><h2>EM Beer Manager <span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
     
     <h2>Settings</h2>
     

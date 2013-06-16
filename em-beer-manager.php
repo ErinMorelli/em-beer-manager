@@ -16,6 +16,15 @@ define('EM_BEERMANAGE_DIR', plugin_dir_path(__FILE__));
 define('EM_BEERMANAGE_URL', plugin_dir_url(__FILE__));
 
 
+// Set plugin version
+if (!defined('EMBM_VERSION_KEY'))
+    define('EMBM_VERSION_KEY', 'embm_version');
+
+if (!defined('EMBM_VERSION_NUM'))
+    define('EMBM_VERSION_NUM', '1.0');
+
+add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);
+
 
 // Initiate plugin files
 function em_beermanage_load(){
@@ -51,8 +60,7 @@ if ($has_custom_css != '') {
 // Activation setup
 register_activation_hook(__FILE__, 'em_beermanage_activation');
 
-function em_beermanage_activation() {
-    
+function em_beermanage_activation() {  
 	//actions to perform once on plugin activation go here   
 }
 
@@ -61,7 +69,48 @@ function em_beermanage_activation() {
 register_uninstall_hook(__FILE__, 'em_beermanage_uninstall');
 
 function em_beermanage_uninstall() {    
-	// actions to perform once on plugin deactivation go here
+	// actions to perform once on plugin deleletion go here
+	if (!isset($_GET["act"])) {
+?>
+    <p>Would you like to keep the Beer post data in the database?</p>
+    <form action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
+        <select name="act">
+            <option value="keep">Keep</option>
+            <option value="delete">Delete</option>
+        </select>
+        <input type="submit" value="Continue" />
+    </form>
+    
+<?php
+    } else {
+        // if the "act" variable has been set, see if the user wants to delete the options..
+        if ($_GET["act"] == "delete") {
+            delete_option( 'my_options' );
+            
+            global $wp_post_types;
+		    if ( isset( $wp_post_types[ 'beer' ] ) ) {
+		        unset( $wp_post_types[ 'beer' ] );
+		    }
+            $args = array(
+				'post_type' =>'beer'
+			);
+			$posts = get_posts( $args );
+			if (is_array($posts)) {
+			   foreach ($posts as $post) {
+			// what you want to do;
+			       wp_delete_post( $post->ID, true);
+			   }
+			}
+			
+            echo "Beer data deleted; uninstall successful.";
+            return;
+            
+        } else {
+            // .. or keep them
+            echo "Beer data saved; uninstall successful.";
+            return;
+        }
+    }
 	
 	//remove plugin css
 	wp_deregister_style( 'beer-output', EM_BEERMANAGE_URL.'assets/css/output.css' );
@@ -70,8 +119,8 @@ function em_beermanage_uninstall() {
 	wp_dequeue_style( 'custome-beer-output' );
 	
 	//remove custom settings
-	unregister_setting( 'embm-group', 'disable_untappd' );  
-	unregister_setting( 'embm-group', 'custom_style_url' );
+	delete_option('embm_version');
+	delete_option('embm_options');
 	  
 }
 

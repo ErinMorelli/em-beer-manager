@@ -77,3 +77,7 @@
 .beer-list .nav-below {
 	text-align: right;
 }
+
+.embm-clear {
+	clear: both;
+}

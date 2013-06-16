@@ -1,7 +1,7 @@
 === EM Beer Manager ===
 Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/
-Tags: beer, brewery, untappd
+Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.1
 License: GPLv2 or later
@@ -102,4 +102,4 @@ This will display a formatted listing all beers in the database. Optional attrib
 == Changelog ==
 
 = 1.0 =
-* Initial plugin alpha release
+* Initial plugin release

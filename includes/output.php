@@ -97,6 +97,8 @@ function em_beer_single_output ($beer) {
 		}
 		
 		$output .= '</div>'."\n";	
+	} else {
+		$output .= '<div class="embm-clear"></div>'."\n";
 	}
 	
 	$output .= '</div>'."\n";
@@ -190,8 +192,8 @@ function em_beer_list_output ($beers) {
 			$use_untappd = $ut_option['embm_untappd_check'];
 			
 			if ($use_untappd != "1") {
-				if ( (get_beer($bid,'untappd') != '') ) {
-					$output .= '<div class="untappd"><a href="'.get_beer($bid,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
+				if ( (get_beer($post->ID,'untappd') != '') ) {
+					$output .= '<div class="untappd"><a href="'.get_beer($post->ID,'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
 				}
 			}
 		
@@ -245,6 +247,8 @@ function em_beer_list_output ($beers) {
 						
 			$output .= '</div>'."\n";
 			
+		} else {
+			$output .= '<div class="embm-clear"></div>'."\n";
 		}
 		
 	 $output .= '</div>'."\n";
