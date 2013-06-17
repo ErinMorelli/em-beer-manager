@@ -4,10 +4,11 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.1
+Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
+Manage your beers with WordPress. Integrates simply with Untappd beer checkins. Great for everyone from home brewers to professional breweries!
 
 
 == Description ==
@@ -15,7 +16,7 @@ Catalog and display your beers with WordPress. Integrates very simply with Untap
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
 * A custom beer "style" taxonomy for categorizing your beers
-* Shortcodes and template tags for displaying all or a select number of beerss
+* Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
 * Simple beer checkin integration with Untappd
 
@@ -93,9 +94,9 @@ This will display a formatted listing of all beers in the database. Optional att
 == Screenshots ==
 
 1. The "Beer" management screen
-2. Beer profile infomation
+2. Beer profile information
 3. Extra Beer information
-4. Special styles organizaion
+4. Special styles organization
 5. Single beer front-end display (with all options enabled)
 
 

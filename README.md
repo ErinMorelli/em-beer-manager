@@ -2,7 +2,7 @@
 
 *by Erin Morelli*
 
-Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
+Manage your beers with WordPress. Integrates simply with Untappd beer checkins. Great for everyone from home brewers to professional breweries!
 
 
 ### Overview ####
