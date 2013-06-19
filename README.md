@@ -53,7 +53,7 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
      <?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>
 
-This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes:
+This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
 
 * __show_profile={`true/false`}__ (Default = `true`)
      
@@ -71,7 +71,7 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
 
      <?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>
      
-This will display a formatted listing of all beers in the database. Optional attributes:
+This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
 
 * __exclude={`"beer ids"`}__ (String separated by commas e.g. `"4,23,24"`)
 
