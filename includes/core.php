@@ -29,19 +29,19 @@ add_theme_support( 'post-thumbnails', array('beer') );
 
 function embm_custom_post_beer() {
 	$labels = array(
-		'name'               => _x( 'Beers', 'post type general name' ),
-		'singular_name'      => _x( 'Beer', 'post type singular name' ),
-		'add_new'            => __( 'Add New' ),
-		'add_new_item'       => __( 'Add New Beer' ),
-		'edit_item'          => __( 'Edit Beer' ),
-		'new_item'           => __( 'New Beer' ),
-		'all_items'          => __( 'All Beers' ),
+		'name'               => __( 'Beers', 'embm' ),
+		'singular_name'      => __( 'Beer', 'embm' ),
+		'add_new'            => __( 'Add New', 'embm' ),
+		'add_new_item'       => __( 'Add New Beer', 'embm' ),
+		'edit_item'          => __( 'Edit Beer', 'embm' ),
+		'new_item'           => __( 'New Beer', 'embm' ),
+		'all_items'          => __( 'All Beers', 'embm' ),
 		'view_item'          => null,
-		'search_items'       => __( 'Search Beers' ),
-		'not_found'          => __( 'No beers found' ),
-		'not_found_in_trash' => __( 'No beers found in the Trash' ), 
+		'search_items'       => __( 'Search Beers', 'embm' ),
+		'not_found'          => __( 'No beers found', 'embm' ),
+		'not_found_in_trash' => __( 'No beers found in the Trash', 'embm' ), 
 		'parent_ithwh_colon'  => '',
-		'menu_name'          => 'Beers'
+		'menu_name'          => __( 'Beers', 'embm' )
 	);
 	$args = array(
 		'labels'        	=> $labels,
@@ -90,18 +90,18 @@ function embm_beer_specs_cb() {
     <tbody>
     	<tr>
     	<td>
-		    <p><label for="malts"><strong>Malts: </strong></label><br />
+		    <p><label for="malts"><strong><?php _e('Malts: ', 'embm'); ?></strong></label><br />
 		    	<input type="text" name="malts" id="malts" style="width:100%;" value="<?php echo $b_malts; ?>" /></p>
-		    <p><label for="hops"><strong>Hops: </strong></label><br />
+		    <p><label for="hops"><strong><?php _e('Hops: ', 'embm'); ?></strong></label><br />
 		    	<input type="text" name="hops" id="hops" style="width:100%;" value="<?php echo $b_hops; ?>" /></p>
-		    <p><label for="adds"><strong>Additions/Spices:</strong></label><br />
+		    <p><label for="adds"><strong><?php _e('Additions/Spices: ', 'embm'); ?></strong></label><br />
 		    	<input type="text" name="adds" id="adds" style="width:100%;" value="<?php echo $b_adds; ?>" /></p>
-		    <p><label for="yeast"><strong>Yeast:</strong></label><br />
+		    <p><label for="yeast"><strong><?php _e('Yeast: ', 'embm'); ?></strong></label><br />
 		    	<input type="text" name="yeast" id="yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" /></p>
     	<hr />
-		    <p><label for="abv"><strong>ABV:</strong></label>
+		    <p><label for="abv"><strong><?php _e('ABV: ', 'embm'); ?></strong></label>
 		       <input type="number" name="abv" id="abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %</p>
-		    <p><label for="ibu"><strong>IBU:</strong></label>
+		    <p><label for="ibu"><strong><?php _e('IBU: ', 'embm'); ?></strong></label>
 		       <input type="number" name="ibu" id="style" min="0" max="100" step="1" value="<?php echo $b_ibu; ?>" /></p>
     	</td>
     	</tr>
@@ -162,14 +162,14 @@ function embm_beer_info_cb() {
     <tbody>
     	<tr>
     	<td width="60%" valign="top">
-		   <p><label for="notes"><strong>Additional Notes/Food Pairings:</strong></label><br />
+		   <p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings:', 'embm'); ?></strong></label><br />
 		     <textarea name="notes" id="notes" rows="7" cols="70" style="width:95%;"><?php echo $b_notes; ?></textarea></p>
     	</td><td valign="top">
-		    <p><label for="avail"><strong>Availability: </strong></label><br />
+		    <p><label for="avail"><strong><?php _e('Availability: ','embm'); ?></strong></label><br />
 		    	<input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
 		    	
 		    <?php if ( $use_untappd != "1" ) : ?>
-		    	<p><label for="untappd"><strong>Untappd Check-In URL:</strong></label><br />
+		    	<p><label for="untappd"><strong><?php _e('Untappd Check-In URL:', 'embm'); ?></strong></label><br />
 		    	<input type="url" name="untappd" id="untappd" style="width:95%;" value="<?php echo $b_untap; ?>" /></p>
 		    <?php endif; ?>
     	</td>
@@ -234,19 +234,19 @@ add_action( 'init', 'embm_create_style_tax', 0 );
 
 function embm_create_style_tax() {
 	$labels = array(
-		'name'              => _x( 'Styles', 'taxonomy general name' ),
-		'singular_name'     => _x( 'Style', 'taxonomy singular name' ),
-		'search_items'      => __( 'Search Styles' ),
-		'all_items'         => __( 'All Styles' ),
-		'edit_item'         => __( 'Edit Style' ),
-		'update_item'       => __( 'Update Style' ),
-		'add_new_item'      => __( 'Add New Style' ),
-		'new_item_name'     => __( 'New Style Name' ),
-		'popular_items' 	=> __( 'Popular Styles' ),
-		'choose_from_most_used' => __( 'Choose from the most used styles' ),
-		'separate_items_with_commas' => __( 'Separate styles with commas' ),
-		'add_or_remove_items' => __( 'Add or remove styles' ),
-		'menu_name'         => __( 'Styles' ),
+		'name'              => __( 'Styles', 'embm' ),
+		'singular_name'     => __( 'Style', 'embm' ),
+		'search_items'      => __( 'Search Styles', 'embm' ),
+		'all_items'         => __( 'All Styles', 'embm' ),
+		'edit_item'         => __( 'Edit Style', 'embm' ),
+		'update_item'       => __( 'Update Style', 'embm' ),
+		'add_new_item'      => __( 'Add New Style', 'embm' ),
+		'new_item_name'     => __( 'New Style Name', 'embm' ),
+		'popular_items' 	=> __( 'Popular Styles', 'embm' ),
+		'choose_from_most_used' => __( 'Choose from the most used styles', 'embm' ),
+		'separate_items_with_commas' => __( 'Separate styles with commas', 'embm' ),
+		'add_or_remove_items' => __( 'Add or remove styles', 'embm' ),
+		'menu_name'         => __( 'Styles', 'embm' ),
 	);
 
 	$args = array(

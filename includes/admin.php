@@ -47,22 +47,22 @@ function embm_settings_style() { ?>
 function embm_change_columns( $cols ) {
   $cols = array(
     'cb'       => '<input type="checkbox" />',
-    'id'	=> __( 'ID',      'trans' ),
-    'title'      => __( 'Beer',      'trans' ),
-    'taxonomy-style' => __( 'Style', 'trans' ),
-    'abv'     => __( 'ABV', 'trans' ),
-    'ibu'	=> __( 'IBU', 'trans' ),
-    'avail'     => __( 'Availability', 'trans' )
+    'id'	=> __( 'ID', 'embm' ),
+    'title'      => __( 'Beer', 'embm' ),
+    'taxonomy-style' => __( 'Style', 'embm' ),
+    'abv'     => __( 'ABV', 'embm' ),
+    'ibu'	=> __( 'IBU', 'embm' ),
+    'avail'     => __( 'Availability', 'embm' )
   );
   
   $ut_option = get_option('embm_options');
   $use_untappd = $ut_option['embm_untappd_check']; 
   
   if ($use_untappd != "1") {
-	  $cols['untappd'] = __( 'Untappd', 'trans' );
+	  $cols['untappd'] = __( 'Untappd', 'embm' );
   }
   
-  $cols['date'] = __( 'Released', 'trans' );
+  $cols['date'] = __( 'Released', 'embm' );
   
   return $cols;
 }
@@ -169,8 +169,8 @@ function embm_sort_beers( $vars ) {
 add_action('admin_menu', 'embm_admin_menu');
 
 function embm_admin_menu() {
-    $page_title = 'EM Beer Manager Settings';
-    $menu_title = 'EM Beer Manager';
+    $page_title = __('EM Beer Manager Settings', 'embm');
+    $menu_title = __('EM Beer Manager', 'embm');
     $capability = 'manage_options';
     $menu_slug = 'embm-settings';
     $function = 'embm_settings';
@@ -234,7 +234,8 @@ function embm_options_validate($input) {
 
 function embm_untappd_box() {
 	$options = get_option('embm_options');
-	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> Disable integration';
+	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> ';
+	_e("Disable integration", "embm");
 } 
 function embm_css_url() {
 	$options = get_option('embm_options');
@@ -250,9 +251,9 @@ function embm_settings() {
 ?>
 <div class="wrap" id="beer-settings">
 
-    <div id="icon-edit" class="icon32 icon32-posts-beer"><br /></div><h2>EM Beer Manager <span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
+    <div id="icon-edit" class="icon32 icon32-posts-beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
     
-    <h2>Settings</h2>
+    <h2><?php _e("Settings", "embm"); ?></h2>
     
     <form method="post" action="options.php" class="emdm-form-settings"> 
     
@@ -267,67 +268,67 @@ function embm_settings() {
     
     <hr />
     
-    <h2>Usage</h2>
+    <h2><?php _e("Usage", "embm"); ?></h2>
 
-    <p>Use these shortcodes to display beers in your posts or use the template tags in your theme files</p>
+    <p><?php _e("Use these shortcodes to display beers in your posts or use the template tags in your theme files", "embm"); ?></p>
 
 
-    <h3>Single Beer Display</h3>
+    <h3><?php _e("Single Beer Display", "embm"); ?></h3>
     
-     <p>These will display a single beer entry given it's ID number.</p>
+     <p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
      <p><code> [beer id={beer id}] </code></p>
      <p><code><?php echo htmlentities('<?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
 
-     <p style="margin-top:2em;">Optional attributes (for both shortcode and template code):</p>
+     <p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
 	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
-	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Displays or hides the "Beer Profile" information</em></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
+	     <td><em><?php _e('Displays or hides the "Beer Profile" information', 'embm'); ?></em></td>
 	 </tr><tr>
 		 <td><code><strong>show_extras=</strong>{true/false}</code></td> 
-		 <td>(Default = <code>true</code>)</td>
-		 <td><em>Displays or hides the "More Information" section</em></td>
+		 <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
+		 <td><em><?php _e('Displays or hides the "More Information" section', 'embm'); ?></em></td>
      </tr>
 	</table>
 	
-	<h3 style="margin-top:2em;">List All Beers</h3>
+	<h3 style="margin-top:2em;"><?php _e('List All Beers', 'embm'); ?></h3>
 
-	  <p>These will display a formatted listing of all beers in the database.</p>
+	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
      <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>'); ?></code></p>
     
-     <p style="margin-top:2em;">Optional attributes (for both shortcode and template code):</p>
+     <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
 	     <td><code><strong>exclude=</strong>{"beer ids"}</code></td>
-	     <td>(String separated by commas e.g. <code>"4,23,24"</code>)</td>
-	     <td><em>Hides listed beers from output</em></td>
+	     <td>(<?php _e('String separated by commas', 'embm'); ?> e.g. <code>"4,23,24"</code>)</td>
+	     <td><em><?php _e('Hides listed beers from output', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
-	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Displays or hides the "Beer Profile" information for each listing</em></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
+	     <td><em><?php _e('Displays or hides the "Beer Profile" information for each listing', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>show_extras=</strong>{true/false}</code></td>
-	     <td>(Default = <code>true</code>)</td>
-	     <td><em>Displays or hides the "More Information" section for each listing</em></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
+	     <td><em><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>style=</strong>{"style name"}</code></td>
 	     <td>(String e.g. <code>"India Pale Ale"</code>)</td>
-	     <td><em>Displays only beers belonging to a specific beer style</em></td>
+	     <td><em><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>beers_per_page=</strong>{number}</code></td>
-	     <td>(Default = <code>-1</code>, shows all beers on one page)</td>
-	     <td><em>Paginates output and displays the given number of beers per page</em></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?></td>
+	     <td><em><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></em></td>
      </tr>
      </table>
      <br />
      
      <hr />
      
-     <p>If you like this plugin, please consider donating to help support future development. Thank you!</p>
+     <p><?php _e('If you like this plugin, please consider donating to help support future development. Thank you!', 'embm'); ?></p>
      
      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
