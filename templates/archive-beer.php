@@ -23,17 +23,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 get_header(); ?>
 
-	<div id="primary" class="embm-content-archive site-content">
-		<div id="content" role="main">
+	<div id="content" class="embm-content-archive site-content" role="main">
 
-			<?php while ( have_posts() ) : the_post(); ?>
+		<?php while ( have_posts() ) : the_post(); ?>
 
-				<?php echo embm_display_beer($post->ID, 'false', 'false'); ?>
+			<?php echo embm_display_beer($post->ID, 'false', 'false'); ?>
 
-			<?php endwhile; // end of the loop. ?>
+		<?php endwhile; // end of the loop. ?>
 
-		</div><!-- #content -->
-	</div><!-- #primary -->
+	</div><!-- #content -->
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

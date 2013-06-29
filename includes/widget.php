@@ -128,7 +128,7 @@ add_action( 'widgets_init', create_function('', 'return register_widget("EMBM_Be
 // Generate HTML display of beer list widget content
 function embm_display_list_widget($beers) {
 	
-	// Declared shortcode variables
+	// Widget variables
 	$title = $beers['title'];
 	$exclude = explode(',', $beers['exclude']);
 	$summary = $beers['summary'];

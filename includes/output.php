@@ -180,10 +180,14 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 	} else {
 		$output .= '<h1>'.get_the_title($beer_id).'</h1>'."\n";
 	}
-	$output .= '<span class="beer-style">(';
-	$output .= '<a href="'.get_term_link(embm_get_beer_style($beer_id), 'style').'" title="View All '.embm_get_beer_style($beer_id).'s">';
-	$output .= embm_get_beer_style($beer_id);
-	$output .= '</a>)</span>'."\n";
+	
+	if (embm_get_beer_style($beer_id)) {
+		$output .= '<span class="beer-style">(';
+		$output .= '<a href="'.get_term_link(embm_get_beer_style($beer_id), 'style').'" title="View All '.embm_get_beer_style($beer_id).'s">';
+		$output .= embm_get_beer_style($beer_id);
+		$output .= '</a>)</span>'."\n";
+	}
+	
 	$output .= '</div>'."\n";
 	
 	if (!is_archive()) {

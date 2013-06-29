@@ -135,6 +135,7 @@ function embm_plugin_uninstall() {
 	//remove custom settings
 	delete_option('embm_version');
 	delete_option('embm_options');
+	delete_option('widget_beer_list_widget');
 	  
 }
 

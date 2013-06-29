@@ -120,6 +120,12 @@ The `show_profile` setting refers to all the content in the "Beer Profile" infor
 The Untappd checkin integration is handled separately from the `show_extras` setting. To hide the button for a single beer, make sure the "Untappd Check-in URL" box is empty - a square Untappd check-in icon will appear on the "Beers" admin page next to the beers where the button is active. You can also completely disable the Untappd options through the "EM Beer Manager" settings page. 
 
 
+= My beer and style pages are not displaying or are showing a 404 error =
+
+Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If this does not work, it may be due to your site's theme overriding the EM Beer Manager templates. You can edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
+
+
+
 == Screenshots ==
 
 1. The "Beer" management screen
