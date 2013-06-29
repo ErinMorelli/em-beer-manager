@@ -205,9 +205,6 @@ function options_embm_add_js() { ?>
 .emdm-form-settings > .form-table {
     margin-bottom: 20px;    
 }
-.emdm-form-settings > .form-table:first-of-type tr th {
-	display: none;
-}
 </style>
 <?php
 }
@@ -218,12 +215,16 @@ add_action('admin_head', 'options_embm_add_js');
 // Register new settings
 function embm_register_settings() { // whitelist options
   register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
-  
+  // Untappd settings
   add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
-  add_settings_field('embm_untappd_check', 'Check-in button:', 'embm_untappd_box', 'embm', 'embm_untappd');
-  
+  add_settings_field('embm_untappd_check', 'Disable integration:', 'embm_untappd_box', 'embm', 'embm_untappd');
+  // Custom css settings
   add_settings_section('embm_custom_url', 'Custom Styleseet', 'embm_section_text', 'embm');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
+  //Age verification settings
+  //add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
+  //add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
+  //add_settings_field('embm_age_limit', 'Set age restriction:', 'embm_age_limit_box', 'embm', 'embm_age_verify');
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -235,12 +236,20 @@ function embm_options_validate($input) {
 function embm_untappd_box() {
 	$options = get_option('embm_options');
 	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> ';
-	_e("Disable integration", "embm");
 } 
 function embm_css_url() {
 	$options = get_option('embm_options');
 	echo "<input id='embm_css_url' name='embm_options[embm_css_url]' style='width: 50%;' type='url' value='{$options['embm_css_url']}' />";
 } 
+function embm_age_enable_box() {
+	$options = get_option('embm_options');
+	echo '<input name="embm_options[embm_age_enable]" type="checkbox" id="embm_age_enable" value="1"'.checked('1', $options['embm_age_enable'], false).' /> ';
+}
+function embm_age_limit_box() {
+	$options = get_option('embm_options');
+	echo "<input id='embm_age_limit' name='embm_options[embm_age_limit]' min='10' max='50' step='1' size='2' type='number' value='{$options['embm_age_limit']}' /> ";
+	_e('Years', 'embm');
+}
 
 
 function embm_settings() {

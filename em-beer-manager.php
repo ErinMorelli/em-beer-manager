@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/wordpress/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.0
+ * Version: 1.2
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -16,16 +16,6 @@ define('EMBM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EMBM_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 
-// Set plugin version
-if (!defined('EMBM_VERSION_KEY'))
-    define('EMBM_VERSION_KEY', 'embm_version');
-
-if (!defined('EMBM_VERSION_NUM'))
-    define('EMBM_VERSION_NUM', '1.0');
-
-add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);
-
-
 // Initiate plugin files
 function embm_plugin_load(){
 		
@@ -34,6 +24,7 @@ function embm_plugin_load(){
         
     require_once(EMBM_PLUGIN_DIR.'includes/core.php');
     require_once(EMBM_PLUGIN_DIR.'includes/output.php');
+    //require_once(EMBM_PLUGIN_DIR.'includes/widget.php');
 }
 embm_plugin_load();
 
@@ -42,26 +33,54 @@ embm_plugin_load();
 $style_option = get_option('embm_options');
 $has_custom_css = $style_option['embm_css_url'];
 if ($has_custom_css != '') {
-	wp_deregister_style( 'beer-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
-	wp_dequeue_style( 'beer-output' );
+	wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
+	wp_dequeue_style( 'embm-output' );
 	
-	wp_register_style( 'custom-beer-output', $has_custom_css );
-	wp_enqueue_style( 'custom-beer-output' );
+	wp_register_style( 'custom-embm-output', $has_custom_css );
+	wp_enqueue_style( 'custom-embm-output' );
 
 } else {
-	wp_deregister_style( 'custom-beer-output', $has_custom_css );
-	wp_dequeue_style( 'custome-beer-output' );
+	wp_deregister_style( 'custom-embm-output', $has_custom_css );
+	wp_dequeue_style( 'custom-embm-output' );
 	
-	wp_register_style( 'beer-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
-	wp_enqueue_style( 'beer-output' );
+	wp_register_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
+	wp_enqueue_style( 'embm-output' );
 }
 
 
 // Activation setup
 register_activation_hook(__FILE__, 'embm_plugin_activation');
 
-function embm_plugin_activation() {  
-	//actions to perform once on plugin activation go here   
+function embm_plugin_activation() {
+	// Check for new version
+	$embm_curr_version = '1.2';
+	 
+	if (!defined('EMBM_VERSION_KEY')) {
+		// Define new version option
+    	define('EMBM_VERSION_KEY', 'embm_version');
+    }
+    
+    if (!defined('EMBM_VERSION_NUM')) {
+    	// Add current version value
+	    define('EMBM_VERSION_NUM', $embm_curr_version);	
+	    add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);  
+    } 
+    else if (get_option(EMBM_VERSION_KEY) != $embm_curr_version) {
+	    // Update the version value
+	    update_option(EMBM_VERSION_KEY, $embm_curr_version);
+	}
+	
+	// Refresh permalinks
+	flush_rewrite_rules();
+}
+
+
+// Deactivation setup
+register_deactivation_hook(__FILE__, 'embm_plugin_deactivation');
+
+function embm_plugin_deactivation() {
+	// Refresh permalinks
+	flush_rewrite_rules();
 }
 
 
@@ -101,12 +120,12 @@ function embm_plugin_uninstall() {
 	}  
 		
 	//remove plugin css
-	wp_deregister_style( 'beer-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
-	wp_dequeue_style( 'beer-output' );
+	wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
+	wp_dequeue_style( 'embm-output' );
 	$get_style_option = get_option('embm_options');
 	$get_custom_css = $style_option['embm_css_url'];
-	wp_deregister_style( 'custom-beer-output', $get_custom_css );
-	wp_dequeue_style( 'custome-beer-output' );
+	wp_deregister_style( 'custom-embm-output', $get_custom_css );
+	wp_dequeue_style( 'custom-embm-output' );
 	
 	//remove custom settings
 	delete_option('embm_version');

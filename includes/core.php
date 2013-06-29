@@ -36,7 +36,7 @@ function embm_custom_post_beer() {
 		'edit_item'          => __( 'Edit Beer', 'embm' ),
 		'new_item'           => __( 'New Beer', 'embm' ),
 		'all_items'          => __( 'All Beers', 'embm' ),
-		'view_item'          => null,
+		'view_item'          => __( 'View Beer', 'embm'),
 		'search_items'       => __( 'Search Beers', 'embm' ),
 		'not_found'          => __( 'No beers found', 'embm' ),
 		'not_found_in_trash' => __( 'No beers found in the Trash', 'embm' ), 
@@ -52,7 +52,7 @@ function embm_custom_post_beer() {
 		'taxonomies'		=> array('style'),
 		'has-archive' 		=> true,
 		'menu_position' 	=> 5,
-		'rewrite' 			=> array( 'slug' => 'beers', 'with_front' => false),
+		'rewrite' 			=> array( 'slug' => 'beers', 'with_front' => false, 'feeds' => true, 'pages' => true),
 		'supports'      	=> array( 'title', 'editor', 'thumbnail', 'revisions'),
 	);
 	register_post_type( 'beer', $args );	
@@ -260,6 +260,10 @@ function embm_create_style_tax() {
 
 	register_taxonomy( 'style', array( 'beer' ), $args );
 }
+
+
+
+?>
 
 
 
