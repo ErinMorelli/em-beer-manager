@@ -99,11 +99,12 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Changelog ###
 
-#### 1.0 ####
-* Initial plugin release
 
 #### 1.5 ####
 * Added translatable strings for localization
 * Added new "Beer List" widget to display a list of beers with a number of display options
 * Added themed template files for styles and single beer page display
 * Fixed bug that caused plugin activation to throw a header error
+
+#### 1.0 ####
+* Initial plugin release
