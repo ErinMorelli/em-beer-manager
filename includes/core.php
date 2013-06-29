@@ -264,6 +264,3 @@ function embm_create_style_tax() {
 
 
 ?>
-
-
-

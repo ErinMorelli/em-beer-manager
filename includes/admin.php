@@ -215,12 +215,15 @@ add_action('admin_head', 'options_embm_add_js');
 // Register new settings
 function embm_register_settings() { // whitelist options
   register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
+  
   // Untappd settings
   add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
   add_settings_field('embm_untappd_check', 'Disable integration:', 'embm_untappd_box', 'embm', 'embm_untappd');
+  
   // Custom css settings
   add_settings_section('embm_custom_url', 'Custom Styleseet', 'embm_section_text', 'embm');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
+  
   //Age verification settings
   //add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
   //add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
@@ -325,7 +328,7 @@ function embm_settings() {
 	     <td><em><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>style=</strong>{"style name"}</code></td>
-	     <td>(String e.g. <code>"India Pale Ale"</code>)</td>
+	     <td>(<?php _e('String'); ?> e.g. <code>"India Pale Ale"</code>)</td>
 	     <td><em><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>beers_per_page=</strong>{number}</code></td>

@@ -13,10 +13,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
 * Simple beer checkin integration with Untappd
+* A "Beer List" widget for simply displaying your beers in sidebars
+* Custom page display for beers and styles
 
 #### Planned Features ####
 
-* Sidebar widget for displaying beers
 * Option to add simple age verification check to site
 * Expanded Untappd integration
 
@@ -27,6 +28,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-3.jpg)
 4. [Special styles organization](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-4.jpg)
 5. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-5.jpg)
+6. [Beer List widget options](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-6.jpg)
 
 
 *****
@@ -99,3 +101,9 @@ This will display a formatted listing of all beers in the database. Optional att
 
 #### 1.0 ####
 * Initial plugin release
+
+#### 1.5 ####
+* Added translatable strings for localization
+* Added new "Beer List" widget to display a list of beers with a number of display options
+* Added themed template files for styles and single beer page display
+* Fixed bug that caused plugin activation to throw a header error

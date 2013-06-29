@@ -57,11 +57,11 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 	  ?>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
-		  	<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title ?>"   />
+		  	<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
 		  </p>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers: ', 'embm'); ?></label><br />
-		  	<input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude ?>" /><br /><small><?php _e('Comma separated IDs, e.g. "1,2,3"', 'embm'); ?></small>
+		  	<input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs, e.g. "1,2,3"', 'embm'); ?></small>
 		  </p>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary: ', 'embm'); ?></label>
@@ -69,7 +69,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 		  </p>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length: ', 'embm'); ?></label>
-		  	<input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo  $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length ?>" /><?php _e(' Chars', 'embm'); ?>
+		  	<input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small><?php _e(' Characters', 'embm'); ?></small>
 		  </p>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style: ', 'embm'); ?></label>
@@ -195,3 +195,5 @@ function embm_display_list_widget($beers) {
 	return $output;
 
 }
+
+?>

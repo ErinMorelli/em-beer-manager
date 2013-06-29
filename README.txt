@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 3.5.1
-Stable tag: 4.3
+Tested up to: 3.5.2
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,18 +17,19 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for categorizing your beers
 * Shortcodes and template tags for displaying all or a select number of beers
-* Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
+* Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Simple beer checkin integration with Untappd
+* A "Beer List" widget for simply displaying your beers in sidebars
+* Custom page display for beers and styles
 
-*****
 
 
-## USAGE ##
+### Usage ###
 
 Use these shortcodes to display beers in your posts or use the template tags in your theme files.
 
 
-### Single Beer Display ###
+#### Single Beer Display ####
 
      [beer id={beer id}]
 
@@ -45,7 +46,7 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
     *Displays or hides the "More Information" section*
 
 
-### List All Beers ###
+#### List All Beers ####
 
 
      [beer-list]
@@ -74,12 +75,11 @@ This will display a formatted listing of all beers in the database. Optional att
 
     *Paginates output and displays the given number of beers per page*
 
-*****
 
 
-## Planned Features ##
 
-* Sidebar widget for displaying beers
+### Planned Features ###
+
 * Option to add simple age verification check to site
 * Expanded Untappd integration
 
@@ -91,6 +91,35 @@ This will display a formatted listing of all beers in the database. Optional att
 1. See "Usage" section on the Description page to learn more.
 
 
+== Frequently Asked Questions ==
+
+= How do I display a single beer on a page? =
+
+Use the `[beer id=#]` shortcode inside the WordPress page editor to add a beer to any page. Replace the "#" with the ID of the beer you wish to display, which is listed on the "Beers" admin page.
+
+
+= How do I display a list of all my beers? =
+
+Use the `[beer-list]` shortcode inside the WordPress page editor to add a list of all your beers to any page.
+
+
+= I don't want to show that big grey box of information, how do I get rid of it? =
+
+For both the `[beer id=#]` and `[beer-list]` shortcodes there are 2 optional attributes of `show_profile` and `show_extras`. Set both of these to `false` to hide the grey box. 
+
+Example: `[beer-list show_profile="false" show_extras="false"]`
+
+
+= What's the difference between `show_profile` and `show_extras`? =
+
+The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The `show_extras` setting refers to the "Additional Notes" and "Availability" information stored for each beer. 
+
+
+= Why isn't the Untappd checkin button hidden when I set `show_extras` to false? =
+
+The Untappd checkin integration is handled separately from the `show_extras` setting. To hide the button for a single beer, make sure the "Untappd Check-in URL" box is empty - a square Untappd check-in icon will appear on the "Beers" admin page next to the beers where the button is active. You can also completely disable the Untappd options through the "EM Beer Manager" settings page. 
+
+
 == Screenshots ==
 
 1. The "Beer" management screen
@@ -98,9 +127,23 @@ This will display a formatted listing of all beers in the database. Optional att
 3. Extra Beer information
 4. Special styles organization
 5. Single beer front-end display (with all options enabled)
+6. Beer List widget options
 
 
 == Changelog ==
 
 = 1.0 =
 * Initial plugin release
+
+
+= 1.5 =
+* Added translatable strings for localization
+* Added new "Beer List" widget to display a list of beers with a number of display options
+* Added themed template files for styles and single beer page display
+* Fixed bug that caused plugin activation to throw a header error
+
+
+== Upgrade Notice ==
+
+= 1.5 =
+Fixed plugin activation error bug

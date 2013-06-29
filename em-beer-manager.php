@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/wordpress/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.2
+ * Version: 1.5
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -53,7 +53,7 @@ register_activation_hook(__FILE__, 'embm_plugin_activation');
 
 function embm_plugin_activation() {
 	// Check for new version
-	$embm_curr_version = '1.2';
+	$embm_curr_version = '1.5';
 	 
 	if (!defined('EMBM_VERSION_KEY')) {
 		// Define new version option
@@ -65,7 +65,8 @@ function embm_plugin_activation() {
 	    define('EMBM_VERSION_NUM', $embm_curr_version);	
 	    add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);  
     } 
-    else if (get_option(EMBM_VERSION_KEY) != $embm_curr_version) {
+    
+    if (get_option(EMBM_VERSION_KEY) != $embm_curr_version) {
 	    // Update the version value
 	    update_option(EMBM_VERSION_KEY, $embm_curr_version);
 	}
@@ -120,8 +121,12 @@ function embm_plugin_uninstall() {
 	}  
 		
 	//remove plugin css
+	wp_deregister_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css' );
+	wp_dequeue_style( 'embm-widget' );
+	
 	wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
 	wp_dequeue_style( 'embm-output' );
+	
 	$get_style_option = get_option('embm_options');
 	$get_custom_css = $style_option['embm_css_url'];
 	wp_deregister_style( 'custom-embm-output', $get_custom_css );
@@ -155,3 +160,4 @@ function embm_plugin_action_links($links, $file) {
 
     return $links;
 }
+?>
