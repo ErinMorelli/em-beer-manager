@@ -22,11 +22,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 #### Screenshots ####
 
-1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-1.jpg)
-2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-2.jpg)
-3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-3.jpg)
-4. [Special styles organization](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-4.jpg)
-5. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/assets/screenshot-5.jpg)
+1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-1.jpg)
+2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-2.jpg)
+3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-3.jpg)
+4. [Special styles organization](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-4.jpg)
+5. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-5.jpg)
 
 
 *****

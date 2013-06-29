@@ -24,7 +24,7 @@ function embm_plugin_load(){
         
     require_once(EMBM_PLUGIN_DIR.'includes/core.php');
     require_once(EMBM_PLUGIN_DIR.'includes/output.php');
-    //require_once(EMBM_PLUGIN_DIR.'includes/widget.php');
+    require_once(EMBM_PLUGIN_DIR.'includes/widget.php');
 }
 embm_plugin_load();
 
