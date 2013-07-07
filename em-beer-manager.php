@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/wordpress/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.5
+ * Version: 1.8
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -24,7 +24,13 @@ function embm_plugin_load(){
         
     require_once(EMBM_PLUGIN_DIR.'includes/core.php');
     require_once(EMBM_PLUGIN_DIR.'includes/output.php');
-    require_once(EMBM_PLUGIN_DIR.'includes/widget.php');
+    
+    foreach (scandir(EMBM_PLUGIN_DIR.'includes/components') as $filename) {
+    	$path = EMBM_PLUGIN_DIR.'includes/components/' . $filename;
+    	if (is_file($path)) {
+        	require $path;
+        }
+    }
 }
 embm_plugin_load();
 
@@ -48,12 +54,33 @@ if ($has_custom_css != '') {
 }
 
 
+// Localization
+function embm_load_textdomain() {
+		
+	$locale = get_locale();
+	$locale = apply_filters( 'plugin_locale',  $locale, 'embm' );
+	$mofile = sprintf( 'embm-%s.mo', $locale );
+
+	$mofile_local  = EMBM_PLUGIN_DIR . '/languages/' . $mofile;
+	$mofile_global = WP_LANG_DIR . '/embm/' . $mofile;
+
+	if ( file_exists( $mofile_local ) )
+		return load_textdomain( 'embm', $mofile_local );
+		
+	if ( file_exists( $mofile_global ) )
+		return load_textdomain( 'embm', $mofile_global );
+
+	return false;
+}
+embm_load_textdomain();
+
+
 // Activation setup
 register_activation_hook(__FILE__, 'embm_plugin_activation');
 
 function embm_plugin_activation() {
 	// Check for new version
-	$embm_curr_version = '1.5';
+	$embm_curr_version = '1.8';
 	 
 	if (!defined('EMBM_VERSION_KEY')) {
 		// Define new version option

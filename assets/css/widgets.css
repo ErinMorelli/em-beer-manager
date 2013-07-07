@@ -41,3 +41,25 @@ li.embm-beer-list-item a.embm-read-more {
 	padding-left: 3px;
 	font-size: 100%;
 }
+
+ul.embm-untappd-list {
+	padding: 0;
+	margin: 0;
+}
+ul.embm-untappd-list li {
+	list-style: none;
+}
+ul.embm-untappd-list li.embm-untappd-list-item {
+	font-size: 0.9em;
+	line-height: 1.5em;
+	padding-bottom: 10px;
+}
+li.embm-untappd-list-item a.embm-checkin-date {
+	display: block;
+	font-size: 0.8em;
+	color: #aaa;
+	text-decoration: none;
+}
+li.embm-untappd-list-item a.embm-checkin-date:hover {
+	text-decoration: underline;
+}

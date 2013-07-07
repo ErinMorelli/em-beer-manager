@@ -169,12 +169,36 @@ function embm_sort_beers( $vars ) {
 add_action('admin_menu', 'embm_admin_menu');
 
 function embm_admin_menu() {
+	global $embm_admin_page;
+	
     $page_title = __('EM Beer Manager Settings', 'embm');
     $menu_title = __('EM Beer Manager', 'embm');
     $capability = 'manage_options';
     $menu_slug = 'embm-settings';
     $function = 'embm_settings';
-    add_options_page($page_title, $menu_title, $capability, $menu_slug, $function);
+    
+    $embm_admin_page = add_options_page($page_title, $menu_title, $capability, $menu_slug, $function);
+    
+    add_action('load-'.$embm_admin_page, 'ebmb_admin_help_tab'); // Load help tab
+}
+
+// Add help tab
+function ebmb_admin_help_tab() {
+    global $embm_admin_page;
+    $screen = get_current_screen();
+    
+    if ( $screen->id != $embm_admin_page )
+        return;
+        
+	$screen->add_help_tab( array(
+		'id'      => 'untappd',
+		'title'   => __('Untappd Integration', 'embm'),
+		'content' => '<p>'.__('Checking the "Disable integration" option below, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget. You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page."', 'embm').'</p>'.
+			'<h3>Brewery ID</h3>'.
+			'<p>' . __("Find your Untappd brewery ID number by going to your brewery's official page (i.e. ", "embm").'<code>https://untappd.com/BreweryName</code>'.__("). Click on the orange RSS feed button. The URL will be formatted like this:", "embm") . '</p>' .
+			'<p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p>' .
+			'<p>' . __("The string of numbers at the end of the URL is your brewery ID number, which you can enter below to utilize special Untappd integration features.", "embm") . '</p>',
+	) );
 }
 
 
@@ -205,6 +229,14 @@ function options_embm_add_js() { ?>
 .emdm-form-settings > .form-table {
     margin-bottom: 20px;    
 }
+#contextual-help-link-wrap.embm-help {
+	border-right: none;
+	border-left: none;
+	border-bottom: none;
+	background: transparent;
+	background-image: none !important;
+	float: none;
+}
 </style>
 <?php
 }
@@ -219,15 +251,17 @@ function embm_register_settings() { // whitelist options
   // Untappd settings
   add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
   add_settings_field('embm_untappd_check', 'Disable integration:', 'embm_untappd_box', 'embm', 'embm_untappd');
+  add_settings_field('embm_untappd_brewery', 'Untappd brewery ID number:', 'embm_untappd_brewery_box', 'embm', 'embm_untappd');
   
   // Custom css settings
   add_settings_section('embm_custom_url', 'Custom Styleseet', 'embm_section_text', 'embm');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
   
-  //Age verification settings
-  //add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
-  //add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
-  //add_settings_field('embm_age_limit', 'Set age restriction:', 'embm_age_limit_box', 'embm', 'embm_age_verify');
+  // Age verification settings
+  add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
+  add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
+  add_settings_field('embm_age_limit', 'Set age restriction:', 'embm_age_limit_box', 'embm', 'embm_age_verify');
+  add_settings_field('embm_age_type', 'Verification type:', 'embm_age_type_box', 'embm', 'embm_age_verify');
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -240,9 +274,14 @@ function embm_untappd_box() {
 	$options = get_option('embm_options');
 	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> ';
 } 
+function embm_untappd_brewery_box() {
+	$options = get_option('embm_options');
+	echo "<input id='embm_untappd_brewery' name='embm_options[embm_untappd_brewery]' size='5' type='text' value='{$options['embm_untappd_brewery']}' />";
+    echo '&nbsp;<span id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle embm-help"><a href="#contextual-help-wrap" id="contextual-help-link" class="show-settings" aria-controls="contextual-help-wrap" aria-expanded="false"><small>'.__("What's this?", "embm").'</small></a></span>';
+} 
 function embm_css_url() {
 	$options = get_option('embm_options');
-	echo "<input id='embm_css_url' name='embm_options[embm_css_url]' style='width: 50%;' type='url' value='{$options['embm_css_url']}' />";
+	echo "<input id='embm_css_url' name='embm_options[embm_css_url]' size='50' type='url' value='{$options['embm_css_url']}' />";
 } 
 function embm_age_enable_box() {
 	$options = get_option('embm_options');
@@ -252,6 +291,24 @@ function embm_age_limit_box() {
 	$options = get_option('embm_options');
 	echo "<input id='embm_age_limit' name='embm_options[embm_age_limit]' min='10' max='50' step='1' size='2' type='number' value='{$options['embm_age_limit']}' /> ";
 	_e('Years', 'embm');
+}
+function embm_age_type_box() {
+	$custom = true;
+	$options = get_option('embm_options');
+	echo '<input id="embm_age_type" type="radio" name="embm_options[embm_age_type]" value="birthday"';
+		if ( $options['embm_age_type'] === 'birthday' ) { 
+			echo ' checked="checked"';
+			$custom = false;
+		}
+	echo ' />&nbsp;&nbsp;';
+	echo __('Birthday drop down selection', 'embm') . '&nbsp;&nbsp;<code>(' . __('MM/DD/YYYY', 'embm') . ')</code>';
+	echo '<br /><input id="embm_age_type" type="radio" name="embm_options[embm_age_type]" value="yesno"';
+		if ( $options['embm_age_type'] === 'yesno' ) { 
+			echo ' checked="checked"';
+			$custom = false;
+		}
+	echo ' />&nbsp;&nbsp;';
+	echo __('"I Certify" checkpoint', 'embm') . '&nbsp;&nbsp;<code>(' . __('Yes/No', 'embm') . ')</code>';
 }
 
 

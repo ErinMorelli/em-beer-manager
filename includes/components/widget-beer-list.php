@@ -17,12 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
 *
 *
-* EM Beer Manager widget options & display
+* EM Beer Manager 'Beer List' widget options & display
 *
 */
 
 // Load widget styles
-wp_register_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css' );
+wp_register_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widgets.css' );
 wp_enqueue_style( 'embm-widget' );
 
 
@@ -136,7 +136,7 @@ function embm_display_list_widget($beers) {
 	$style = $beers['style']; 
 	
 	$output = '';	
-	$output = '<h3 class="widget-title">'.$title.'</h3>';
+	$output = "\n".'<h3 class="widget-title">'.$title.'</h3>'."\n";
 	
 	// The query
 	global $post;
