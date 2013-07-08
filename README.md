@@ -14,12 +14,13 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
 * Simple beer checkin integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
+* A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
 
 #### Planned Features ####
 
 * Option to add simple age verification check to site
-* Expanded Untappd integration
+* Additional taxonomy for "availability"
 
 #### Screenshots ####
 
@@ -99,6 +100,11 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Changelog ###
 
+#### 1.7 ####
+* Added localization POT
+* Added new "Recent Untappd Check-Ins" widget
+* Added new settings option for Untappd brewery ID
+* Updated settings page with help documentation
 
 #### 1.5 ####
 * Added translatable strings for localization

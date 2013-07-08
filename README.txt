@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.2
-Stable tag: 1.5
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Simple beer checkin integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
+* A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
 
 
@@ -81,7 +82,7 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Planned Features ###
 
 * Option to add simple age verification check to site
-* Expanded Untappd integration
+* Additional taxonomy for "availability"
 
 
 == Installation ==
@@ -138,6 +139,11 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.7 =
+* Added localization POT
+* Added new "Recent Untappd Check-Ins" widget
+* Added new settings option for Untappd brewery ID
+* Updated settings page with help documentation
 
 = 1.5 =
 * Added translatable strings for localization

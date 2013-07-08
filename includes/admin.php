@@ -220,13 +220,13 @@ function embm_register_settings() { // whitelist options
   add_settings_section('embm_custom_url', 'Custom Styleseet', 'embm_section_text', 'embm');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
   
-  // Age verification settings
+  /* Age verification settings
   add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
   add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
   add_settings_field('embm_age_limit', 'Set age restriction:', 'embm_age_limit_box', 'embm', 'embm_age_verify');
   add_settings_field('embm_age_duration', 'Remember verification for:', 'embm_age_duration_box', 'embm', 'embm_age_verify');
   add_settings_field('embm_age_type', 'Verification type:', 'embm_age_type_box', 'embm', 'embm_age_verify'); 
-  
+  */
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -302,12 +302,6 @@ function embm_settings() {
     <p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
    
     </form>
-    
-    <?php 
-    
-    echo embm_show_verify(); 
-    
-    ?>
     
     <br />
     
