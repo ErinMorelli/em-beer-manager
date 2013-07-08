@@ -22,24 +22,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
  
-// Styling for the custom post type
-
-add_action( 'admin_head', 'embm_settings_style' );
-
-function embm_settings_style() { ?>
-
-	<style type="text/css" media="screen">
-		#menu-posts-beer .wp-menu-image {
-            background: url(<?php echo EMBM_PLUGIN_URL.'assets/img/beer-icon.png'; ?>) no-repeat 6px 6px !important;
-        }
-        #menu-posts-beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
-        	background-position:6px -18px !important;
-        }
-        #icon-edit.icon32-posts-beer {background: url(<?php echo EMBM_PLUGIN_URL.'assets/img/beer-32x32.png';?>) no-repeat;}
-        .widefat .column-id {width: 35px;}
-        
-    </style>
-<?php }
+// Enqueue admin styles
+function embm_admin_styles() {
+    wp_enqueue_style('embm-admin', EMBM_PLUGIN_URL.'assets/css/admin.css');
+}
+add_action('admin_enqueue_scripts', 'embm_admin_styles');
+add_action('login_enqueue_scripts', 'embm_admin_styles');
 
  
  // ==== CUSTOM BEER ADMIN COLUMNS  === //
@@ -213,31 +201,6 @@ function options_embm_add_js() { ?>
 	});
 //]]>
 </script>
-<style type="text/css">
-#beer-settings .usage tr td {
-	border-collapse: collapse;
-	border-bottom: 1px solid #ccc;
-
-	padding: 5px 10px;
-}
-#beer-settings .usage tr:first-child td {
-	border-top: 1px solid #ccc;
-}
-#beer-settings .usage tr:nth-child(even) td {
-	background: #fafafa;
-}
-.emdm-form-settings > .form-table {
-    margin-bottom: 20px;    
-}
-#contextual-help-link-wrap.embm-help {
-	border-right: none;
-	border-left: none;
-	border-bottom: none;
-	background: transparent;
-	background-image: none !important;
-	float: none;
-}
-</style>
 <?php
 }
 add_action('admin_head', 'options_embm_add_js');
@@ -261,7 +224,9 @@ function embm_register_settings() { // whitelist options
   add_settings_section('embm_age_verify', 'Age Verification', 'embm_section_text', 'embm');
   add_settings_field('embm_age_enable', 'Enable age verification check:', 'embm_age_enable_box', 'embm', 'embm_age_verify');
   add_settings_field('embm_age_limit', 'Set age restriction:', 'embm_age_limit_box', 'embm', 'embm_age_verify');
-  add_settings_field('embm_age_type', 'Verification type:', 'embm_age_type_box', 'embm', 'embm_age_verify');
+  add_settings_field('embm_age_duration', 'Remember verification for:', 'embm_age_duration_box', 'embm', 'embm_age_verify');
+  add_settings_field('embm_age_type', 'Verification type:', 'embm_age_type_box', 'embm', 'embm_age_verify'); 
+  
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -289,8 +254,13 @@ function embm_age_enable_box() {
 }
 function embm_age_limit_box() {
 	$options = get_option('embm_options');
-	echo "<input id='embm_age_limit' name='embm_options[embm_age_limit]' min='10' max='50' step='1' size='2' type='number' value='{$options['embm_age_limit']}' /> ";
+	echo "<input id='embm_age_limit' name='embm_options[embm_age_limit]' min='10' max='50' step='1' size='2' type='number' style='width:50px;' value='{$options['embm_age_limit']}' /> ";
 	_e('Years', 'embm');
+}
+function embm_age_duration_box() {
+	$options = get_option('embm_options');
+	echo "<input id='embm_age_duration' name='embm_options[embm_age_duration]' min='10' step='1' size='4' style='width:65px;' type='number' value='{$options['embm_age_duration']}' /> ";
+	_e('Minutes', 'embm');
 }
 function embm_age_type_box() {
 	$custom = true;
@@ -332,6 +302,12 @@ function embm_settings() {
     <p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
    
     </form>
+    
+    <?php 
+    
+    echo embm_show_verify(); 
+    
+    ?>
     
     <br />
     

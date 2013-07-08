@@ -21,10 +21,46 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
+$getOptions = get_option('embm_options');
 
+if($getOptions['embm_age_enable'] === '1') {
+	// run component functions
+}
 
+function embm_show_verify() {
+	$options = get_option('embm_options');
+	$minAge = $options['embm_age_limit'];
+	
+	$output = '';
+	$output .= '<div id="embm-age-check" class="embm-age-check-'.$options['embm_age_type'].'">'."\n";
+	
+	if($options['embm_age_type'] === 'birthday') {
+		// Age dropdown form
+		$output .= '<input type="date" name="embm-bday" id="embm-bday" required>'; // convert to dropdowns :(
+	}
+		
+	if($options['embm_age_type'] === 'yesno') {
+		// Yes/No check
+		$output .= '<input type="radio" name="embm-cert" id="embm-cert" value="true" /> ';
+		$output .= sprintf(__('I am age %s or older', 'embm'), $minAge)."\n";
+		$output .= '<input type="radio" name="embm-cert" id="embm-cert" value="false" /> '.__('I am not', 'embm')."\n";
+	}
+	
+	$output .= '</div>';
 
+	return $output;
+}
 
+function embm_verify_age() {
+	// Determine if age input is valid
+}
+function embm_verify_cert() {
+	// Determine if yes certification has been checked	
+}
+
+function embm_hide_content() {
+	// Output message if verification not met
+}
 
 
 

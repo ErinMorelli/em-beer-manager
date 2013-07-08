@@ -100,6 +100,18 @@ function embm_plugin_activation() {
 	
 	// Refresh permalinks
 	flush_rewrite_rules();
+	
+	// Set default options
+	$defaults = array(
+	  'embm_untappd_check' => '',
+	  'embm_untappd_brewery' => '', 
+	  'embm_css_url' => '',
+	  'embm_age_enable' => '',
+	  'embm_age_limit' => '21',
+	  'embm_age_duration' => '720',
+	  'embm_age_type' => ''
+	);
+	update_option('embm_options', $defaults);
 }
 
 
@@ -153,6 +165,8 @@ function embm_plugin_uninstall() {
 	
 	wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
 	wp_dequeue_style( 'embm-output' );
+	
+	wp_dequeue_style( 'embm-admin' );
 	
 	$get_style_option = get_option('embm_options');
 	$get_custom_css = $style_option['embm_css_url'];
