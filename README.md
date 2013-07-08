@@ -100,7 +100,7 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Changelog ###
 
-#### 1.7 ####
+#### 1.6.0 ####
 * Added localization POT
 * Added new "Recent Untappd Check-Ins" widget
 * Added new settings option for Untappd brewery ID

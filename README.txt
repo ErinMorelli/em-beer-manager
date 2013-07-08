@@ -139,7 +139,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
-= 1.7 =
+= 1.6.0 =
 * Added localization POT
 * Added new "Recent Untappd Check-Ins" widget
 * Added new settings option for Untappd brewery ID
