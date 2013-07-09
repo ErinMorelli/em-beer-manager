@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.2
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.6.1 =
+* Fixed a bug that was throwing an invalid function warning on the settings page
+
 = 1.6.0 =
 * Added localization POT
 * Added new "Recent Untappd Check-Ins" widget
@@ -158,6 +161,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 1.6.1 =
+Fixed an invalid function warning bug
 
 = 1.5 =
 Fixed plugin activation error bug

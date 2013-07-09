@@ -234,7 +234,9 @@ add_action( 'admin_init', 'embm_register_settings' );
 function embm_options_validate($input) {
 	return $input;
 }
-
+function embm_section_text() {
+	echo '';
+}
 function embm_untappd_box() {
 	$options = get_option('embm_options');
 	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> ';

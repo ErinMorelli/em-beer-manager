@@ -116,32 +116,38 @@ function embm_display_untappd_widget($beers) {
 	
 	$output = '';	
 	$output .= "\n".'<h3 class="widget-title">'.$title.'</h3>'."\n";
+	$output .= '<ul class="embm-untappd-list">'."\n"; 
 	
-	// Extract Untappd xml feed data	      
-    $content = file_get_contents($feed_url);  
-    $x = new SimpleXmlElement($content);  
-      
-    $output .= '<ul class="embm-untappd-list">'."\n";  
     
-    $i = 0; // Initiate iterator
-    
-    foreach($x->channel->item as $entry) {
-    	if ($i < $items) {
-	        $output .= '<li class="embm-untappd-list-item">';
-	        $output .= $entry->title."\n";
-	        $output .= '<a class="embm-checkin-date" href="'.$entry->link.'" title="'.$entry->title.'">';
-	        
-	        // Display date using WP timezone setting
-	     	$offset = get_option('gmt_offset');   
-	     	$postDate = strtotime($entry->pubDate);
-	     	$newDate = mktime(date('H', $postDate)+$offset,date('i', $postDate),0,date('n', $postDate),date('j', $postDate),date('y', $postDate));
-	     	
-	        $output .= date('g:i A - j M y', $newDate);
-	        
-	        $output .= '</a></li>'."\n";  
-	        $i++;
-        } 
-    }  
+    if (!$brewID) {
+	    $output .= '<li class="embm-untappd-list-item">';
+	    $output .= __('A brewery ID number has not been set.', 'embm');
+	    $output .= '</li>'."\n"; 
+    } else {
+    	// Extract Untappd xml feed data	      
+	    $content = file_get_contents($feed_url);  
+	    $x = new SimpleXmlElement($content);  
+	    
+	    $i = 0; // Initiate iterator
+	    
+	    foreach($x->channel->item as $entry) {
+	    	if ($i < $items) {
+		        $output .= '<li class="embm-untappd-list-item">';
+		        $output .= $entry->title."\n";
+		        $output .= '<a class="embm-checkin-date" href="'.$entry->link.'" title="'.$entry->title.'">';
+		        
+		        // Display date using WP timezone setting
+		     	$offset = get_option('gmt_offset');   
+		     	$postDate = strtotime($entry->pubDate);
+		     	$newDate = mktime(date('H', $postDate)+$offset,date('i', $postDate),0,date('n', $postDate),date('j', $postDate),date('y', $postDate));
+		     	
+		        $output .= date('g:i A - j M y', $newDate);
+		        
+		        $output .= '</a></li>'."\n";  
+		        $i++;
+	        } 
+	    }  
+    }
     
     $output .= '</ul>'."\n";  
 
