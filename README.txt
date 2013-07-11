@@ -82,7 +82,10 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Planned Features ###
 
 * Option to add simple age verification check to site
-* Additional taxonomy for "availability"
+* Additional taxonomy for custom categorizing beers (i.e. seasonally, by brewery, etc.)
+* Auto-populate "styles" taxonomy from official beer styles list
+* Post/Page "Add Beer" button to auto-generate shortcode input
+* Possibly add a ratings/review system down-the-line
 
 
 == Installation ==
@@ -93,6 +96,11 @@ This will display a formatted listing of all beers in the database. Optional att
 
 
 == Frequently Asked Questions ==
+
+
+= How do I display an image of my beer next to its name and description? =
+When creating your new beer entry, set the "featured image" option in the sidebar to beer image you wish to use, it will display alongside the entry when the beer is displayed on your site. 
+
 
 = How do I display a single beer on a page? =
 
@@ -124,6 +132,7 @@ The Untappd checkin integration is handled separately from the `show_extras` set
 = My beer and style pages are not displaying or are showing a 404 error =
 
 Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If this does not work, it may be due to your site's theme overriding the EM Beer Manager templates. You can edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
+
 
 
 

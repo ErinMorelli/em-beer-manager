@@ -20,7 +20,10 @@ This plugin allows beer creators from home brewers to professional breweries to 
 #### Planned Features ####
 
 * Option to add simple age verification check to site
-* Additional taxonomy for "availability"
+* Additional taxonomy for custom categorizing beers (i.e. seasonally, by brewery, etc.)
+* Auto-populate "styles" taxonomy from official beer styles list
+* Post/Page "Add Beer" button to auto-generate shortcode input
+* Possibly add a ratings/review system down-the-line
 
 #### Screenshots ####
 
