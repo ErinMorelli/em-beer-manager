@@ -104,7 +104,7 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Changelog ###
 
 
-#### 1.6.1 #### 
+#### 1.6.1 ###
 * Fixed a bug that was throwing an invalid function warning on the settings page
 
 #### 1.6.0 ####
