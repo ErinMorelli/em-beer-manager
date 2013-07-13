@@ -21,11 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-// Load widget styles
-wp_register_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widgets.css' );
-wp_enqueue_style( 'embm-widget' );
-
-
 // Define Beer List widget constuctor 
 class EMBM_Beer_List_Widget extends WP_Widget {
 
@@ -143,12 +138,12 @@ function embm_display_list_widget($beers) {
 	$tmp_post = $post;
 	
 	$args = array (
-		'post_type' => 'beer'
+		'post_type' => 'embm_beer'
 	);
 	
 	// Add styles filter
 	if ($style != 'all') {
-		$args['style'] = $style;
+		$args['embm_style'] = $style;
 	}
 	
 	// Add id filter

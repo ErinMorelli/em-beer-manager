@@ -37,7 +37,7 @@ function embm_change_columns( $cols ) {
     'cb'       => '<input type="checkbox" />',
     'id'	=> __( 'ID', 'embm' ),
     'title'      => __( 'Beer', 'embm' ),
-    'taxonomy-style' => __( 'Style', 'embm' ),
+    'taxonomy-embm_style' => __( 'Style', 'embm' ),
     'abv'     => __( 'ABV', 'embm' ),
     'ibu'	=> __( 'IBU', 'embm' ),
     'avail'     => __( 'Availability', 'embm' )
@@ -54,7 +54,7 @@ function embm_change_columns( $cols ) {
   
   return $cols;
 }
-add_filter( 'manage_beer_posts_columns', 'embm_change_columns' );
+add_filter( 'manage_embm_beer_posts_columns', 'embm_change_columns' );
 
 function embm_custom_columns( $column, $post_id ) {
   switch ( $column ) {
@@ -81,7 +81,7 @@ function embm_custom_columns( $column, $post_id ) {
       break;
   }
 }
-add_action( 'manage_beer_posts_custom_column', 'embm_custom_columns', 10, 2 );
+add_action( 'manage_embm_beer_posts_custom_column', 'embm_custom_columns', 10, 2 );
 
 
 // Make these columns sortable
@@ -95,7 +95,7 @@ function embm_sortable_columns() {
     'date' => 'date'
   );
 }
-add_filter( 'manage_edit-beer_sortable_columns', 'embm_sortable_columns' );
+add_filter( 'manage_edit-embm_beer_sortable_columns', 'embm_sortable_columns' );
 
 
 /* Only run our customization on the 'edit.php' page in the admin. */
@@ -109,7 +109,7 @@ function embm_edit_beer_load() {
 function embm_sort_beers( $vars ) {
 
 	/* Check if we're viewing the 'beer' post type. */
-	if ( isset( $vars['post_type'] ) && 'beer' == $vars['post_type'] ) {
+	if ( isset( $vars['post_type'] ) && 'embm_beer' == $vars['post_type'] ) {
 
 		/* Check if 'orderby' is set to 'abv'. */
 		if ( isset( $vars['orderby'] ) && 'abv' == $vars['orderby'] ) {
@@ -194,9 +194,10 @@ function embm_register_settings() { // whitelist options
   add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
   add_settings_field('embm_untappd_check', 'Disable integration:', 'embm_untappd_box', 'embm', 'embm_untappd');
   
-  // Custom css settings
-  add_settings_section('embm_custom_url', 'Custom Styleseet', 'embm_section_text', 'embm');
-  add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_url', 'embm', 'embm_custom_url');
+  // Custom EMBM settings
+  add_settings_section('embm_custom_url', 'Customize', 'embm_section_text', 'embm');
+  add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_box', 'embm', 'embm_custom_url');
+  add_settings_field('embm_group_slug', 'Custom Group taxonomy slug:', 'embm_group_box', 'embm', 'embm_custom_url');
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -205,15 +206,24 @@ function embm_options_validate($input) {
 	return $input;
 }
 function embm_section_text() {
-	echo '';
+	//echo '';
 }
 function embm_untappd_box() {
 	$options = get_option('embm_options');
-	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $options['embm_untappd_check'], false).' /> ';
+	if (isset($options['embm_untappd_check'])) {
+		$use_untappd = $options['embm_untappd_check']; 
+	} else {
+		$use_untappd = null;
+	}
+	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
 } 
-function embm_css_url() {
+function embm_css_box() {
 	$options = get_option('embm_options');
-	echo "<input id='embm_css_url' name='embm_options[embm_css_url]' size='50' type='url' value='{$options['embm_css_url']}' />";
+	echo '<input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" />';
+} 
+function embm_group_box() {
+	$options = get_option('embm_options');
+	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.esc_attr($options['embm_group_slug']).'" />';
 } 
 
 function embm_settings() {
@@ -236,8 +246,6 @@ function embm_settings() {
     <p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
    
     </form>
-    
-    <?php echo embm_show_verify(); ?>
     
     <br />
     

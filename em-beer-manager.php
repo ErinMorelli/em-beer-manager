@@ -35,25 +35,6 @@ function embm_plugin_load(){
 embm_plugin_load();
 
 
-// Load plugin styles or, if added, custom stylesheet
-$style_option = get_option('embm_options');
-$has_custom_css = $style_option['embm_css_url'];
-if ($has_custom_css != '') {
-	wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
-	wp_dequeue_style( 'embm-output' );
-	
-	wp_register_style( 'custom-embm-output', $has_custom_css );
-	wp_enqueue_style( 'custom-embm-output' );
-
-} else {
-	wp_deregister_style( 'custom-embm-output', $has_custom_css );
-	wp_dequeue_style( 'custom-embm-output' );
-	
-	wp_register_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
-	wp_enqueue_style( 'embm-output' );
-}
-
-
 // Localization
 function embm_load_textdomain() {
 		
@@ -105,9 +86,11 @@ function embm_plugin_activation() {
 	$defaults = array(
 	  'embm_untappd_check' => '',
 	  'embm_untappd_brewery' => '', 
-	  'embm_css_url' => ''
+	  'embm_css_url' => '',
+	  'embm_group_slug' => 'group'
 	);
 	update_option('embm_options', $defaults);
+	
 }
 
 
@@ -127,11 +110,11 @@ function embm_plugin_uninstall() {
 
 	// remove Beer post type
 	global $wp_post_types;
-    if ( isset( $wp_post_types[ 'beer' ] ) ) {
-        unset( $wp_post_types[ 'beer' ] );
+    if ( isset( $wp_post_types[ 'embm_beer' ] ) ) {
+        unset( $wp_post_types[ 'embm_beer' ] );
     }
     $args = array(
-		'post_type' =>'beer',
+		'post_type' =>'embm_beer',
 		'post_status' => array('publish', 'pending', 'draft', 'auto-draft', 'future', 'private', 'inherit', 'trash') 
 	);
 	$posts = get_posts( $args );
@@ -142,7 +125,7 @@ function embm_plugin_uninstall() {
 	}
 	
 	// remove Style taxonomy
-	$tax = array( 'style' );
+	$tax = array( 'embm_style' );
 	if( $tax ) {
 		global $wp_taxonomies;
 		foreach( $tax as $taxonomy ) {
@@ -198,4 +181,29 @@ function embm_plugin_action_links($links, $file) {
 
     return $links;
 }
+
+// Load plugin styles or, if added, custom stylesheet
+function embm_load_styles() {
+	$style_option = get_option('embm_options');
+	$has_custom_css = esc_url($style_option['embm_css_url']);
+	if ($has_custom_css != '') {
+		wp_deregister_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
+		wp_dequeue_style( 'embm-output' );
+		
+		wp_register_style( 'custom-embm-output', $has_custom_css );
+		wp_enqueue_style( 'custom-embm-output' );
+	
+	} else {
+		wp_deregister_style( 'custom-embm-output', $has_custom_css );
+		wp_dequeue_style( 'custom-embm-output' );
+		
+		wp_register_style( 'embm-output', EMBM_PLUGIN_URL.'assets/css/output.css' );
+		wp_enqueue_style( 'embm-output' );
+	}
+	wp_register_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widgets.css' );
+	wp_enqueue_style( 'embm-widget' );
+}
+add_action( 'wp_enqueue_scripts', 'embm_load_styles' );
+
+
 ?>

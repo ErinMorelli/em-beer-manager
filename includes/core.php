@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 
-add_theme_support( 'post-thumbnails', array('beer') );
+add_theme_support( 'post-thumbnails', array('embm_beer') );
 
 
 // ==== CUSTOM BEER POST TYPE === //
@@ -49,13 +49,13 @@ function embm_custom_post_beer() {
 		'public'        	=> true,
 		'capability_type' 	=> 'post',
 		'hierarchical' 		=> false,
-		'taxonomies'		=> array('style'),
+		'taxonomies'		=> array('embm_style', 'embm_group'),
 		'has-archive' 		=> true,
 		'menu_position' 	=> 5,
 		'rewrite' 			=> array( 'slug' => 'beers', 'with_front' => false, 'feeds' => true, 'pages' => true),
 		'supports'      	=> array( 'title', 'editor', 'thumbnail', 'revisions'),
 	);
-	register_post_type( 'beer', $args );	
+	register_post_type( 'embm_beer', $args );	
 }
 
 add_action( 'init', 'embm_custom_post_beer' );
@@ -68,8 +68,8 @@ add_action( 'init', 'embm_custom_post_beer' );
 add_action( 'add_meta_boxes', 'embm_beer_specs_add' );  
 
 function embm_beer_specs_add() {  
-	add_meta_box( 'beer-specs', 'Beer Profile', 'embm_beer_specs_cb', 'beer', 'side', 'core' );
-	add_meta_box( 'beer-info', 'More Information', 'embm_beer_info_cb', 'beer', 'normal', 'core' );
+	add_meta_box( 'beer-specs', 'Beer Profile', 'embm_beer_specs_cb', 'embm_beer', 'side', 'core' );
+	add_meta_box( 'beer-info', 'More Information', 'embm_beer_info_cb', 'embm_beer', 'normal', 'core' );
 }
 
 function embm_beer_specs_cb() {  
@@ -205,10 +205,6 @@ function embm_beer_info_save( $post_id )  {
 
 
 
-
-
-
-
 // ==== CUSTOM BEER FUNCTIONS === //
 
 function embm_get_beer($postid, $attr) {
@@ -219,7 +215,7 @@ function embm_get_beer($postid, $attr) {
 	else {return $b_attr;}
 }
 function embm_get_beer_style($postid) {
-	$types = wp_get_object_terms($postid, 'style'); 
+	$types = wp_get_object_terms($postid, 'embm_style'); 
 	foreach($types as $type) { 
 		return $type->name; 
 	}
@@ -258,7 +254,41 @@ function embm_create_style_tax() {
 		'rewrite'           => array( 'slug' => 'beers/style', 'with_front' => false ),
 	);
 
-	register_taxonomy( 'style', array( 'beer' ), $args );
+	register_taxonomy( 'embm_style', array( 'embm_beer' ), $args );
+}
+
+
+// ==== CUSTOM GROUP TAXONOMY === //
+
+add_action( 'init', 'embm_create_group_tax', 0 );
+
+function embm_create_group_tax() {
+	$labels = array(
+		'name'              => __( 'Groups', 'embm' ),
+		'singular_name'     => __( 'Group', 'embm' ),
+		'search_items'      => __( 'Search Groups', 'embm' ),
+		'all_items'         => __( 'All Groups', 'embm' ),
+		'edit_item'         => __( 'Edit Group', 'embm' ),
+		'update_item'       => __( 'Update Group', 'embm' ),
+		'add_new_item'      => __( 'Add New Group', 'embm' ),
+		'new_item_name'     => __( 'New Group Name', 'embm' ),
+		'popular_items' 	=> __( 'Popular Groups', 'embm' ),
+		'choose_from_most_used' => __( 'Choose from the most used groups', 'embm' ),
+		'separate_items_with_commas' => __( 'Separate groups with commas', 'embm' ),
+		'add_or_remove_items' => __( 'Add or remove groups', 'embm' ),
+		'menu_name'         => __( 'Groups', 'embm' ),
+	);
+
+	$args = array(
+		'hierarchical'      => true,
+		'labels'            => $labels,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+		'query_var'         => true,
+		'rewrite'           => array( 'slug' => 'group', 'with_front' => false ),
+	);
+
+	register_taxonomy( 'embm_group', array( 'embm_beer' ), $args );
 }
 
 

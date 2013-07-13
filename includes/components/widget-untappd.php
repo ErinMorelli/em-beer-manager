@@ -21,13 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-// Load widget styles
-wp_register_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widgets.css' );
-wp_enqueue_style( 'embm-widget' );
-
-
 $ut_option = get_option('embm_options');
-$use_untappd = $ut_option['embm_untappd_check']; 
+if (isset($ut_option['embm_untappd_check'])) {
+	$use_untappd = $ut_option['embm_untappd_check']; 
+} else {
+	$use_untappd = null;
+}
   
 if ($use_untappd != "1") {
 
