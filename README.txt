@@ -81,7 +81,6 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Planned Features ###
 
-* Option to add simple age verification check to site
 * Additional taxonomy for custom categorizing beers (i.e. seasonally, by brewery, etc.)
 * Auto-populate "styles" taxonomy from official beer styles list
 * Post/Page "Add Beer" button to auto-generate shortcode input
@@ -99,7 +98,7 @@ This will display a formatted listing of all beers in the database. Optional att
 
 
 = How do I display an image of my beer next to its name and description? =
-When creating your new beer entry, set the "featured image" option in the sidebar to beer image you wish to use, it will display alongside the entry when the beer is displayed on your site. 
+When creating your new beer entry, set the "featured image" option in the sidebar to the beer image you wish to use, it will display alongside the entry when the beer is displayed on your site. 
 
 
 = How do I display a single beer on a page? =
