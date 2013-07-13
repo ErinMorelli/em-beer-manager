@@ -41,13 +41,15 @@ class EMBM_Beer_List_Widget extends WP_Widget {
       	'exclude' => '',
       	'summary' => null,
       	'sum_length' => '100',
-      	'style' => ''
+      	'style' => '',
+      	'group' => ''
 	  ) );
 	  $title = $instance['title'];
 	  $exclude = $instance['exclude'];
 	  $summary = $instance['summary'];
 	  $sum_length = $instance['sum_length'];
 	  $style = $instance['style'];
+	  $group = $instance['group'];
  
 	  ?>
 		  <p>
@@ -70,12 +72,26 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 		  	<label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style: ', 'embm'); ?></label>
 		  	<select name="<?php echo $this->get_field_name('style'); ?>" id="<?php echo $this->get_field_id('style'); ?>">
 		  		<option value="all" <?php selected($style, 'all', true); ?>><?php _e('All Styles', 'embm'); ?></option>
-	        <?php $beer_styles = get_terms('style');
+	        <?php $beer_styles = get_terms('embm_style');
 	        	  foreach ( $beer_styles as $beer_style) { 
                    echo '<option value="';
                    echo $beer_style->slug;
                    echo '" '.selected($style, $beer_style->slug, false).'>';
                    echo $beer_style->name;
+                   echo '</option>';
+            }?>
+            </select> 
+		  </p>
+		  <p>
+		  	<label for="<?php echo $this->get_field_id('group'); ?>"><?php _e('Show Group: ', 'embm'); ?></label>
+		  	<select name="<?php echo $this->get_field_name('group'); ?>" id="<?php echo $this->get_field_id('group'); ?>">
+		  		<option value="all" <?php selected($group, 'all', true); ?>><?php _e('All Groups', 'embm'); ?></option>
+	        <?php $beer_groups = get_terms('embm_group');
+	        	  foreach ( $beer_groups as $beer_group) { 
+                   echo '<option value="';
+                   echo $beer_group->slug;
+                   echo '" '.selected($group, $beer_group->slug, false).'>';
+                   echo $beer_group->name;
                    echo '</option>';
             }?>
             </select> 
@@ -91,6 +107,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
   	$instance['summary'] = $new_instance['summary'];
   	$instance['sum_length'] = $new_instance['sum_length'];
   	$instance['style'] = $new_instance['style'];
+  	$instance['group'] = $new_instance['group'];
   	
   	return $instance;
   }
@@ -102,6 +119,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
     $summary = apply_filters( 'widget_summary', $instance['summary'] );
     $sum_length = apply_filters( 'widget_sum_length', $instance['sum_length'] );
     $style = apply_filters( 'widget_style', $instance['style'] );
+    $group = apply_filters( 'widget_group', $instance['group'] );
  
     echo $before_widget;
 
@@ -110,7 +128,8 @@ class EMBM_Beer_List_Widget extends WP_Widget {
     	'exclude' => $exclude,
     	'summary' => $summary,
     	'sum_length' => $sum_length,
-    	'style' => $style
+    	'style' => $style,
+    	'group' => $group
     ) );
     
     echo $after_widget;
@@ -129,6 +148,7 @@ function embm_display_list_widget($beers) {
 	$summary = $beers['summary'];
 	$sum_length = $beers['sum_length'];
 	$style = $beers['style']; 
+	$group = $beers['group']; 
 	
 	$output = '';	
 	$output = "\n".'<h3 class="widget-title">'.$title.'</h3>'."\n";
@@ -144,6 +164,11 @@ function embm_display_list_widget($beers) {
 	// Add styles filter
 	if ($style != 'all') {
 		$args['embm_style'] = $style;
+	}
+	
+	// Add group filter
+	if ($group != 'all') {
+		$args['embm_group'] = $group;
 	}
 	
 	// Add id filter

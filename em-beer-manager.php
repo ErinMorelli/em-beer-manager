@@ -136,7 +136,21 @@ function embm_plugin_uninstall() {
 			}
 			unset( $wp_taxonomies[$taxonomy] );
 		}
-	}  
+	}
+	
+	// remove Group taxonomy
+	$tax = array( 'embm_group' );
+	if( $tax ) {
+		global $wp_taxonomies;
+		foreach( $tax as $taxonomy ) {
+			register_taxonomy( $taxonomy );
+			$terms = get_terms( $taxonomy, array( 'hide_empty' => 0 ) );
+			foreach( $terms as $term ) {
+				wp_delete_term( $term->term_id, $taxonomy );
+			}
+			unset( $wp_taxonomies[$taxonomy] );
+		}
+	} 
 		
 	//remove plugin css
 	wp_deregister_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css' );

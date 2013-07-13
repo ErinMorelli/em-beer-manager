@@ -37,6 +37,7 @@ function embm_change_columns( $cols ) {
     'cb'       => '<input type="checkbox" />',
     'id'	=> __( 'ID', 'embm' ),
     'title'      => __( 'Beer', 'embm' ),
+    'taxonomy-embm_group' => __( 'Group', 'embm' ),
     'taxonomy-embm_style' => __( 'Style', 'embm' ),
     'abv'     => __( 'ABV', 'embm' ),
     'ibu'	=> __( 'IBU', 'embm' ),
@@ -44,7 +45,11 @@ function embm_change_columns( $cols ) {
   );
   
   $ut_option = get_option('embm_options');
-  $use_untappd = $ut_option['embm_untappd_check']; 
+	if (isset($ut_option['embm_untappd_check'])) {
+		$use_untappd = $ut_option['embm_untappd_check']; 
+	} else {
+		$use_untappd = null;
+	}
   
   if ($use_untappd != "1") {
 	  $cols['untappd'] = __( 'Untappd', 'embm' );
@@ -223,7 +228,8 @@ function embm_css_box() {
 } 
 function embm_group_box() {
 	$options = get_option('embm_options');
-	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.esc_attr($options['embm_group_slug']).'" />';
+	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.esc_attr($options['embm_group_slug']).'" />'."\n";
+	echo '<br /><small>'.__('NOTE: You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting', 'embm').'</small>';
 } 
 
 function embm_settings() {
@@ -234,7 +240,7 @@ function embm_settings() {
 ?>
 <div class="wrap" id="beer-settings">
 
-    <div id="icon-edit" class="icon32 icon32-posts-beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
+    <div id="icon-edit" class="icon32 icon32-posts-embm_beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
     
     <h2><?php _e("Settings", "embm"); ?></h2>
     
@@ -281,7 +287,7 @@ function embm_settings() {
 	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)],  [group (optional)] ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
@@ -301,6 +307,10 @@ function embm_settings() {
 	     <td><code><strong>style=</strong>{"style name"}</code></td>
 	     <td>(<?php _e('String'); ?> e.g. <code>"India Pale Ale"</code>)</td>
 	     <td><em><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></em></td>
+     </tr><tr>
+	     <td><code><strong>group=</strong>{"group name"}</code></td>
+	     <td>(<?php _e('String'); ?> e.g. <code>"Seasonals"</code>)</td>
+	     <td><em><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>beers_per_page=</strong>{number}</code></td>
 	     <td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?></td>

@@ -9,7 +9,8 @@ Manage your beers with WordPress. Integrates simply with Untappd beer checkins. 
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
-* A custom beer "style" taxonomy for categorizing your beers
+* A custom beer "style" taxonomy for classifying your beers
+* A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
 * Simple beer checkin integration with Untappd
@@ -19,7 +20,6 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 #### Planned Features ####
 
-* Additional taxonomy for custom categorizing beers (i.e. seasonally, by brewery, etc.)
 * Auto-populate "styles" taxonomy from official beer styles list
 * Post/Page "Add Beer" button to auto-generate shortcode input
 * Possibly add a ratings/review system down-the-line
@@ -93,6 +93,10 @@ This will display a formatted listing of all beers in the database. Optional att
 * __style={`"style name"`}__ (String e.g. `"India Pale Ale"`)
 
     *Displays only beers belonging to a specific beer style*
+    
+* __group={`"group name"`}__ (String e.g. `"Seasonals"`)
+
+    *Displays only beers belonging to a specific group*
 
 * __beers\_per\_page={`number`}__ (Default = `-1`, shows all beers on one page)
 
@@ -102,6 +106,13 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Changelog ###
 
+
+#### 1.7.0 ###
+* Renamed all EMBM custom post types and taxonomies to include embm_ prefix 
+* Added new "Group" taxonomy with the ability to customize slug
+* Updated "Beer List" widget, shortcode, and template tag to include "Group" filters
+* Added "Group" page template
+* Fixed a number of escaped input errors being thrown on the settings page
 
 #### 1.6.1 ###
 * Fixed a bug that was throwing an invalid function warning on the settings page

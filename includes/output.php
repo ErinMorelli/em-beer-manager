@@ -84,17 +84,18 @@ function embm_all_beers($atts) {
       'show_profile' => 'true',
       'show_extras' => 'true',
       'style' => '',
+      'group' => '',
       'beers_per_page' => -1,
    ), $atts));
    
-   return embm_beer_list($exclude, $show_profile, $show_extras, $style, $beers_per_page);
+   return embm_beer_list($exclude, $show_profile, $show_extras, $style, $group, $beers_per_page);
 }
 add_shortcode('beer-list', 'embm_all_beers');
 
 
 // Beer list template code
 function embm_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $pagenum = -1) {
-	$args = array('exclude' => $exclude, 'profile' => $profile, 'extras' => $extras, 'style' => $style, 'page_num' => $pagenum);
+	$args = array('exclude' => $exclude, 'profile' => $profile, 'extras' => $extras, 'style' => $style, 'group' => $group, 'page_num' => $pagenum);
 	return embm_beer_list_output ($args);
 }
 
@@ -106,6 +107,7 @@ function embm_beer_list_output ($beers) {
 	$showprofile = $beers['profile'];
 	$showextras = $beers['extras'];
 	$showstyle = $beers['style'];
+	$showgroup = $beers['group'];
 	$showpages = $beers['page_num']; 
 	
 	$output = '';	
@@ -126,7 +128,12 @@ function embm_beer_list_output ($beers) {
 	// Add styles filter
 	if ($showstyle != '') {
 		$style_slug = get_term_by('name', $showstyle, 'embm_style', 'ARRAY_A');
-		$args['style'] = $style_slug['slug'];
+		$args['embm_style'] = $style_slug['slug'];
+	}
+	// Add groups filter
+	if ($showstyle != '') {
+		$group_slug = get_term_by('name', $showgroup, 'embm_group', 'ARRAY_A');
+		$args['embm_group'] = $group_slug['slug'];
 	}
 	
 	// Add id filter
@@ -174,7 +181,7 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 
 	$output .= '<div class="beer-title">'."\n";
 	
-	if (is_page() || is_archive()) {
+	if (is_page() || is_archive() || is_tax('embm_group')) {
 		$output .= '<a href="'.get_permalink($beer_id).'" titile="'.get_the_title($beer_id).'">';
 		$output .= '<h2>'.get_the_title($beer_id).'</h2>';
 		$output .= '</a>'."\n";
@@ -203,7 +210,7 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 	
 		$output .= get_the_content($beer_id);
 		
-		if (is_tax('embm_style') || is_archive()) {
+		if ( (is_tax('embm_style') || is_archive()) && !is_tax('embm_group') ) {
 			$output .= ' <a class="read-more" href="'.get_permalink($beer_id).'">';
 			$output .= __('More...', 'embm');
 			$output .= '</a>';
@@ -308,8 +315,7 @@ function embm_single_beer_template($single_template) {
      
      return $single_template;
 }
-
-add_filter( "single_template", "embm_single_beer_template" ) ;
+add_filter("single_template", "embm_single_beer_template");
 
 
 // Redirect beer archives to plugin theme files 
@@ -319,10 +325,9 @@ function embm_archive_beer_template($tax_template) {
           $archive_template = EMBM_PLUGIN_DIR. '/templates/archive-embm_beer.php';
      } 
      
-     return $archive_template_template;
+     return $archive_template;
 }
-
-add_filter( "taxonomy_template", "embm_archive_beer_template" ) ;
+add_filter("archive_template", "embm_archive_beer_template");
 
 
 // Redirect style pages to plugin theme files 
@@ -334,7 +339,19 @@ function embm_tax_style_template($tax_template) {
      
      return $tax_template;
 }
+add_filter("taxonomy_template", "embm_tax_style_template");
 
-add_filter( "taxonomy_template", "embm_tax_style_template" ) ;
+
+// Redirect group pages to plugin theme files 
+function embm_tax_group_template($tax_template) {
+
+     if (is_tax( 'embm_group' )) {
+          $tax_template = EMBM_PLUGIN_DIR. '/templates/taxonomy-embm_group.php';
+     } 
+     
+     return $tax_template;
+}
+add_filter("taxonomy_template", "embm_tax_group_template");
+
 
 ?>

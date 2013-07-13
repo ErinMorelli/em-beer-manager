@@ -152,7 +152,11 @@ function embm_beer_info_cb() {
 	$b_notes = isset( $beer_entry['notes'] ) ? esc_attr( $beer_entry['notes'][0] ) : '';
 	
 	$ut_option = get_option('embm_options');
-	$use_untappd = $ut_option['embm_untappd_check'];
+		if (isset($ut_option['embm_untappd_check'])) {
+			$use_untappd = $ut_option['embm_untappd_check']; 
+		} else {
+			$use_untappd = null;
+		}
 	
     // We'll use this nonce field later on when saving.  
     wp_nonce_field( 'my_meta_box_nonce_two', 'meta_box_nonce_two' ); 
@@ -278,6 +282,14 @@ function embm_create_group_tax() {
 		'add_or_remove_items' => __( 'Add or remove groups', 'embm' ),
 		'menu_name'         => __( 'Groups', 'embm' ),
 	);
+	
+	// Set slug rewrite to user input
+	$options = get_option('embm_options');
+	if (isset($options['embm_group_slug'])) {
+		$group_slug = 'beer/'.$options['embm_group_slug'];
+	} else {
+		$group_slug = 'beer/group';
+	}
 
 	$args = array(
 		'hierarchical'      => true,
@@ -285,7 +297,7 @@ function embm_create_group_tax() {
 		'show_ui'           => true,
 		'show_admin_column' => true,
 		'query_var'         => true,
-		'rewrite'           => array( 'slug' => 'group', 'with_front' => false ),
+		'rewrite'           => array( 'slug' => $group_slug, 'with_front' => false ),
 	);
 
 	register_taxonomy( 'embm_group', array( 'embm_beer' ), $args );

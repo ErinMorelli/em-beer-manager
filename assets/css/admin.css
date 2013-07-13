@@ -20,17 +20,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-#menu-posts-beer .wp-menu-image {
+#menu-posts-embm_beer .wp-menu-image {
 	background: url('../img/beer-icon.png') no-repeat 6px 6px !important;
 }
-#menu-posts-beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
+#menu-posts-embm_beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
 	background-position:6px -18px !important;
 }
-#icon-edit.icon32-posts-beer {
+#icon-edit.icon32-posts-embm_beer {
 	background: url('../img/beer-32x32.png') no-repeat;
 }
-.settings_page_embm-settings .widefat .column-id {
+.widefat #id.column-id {
 	width: 35px;
+}
+.widefat #untappd.column-untappd {
+	width: 80px;
 }
 #beer-settings .usage tr td {
 	border-collapse: collapse;
