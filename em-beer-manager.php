@@ -108,6 +108,11 @@ register_uninstall_hook(__FILE__, 'embm_plugin_uninstall');
 
 function embm_plugin_uninstall() {    
 
+	$curr_version = floatval(get_option('embm_version'));
+    $new_version = 1.7;
+    
+    if ($curr_version > $new_version) { //Keep beer data saved for those upgrading from 1.6 or earlier
+    
 	// remove Beer post type
 	global $wp_post_types;
     if ( isset( $wp_post_types[ 'embm_beer' ] ) ) {
@@ -151,6 +156,8 @@ function embm_plugin_uninstall() {
 			unset( $wp_taxonomies[$taxonomy] );
 		}
 	} 
+	
+	}
 		
 	//remove plugin css
 	wp_deregister_style( 'embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css' );
@@ -219,5 +226,26 @@ function embm_load_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'embm_load_styles' );
 
+
+// Update pre 1.7.0 databases to new naming
+add_action('init', 'embm_update_db_names');
+function embm_update_db_names() {
+	global $wpdb;
+	$curr_version = floatval(get_option('embm_version'));
+    $new_version = 1.7;
+    
+    if ($curr_version <= $new_version) {
+	    $wpdb->query("
+			UPDATE $wpdb->term_taxonomy 
+			SET taxonomy = 'embm_style'
+			WHERE taxonomy = 'style'
+		");
+		$wpdb->query("
+			UPDATE $wpdb->posts 
+			SET post_type = 'embm_beer'
+			WHERE post_type = 'beer'
+		");
+    }
+}
 
 ?>

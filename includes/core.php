@@ -250,7 +250,7 @@ function embm_create_style_tax() {
 	);
 
 	$args = array(
-		'hierarchical'      => true,
+		'hierarchical'      => false,
 		'labels'            => $labels,
 		'show_ui'           => true,
 		'show_admin_column' => true,
@@ -286,7 +286,8 @@ function embm_create_group_tax() {
 	// Set slug rewrite to user input
 	$options = get_option('embm_options');
 	if (isset($options['embm_group_slug'])) {
-		$group_slug = 'beer/'.$options['embm_group_slug'];
+		$new_slug = sanitize_key($options['embm_group_slug']);
+		$group_slug = 'beer/'.$new_slug;
 	} else {
 		$group_slug = 'beer/group';
 	}

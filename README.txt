@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.2
-Stable tag: 1.6.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
      [beer id={beer id}]
 
-     <?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>
+     <?php echo embm_beer_single( beer id, show_profile, show_extras ); ?>
 
 This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
 
@@ -53,7 +53,7 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
 
      [beer-list]
 
-     <?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)] ); ?>
+     <?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>
      
 This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
 
@@ -99,6 +99,9 @@ This will display a formatted listing of all beers in the database. Optional att
 
 
 == Frequently Asked Questions ==
+
+= Nothing is working or there are errors after upgrading to version 1.7.0 = 
+EM Beer Manager updated the beer database structure in v1.7.0 and should automatically make any necessary changes. However in the case that the automatic update does not work, you will need to uninstall EM Beer Manager and install the latest v1.7.x or higher release to maintain functionality. You will not lose any of your Beer or Styles data when uninstalling the older version.
 
 
 = How do I display an image of my beer next to its name and description? =
@@ -154,6 +157,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 = 1.7.0 =
 * Renamed all EMBM custom post types and taxonomies to include embm_ prefix 
 * Added new "Group" taxonomy with the ability to customize slug
+* "Styles" taxonomy is no longer hierarchical 
 * Updated "Beer List" widget, shortcode, and template tag to include "Group" filters
 * Added "Group" page template
 * Fixed a number of escaped input errors being thrown on the settings page

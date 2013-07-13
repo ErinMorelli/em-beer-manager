@@ -228,7 +228,7 @@ function embm_css_box() {
 } 
 function embm_group_box() {
 	$options = get_option('embm_options');
-	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.esc_attr($options['embm_group_slug']).'" />'."\n";
+	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" />'."\n";
 	echo '<br /><small>'.__('NOTE: You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting', 'embm').'</small>';
 } 
 
@@ -267,7 +267,7 @@ function embm_settings() {
      <p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
      <p><code> [beer id={beer id}] </code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_single( beer id, show_profile, show_extras ); ?>'); ?></code></p>
 
      <p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
@@ -287,7 +287,7 @@ function embm_settings() {
 	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)],  [group (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
