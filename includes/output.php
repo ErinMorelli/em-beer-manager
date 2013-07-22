@@ -94,7 +94,7 @@ add_shortcode('beer-list', 'embm_all_beers');
 
 
 // Beer list template code
-function embm_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $pagenum = -1) {
+function embm_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $group = '', $pagenum = -1) {
 	$args = array('exclude' => $exclude, 'profile' => $profile, 'extras' => $extras, 'style' => $style, 'group' => $group, 'page_num' => $pagenum);
 	return embm_beer_list_output ($args);
 }

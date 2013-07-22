@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.5.2
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -153,6 +153,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 1.7.1 = 
+* Fixed a bug with the beer list shortcode/template code throwing a "Group" error
 
 = 1.7.0 =
 * Renamed all EMBM custom post types and taxonomies to include embm_ prefix 

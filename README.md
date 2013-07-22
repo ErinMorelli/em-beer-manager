@@ -107,6 +107,9 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Changelog ###
 
 
+#### 1.7.1 ###
+* Fixed a bug with the beer list shortcode/template code throwing a "Group" error
+
 #### 1.7.0 ###
 * Renamed all EMBM custom post types and taxonomies to include embm_ prefix 
 * Added new "Group" taxonomy with the ability to customize slug
