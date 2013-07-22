@@ -187,6 +187,8 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
+= 1.7.1 = 
+* Fixed beer list shortcode "Group" error
 
 = 1.7.0 =
 Major bug fixes and a new "Group" taxonomy
