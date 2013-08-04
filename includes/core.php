@@ -257,8 +257,27 @@ function embm_create_style_tax() {
 	);
 
 	register_taxonomy( 'embm_style', array( 'embm_beer' ), $args );
+	embm_populate_styles();
 }
 
+
+function embm_populate_styles() {
+	
+	include(EMBM_PLUGIN_DIR.'assets/beer-styles.php');
+	       
+	$beer_styles = new SimpleXmlElement($xmlstr); 	
+	
+	foreach($beer_styles->item as $beer_style) {
+		wp_insert_term(
+		  $beer_style->name,
+		  'embm_style', 
+		  array(
+		    'slug' => $beer_style->slug
+		  )
+		);   
+	}
+}
+    
 
 // ==== CUSTOM GROUP TAXONOMY === //
 
