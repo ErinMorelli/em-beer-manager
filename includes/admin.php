@@ -253,7 +253,7 @@ function embm_profile_box() {
 	} else {
 		$view_profile = null;
 	}
-	echo '<input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
+	echo '<input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("What's this?", "embm").'</small></a></span>';
 } 
 function embm_extras_box() {
 	$options = get_option('embm_options');
@@ -262,7 +262,7 @@ function embm_extras_box() {
 	} else {
 		$view_extras = null;
 	}
-	echo '<input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
+	echo '<input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("What's this?", "embm").'</small></a></span>';
 }
 function embm_profile_group_box() {
 	$options = get_option('embm_options');
@@ -329,7 +329,11 @@ function embm_settings() {
 
     <div id="icon-edit" class="icon32 icon32-posts-embm_beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
     
-    <h2><?php _e("Settings", "embm"); ?></h2>
+    <script type="text/javascript">
+    	function untappdHelp() {
+    		window.open("<?php echo EMBM_PLUGIN_URL; ?>assets/embm-help.php#settings","Finding Your Untappd Brewery ID","menubar=no,width=460,height=550,toolbar=no");
+    	}
+	</script>
     
     <form method="post" action="options.php" class="emdm-form-settings"> 
     

@@ -27,7 +27,7 @@ function embm_plugin_load(){
     
     foreach (scandir(EMBM_PLUGIN_DIR.'includes/components') as $filename) {
     	$path = EMBM_PLUGIN_DIR.'includes/components/' . $filename;
-    	if (is_file($path)) {
+    	if (is_file($path) && ($filename != '.DS_Store')) {
         	require $path;
         }
     }

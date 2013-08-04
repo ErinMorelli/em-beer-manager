@@ -515,10 +515,4 @@ function embm_title_filter($title, $id) {
 }
 add_filter('the_title', 'embm_title_filter', 10, 2);
 
-
-
-
-
-
-
 ?>
