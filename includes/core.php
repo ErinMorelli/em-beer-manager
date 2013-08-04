@@ -263,18 +263,23 @@ function embm_create_style_tax() {
 
 function embm_populate_styles() {
 	
-	include(EMBM_PLUGIN_DIR.'assets/beer-styles.php');
-	       
-	$beer_styles = new SimpleXmlElement($xmlstr); 	
+	if (get_option('embm_styles_loaded') != 'true') {
 	
-	foreach($beer_styles->item as $beer_style) {
-		wp_insert_term(
-		  $beer_style->name,
-		  'embm_style', 
-		  array(
-		    'slug' => $beer_style->slug
-		  )
-		);   
+		include(EMBM_PLUGIN_DIR.'assets/beer-styles.php');
+		       
+		$beer_styles = new SimpleXmlElement($xmlstr); 	
+		
+		foreach($beer_styles->item as $beer_style) {
+			wp_insert_term(
+			  $beer_style->name,
+			  'embm_style', 
+			  array(
+			    'slug' => $beer_style->slug
+			  )
+			);   
+		}
+		
+		add_option('embm_styles_loaded', 'true');
 	}
 }
     

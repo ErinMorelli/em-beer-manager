@@ -9,7 +9,7 @@ Manage your beers with WordPress. Integrates simply with Untappd beer checkins. 
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
-* A custom beer "style" taxonomy for classifying your beers
+* A custom beer "style" taxonomy for classifying your beers pre-populated with styles from BeerPal
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
@@ -20,7 +20,6 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 #### Planned Features ####
 
-* Auto-populate "styles" taxonomy from official beer styles list
 * Post/Page "Add Beer" button to auto-generate shortcode input
 * Possibly add a ratings/review system down-the-line
 
@@ -108,8 +107,10 @@ This will display a formatted listing of all beers in the database. Optional att
 
 
 #### 1.8.0 ###
+* Updated compatibility with WP v3.6
 * Removed template files & added filters to make single beer, group taxonomy, and style taxonmy displays integrate more universally with themes
 * Added new settings to control how single, group, and style pages are displayed
+* Styles will now populate with styles list courtesy of BeerPal
 
 #### 1.7.1 ###
 * Fixed a bug with the beer list shortcode/template code throwing a "Group" error
