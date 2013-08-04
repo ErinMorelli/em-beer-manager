@@ -195,14 +195,29 @@ add_action('admin_head', 'options_embm_add_js');
 function embm_register_settings() { // whitelist options
   register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
   
-  // Untappd settings
-  add_settings_section('embm_untappd', 'Untappd', 'embm_section_text', 'embm');
-  add_settings_field('embm_untappd_check', 'Disable integration:', 'embm_untappd_box', 'embm', 'embm_untappd');
-  
-  // Custom EMBM settings
-  add_settings_section('embm_custom_url', 'Customize', 'embm_section_text', 'embm');
+  // Global EMBM settings
+  add_settings_section('embm_custom_url', 'Global Settings', 'embm_section_text', 'embm');
+  add_settings_field('embm_untappd_check', 'Disable Untappd integration:', 'embm_untappd_box', 'embm', 'embm_custom_url');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_box', 'embm', 'embm_custom_url');
-  add_settings_field('embm_group_slug', 'Custom Group taxonomy slug:', 'embm_group_box', 'embm', 'embm_custom_url');
+  add_settings_field('embm_profile_show', 'Globally hide "profile" info:', 'embm_profile_box', 'embm', 'embm_custom_url');
+  add_settings_field('embm_extras_show', 'Globally hide "extras" info:', 'embm_extras_box', 'embm', 'embm_custom_url');
+  
+  // Group Tax Settings
+  add_settings_section('embm_group_settings', 'Groups Display', 'embm_section_text', 'embm');
+  add_settings_field('embm_group_slug', 'Custom Group taxonomy slug:', 'embm_group_box', 'embm', 'embm_group_settings');
+  add_settings_field('embm_profile_show_group', 'Hide "profile" info:', 'embm_profile_group_box', 'embm', 'embm_group_settings');
+  add_settings_field('embm_extras_show_group', 'Hide "extras" info:', 'embm_extras_group_box', 'embm', 'embm_group_settings');
+  
+  // Style Tax Settings
+  add_settings_section('embm_style_settings', 'Styles Display', 'embm_section_text', 'embm');
+  add_settings_field('embm_profile_show_style', 'Hide "profile" info:', 'embm_profile_style_box', 'embm', 'embm_style_settings');
+  add_settings_field('embm_extras_show_style', 'Hide "extras" info:', 'embm_extras_style_box', 'embm', 'embm_style_settings');
+  
+  // Single Beer Settings
+  add_settings_section('embm_single_settings', 'Single Beer Display', 'embm_section_text', 'embm');
+  add_settings_field('embm_profile_show_single', 'Hide "profile" info:', 'embm_profile_single_box', 'embm', 'embm_single_settings');
+  add_settings_field('embm_extras_show_single', 'Hide "extras" info:', 'embm_extras_single_box', 'embm', 'embm_single_settings');
+  
 }
 
 add_action( 'admin_init', 'embm_register_settings' );
@@ -230,7 +245,79 @@ function embm_group_box() {
 	$options = get_option('embm_options');
 	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" />'."\n";
 	echo '<br /><small>'.__('NOTE: You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting', 'embm').'</small>';
+}
+function embm_profile_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_profile_show'])) {
+		$view_profile = $options['embm_profile_show']; 
+	} else {
+		$view_profile = null;
+	}
+	echo '<input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
 } 
+function embm_extras_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_extras_show'])) {
+		$view_extras = $options['embm_extras_show']; 
+	} else {
+		$view_extras = null;
+	}
+	echo '<input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
+}
+function embm_profile_group_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_profile_show_group'])) {
+		$view_profile = $options['embm_profile_show_group']; 
+	} else {
+		$view_profile = null;
+	}
+	echo '<input name="embm_options[embm_profile_show_group]" type="checkbox" id="embm_profile_show_group" value="1"'.checked('1', $view_profile, false).' /> ';
+} 
+function embm_extras_group_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_extras_show_group'])) {
+		$view_extras = $options['embm_extras_show_group']; 
+	} else {
+		$view_extras = null;
+	}
+	echo '<input name="embm_options[embm_extras_show_group]" type="checkbox" id="embm_extras_show_group" value="1"'.checked('1', $view_extras, false).' /> ';
+}
+function embm_profile_style_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_profile_show_style'])) {
+		$view_profile = $options['embm_profile_show_style']; 
+	} else {
+		$view_profile = null;
+	}
+	echo '<input name="embm_options[embm_profile_show_style]" type="checkbox" id="embm_profile_show_style" value="1"'.checked('1', $view_profile, false).' /> ';
+} 
+function embm_extras_style_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_extras_show_style'])) {
+		$view_extras = $options['embm_extras_show_style']; 
+	} else {
+		$view_extras = null;
+	}
+	echo '<input name="embm_options[embm_extras_show_style]" type="checkbox" id="embm_extras_show_style" value="1"'.checked('1', $view_extras, false).' /> ';
+}
+function embm_profile_single_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_profile_show_single'])) {
+		$view_profile = $options['embm_profile_show_single']; 
+	} else {
+		$view_profile = null;
+	}
+	echo '<input name="embm_options[embm_profile_show_single]" type="checkbox" id="embm_profile_show_single" value="1"'.checked('1', $view_profile, false).' /> ';
+} 
+function embm_extras_single_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_extras_show_single'])) {
+		$view_extras = $options['embm_extras_show_single']; 
+	} else {
+		$view_extras = null;
+	}
+	echo '<input name="embm_options[embm_extras_show_single]" type="checkbox" id="embm_extras_show_single" value="1"'.checked('1', $view_extras, false).' /> ';
+}  
 
 function embm_settings() {
     if (!current_user_can('manage_options')) {
@@ -267,7 +354,7 @@ function embm_settings() {
      <p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
      <p><code> [beer id={beer id}] </code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_single( beer id, show_profile, show_extras ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
 
      <p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
@@ -287,7 +374,7 @@ function embm_settings() {
 	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)],  [group (optional)] ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">

@@ -107,6 +107,10 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Changelog ###
 
 
+#### 1.8.0 ###
+* Removed template files & added filters to make single beer, group taxonomy, and style taxonmy displays integrate more universally with themes
+* Added new settings to control how single, group, and style pages are displayed
+
 #### 1.7.1 ###
 * Fixed a bug with the beer list shortcode/template code throwing a "Group" error
 

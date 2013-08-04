@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 3.5.2
-Stable tag: 1.7.1
+Tested up to: 3.6.0
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,9 +135,9 @@ The `show_profile` setting refers to all the content in the "Beer Profile" infor
 The Untappd checkin integration is handled separately from the `show_extras` setting. To hide the button for a single beer, make sure the "Untappd Check-in URL" box is empty - a square Untappd check-in icon will appear on the "Beers" admin page next to the beers where the button is active. You can also completely disable the Untappd options through the "EM Beer Manager" settings page. 
 
 
-= My beer and style pages are not displaying or are showing a 404 error =
+= My beer, style, or group pages are not displaying or are showing a 404 error =
 
-Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If this does not work, it may be due to your site's theme overriding the EM Beer Manager templates. You can edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
+Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If you are running EM Beer Manager 1.7.1 or earlier, it may be due to your site's theme overriding the EM Beer Manager templates. We recommend updating to version 1.8.0 or higher, but you can  also edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
 
 
 
@@ -153,6 +153,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 1.8.0 = 
+* Removed template files & added filters to make single beer, group taxonomy, and style taxonmy displays integrate more universally with themes
+* Added new settings to control how single, group, and style pages are displayed
 
 = 1.7.1 = 
 * Fixed a bug with the beer list shortcode/template code throwing a "Group" error
