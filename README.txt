@@ -155,7 +155,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 = 1.8.0 = 
 * Updated compatibility with WP v3.6
-* Removed template files & added filters to make single beer, group taxonomy, and style taxonmy displays integrate more universally with themes
+* Removed template files & added filters to make single beer, group taxonomy, and style taxonomy displays integrate more universally with themes
 * Added new settings to control how single, group, and style pages are displayed
 * Styles will now populate with styles list courtesy of BeerPal
 
