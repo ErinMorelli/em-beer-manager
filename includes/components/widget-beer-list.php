@@ -39,6 +39,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 	  $instance = wp_parse_args( (array) $instance, array( 
 	    'title' => '',
       	'exclude' => '',
+      	'count' => '3',
       	'summary' => null,
       	'sum_length' => '100',
       	'style' => '',
@@ -46,6 +47,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 	  ) );
 	  $title = $instance['title'];
 	  $exclude = $instance['exclude'];
+	  $count = $instance['count'];
 	  $summary = $instance['summary'];
 	  $sum_length = $instance['sum_length'];
 	  $style = $instance['style'];
@@ -59,6 +61,10 @@ class EMBM_Beer_List_Widget extends WP_Widget {
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers: ', 'embm'); ?></label><br />
 		  	<input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs, e.g. "1,2,3"', 'embm'); ?></small>
+		  </p>
+		  <p>
+		  	<label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Beer Count: ', 'embm'); ?></label>
+		  	<input id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="number" style="width: 25%;" value="<?php echo $count; ?>" />
 		  </p>
 		  <p>
 		  	<label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary: ', 'embm'); ?></label>
@@ -104,6 +110,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
     
     $instance['title'] = $new_instance['title'];
   	$instance['exclude'] = $new_instance['exclude'];
+  	$instance['count'] = $new_instance['count'];
   	$instance['summary'] = $new_instance['summary'];
   	$instance['sum_length'] = $new_instance['sum_length'];
   	$instance['style'] = $new_instance['style'];
@@ -116,6 +123,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
   	extract( $args );
     $title = apply_filters( 'widget_title', $instance['title'] );
     $exclude = apply_filters( 'widget_exclude', $instance['exclude'] );
+    $count = apply_filters( 'widget_count', $instance['count'] );
     $summary = apply_filters( 'widget_summary', $instance['summary'] );
     $sum_length = apply_filters( 'widget_sum_length', $instance['sum_length'] );
     $style = apply_filters( 'widget_style', $instance['style'] );
@@ -126,6 +134,7 @@ class EMBM_Beer_List_Widget extends WP_Widget {
     echo embm_display_list_widget( array (
     	'title' => $title,
     	'exclude' => $exclude,
+    	'count' => $count,
     	'summary' => $summary,
     	'sum_length' => $sum_length,
     	'style' => $style,
@@ -145,6 +154,7 @@ function embm_display_list_widget($beers) {
 	// Widget variables
 	$title = $beers['title'];
 	$exclude = explode(',', $beers['exclude']);
+	$count = $beers['count'];
 	$summary = $beers['summary'];
 	$sum_length = $beers['sum_length'];
 	$style = $beers['style']; 
@@ -160,6 +170,12 @@ function embm_display_list_widget($beers) {
 	$args = array (
 		'post_type' => 'embm_beer'
 	);
+	
+	
+	// Add count filter 
+	if ($count != '') {
+		$args['posts_per_page'] = $count;	
+	} 
 	
 	// Add styles filter
 	if ($style != 'all') {

@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.6.0
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,15 +35,15 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
      [beer id={beer id}]
 
-     <?php echo embm_beer_single( beer id, show_profile, show_extras ); ?>
+     <?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>
 
 This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
 
-* __show_profile={`true/false`}__ (Default = `true`)
+* __show_profile=`"true/false"`__ (Default = `true`)
      
     *Displays or hides the "Beer Profile" information*
 
-* __show_extras={`true/false`}__ (Default = `true`)
+* __show_extras=`"true/false"`__ (Default = `true`)
      
     *Displays or hides the "More Information" section*
 
@@ -57,27 +57,27 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
      
 This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
 
-* __exclude={`"beer ids"`}__ (String separated by commas e.g. `"4,23,24"`)
+* __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`)
 
     *Hides listed beers from output*
 
-* __show_profile={`true/false`}__ (Default = `true`)
+* __show_profile=`"true/false"`__ (Default = `true`)
 
     *Displays or hides the "Beer Profile" information for each listing*
 
-* __show_extras={`true/false`}__ (Default = `true`)
+* __show_extras=`"true/false"`__ (Default = `true`)
 
     *Displays or hides the "More Information" section for each listing*
 
-* __style={`"style name"`}__ (String e.g. `"India Pale Ale"`)
+* __style=`"style name"`__ (String e.g. `"India Pale Ale"`)
 
     *Displays only beers belonging to a specific beer style*
     
-* __group={`"group name"`}__ (String e.g. `"Seasonals"`)
+* __group=`"group name"`__ (String e.g. `"Seasonals"`)
 
     *Displays only beers belonging to a specific group*
 
-* __beers\_per\_page={`number`}__ (Default = `-1`, shows all beers on one page)
+* __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page)
 
     *Paginates output and displays the given number of beers per page*
 
@@ -153,6 +153,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.8.1 = 
+* Fixed a bug with the Beer List shortcode not displaying groups properly
+* Added "beer count" control to Beer List widget
+
 = 1.8.0 = 
 * Updated compatibility with WP v3.6
 * Removed template files & added filters to make single beer, group taxonomy, and style taxonomy displays integrate more universally with themes
@@ -192,11 +196,14 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
+= 1.8.1 = 
+Upgraded templates, permalinks need to be refreshed
+
 = 1.8.0 = 
-* Upgraded templates, permalinks need to be refreshed
+Upgraded templates, permalinks need to be refreshed
 
 = 1.7.1 = 
-* Fixed beer list shortcode "Group" error
+Fixed beer list shortcode "Group" error
 
 = 1.7.0 =
 Major bug fixes and a new "Group" taxonomy

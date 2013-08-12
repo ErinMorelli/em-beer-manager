@@ -357,17 +357,17 @@ function embm_settings() {
     
      <p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
-     <p><code> [beer id={beer id}] </code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_single( [beer id], [show_profile (optional)], [show_extras (optional)] ); ?>'); ?></code></p>
+     <p><code> [beer id="beer id"] </code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>'); ?></code></p>
 
      <p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
-	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
+	     <td><code><strong>show_profile=</strong>"true/false"</code></td>
 	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
 	     <td><em><?php _e('Displays or hides the "Beer Profile" information', 'embm'); ?></em></td>
 	 </tr><tr>
-		 <td><code><strong>show_extras=</strong>{true/false}</code></td> 
+		 <td><code><strong>show_extras=</strong>"true/false"</code></td> 
 		 <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
 		 <td><em><?php _e('Displays or hides the "More Information" section', 'embm'); ?></em></td>
      </tr>
@@ -378,33 +378,33 @@ function embm_settings() {
 	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_list( [exclude (optional)], [show_profile (optional)], [show_extras (optional)], [style (optional)],  [group (optional)] ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
      <tr>
-	     <td><code><strong>exclude=</strong>{"beer ids"}</code></td>
+	     <td><code><strong>exclude=</strong>"beer ids"</code></td>
 	     <td>(<?php _e('String separated by commas', 'embm'); ?> e.g. <code>"4,23,24"</code>)</td>
 	     <td><em><?php _e('Hides listed beers from output', 'embm'); ?></em></td>
      </tr><tr>
-	     <td><code><strong>show_profile=</strong>{true/false}</code></td>
+	     <td><code><strong>show_profile=</strong>"true/false"</code></td>
 	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
 	     <td><em><?php _e('Displays or hides the "Beer Profile" information for each listing', 'embm'); ?></em></td>
      </tr><tr>
-	     <td><code><strong>show_extras=</strong>{true/false}</code></td>
+	     <td><code><strong>show_extras=</strong>"true/false"</code></td>
 	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
 	     <td><em><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></em></td>
      </tr><tr>
-	     <td><code><strong>style=</strong>{"style name"}</code></td>
+	     <td><code><strong>style=</strong>"style name"</code></td>
 	     <td>(<?php _e('String'); ?> e.g. <code>"India Pale Ale"</code>)</td>
 	     <td><em><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></em></td>
      </tr><tr>
-	     <td><code><strong>group=</strong>{"group name"}</code></td>
+	     <td><code><strong>group=</strong>"group name"</code></td>
 	     <td>(<?php _e('String'); ?> e.g. <code>"Seasonals"</code>)</td>
 	     <td><em><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></em></td>
      </tr><tr>
-	     <td><code><strong>beers_per_page=</strong>{number}</code></td>
-	     <td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?></td>
+	     <td><code><strong>beers_per_page=</strong>"number"</code></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?>)</td>
 	     <td><em><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></em></td>
      </tr>
      </table>

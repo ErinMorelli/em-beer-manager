@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/wordpress/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.8.0
+ * Version: 1.8.1
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -61,7 +61,7 @@ register_activation_hook(__FILE__, 'embm_plugin_activation');
 
 function embm_plugin_activation() {
 	// Check for new version
-	$embm_curr_version = '1.8.0';
+	$embm_curr_version = '1.8.1';
 	 
 	if (!defined('EMBM_VERSION_KEY')) {
 		// Define new version option
@@ -111,7 +111,7 @@ function embm_plugin_uninstall() {
 	$curr_version = floatval(get_option('embm_version'));
     $new_version = 1.7;
     
-    if ($curr_version > $new_version) { //Keep beer data saved for those upgrading from 1.6 or earlier
+    if ($curr_version < $new_version) { //Keep beer data saved for those upgrading from 1.6 or earlier
     
 	// remove Beer post type
 	global $wp_post_types;
@@ -176,6 +176,7 @@ function embm_plugin_uninstall() {
 	//remove custom settings
 	delete_option('embm_version');
 	delete_option('embm_options');
+	delete_option('embm_db_upgrade');
 	delete_option('widget_beer_list_widget');
 	delete_option('widget_recent_untappd_widget');
 }
@@ -231,10 +232,11 @@ add_action( 'wp_enqueue_scripts', 'embm_load_styles' );
 add_action('init', 'embm_update_db_names');
 function embm_update_db_names() {
 	global $wpdb;
+	$upgrade = get_option('embm_db_upgrade');
 	$curr_version = floatval(get_option('embm_version'));
     $new_version = 1.7;
     
-    if ($curr_version <= $new_version) {
+    if ( ($curr_version >= $new_version) && ($upgrade == false) ) {
 	    $wpdb->query("
 			UPDATE $wpdb->term_taxonomy 
 			SET taxonomy = 'embm_style'
@@ -245,6 +247,7 @@ function embm_update_db_names() {
 			SET post_type = 'embm_beer'
 			WHERE post_type = 'beer'
 		");
+		add_option('embm_db_upgrade', 'true');
     }
 }
 
