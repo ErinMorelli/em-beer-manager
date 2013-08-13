@@ -199,7 +199,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 == Upgrade Notice ==
 
 = 1.8.1 = 
-Upgraded templates, permalinks need to be refreshed
+Minor bug fixes and new beer list widget options
 
 = 1.8.0 = 
 Upgraded templates, permalinks need to be refreshed
