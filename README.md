@@ -28,9 +28,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-1.jpg)
 2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-2.jpg)
 3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-3.jpg)
-4. [Special styles organization](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-4.jpg)
-5. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-5.jpg)
-6. [Beer List widget options](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-6.jpg)
+4. [Pre-populated styles taxonomy](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-4.jpg)
+5. [Special groups taxonomy](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-5.jpg)
+6. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-6.jpg)
+7. [Untappd check-in widget options & display](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-7.jpg)
+8. [Beer List widget options & display](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-8.jpg)
 
 
 *****
