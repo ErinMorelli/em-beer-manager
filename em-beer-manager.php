@@ -111,7 +111,7 @@ function embm_plugin_uninstall() {
 	$curr_version = floatval(get_option('embm_version'));
     $new_version = 1.7;
     
-    if ($curr_version < $new_version) { //Keep beer data saved for those upgrading from 1.6 or earlier
+    if ($curr_version >= $new_version) { //Keep beer data saved for those upgrading from 1.6 or earlier
     
 	// remove Beer post type
 	global $wp_post_types;
