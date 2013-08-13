@@ -146,8 +146,8 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 1. The "Beer" management screen
 2. Beer profile information
 3. Extra Beer information
-4. Pre-populated styles taxonomy
-5. Special groups taxonomy
+4. Special groups taxonomy
+5. Pre-populated styles taxonomy
 6. Single beer front-end display (with all options enabled)
 7. Untappd check-in widget options & display
 8. Beer List widget options & display
