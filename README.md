@@ -105,44 +105,9 @@ This will display a formatted listing of all beers in the database. Optional att
 
 *****
 
-### Changelog ###
+### Latest Release ###
 
 
-#### 1.8.1 ###
+#### [Version 1.8.1 - Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.8.1) ###
 * Fixed a bug with the Beer List shortcode not displaying groups properly
 * Added "beer count" control to Beer List widget
-
-#### 1.8.0 ###
-* Updated compatibility with WP v3.6
-* Removed template files & added filters to make single beer, group taxonomy, and style taxonomy displays integrate more universally with themes
-* Added new settings to control how single, group, and style pages are displayed
-* Styles will now populate with styles list courtesy of BeerPal
-
-#### 1.7.1 ###
-* Fixed a bug with the beer list shortcode/template code throwing a "Group" error
-
-#### 1.7.0 ###
-* Renamed all EMBM custom post types and taxonomies to include embm_ prefix 
-* Added new "Group" taxonomy with the ability to customize slug
-* "Styles" taxonomy is no longer hierarchical 
-* Updated "Beer List" widget, shortcode, and template tag to include "Group" filters
-* Added "Group" page template
-* Fixed a number of escaped input errors being thrown on the settings page
-
-#### 1.6.1 ###
-* Fixed a bug that was throwing an invalid function warning on the settings page
-
-#### 1.6.0 ####
-* Added localization POT
-* Added new "Recent Untappd Check-Ins" widget
-* Added new settings option for Untappd brewery ID
-* Updated settings page with help documentation
-
-#### 1.5 ####
-* Added translatable strings for localization
-* Added new "Beer List" widget to display a list of beers with a number of display options
-* Added themed template files for styles and single beer page display
-* Fixed bug that caused plugin activation to throw a header error
-
-#### 1.0 ####
-* Initial plugin release
