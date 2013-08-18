@@ -60,6 +60,44 @@ function embm_custom_post_beer() {
 add_action( 'init', 'embm_custom_post_beer' );
 
 
+// Check to see if comments are enabled in settings & add support
+
+add_action( 'after setup theme', 'embm_enable_beer_comments' ); 
+
+function embm_enable_beer_comments() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_comment_check'])) {
+		$use_comments = $options['embm_comment_check']; 
+	} else {
+		$use_comments = null;
+	}
+	
+	if ($use_comments == "1") {
+	
+		add_post_type_support( 'embm_beer', 'comments' );
+		
+	} else {
+	
+		remove_post_type_support( 'embm_beer', 'comments' );
+		
+		$args = array(
+			'post_type' =>'embm_beer',
+			'comment_status' => 'open' 
+		);
+		$posts = get_posts( $args );
+		
+		if (is_array($posts)) {
+		   foreach ($posts as $post) {
+		       $post->comment_status = 'closed';
+		       $post->ping_status = 'closed';
+		       wp_update_post( $post );
+		   }
+		}	
+	}
+	
+}
+
+
 
 // ==== REGISTER BEER PROFILE META BOX === //
 

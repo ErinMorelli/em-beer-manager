@@ -198,6 +198,7 @@ function embm_register_settings() { // whitelist options
   // Global EMBM settings
   add_settings_section('embm_custom_url', 'Global Settings', 'embm_section_text', 'embm');
   add_settings_field('embm_untappd_check', 'Disable Untappd integration:', 'embm_untappd_box', 'embm', 'embm_custom_url');
+  add_settings_field('embm_comment_check', 'Enable commenting on beers:', 'embm_comment_box', 'embm', 'embm_custom_url');
   add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_box', 'embm', 'embm_custom_url');
   add_settings_field('embm_profile_show', 'Globally hide "profile" info:', 'embm_profile_box', 'embm', 'embm_custom_url');
   add_settings_field('embm_extras_show', 'Globally hide "extras" info:', 'embm_extras_box', 'embm', 'embm_custom_url');
@@ -236,6 +237,15 @@ function embm_untappd_box() {
 		$use_untappd = null;
 	}
 	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
+} 
+function embm_comment_box() {
+	$options = get_option('embm_options');
+	if (isset($options['embm_comment_check'])) {
+		$use_comments = $options['embm_comment_check']; 
+	} else {
+		$use_comments = null;
+	}
+	echo '<input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
 } 
 function embm_css_box() {
 	$options = get_option('embm_options');
