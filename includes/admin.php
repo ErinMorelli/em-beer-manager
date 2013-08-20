@@ -388,7 +388,7 @@ function embm_settings() {
 	  <p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
      <p><code>[beer-list]</code></p>
-     <p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>'); ?></code></p>
+     <p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>'); ?></code></p>
     
      <p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
      <table class="usage" cellpadding="0" cellspacing="0" border="0">
@@ -416,6 +416,18 @@ function embm_settings() {
 	     <td><code><strong>beers_per_page=</strong>"number"</code></td>
 	     <td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?>)</td>
 	     <td><em><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></em></td>
+     </tr><tr>
+	     <td><code><strong>paginate=</strong>"true/false"</code></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>); ?>)</td>
+	     <td><em><?php _e('Disables/enables pagination', 'embm'); ?></em></td>
+     </tr><tr>
+	     <td><code><strong>orderby=</strong>"string"</code></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>date</code>, <?php echo sprintf('See <a href="%s" target="_blank">this list</a> for options', 'http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters'); ?>)</td>
+	     <td><em><?php _e('Orders output by given paramater', 'embm'); ?></em></td>
+     </tr><tr>
+	     <td><code><strong>order=</strong>"desc/asc"</code></td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>desc</code>)</td>
+	     <td><em><?php _e('List beer by <code>orderby</code> value in ascending or descending order', 'embm'); ?></em></td>
      </tr>
      </table>
      <br />

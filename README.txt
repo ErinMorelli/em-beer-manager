@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.6.0
-Stable tag: 1.8.2
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,53 +33,43 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 #### Single Beer Display ####
 
-     [beer id={beer id}]
+`[beer id={beer id}]`
 
-     <?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>
+`<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
 This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
 
-* __show_profile=`"true/false"`__ (Default = `true`)
-     
-    *Displays or hides the "Beer Profile" information*
+* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
 
-* __show_extras=`"true/false"`__ (Default = `true`)
-     
-    *Displays or hides the "More Information" section*
+* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
 
 
 #### List All Beers ####
 
 
-     [beer-list]
+`[beer-list]`
 
-     <?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page ); ?>
+`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
      
 This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
 
-* __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`)
+* __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
 
-    *Hides listed beers from output*
+* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information for each listing*
 
-* __show_profile=`"true/false"`__ (Default = `true`)
+* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section for each listing*
 
-    *Displays or hides the "Beer Profile" information for each listing*
-
-* __show_extras=`"true/false"`__ (Default = `true`)
-
-    *Displays or hides the "More Information" section for each listing*
-
-* __style=`"style name"`__ (String e.g. `"India Pale Ale"`)
-
-    *Displays only beers belonging to a specific beer style*
+* __style=`"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
     
-* __group=`"group name"`__ (String e.g. `"Seasonals"`)
+* __group=`"group name"`__ (String e.g. `"Seasonals"`) // *Displays only beers belonging to a specific group*
 
-    *Displays only beers belonging to a specific group*
+* __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
+   
+* __paginate=`"true/false"`__ (Default = `true`) // *Disables/enables pagination*
+    
+* __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
 
-* __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page)
-
-    *Paginates output and displays the given number of beers per page*
+* __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*
 
 
 
@@ -155,7 +145,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
-= 1.8.2 = 
+= 1.9.0 = 
 * ??
 
 = 1.8.1 = 
@@ -200,6 +190,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
 
 = 1.8.1 = 
 Minor bug fixes and new beer list widget options

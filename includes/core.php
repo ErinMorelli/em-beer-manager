@@ -52,7 +52,7 @@ function embm_custom_post_beer() {
 		'has-archive' 		=> true,
 		'menu_position' 	=> 5,
 		'rewrite' 			=> array( 'slug' => 'beers', 'with_front' => false, 'feeds' => true, 'pages' => true),
-		'supports'      	=> array( 'title', 'editor', 'thumbnail', 'revisions'),
+		'supports'      	=> array( 'title', 'editor', 'thumbnail', 'revisions', 'comments'),
 	);
 	register_post_type( 'embm_beer', $args );	
 }
@@ -60,42 +60,71 @@ function embm_custom_post_beer() {
 add_action( 'init', 'embm_custom_post_beer' );
 
 
-// Check to see if comments are enabled in settings & add support
 
-add_action( 'after setup theme', 'embm_enable_beer_comments' ); 
+// ==== Enable/Disable Commenting on Beers === //
 
-function embm_enable_beer_comments() {
+
+// Determine comment open/closed status
+function embm_filter_comment_status( $open, $post_id ) {
+
+	$post = get_post( $post_id );
 	$options = get_option('embm_options');
-	if (isset($options['embm_comment_check'])) {
-		$use_comments = $options['embm_comment_check']; 
-	} else {
-		$use_comments = null;
+	
+	if (isset($options['embm_comment_check'])) {$use_comments = $options['embm_comment_check']; } 
+	else {$use_comments = null;}
+		
+	if ($use_comments != "1") {
+		$open = false;
 	}
+	
+	return $open;
+}
+
+// When disabled, replace comments template with dummy file
+function embm_comment_template() {
+	
+	global $post;
+	$options = get_option('embm_options');
+	
+	if (isset($options['embm_comment_check'])) {$use_comments = $options['embm_comment_check']; } 
+	else {$use_comments = null;}
+	
+	if ($use_comments != "1") {
+		if($post->post_type == 'embm_beer'){ 
+        	return EMBM_PLUGIN_DIR.'assets/embm-comments.php';
+        }
+    }
+}
+
+// Toggle function that controls filters
+function embm_beer_comments_toggle() {
+	$options = get_option('embm_options');
+	
+	if (isset($options['embm_comment_check'])) {$use_comments = $options['embm_comment_check']; } 
+	else {$use_comments = null;}
 	
 	if ($use_comments == "1") {
 	
-		add_post_type_support( 'embm_beer', 'comments' );
+		if( !post_type_supports( 'embm_beer', 'comments' ) ) {
+			add_post_type_support( 'embm_beer', 'comments' );
+			add_post_type_support('embm_beer', 'trackbacks' );
+		}
 		
 	} else {
 	
-		remove_post_type_support( 'embm_beer', 'comments' );
-		
-		$args = array(
-			'post_type' =>'embm_beer',
-			'comment_status' => 'open' 
-		);
-		$posts = get_posts( $args );
-		
-		if (is_array($posts)) {
-		   foreach ($posts as $post) {
-		       $post->comment_status = 'closed';
-		       $post->ping_status = 'closed';
-		       wp_update_post( $post );
-		   }
-		}	
+		if ( post_type_supports( 'embm_beer', 'comments' ) ) {
+			remove_post_type_support( 'embm_beer', 'comments' );
+			remove_post_type_support('embm_beer', 'trackbacks' );
+		}
 	}
 	
+	add_filter( 'comments_open', 'embm_filter_comment_status', 20, 2 );
+	add_filter( 'pings_open', 'embm_filter_comment_status', 20, 2 );
+		
+	add_filter( "comments_template", "embm_comment_template" );
+	
 }
+add_action( 'init', 'embm_beer_comments_toggle' );
 
 
 
@@ -152,15 +181,11 @@ function embm_beer_specs_cb() {
 add_action( 'save_post', 'embm_beer_specs_save' ); 
  
 function embm_beer_specs_save( $post_id )  {  
-   // Bail if we're doing an auto save  
+ 
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
-    // if our nonce isn't there, or we can't verify it, bail 
     if( !isset( $_POST['meta_box_nonce'] ) || !wp_verify_nonce( $_POST['meta_box_nonce'], 'my_meta_box_nonce' ) ) return; 
-    // if our current user can't edit this post, bail  
     if( !current_user_can( 'edit_post' ) ) return;  
-    // now we can actually save the data 
-     
-    // Make sure your data is set before trying to save it  
+ 
     if( isset( $_POST['malts'] ) )  
         update_post_meta( $post_id, 'malts', esc_attr( $_POST['malts'] ) );
     if( isset( $_POST['hops'] ) )  
@@ -225,15 +250,11 @@ function embm_beer_info_cb() {
 add_action( 'save_post', 'embm_beer_info_save' ); 
  
 function embm_beer_info_save( $post_id )  {  
-   // Bail if we're doing an auto save  
+
     if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
-    // if our nonce isn't there, or we can't verify it, bail 
     if( !isset( $_POST['meta_box_nonce_two'] ) || !wp_verify_nonce( $_POST['meta_box_nonce_two'], 'my_meta_box_nonce_two' ) ) return; 
-    // if our current user can't edit this post, bail  
     if( !current_user_can( 'edit_post' ) ) return;  
-    // now we can actually save the data 
      
-    // Make sure your data is set before trying to save it  
     if( isset( $_POST['avail'] ) )  
         update_post_meta( $post_id, 'avail', esc_attr( $_POST['avail'] ) );
     if( isset( $_POST['notes'] ) )  

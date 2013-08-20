@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 .single-beer {
-	margin: 20px 0 40px;
+	margin: 25px 0 30px;
 	font-size: 14px;
 	line-height: 22px;
 }
@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	height: auto;
 }
 .single-beer .beer-description {
-	padding: 0 0 15px 20px;
+	padding: 0 0 0 20px;
 }
 .single-beer .beer-description .untappd {
 	padding: 12px 0;
@@ -87,6 +87,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	border: 1px solid #ddd;
 	padding: 15px 20px;
 	color: #000;
+	margin-bottom: 35px;
 }
 .single-beer .beer-meta .beer-profile {
 	padding-bottom: 10px;
@@ -107,12 +108,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     display: block;
     padding: 10px 0px 3px;	
 }
-.beer-list p,
+/* .beer-list p,
 .single-beer p,
 .beer-description p {
 	margin: 0 !important;
 	padding: 0 !important;
-}
+} */
 .beer-list .nav-below {
 	text-align: right;
 }
