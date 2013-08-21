@@ -85,7 +85,8 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
 
 `[beer-list]`
 
-`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
+`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,` 
+`beers_per_page, paginate, orderby, order ); ?>`
      
 This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
 
