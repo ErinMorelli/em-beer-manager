@@ -36,24 +36,8 @@ embm_plugin_load();
 
 
 // Localization
-function embm_load_textdomain() {
-		
-	$locale = get_locale();
-	$locale = apply_filters( 'plugin_locale',  $locale, 'embm' );
-	$mofile = sprintf( 'embm-%s.mo', $locale );
-
-	$mofile_local  = EMBM_PLUGIN_DIR . '/languages/' . $mofile;
-	$mofile_global = WP_LANG_DIR . '/embm/' . $mofile;
-
-	if ( file_exists( $mofile_local ) )
-		return load_textdomain( 'embm', $mofile_local );
-		
-	if ( file_exists( $mofile_global ) )
-		return load_textdomain( 'embm', $mofile_global );
-
-	return false;
-}
-add_action('plugins_loaded', 'embm_load_textdomain');
+$plugin_dir = EMBM_PLUGIN_DIR . 'languages';
+load_plugin_textdomain( 'em-beer-manager', WP_PLUGIN_DIR.'/'.$plugin_dir, $plugin_dir );
 
 
 // Activation setup

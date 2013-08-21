@@ -146,7 +146,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 == Changelog ==
 
 = 1.9.0 = 
-* ??
+* Fixed issue with language textdomain files not loading properly
+* Fixed issue with p and br tags not displaying properly in beer posts
+* Added new filter options to "beer-list" plugin: paginate, orderby, and order
+* Added ability to enable/disable commenting on beers
 
 = 1.8.1 = 
 * Fixed a bug with the Beer List shortcode not displaying groups properly

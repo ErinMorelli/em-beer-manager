@@ -42,9 +42,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ### Latest Release ###
 
 
-#### [Version 1.8.1 - Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.8.1) ###
-* Fixed a bug with the Beer List shortcode not displaying groups properly
-* Added "beer count" control to Beer List widget
+#### [Version 1.9.0 - Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.0) ###
+* Fixed issue with language textdomain files not loading properly
+* Fixed issue with p and br tags not displaying properly in beer posts
+* Added new filter options to "beer-list" plugin: paginate, orderby, and order
+* Added ability to enable/disable commenting on beers
 
 
 

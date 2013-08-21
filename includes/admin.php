@@ -418,7 +418,7 @@ function embm_settings() {
 	     <td><em><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>paginate=</strong>"true/false"</code></td>
-	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>); ?>)</td>
+	     <td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
 	     <td><em><?php _e('Disables/enables pagination', 'embm'); ?></em></td>
      </tr><tr>
 	     <td><code><strong>orderby=</strong>"string"</code></td>
