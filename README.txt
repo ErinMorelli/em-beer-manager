@@ -76,8 +76,11 @@ This will display a formatted listing of all beers in the database. Optional att
 
 ### Planned Features ###
 
-* Post/Page "Add Beer" button to auto-generate shortcode input
-* Possibly add a ratings/review system down-the-line
+* Add new sort options to beer list widget
+* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
+* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
+* Expand Untappd integration to include further brewery/beer options
+* Add a ratings/review system (possibly as separate add-on)
 
 
 == Installation ==
