@@ -557,7 +557,7 @@ function embm_content_filter( $content ) {
     
     return $content;
 }
-add_filter( 'the_content', 'embm_content_filter', 20 );
+add_filter( 'the_content', 'embm_content_filter', -1 );
 
 
 function embm_body_classes($classes) {

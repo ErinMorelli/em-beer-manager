@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.6.0
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.9.1 =
+* Fixed issue with content filter being overridden by other plugins
+
 = 1.9.0 = 
 * Fixed issue with language textdomain files not loading properly
 * Fixed issue with p and br tags not displaying properly in beer posts
@@ -194,6 +197,8 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
+= 1.9.1 = 
+Minor bug fix for conflicts with other plugins overriding content filters
 
 = 1.8.1 = 
 Minor bug fixes and new beer list widget options
