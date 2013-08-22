@@ -45,8 +45,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ### Latest Release ###
 
 
-#### [Version 1.9.1 - Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.0) ###
-* Fixed issue with content filter being overridden by other plugins
+#### [Version 1.9.2 - Major Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.2) ###
+* Fixed major issue with comments setting overriding site-wide comments
 
 
 

@@ -74,7 +74,9 @@ function embm_filter_comment_status( $open, $post_id ) {
 	else {$use_comments = null;}
 		
 	if ($use_comments != "1") {
-		$open = false;
+		if($post->post_type == 'embm_beer'){ 
+			$open = false;
+		}
 	}
 	
 	return $open;
