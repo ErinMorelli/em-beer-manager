@@ -131,8 +131,16 @@ function embm_beer_list_output ($beers) {
 	$output = '';	
 	
 	// Set up new loop data
-	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	global $post;
+	
+	if ( get_query_var('paged') ) {
+	    $paged = get_query_var('paged');
+	} else if ( get_query_var('page') ) {
+	    $paged = get_query_var('page');
+	} else {
+	    $paged = 1;
+	}
+
 	$wp_query = new WP_Query(); 
 	
 	// The query
@@ -188,7 +196,7 @@ function embm_beer_list_output ($beers) {
 			$output .= paginate_links( array(
 			  	'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
 			  	'format' => '?paged=%#%',
-			  	'current' => max( 1, get_query_var('paged') ),
+			  	'current' => max( 1, $paged ),
 			  	'total' => $wp_query->max_num_pages
 			  	) );
 		

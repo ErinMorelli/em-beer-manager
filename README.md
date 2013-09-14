@@ -45,8 +45,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ### Latest Release ###
 
 
-#### [Version 1.9.2 - Major Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.2) ###
-* Fixed major issue with comments setting overriding site-wide comments
+#### [Version 1.9.3 - Minor Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.3) ###
+* Fixed bug with beer-list shortcode pagination not working on index pages
 
 
 

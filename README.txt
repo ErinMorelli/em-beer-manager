@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 3.6.0
-Stable tag: 1.9.2
+Tested up to: 3.6.1
+Stable tag: 1.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -147,6 +147,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 1.9.3 = 
+* Fixed bug with beer-list shortcode pagination not working on index pages
 
 = 1.9.2 = 
 * Fixed major issue with comments setting overriding site-wide comments
