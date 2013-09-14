@@ -20,7 +20,6 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 #### Planned Features ####
 
-* Add new sort options to beer list widget
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Expand Untappd integration to include further brewery/beer options
