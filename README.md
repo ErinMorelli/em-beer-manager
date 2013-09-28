@@ -5,27 +5,28 @@
 Manage your beers with WordPress. Integrates simply with Untappd beer checkins. Great for everyone from home brewers to professional breweries!
 
 
-### Overview ####
+## Overview ###
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from BeerPal
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
-* Custom meta boxes to store detailed information about each beer, including abv, ibu, and ingredients
+* Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Simple beer checkin integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
 
-#### Planned Features ####
+### Planned Features ###
 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
+* Add a [beer-group] shortcode & improve template tag usability
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Expand Untappd integration to include further brewery/beer options
 * Add a ratings/review system (possibly as separate add-on)
 
-#### Screenshots ####
+### Screenshots ###
 
 1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-1.jpg)
 2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-2.jpg)
@@ -41,11 +42,12 @@ This plugin allows beer creators from home brewers to professional breweries to 
 *****
 
 
-### Latest Release ###
+## Latest Release ##
 
 
-#### [Version 1.9.3 - Minor Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.3) ###
-* Fixed bug with beer-list shortcode pagination not working on index pages
+### [Version 1.9.4 - Minor Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.4) ###
+* Fixed localization and translation issues
+* Updated .POT language file to latest version
 
 
 
@@ -61,33 +63,51 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 *****
 
-### Usage ###
+## Usage ##
 
 
 Use these shortcodes to display beers in your posts or use the template tags in your theme files.
 
 
-#### Single Beer Display ####
+### Single Beer Display ###
+
+This will display a single beer entry given it's ID number (found in "Beers" admin). 
+
+__Shortcode:__ 
 
 `[beer id={beer id}]`
 
+__Template tag:__
+ 
 `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
-This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
+
+__Options:__
+
+_For both shortcode & template tag_
 
 * __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
 
 * __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
 
 
-#### List All Beers ####
+### List All Beers ###
+
+This will display a formatted listing of all beers in the database.
+
+__Shortcode:__  
 
 `[beer-list]`
 
+__Template tag:__ 
+
 `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,` 
 `beers_per_page, paginate, orderby, order ); ?>`
+
      
-This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
+__Options:__
+
+_For both shortcode & template tag_
 
 * __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
 

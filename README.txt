@@ -4,7 +4,7 @@ Donate link: http://erinmorelli.com/wordpress/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 3.6.1
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,32 +26,48 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 
 
-### Usage ###
+## Usage ##
 
 Use these shortcodes to display beers in your posts or use the template tags in your theme files.
 
 
-#### Single Beer Display ####
+### Single Beer Display ###
+
+
+__Shortcode:__
+
+This will display a single beer entry given it's ID number (found in "Beers" admin).
 
 `[beer id={beer id}]`
 
+__Template tag:__
+
 `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
-This will display a single beer entry given it's ID number (found in "Beers" admin). Optional attributes for both shortcode and template tag:
+__Options:__
+
+_For both shortcode & template tag_
 
 * __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
 
 * __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
 
 
-#### List All Beers ####
+### List All Beers ###
 
+This will display a formatted listing of all beers in the database.
+
+__Shortcode:__
 
 `[beer-list]`
 
+__Template tag:__
+
 `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
      
-This will display a formatted listing of all beers in the database. Optional attributes for both shortcode and template tag:
+__Options:__
+
+_For both shortcode & template tag_
 
 * __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
 
@@ -77,6 +93,7 @@ This will display a formatted listing of all beers in the database. Optional att
 ### Planned Features ###
 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
+* Add a [beer-group] shortcode & improve template tag usability
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Expand Untappd integration to include further brewery/beer options
 * Add a ratings/review system (possibly as separate add-on)
@@ -147,6 +164,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.9.4 = 
+* Fixed localization and translation issues
+* Updated .POT language file to latest version
+
 = 1.9.3 = 
 * Fixed bug with beer-list shortcode pagination not working on index pages
 
@@ -204,6 +225,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 1.9.4 = 
+Plugin localization and translation is now working properly
 
 = 1.9.2 = 
 Fixed major issue with comments setting overriding site-wide comments

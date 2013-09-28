@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/wordpress/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.9.3
+ * Version: 1.9.4
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -36,8 +36,10 @@ embm_plugin_load();
 
 
 // Localization
-$plugin_dir = EMBM_PLUGIN_DIR . 'languages';
-load_plugin_textdomain( 'embm', WP_PLUGIN_DIR.'/'.$plugin_dir, $plugin_dir );
+if ( !defined('PLUGINDIR') )
+	define( 'PLUGINDIR', 'wp-content/plugins' );
+
+load_plugin_textdomain( 'embm', PLUGINDIR.'/em-beer-manager/languages', 'em-beer-manager/languages' );
 
 
 // Activation setup
@@ -45,7 +47,7 @@ register_activation_hook(__FILE__, 'embm_plugin_activation');
 
 function embm_plugin_activation() {
 	// Check for new version
-	$embm_curr_version = '1.9.3';
+	$embm_curr_version = '1.9.4';
 	 
 	if (!defined('EMBM_VERSION_KEY')) {
 		// Define new version option
@@ -178,9 +180,6 @@ function embm_plugin_action_links($links, $file) {
     }
 
     if ($file == $this_plugin) {
-        // The "page" query string value must be equal to the slug
-        // of the Settings admin page we defined earlier, which in
-        // this case equals "myplugin-settings".
         $settings_link = '<a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=embm-settings">';
         $settings_link .= __('Settings', 'embm');
         $settings_link .= '</a>';
