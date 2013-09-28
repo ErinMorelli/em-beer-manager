@@ -33,10 +33,9 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 ### Single Beer Display ###
 
+This will display a single beer entry given it's ID number (found in "Beers" admin).
 
 __Shortcode:__
-
-This will display a single beer entry given it's ID number (found in "Beers" admin).
 
 `[beer id={beer id}]`
 
