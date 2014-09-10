@@ -45,7 +45,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 1.9.4 - Minor Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/tag/v1.9.4) ###
+### [Version 1.9.4 - Minor Bug Fix](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.4.zip) ###
 * Fixed localization and translation issues
 * Updated .POT language file to latest version
 
