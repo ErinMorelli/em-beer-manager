@@ -28,14 +28,14 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ### Screenshots ###
 
-1. [The "Beer" management screen](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-1.jpg)
-2. [Beer profile information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-2.jpg)
-3. [Extra Beer information](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-3.jpg)
-4. [Special groups taxonomy](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-4.jpg)
-5. [Pre-populated styles taxonomy](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-5.jpg)
-6. [Single beer front-end display (with all options enabled)](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-6.jpg)
-7. [Untappd check-in widget options & display](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-7.jpg)
-8. [Beer List widget options & display](https://raw.github.com/ErinMorelli/em-beer-manager/master/screenshot-8.jpg)
+1. [The "Beer" management screen](https://bitbucket.org/repo/jbBK97/images/2094199255-screenshot-1.jpg)
+2. [Beer profile information](https://bitbucket.org/repo/jbBK97/images/3661523039-screenshot-2.jpg)
+3. [Extra Beer information](https://bitbucket.org/repo/jbBK97/images/489714407-screenshot-3.jpg)
+4. [Special groups taxonomy](https://bitbucket.org/repo/jbBK97/images/1441219431-screenshot-4.jpg)
+5. [Pre-populated styles taxonomy](https://bitbucket.org/repo/jbBK97/images/124939507-screenshot-5.jpg)
+6. [Single beer front-end display (with all options enabled)](https://bitbucket.org/repo/jbBK97/images/4234449303-screenshot-6.jpg)
+7. [Untappd check-in widget options & display](https://bitbucket.org/repo/jbBK97/images/924423916-screenshot-7.jpg)
+8. [Beer List widget options & display](https://bitbucket.org/repo/jbBK97/images/2556482217-screenshot-8.jpg)
 
 
 
