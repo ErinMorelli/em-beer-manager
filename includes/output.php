@@ -383,6 +383,7 @@ function embm_display_beer_profile($beer_id) {
 
 function embm_display_beer_extras($beer_id) {
 
+	$bnum = embm_get_beer($beer_id,'beer_num');
 	$avail = embm_get_beer($beer_id,'avail');
 	$notes = embm_get_beer($beer_id,'notes');
 	
@@ -401,6 +402,11 @@ function embm_display_beer_extras($beer_id) {
 		
 			$output = '<div class="beer-extras">';
 			
+			if ($bnum != '') {
+				$output .= '<div class="beer_num"><span class="label">';
+				$output .= __('Beer Number:', 'embm');
+				$output .= '</span><span class="value">'.embm_get_beer($beer_id,'beer_num').'</span></div>'."\n";
+			}
 			if ($avail != '') {
 				$output .= '<div class="avail"><span class="label">';
 				$output .= __('Availability:', 'embm');

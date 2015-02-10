@@ -20,17 +20,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-#menu-posts-embm_beer .wp-menu-image {
-	background: url('../img/beer-icon.png') no-repeat 6px 6px !important;
+@font-face {
+	font-family: 'beer-icons';
+	src:url('../fonts/beer-icons.eot?rjxbel');
+	src:url('../fonts/beer-icons.eot?#iefixrjxbel') format('embedded-opentype'),
+		url('../fonts/beer-icons.woff?rjxbel') format('woff'),
+		url('../fonts/beer-icons.ttf?rjxbel') format('truetype'),
+		url('../fonts/beer-icons.svg?rjxbel#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
-#menu-posts-embm_beer:hover .wp-menu-image, #menu-posts-portfolio.wp-has-current-submenu .wp-menu-image {
-	background-position:6px -18px !important;
+#menu-posts-embm_beer .wp-menu-image:before {
+	font-family: 'beer-icons';
+	content: "\e604";
 }
 #icon-edit.icon32-posts-embm_beer {
 	background: url('../img/beer-32x32.png') no-repeat;
 }
 .widefat #id.column-id {
 	width: 35px;
+}
+.widefat #abv.column-abv,
+.widefat #ibu.column-ibu,
+.widefat #beer_num.column-beer_num {
+	width: 100px;
 }
 .widefat #untappd.column-untappd {
 	width: 80px;

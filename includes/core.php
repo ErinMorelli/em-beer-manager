@@ -210,6 +210,7 @@ function embm_beer_info_cb() {
     // $post is already set, and contains an object: the WordPress post  
     global $post;  
     $beer_entry = get_post_custom( $post->ID );
+    $b_num = isset( $beer_entry['beer_num'] ) ? esc_attr( $beer_entry['beer_num'][0] ) : '';
 	$b_avail = isset( $beer_entry['avail'] ) ? esc_attr( $beer_entry['avail'][0] ) : '';
 	$b_untap = isset( $beer_entry['untappd'] ) ? esc_attr( $beer_entry['untappd'][0] ) : '';
 	$b_notes = isset( $beer_entry['notes'] ) ? esc_attr( $beer_entry['notes'][0] ) : '';
@@ -232,14 +233,17 @@ function embm_beer_info_cb() {
 		   <p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings:', 'embm'); ?></strong></label><br />
 		     <textarea name="notes" id="notes" rows="7" cols="70" style="width:95%;"><?php echo $b_notes; ?></textarea></p>
     	</td><td valign="top">
-		    <p><label for="avail"><strong><?php _e('Availability: ','embm'); ?></strong></label><br />
-		    	<input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
-		    	
-		    <?php if ( $use_untappd != "1" ) : ?>
-		    	<p><label for="untappd"><strong><?php _e('Untappd Check-In URL:', 'embm'); ?></strong></label><br />
-		    	<input type="url" name="untappd" id="untappd" style="width:95%;" value="<?php echo $b_untap; ?>" /></p>
-		    <?php endif; ?>
-    	</td>
+            <p><label for="beer_num"><strong><?php _e('Beer Number: ','embm'); ?></strong></label>
+                &nbsp;&nbsp;#&nbsp;<input type="number" name="beer_num" id="beer_num" style="width:25%;" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
+                
+            <?php if ( $use_untappd != "1" ) : ?>
+                <p><label for="untappd"><strong><?php _e('Untappd Beer Number:', 'embm'); ?></strong></label>
+                &nbsp;&nbsp;<input type="number" name="untappd" id="untappd" style="width:35%;" value="<?php echo $b_untap; ?>" /></p>
+            <?php endif; ?>
+            
+            <p><label for="avail"><strong><?php _e('Availability: ','embm'); ?></strong></label><br />
+                <input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
+        </td>
     	</tr>
     </tbody>
     </table>
@@ -257,6 +261,8 @@ function embm_beer_info_save( $post_id )  {
     if( !isset( $_POST['meta_box_nonce_two'] ) || !wp_verify_nonce( $_POST['meta_box_nonce_two'], 'my_meta_box_nonce_two' ) ) return; 
     if( !current_user_can( 'edit_post' ) ) return;  
      
+    if( isset( $_POST['beer_num'] ) )  
+        update_post_meta( $post_id, 'beer_num', esc_attr( $_POST['beer_num'] ) );
     if( isset( $_POST['avail'] ) )  
         update_post_meta( $post_id, 'avail', esc_attr( $_POST['avail'] ) );
     if( isset( $_POST['notes'] ) )  
@@ -275,6 +281,12 @@ function embm_get_beer($postid, $attr) {
 	if ($attr == 'abv') {
 		return $b_attr . '%';
 	}
+    elseif ($attr == 'beer_num') {
+        return '#' . $b_attr;
+    }
+    elseif ($attr == 'untappd') {
+        return 'https://untappd.com/beer/' . $b_attr;
+    }
 	else {return $b_attr;}
 }
 function embm_get_beer_style($postid) {
