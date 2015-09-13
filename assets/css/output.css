@@ -1,19 +1,19 @@
 /*
-Copyright (c) 2013, Erin Morelli. 
+Copyright (c) 2013, Erin Morelli.
 
-This program is free software; you can redistribute it and/or 
-modify it under the terms of the GNU General Public License 
-as published by the Free Software Foundation; either version 2 
-of the License, or (at your option) any later version. 
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
-but WITHOUT ANY WARRANTY; without even the implied warranty of 
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-GNU General Public License for more details. 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License 
-along with this program; if not, write to the Free Software 
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 *
 * EM Beer Manager output styles
@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	display: block;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 3px;
-	margin-bottom: 20px;	
+	margin-bottom: 20px;
 }
 .beer-title a h1,
 .beer-title h1,
@@ -94,33 +94,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 }
 .single-beer .beer-meta .beer-extras .avail .label,
 .single-beer .beer-meta .beer-profile .label {
-    font-weight: bold;
-    display: inline-block;
-    padding-right: 8px;	
+	font-weight: bold;
+	display: inline-block;
+	padding-right: 8px;
 }
 .single-beer .beer-meta .beer-profile .abv,
 .single-beer .beer-meta .beer-profile .ibu {
-    display: inline-block;
-    padding: 0 20px 5px 0;	
+	display: inline-block;
+	padding: 0 20px 5px 0;
 }
 .single-beer .beer-meta .beer-extras .notes .label {
 	font-weight: bold;
-    display: block;
-    padding: 10px 0px 3px;	
+	display: block;
+	padding: 10px 0px 3px;
 }
-/* .beer-list p,
-.single-beer p,
-.beer-description p {
-	margin: 0 !important;
-	padding: 0 !important;
-} */
 .beer-list .nav-below {
 	text-align: right;
 }
 .single-beer .wp-post-image {
 	display: none;
 }
-
 .embm-clear {
 	clear: both;
 }
