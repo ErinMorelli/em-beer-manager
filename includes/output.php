@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2013, Erin Morelli.
+Copyright (c) 2013-2015, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ function embm_display_beer_extras($beer_id) {
 
 			$output = '<div class="beer-extras">';
 
-			if ( $bnum != '' ) {
+			if ( $bnum != '#' ) {
 				$output .= '<div class="beer_num"><span class="label">';
 				$output .= __('Beer Number:', 'embm');
 				$output .= '</span><span class="value">'.embm_get_beer($beer_id,'beer_num').'</span></div>'."\n";

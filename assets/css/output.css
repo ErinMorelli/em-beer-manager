@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013, Erin Morelli.
+Copyright (c) 2013-2015, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 .single-beer .beer-meta .beer-profile {
 	padding-bottom: 10px;
 }
+.single-beer .beer-meta .beer-extras .beer_num .label,
 .single-beer .beer-meta .beer-extras .avail .label,
 .single-beer .beer-meta .beer-profile .label {
 	font-weight: bold;

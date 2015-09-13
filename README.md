@@ -45,9 +45,10 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 1.9.4 - Minor Bug Fix](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.4.zip) ###
-* Fixed localization and translation issues
-* Updated .POT language file to latest version
+### [Version 1.9.5 - Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.5.zip) ###
+* Added new "Beer Number" field to beers post
+# Updated admin CSS to blend with WP 4.3+ styles
+# Updated beer styles list to populate from BeerAdvocate
 
 
 
@@ -71,14 +72,14 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 ### Single Beer Display ###
 
-This will display a single beer entry given it's ID number (found in "Beers" admin). 
+This will display a single beer entry given it's ID number (found in "Beers" admin).
 
-__Shortcode:__ 
+__Shortcode:__
 
 `[beer id={beer id}]`
 
 __Template tag:__
- 
+
 `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
 
@@ -95,16 +96,16 @@ _For both shortcode & template tag_
 
 This will display a formatted listing of all beers in the database.
 
-__Shortcode:__  
+__Shortcode:__
 
 `[beer-list]`
 
-__Template tag:__ 
+__Template tag:__
 
-`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,` 
+`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,`
 `beers_per_page, paginate, orderby, order ); ?>`
 
-     
+
 __Options:__
 
 _For both shortcode & template tag_
@@ -116,13 +117,13 @@ _For both shortcode & template tag_
 * __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section for each listing*
 
 * __style=`"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
-    
+
 * __group=`"group name"`__ (String e.g. `"Seasonals"`) // *Displays only beers belonging to a specific group*
 
 * __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
-   
+
 * __paginate=`"true/false"`__ (Default = `true`) // *Disables/enables pagination*
-    
+
 * __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
 
 * __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*

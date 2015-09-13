@@ -1,9 +1,9 @@
 === EM Beer Manager ===
 Contributors: ErinMorelli
-Donate link: http://erinmorelli.com/wordpress/
+Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.1
+Tested up to: 4.3
 Stable tag: 1.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -162,6 +162,11 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 1.9.5 =
+* Added new "Beer Number" field to beers post
+# Updated admin CSS to blend with WP 4.3+ styles
+# Updated beer styles list to populate from BeerAdvocate
 
 = 1.9.4 =
 * Fixed localization and translation issues
