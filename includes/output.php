@@ -550,7 +550,7 @@ function embm_body_classes($classes) {
 
 add_filter('body_class', 'embm_body_classes');
 
-function embm_title_filter($title, $id) {
+function embm_title_filter($title, $id = null) {
 	global $post;
 
 	if ( embm_get_beer_style($id) && ( is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title) ) {

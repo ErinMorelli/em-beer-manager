@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.3
-Stable tag: 1.9.5
+Tested up to: 4.3.1
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,49 +24,41 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
 
+= Usage =
+Use these shortcodes to display beers in your posts or use the template tags in your theme files:
 
-
-## Usage ##
-
-Use these shortcodes to display beers in your posts or use the template tags in your theme files.
-
-
-### Single Beer Display ###
+__Single Beer Display__
 
 This will display a single beer entry given it's ID number (found in "Beers" admin).
 
-__Shortcode:__
+* __Shortcode__:
 
-`[beer id={beer id}]`
+    `[beer id={beer id}]`
 
-__Template tag:__
+* __Template tag__:
 
-`<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
+    `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
-__Options:__
-
-_For both shortcode & template tag_
+Options (for both shortcode & template tag):
 
 * __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
 
 * __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
 
 
-### List All Beers ###
+__List All Beers__
 
 This will display a formatted listing of all beers in the database.
 
-__Shortcode:__
+* __Shortcode__:
 
-`[beer-list]`
+    `[beer-list]`
 
-__Template tag:__
+* __Template tag__:
 
-`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
+    `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
 
-__Options:__
-
-_For both shortcode & template tag_
+Options (for both shortcode & template tag):
 
 * __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
 
@@ -85,17 +77,6 @@ _For both shortcode & template tag_
 * __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
 
 * __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*
-
-
-
-
-### Planned Features ###
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Add a [beer-group] shortcode & improve template tag usability
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Expand Untappd integration to include further brewery/beer options
-* Add a ratings/review system (possibly as separate add-on)
 
 
 == Installation ==
@@ -163,10 +144,13 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 1.9.6 =
+* Fixed 'Warning: Missing argument' error
+
 = 1.9.5 =
 * Added new "Beer Number" field to beers post
-# Updated admin CSS to blend with WP 4.3+ styles
-# Updated beer styles list to populate from BeerAdvocate
+* Updated admin CSS to blend with WP 4.3+ styles
+* Updated beer styles list to populate from BeerAdvocate
 
 = 1.9.4 =
 * Fixed localization and translation issues
@@ -256,3 +240,19 @@ Fixed an invalid function warning bug
 
 = 1.5 =
 Fixed plugin activation error bug
+
+
+== Translations ==
+
+I would love to be able to expand this section - let me know if you are able to contribute!
+
+* English
+* Icelandic - *thanks to __rodonmanes__*
+
+
+== Planned Features ==
+
+* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
+* Add a [beer-group] shortcode & improve template tag usability
+* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
+* Expand Untappd integration to include further brewery/beer options

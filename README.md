@@ -45,10 +45,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 1.9.5 - Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.5.zip) ###
-* Added new "Beer Number" field to beers post
-* Updated admin CSS to blend with WP 4.3+ styles
-* Updated beer styles list to populate from BeerAdvocate
+### [Version 1.9.6 - Minor Bug Fix](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.6.zip) ###
+* Fixed 'Warning: Missing argument' error
 
 
 
