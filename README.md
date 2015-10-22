@@ -18,13 +18,6 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
 
-### Planned Features ###
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Add a [beer-group] shortcode & improve template tag usability
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Expand Untappd integration to include further brewery/beer options
-* Add a ratings/review system (possibly as separate add-on)
 
 ### Screenshots ###
 
@@ -72,18 +65,16 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 This will display a single beer entry given it's ID number (found in "Beers" admin).
 
-__Shortcode:__
+* __Shortcode:__
 
-`[beer id={beer id}]`
+    `[beer id={beer id}]`
 
-__Template tag:__
+* __Template tag:__
 
-`<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
+    `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
 
 
-__Options:__
-
-_For both shortcode & template tag_
+Options (for both shortcode & template tag):
 
 * __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
 
@@ -94,19 +85,17 @@ _For both shortcode & template tag_
 
 This will display a formatted listing of all beers in the database.
 
-__Shortcode:__
+* __Shortcode:__
 
-`[beer-list]`
+    `[beer-list]`
 
-__Template tag:__
+* __Template tag:__
 
-`<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,`
-`beers_per_page, paginate, orderby, order ); ?>`
+    `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,`
+    `beers_per_page, paginate, orderby, order ); ?>`
 
 
-__Options:__
-
-_For both shortcode & template tag_
+Options (for both shortcode & template tag):
 
 * __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
 
@@ -125,3 +114,22 @@ _For both shortcode & template tag_
 * __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
 
 * __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*
+
+
+
+*****
+
+### Translations ###
+
+I would love to be able to expand this section - let me know if you are able to contribute!
+
+* English
+* Icelandic - *thanks to __rodonmanes__*
+
+
+### Planned Features ###
+
+* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
+* Add a `[beer-group]` shortcode & improve template tag usability
+* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
+* Expand Untappd integration to include further brewery/beer options
