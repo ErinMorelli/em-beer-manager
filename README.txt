@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.3.1
-Stable tag: 1.9.6
+Tested up to: 4.4.1
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 1.9.7 =
+* ???
 
 = 1.9.6 =
 * Fixed 'Warning: Missing argument' error

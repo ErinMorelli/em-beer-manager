@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -196,11 +196,11 @@ function embm_display_list_widget($beers) {
 	$beerlist = get_posts($args);
 
 	if ( $beerlist ) {
-		$output .= '<ul class="embm-beer-list">'."\n";
+		$output .= '<ul class="embm-beer-list-widget">'."\n";
 
 		foreach ( $beerlist as $post ) : setup_postdata($post);
 
-			$output .= '<li class="embm-beer-list-item" id="embm-beer-'.$post->ID.'">';
+			$output .= '<li class="embm-beer-list-widget-item" id="embm-beer-'.$post->ID.'">';
 			$output .= '<a href="'.get_permalink($post->ID).'" title="'.get_the_title($post->ID).'">'.get_the_title($post->ID).'</a>';
 
 			if ( $summary == '1' ) {

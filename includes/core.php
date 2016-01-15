@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -314,23 +314,24 @@ function embm_create_style_tax() {
 	);
 
 	register_taxonomy( 'embm_style', array( 'embm_beer' ), $args );
-	embm_populate_styles();
+
+	if ( get_option('embm_styles_loaded') != 'true' ) {
+		embm_populate_styles();
+	}
 }
 
 function embm_populate_styles() {
 	// Beer List generated from BeerAdvocate (http://www.beeradvocate.com/beer/style/)
-	if ( get_option('embm_styles_loaded') != 'true' ) {
-		$beer_styles_file = EMBM_PLUGIN_DIR.'assets/beer-styles.txt';
+	$beer_styles_file = EMBM_PLUGIN_DIR.'assets/beer-styles.txt';
 
-		$beer_styles = @fopen($beer_styles_file, 'r');
-		while( !feof($beer_styles) ){
-			$beer_style = fgets($beer_styles);
-			wp_insert_term($beer_style, 'embm_style');
-		}
-		fclose($beer_styles);
-
-		add_option('embm_styles_loaded', 'true');
+	$beer_styles = @fopen($beer_styles_file, 'r');
+	while( !feof($beer_styles) ){
+		$beer_style = fgets($beer_styles);
+		wp_insert_term($beer_style, 'embm_style');
 	}
+	fclose($beer_styles);
+
+	add_option('embm_styles_loaded', 'true');
 }
 
 // ==== CUSTOM GROUP TAXONOMY === //

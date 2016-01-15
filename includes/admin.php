@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -208,31 +208,27 @@ add_action('admin_head', 'options_embm_add_js');
 
 // Register new settings
 function embm_register_settings() { // whitelist options
-  register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
+	// Register new settings options
+	register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
 
-  // Global EMBM settings
-  add_settings_section('embm_custom_url', 'Global Settings', 'embm_section_text', 'embm');
-  add_settings_field('embm_untappd_check', 'Disable Untappd integration:', 'embm_untappd_box', 'embm', 'embm_custom_url');
-  add_settings_field('embm_comment_check', 'Enable commenting on beers:', 'embm_comment_box', 'embm', 'embm_custom_url');
-  add_settings_field('embm_css_url', 'Enter URL for custom stylesheet:', 'embm_css_box', 'embm', 'embm_custom_url');
-  add_settings_field('embm_profile_show', 'Globally hide "profile" info:', 'embm_profile_box', 'embm', 'embm_custom_url');
-  add_settings_field('embm_extras_show', 'Globally hide "extras" info:', 'embm_extras_box', 'embm', 'embm_custom_url');
+	// Global settings
+	add_settings_section('embm_global_settings', 'Global', 'embm_section_text', 'embm');
+	add_settings_field('embm_css_url', 'Custom stylesheet', 'embm_css_box', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
+	add_settings_field('embm_untappd_check', 'General settings', 'embm_general_settings', 'embm', 'embm_global_settings');
+	add_settings_field('embm_profile_show', 'Display settings', 'embm_display_settings', 'embm', 'embm_global_settings');
 
-  // Group Tax Settings
-  add_settings_section('embm_group_settings', 'Groups Display', 'embm_section_text', 'embm');
-  add_settings_field('embm_group_slug', 'Custom Group taxonomy slug:', 'embm_group_box', 'embm', 'embm_group_settings');
-  add_settings_field('embm_profile_show_group', 'Hide "profile" info:', 'embm_profile_group_box', 'embm', 'embm_group_settings');
-  add_settings_field('embm_extras_show_group', 'Hide "extras" info:', 'embm_extras_group_box', 'embm', 'embm_group_settings');
+	// Group Tax Settings
+	add_settings_section('embm_group_settings', 'Groups', 'embm_section_text', 'embm');
+	add_settings_field('embm_group_slug', 'Custom taxonomy slug:', 'embm_group_box', 'embm', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
+	add_settings_field('embm_profile_show_group', 'Display settings', 'embm_group_display_settings', 'embm', 'embm_group_settings');
 
-  // Style Tax Settings
-  add_settings_section('embm_style_settings', 'Styles Display', 'embm_section_text', 'embm');
-  add_settings_field('embm_profile_show_style', 'Hide "profile" info:', 'embm_profile_style_box', 'embm', 'embm_style_settings');
-  add_settings_field('embm_extras_show_style', 'Hide "extras" info:', 'embm_extras_style_box', 'embm', 'embm_style_settings');
+	// Style Tax Settings
+	add_settings_section('embm_style_settings', 'Styles', 'embm_section_text', 'embm');
+	add_settings_field('embm_profile_show_style', 'Display settings', 'embm_style_display_settings', 'embm', 'embm_style_settings');
 
-  // Single Beer Settings
-  add_settings_section('embm_single_settings', 'Single Beer Display', 'embm_section_text', 'embm');
-  add_settings_field('embm_profile_show_single', 'Hide "profile" info:', 'embm_profile_single_box', 'embm', 'embm_single_settings');
-  add_settings_field('embm_extras_show_single', 'Hide "extras" info:', 'embm_extras_single_box', 'embm', 'embm_single_settings');
+	// Single Beer Settings
+	add_settings_section('embm_single_settings', 'Single Page', 'embm_section_text', 'embm');
+	add_settings_field('embm_profile_show_single', 'Display settings', 'embm_single_display_settings', 'embm', 'embm_single_settings');
 
 }
 
@@ -244,29 +240,47 @@ function embm_options_validate($input) {
 
 function embm_section_text() {}
 
-function embm_untappd_box() {
-	$options = get_option('embm_options');
-	if ( isset($options['embm_untappd_check']) ) {
-		$use_untappd = $options['embm_untappd_check'];
-	} else {
-		$use_untappd = null;
-	}
-	echo '<input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
-}
-
-function embm_comment_box() {
-	$options = get_option('embm_options');
-	if (isset($options['embm_comment_check'])) {
-		$use_comments = $options['embm_comment_check'];
-	} else {
-		$use_comments = null;
-	}
-	echo '<input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
-}
-
 function embm_css_box() {
 	$options = get_option('embm_options');
 	echo '<input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" />';
+}
+
+function embm_general_settings() {
+	$options = get_option('embm_options');
+	$use_untappd = null;
+	if ( isset($options['embm_untappd_check']) ) {
+		$use_untappd = $options['embm_untappd_check'];
+	}
+	$output = '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
+	$output .= '<label for="embm_untappd_check">Disable Untappd integration</label></p>';
+
+	$use_comments = null;
+	if (isset($options['embm_comment_check'])) {
+		$use_comments = $options['embm_comment_check'];
+	}
+	$output .= '<p><input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
+	$output .= '<label for="embm_comment_check">Enable commenting on beers</label></p>';
+
+	echo $output;
+}
+
+function embm_display_settings() {
+	$options = get_option('embm_options');
+	$view_profile = null;
+	if ( isset($options['embm_profile_show']) ) {
+		$view_profile = $options['embm_profile_show'];
+	}
+	$output = '<p><input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
+	$output .= '<label for="embm_profile_show">Globally hide "profile" info</label><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("?", "embm").'</small></a></span></p>';
+
+	$view_extras = null;
+	if ( isset($options['embm_extras_show']) ) {
+		$view_extras = $options['embm_extras_show'];
+	}
+	$output .= '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<label for="embm_extras_show">Globally hide "extras" info</label><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("?", "embm").'</small></a></span></p>';
+
+	echo $output;
 }
 
 function embm_group_box() {
@@ -275,84 +289,61 @@ function embm_group_box() {
 	echo '<br /><small>'.__('NOTE: You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting', 'embm').'</small>';
 }
 
-function embm_profile_box() {
+function embm_group_display_settings() {
 	$options = get_option('embm_options');
-	if ( isset($options['embm_profile_show']) ) {
-		$view_profile = $options['embm_profile_show'];
-	} else {
-		$view_profile = null;
-	}
-	echo '<input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("What's this?", "embm").'</small></a></span>';
-}
-
-function embm_extras_box() {
-	$options = get_option('embm_options');
-	if ( isset($options['embm_extras_show']) ) {
-		$view_extras = $options['embm_extras_show'];
-	} else {
-		$view_extras = null;
-	}
-	echo '<input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("What's this?", "embm").'</small></a></span>';
-}
-
-function embm_profile_group_box() {
-	$options = get_option('embm_options');
+	$view_profile = null;
 	if ( isset($options['embm_profile_show_group']) ) {
 		$view_profile = $options['embm_profile_show_group'];
-	} else {
-		$view_profile = null;
 	}
-	echo '<input name="embm_options[embm_profile_show_group]" type="checkbox" id="embm_profile_show_group" value="1"'.checked('1', $view_profile, false).' /> ';
-}
+	$output = '<p><input name="embm_options[embm_profile_show_group]" type="checkbox" id="embm_profile_show_group" value="1"'.checked('1', $view_profile, false).' /> ';
+	$output .= '<label for="embm_profile_show_group">Hide "profile" info in groups</label></p>';
 
-function embm_extras_group_box() {
-	$options = get_option('embm_options');
+	$view_extras = null;
 	if ( isset($options['embm_extras_show_group']) ) {
 		$view_extras = $options['embm_extras_show_group'];
-	} else {
-		$view_extras = null;
 	}
-	echo '<input name="embm_options[embm_extras_show_group]" type="checkbox" id="embm_extras_show_group" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<p><input name="embm_options[embm_extras_show_group]" type="checkbox" id="embm_extras_show_group" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<label for="embm_extras_show_group">Hide "extras" info in groups</label></p>';
+
+	echo $output;
 }
 
-function embm_profile_style_box() {
+function embm_style_display_settings() {
 	$options = get_option('embm_options');
+	$view_profile = null;
 	if ( isset($options['embm_profile_show_style']) ) {
 		$view_profile = $options['embm_profile_show_style'];
-	} else {
-		$view_profile = null;
 	}
-	echo '<input name="embm_options[embm_profile_show_style]" type="checkbox" id="embm_profile_show_style" value="1"'.checked('1', $view_profile, false).' /> ';
-}
+	$output = '<p><input name="embm_options[embm_profile_show_style]" type="checkbox" id="embm_profile_show_style" value="1"'.checked('1', $view_profile, false).' /> ';
+	$output .= '<label for="embm_profile_show_style">Hide "profile" info on styles pages</label></p>';
 
-function embm_extras_style_box() {
-	$options = get_option('embm_options');
+	$view_extras = null;
 	if ( isset($options['embm_extras_show_style']) ) {
 		$view_extras = $options['embm_extras_show_style'];
-	} else {
-		$view_extras = null;
 	}
-	echo '<input name="embm_options[embm_extras_show_style]" type="checkbox" id="embm_extras_show_style" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<p><input name="embm_options[embm_extras_show_style]" type="checkbox" id="embm_extras_show_style" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<label for="embm_extras_show_group">Hide "extras" info on styles pages</label></p>';
+
+	echo $output;
 }
 
-function embm_profile_single_box() {
+function embm_single_display_settings() {
 	$options = get_option('embm_options');
+	$view_profile = null;
 	if ( isset($options['embm_profile_show_single']) ) {
 		$view_profile = $options['embm_profile_show_single'];
-	} else {
-		$view_profile = null;
 	}
-	echo '<input name="embm_options[embm_profile_show_single]" type="checkbox" id="embm_profile_show_single" value="1"'.checked('1', $view_profile, false).' /> ';
-}
+	$output = '<p><input name="embm_options[embm_profile_show_single]" type="checkbox" id="embm_profile_show_single" value="1"'.checked('1', $view_profile, false).' /> ';
+	$output .= '<label for="embm_profile_show_single">Hide "profile" info on single beer pages</label></p>';
 
-function embm_extras_single_box() {
-	$options = get_option('embm_options');
+	$view_extras = null;
 	if ( isset($options['embm_extras_show_single']) ) {
 		$view_extras = $options['embm_extras_show_single'];
-	} else {
-		$view_extras = null;
 	}
-	echo '<input name="embm_options[embm_extras_show_single]" type="checkbox" id="embm_extras_show_single" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<p><input name="embm_options[embm_extras_show_single]" type="checkbox" id="embm_extras_show_single" value="1"'.checked('1', $view_extras, false).' /> ';
+	$output .= '<label for="embm_extras_show_single">Hide "extras" info on single beer pages</label></p>';
+
+	echo $output;
 }
 
 function embm_settings() {
@@ -361,7 +352,7 @@ function embm_settings() {
 	}
 
 ?>
-<div class="wrap" id="beer-settings">
+<div class="wrap" id="embm-beer-settings">
 
 	<div id="icon-edit" class="icon32 icon32-posts-embm_beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
 
@@ -392,7 +383,12 @@ function embm_settings() {
 	<p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
 	<p><code> [beer id="beer id"] </code></p>
-	<p><code><?php echo htmlentities('<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>'); ?></code></p>
+	<p><code><?php echo htmlentities('<?php echo embm_beer_single( $beer_id, $args ); ?>'); ?></code></p>
+	<p>Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:</p>
+	<p><code><?php echo htmlentities("<?php echo embm_beer_single( 123, array(
+		'show_profile'	=> 'false',
+		'show_extras'	=> 'true'
+	) ); ?>"); ?></code></p>
 
 	<p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
 	<table class="usage" cellpadding="0" cellspacing="0" border="0">
@@ -413,7 +409,14 @@ function embm_settings() {
 	<p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
 
 	<p><code>[beer-list]</code></p>
-	<p><code><?php echo htmlentities('<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>'); ?></code></p>
+	<p><code><?php echo htmlentities('<?php echo embm_beer_list( $args ); ?>'); ?></code></p>
+	<p>Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:</p>
+	<p><code><?php echo htmlentities("<?php echo embm_beer_list( array(
+		'show_extras'		=> 'false',
+		'beers_per_page'	=> 3,
+		'orderby'		=> 'name',
+		'order'			=> 'ASC'
+	) ); ?>"); ?></code></p>
 
 	<p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
 

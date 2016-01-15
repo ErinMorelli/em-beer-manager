@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,14 +30,33 @@ function embm_single_beer($atts) {
 		'show_extras'	=> 'true',
 	), $atts));
 
-	return embm_beer_single($id, $show_profile, $show_extras);
+	return embm_beer_single($id, array(
+		'profile'	=> $show_profile,
+		'extras'	=> $show_extras
+	));
 }
 
 add_shortcode('beer', 'embm_single_beer');
 
 // Single beer template code
-function embm_beer_single($postid, $profile = 'true', $extras = 'true') {
-	$args = array('id' => $postid, 'profile' => $profile, 'extras' => $extras);
+function embm_beer_single($postid, $input) {
+	// Set default values
+	$defaults = array(
+		'profile' => 'true',
+		'extras' => 'true'
+	);
+
+	// Set up values to pass on, remove bad values
+	$args = array( 'id' => $postid );
+	foreach ( $defaults as $key => $value ) {
+		if ( !array_key_exists($key, $input) ) {
+			$args[$key] = $value;
+		}
+		else {
+			$args[$key] = $input[$key];
+		}
+	}
+
 	return embm_beer_single_output ($args);
 }
 
@@ -85,26 +104,48 @@ function embm_all_beers($atts) {
 		'order'			=> ''
 	), $atts));
 
-	return embm_beer_list($exclude, $show_profile, $show_extras, $style, $group, $beers_per_page, $paginate, $orderby, $order);
+	return embm_beer_list(array(
+		'exclude'	=> $exclude,
+		'profile'	=> $show_profile,
+		'extras'	=> $show_extras,
+		'style'		=> $style,
+		'group'		=> $group,
+		'page_num'	=> $beers_per_page,
+		'use_pages'	=> $paginate,
+		'sortby'	=> $orderby,
+		'sort'		=> $order
+	));
 }
 
 add_shortcode('beer-list', 'embm_all_beers');
 
 // Beer list template code
-function embm_beer_list($exclude = '', $profile = 'true', $extras = 'true', $style = '', $group = '', $pagenum = -1, $usepages = 'true', $sortby = '', $sort = '') {
-	$args = array(
-		'exclude'	=> $exclude,
-		'profile'	=> $profile,
-		'extras'	=> $extras,
-		'style'		=> $style,
-		'group'		=> $group,
-		'page_num'	=> $pagenum,
-		'use_pages'	=> $usepages,
-		'sortby'	=> $sortby,
-		'sort'		=> $sort
+function embm_beer_list($input) {
+	// Set default values
+	$defaults = array(
+		'exclude'	=> '',
+		'profile'	=> 'true',
+		'extras'	=> 'true',
+		'style'		=> '',
+		'group'		=> '',
+		'page_num'	=> -1,
+		'use_pages'	=> 'true',
+		'sortby'	=> '',
+		'sort'		=> ''
 	);
 
-	return embm_beer_list_output ($args);
+	// Set up values to pass on, remove bad values
+	$args = array();
+	foreach ( $defaults as $key => $value ) {
+		if ( !array_key_exists($key, $input) ) {
+			$args[$key] = $value;
+		}
+		else {
+			$args[$key] = $input[$key];
+		}
+	}
+
+	return embm_beer_list_output($args);
 }
 
 // Beer list display
@@ -166,7 +207,7 @@ function embm_beer_list_output ($beers) {
 
 	$wp_query->query($args);
 
-	$output .= '<div class="beer-list">'."\n";
+	$output .= '<div class="embm-beer-list">'."\n";
 
 	while ( $wp_query->have_posts() ) : $wp_query->the_post();
 		$output .= embm_display_beer($post->ID, $showprofile, $showextras);
@@ -202,35 +243,43 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 	$profile = embm_display_beer_profile($beer_id);
 	$extras = embm_display_beer_extras($beer_id);
 
-	$output .= '<div id="beer-'.$beer_id.'" class="single-beer beer beer-'.$beer_id.'">'."\n";
-	$output .= '<div class="beer-title">'."\n";
+	// Begin single beer
+	$output .= '<div id="embm-beer-'.$beer_id.'" class="embm-single-beer embm-beer embm-beer-'.$beer_id.'">'."\n";
 
+	// Begin beer header
+	$output .= '<div class="embm-beer-header">'."\n";
+
+	// Beer title
 	if ( is_page() || is_archive() || is_tax('embm_group') ) {
-		$output .= '<a href="'.get_permalink($beer_id).'" titile="'.get_the_title($beer_id).'">';
-		$output .= '<h2>'.get_the_title($beer_id).'</h2>';
+		$output .= '<a href="'.get_permalink($beer_id).'" title="'.get_the_title($beer_id).'">';
+		$output .= '<span class="embm-beer-title">'.get_the_title($beer_id).'</span>';
 		$output .= '</a>'."\n";
 	} else {
-		$output .= '<h1>'.get_the_title($beer_id).'</h1>'."\n";
+		$output .= '<span class="embm-beer-title">'.get_the_title($beer_id).'</span>'."\n";
 	}
 
+	// Beer style
 	if ( embm_get_beer_style($beer_id) ) {
-		$output .= '<span class="beer-style">(';
+		$output .= '<span class="embm-beer-style">(';
 		$output .= '<a href="'.get_term_link(embm_get_beer_style($beer_id), 'embm_style').'" title="View All '.embm_get_beer_style($beer_id).'s">';
 		$output .= embm_get_beer_style($beer_id);
 		$output .= '</a>)</span>'."\n";
 	}
 
+	// End beer header
 	$output .= '</div>'."\n";
 
+	// Beer image
 	if ( !is_archive() ) {
 		if ( get_the_post_thumbnail($beer_id) != '' ) {
-			$output .= '<div class="beer-image">'."\n";
+			$output .= '<div class="embm-beer-image">'."\n";
 			$output .= get_the_post_thumbnail($beer_id, 'full')."\n";
 			$output .= '</div>'."\n";
 		}
 	}
 
-	$output .= '<div class="beer-description">'."\n";
+	// Begin beer description
+	$output .= '<div class="embm-beer-description">'."\n";
 	$output .= apply_filters('the_content', get_the_content($beer_id) );
 
 	if ( ( is_tax('embm_style') || is_archive() ) && !is_tax('embm_group') ) {
@@ -239,13 +288,15 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 		$output .= '</a>';
 	}
 
+	// End beer description
 	$output .= embm_display_untappd($beer_id);
 	$output .= '</div>'."\n";
 
+	// Beer meta
 	if ( ( $showprofile == 'true' ) || ( $showextras == 'true' ) ) {
 		if ( ( $profile != null ) || ( $extras != null ) ) {
 
-			$output .= '<div class="beer-meta">'."\n";
+			$output .= '<div class="embm-beer-meta">'."\n";
 
 			if ( ( $showprofile == 'true' ) && ( $profile != null ) ) {
 				$output .= $profile;
@@ -259,6 +310,7 @@ function embm_display_beer($beer_id, $showprofile='true', $showextras='true') {
 		$output .= '<div class="embm-clear"></div>'."\n";
 	}
 
+	// End single beer
 	$output .= '</div>'."\n";
 
 	return $output;
@@ -304,7 +356,7 @@ function embm_display_beer_profile($beer_id) {
 
 		if ( ($abv!='0%') || ($ibu!='0') || ($malts!='') || ($hops!='') || ($adds!='') || ($yeast!='') ) {
 
-			$output = '<div class="beer-profile">'."\n";
+			$output = '<div class="embm-beer-profile">'."\n";
 
 			if ( $abv != '0%' ) {
 				$output .= '<div class="abv"><span class="label">';
@@ -365,7 +417,7 @@ function embm_display_beer_extras($beer_id) {
 
 		if( ($avail!='') || ($notes!='') ) {
 
-			$output = '<div class="beer-extras">';
+			$output = '<div class="embm-beer-extras">'."\n";
 
 			if ( $bnum != '#' ) {
 				$output .= '<div class="beer_num"><span class="label">';
@@ -424,7 +476,7 @@ function embm_content_filter( $content ) {
 
 			if( ($profile != null) || ($extras != null) ) {
 
-				$output .= '<div class="beer-meta">'."\n";
+				$output .= '<div class="embm-beer-meta">'."\n";
 
 				if( ($view_profile_single != "1") && ($profile != null) ) {
 					$output .= $profile;
@@ -439,12 +491,12 @@ function embm_content_filter( $content ) {
 		}
 
 		if ( has_post_thumbnail($post->ID) ) {
-			$thumb .= '<div class="beer-image">'."\n";
+			$thumb .= '<div class="embm-beer-image">'."\n";
 			$thumb .= get_the_post_thumbnail($post->ID, 'full')."\n";
 			$thumb .= '</div>'."\n";
 		}
 
-		$content = sprintf('%s<div class="beer-description">%s', $thumb, $content);
+		$content = sprintf('%s<div class="embm-beer-description">%s', $thumb, $content);
 		$content .= $output;
 	}
 
@@ -469,7 +521,7 @@ function embm_content_filter( $content ) {
 
 			if ( ($profile != null) || ($extras != null) ) {
 
-				$output .= '<div class="beer-meta">'."\n";
+				$output .= '<div class="embm-beer-meta">'."\n";
 
 				if( ($view_profile_style != '1') && ($profile != null) ) {
 					$output .= $profile;
@@ -483,12 +535,12 @@ function embm_content_filter( $content ) {
 		}
 
 		if ( has_post_thumbnail($post->ID) ) {
-			$thumb .= '<div class="beer-image">'."\n";
+			$thumb .= '<div class="embm-beer-image">'."\n";
 			$thumb .= get_the_post_thumbnail($post->ID, 'full')."\n";
 			$thumb .= '</div>'."\n";
 		}
 
-		$content = sprintf('%s<div class="beer-description">%s', $thumb, $content);
+		$content = sprintf('%s<div class="embm-beer-description">%s', $thumb, $content);
 		$content .= $output;
 	}
 
@@ -513,7 +565,7 @@ function embm_content_filter( $content ) {
 
 			if( ($profile != null) || ($extras != null) ) {
 
-				$output .= '<div class="beer-meta">'."\n";
+				$output .= '<div class="embm-beer-meta">'."\n";
 
 				if( ($view_profile_group != "1") && ($profile != null) ) {
 					$output .= $profile;
@@ -527,12 +579,12 @@ function embm_content_filter( $content ) {
 		}
 
 		if ( has_post_thumbnail($post->ID) ) {
-			$thumb .= '<div class="beer-image">'."\n";
+			$thumb .= '<div class="embm-beer-image">'."\n";
 			$thumb .= get_the_post_thumbnail($post->ID, 'full')."\n";
 			$thumb .= '</div>'."\n";
 		}
 
-		$content = sprintf('%s<div class="beer-description">%s', $thumb, $content);
+		$content = sprintf('%s<div class="embm-beer-description">%s', $thumb, $content);
 		$content .= $output;
 	}
 
@@ -543,7 +595,7 @@ add_filter( 'the_content', 'embm_content_filter', -1 );
 
 function embm_body_classes($classes) {
 	if( is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group') ) {
-		$classes[] = 'single-beer';
+		$classes[] = 'embm-beer';
 	}
 	return $classes;
 }
@@ -555,7 +607,7 @@ function embm_title_filter($title, $id = null) {
 
 	if ( embm_get_beer_style($id) && ( is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title) ) {
 		$output = '';
-		$output .= '</a><span class="beer-style">(';
+		$output .= '</a><span class="embm-beer-style">(';
 		$output .= '<a href="'.get_term_link(embm_get_beer_style($id), 'embm_style').'" title="View All '.embm_get_beer_style($id).'s">';
 		$output .= embm_get_beer_style($id);
 		$output .= '</a>)</span>'."\n";

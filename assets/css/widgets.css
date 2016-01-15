@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,22 +20,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-ul.embm-beer-list {
+ul.embm-beer-list-widget {
 	padding: 0;
 	margin: 0 0 0 20px;
 }
-ul.embm-beer-list li {
+ul.embm-beer-list-widget li {
 	list-style: square;
 }
-li.embm-beer-list-item a {
+li.embm-beer-list-widget-item a {
 	font-weight: bold;
 	display: block;
 }
-li.embm-beer-list-item .embm-beer-summary {
+li.embm-beer-list-widget-item .embm-beer-summary {
 	display: inline-block;
 	padding-bottom: 10px;
 }
-li.embm-beer-list-item a.embm-read-more {
+li.embm-beer-list-widget-item a.embm-read-more {
 	font-weight: normal;
 	display: inline-block;
 	padding-left: 3px;

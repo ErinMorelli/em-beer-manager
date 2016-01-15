@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -48,19 +48,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 .widefat #untappd.column-untappd {
 	width: 80px;
 }
-#beer-settings .usage tr td {
+#embm-beer-settings .usage tr td {
 	border-collapse: collapse;
 	border-bottom: 1px solid #ccc;
 
 	padding: 5px 10px;
 }
-#beer-settings .usage tr:first-child td {
+#embm-beer-settings .usage tr:first-child td {
 	border-top: 1px solid #ccc;
 }
-#beer-settings .usage tr:nth-child(even) td {
+#embm-beer-settings .usage tr:nth-child(even) td {
 	background: #fafafa;
 }
-#beer-settings .whats-this {
+#embm-beer-settings .whats-this {
 	display: inline-block;
 	padding-left: 6px;
 }

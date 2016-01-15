@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2015, Erin Morelli.
+Copyright (c) 2013-2016, Erin Morelli.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,99 +20,101 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 *
 */
 
-.single-beer {
+.embm-beer {
 	margin: 25px 0 30px;
-	font-size: 14px;
-	line-height: 22px;
 }
-.embm-content-archive .single-beer:first-child,
-.embm-content-style .single-beer:first-child {
-	margin-top: 0px;
-}
-.embm-content-single .single-beer {
-	margin: 0px;
-}
-.single-beer .beer-title {
-	display: block;
+.embm-beer .embm-beer-header {
 	border-bottom: 1px solid #ccc;
-	padding-bottom: 3px;
+	display: block;
 	margin-bottom: 20px;
+	padding-bottom: 3px;
 }
-.beer-title a h1,
-.beer-title h1,
-.single-beer .beer-title h2,
-.single-beer .beer-title a h2 {
+.embm-beer-header > a,
+.embm-beer .embm-beer-header > a {
+	border: 0;
 	text-decoration: none;
-	display: inline-block;
-	font-family: 'Helvetica',sans-serif;
-	font-size: 25px;
-	margin: 0 !important;
 }
-.single-beer .beer-style {
+.embm-beer-header > a > .embm-beer-title,
+.embm-beer-header > .embm-beer-title,
+.embm-beer .embm-beer-header > .embm-beer-title,
+.embm-beer .embm-beer-header > a > .embm-beer-title {
+	border: 0;
 	display: inline-block;
-	padding-left: 10px;
-	font-size: 16px;
+/*	font-size: 2em;*/
+	margin: 0;
+	text-decoration: none;
+}
+.embm-beer .embm-beer-style {
+	display: inline-block;
+	/*font-size: em;*/
 	font-style: italic;
+	padding-left: 10px;
 }
-.single-beer .beer-style a {
+.embm-beer .embm-beer-style > a {
+	border: 0;
 	color: #888;
 	text-decoration: none;
 }
-.single-beer .beer-image .wp-post-image {
-	display: inline-block;
-	width: 150px;
+.embm-beer .embm-beer-image > .wp-post-image {
+	display: block;
 	float: left;
 	margin: 0 20px 10px 0;
-}
-.single-beer .beer-image img {
 	width: 150px;
-	height: auto;
 }
-.single-beer .beer-description {
+.embm-beer .embm-beer-image > img {
+	height: auto;
+	width: 150px;
+}
+.embm-beer .embm-beer-description {
 	padding: 0 0 0 20px;
 }
-.single-beer .beer-description .untappd {
+.embm-beer .embm-beer-description p:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+.embm-beer .embm-beer-description > .untappd {
 	padding: 12px 0;
 }
-.single-beer .beer-description .untappd a {
-	display: inline-block;
-	width: 162px;
-	height: 25px;
+.embm-beer .embm-beer-description > .untappd > a {
 	background: transparent url('../img/checkin-button.png') 0 0 no-repeat;
+	border: 0;
+	display: inline-block;
+	height: 25px;
+	text-decoration: none;
+	width: 162px;
 }
-.single-beer .beer-meta {
-	clear: both;
-	display: block;
+.embm-beer .embm-beer-meta {
 	background: #eee;
 	border: 1px solid #ddd;
-	padding: 15px 20px;
+	clear: both;
 	color: #000;
+	display: block;
+	padding: 15px 20px;
 	margin-bottom: 35px;
 }
-.single-beer .beer-meta .beer-profile {
+.embm-beer .embm-beer-meta > .embm-beer-profile {
 	padding-bottom: 10px;
 }
-.single-beer .beer-meta .beer-extras .beer_num .label,
-.single-beer .beer-meta .beer-extras .avail .label,
-.single-beer .beer-meta .beer-profile .label {
-	font-weight: bold;
+.embm-beer .embm-beer-meta > .embm-beer-extras .label,
+.embm-beer .embm-beer-meta > .embm-beer-profile .label {
 	display: inline-block;
+	font-weight: bold;
 	padding-right: 8px;
 }
-.single-beer .beer-meta .beer-profile .abv,
-.single-beer .beer-meta .beer-profile .ibu {
+.embm-beer .embm-beer-meta > .embm-beer-profile > .abv,
+.embm-beer .embm-beer-meta > .embm-beer-profile > .ibu {
 	display: inline-block;
 	padding: 0 20px 5px 0;
 }
-.single-beer .beer-meta .beer-extras .notes .label {
-	font-weight: bold;
+.embm-beer .embm-beer-meta > .embm-beer-extras > .notes > .label {
 	display: block;
-	padding: 10px 0px 3px;
+	font-weight: bold;
+	padding: 10px 0 3px;
 }
-.beer-list .nav-below {
+.embm-beer-list .nav-below {
 	text-align: right;
 }
-.single-beer .wp-post-image {
+.embm-beer .wp-post-image {
 	display: none;
 }
 .embm-clear {

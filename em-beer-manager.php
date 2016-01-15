@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://erinmorelli.com/projects/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.9.6
+ * Version: 1.9.7
  * Author: Erin Morelli
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
@@ -49,7 +49,7 @@ register_activation_hook(__FILE__, 'embm_plugin_activation');
 
 function embm_plugin_activation() {
 	// Check for new version
-	$embm_curr_version = '1.9.6';
+	$embm_curr_version = '1.9.7';
 
 	if ( !defined('EMBM_VERSION_KEY') ) {
 		// Define new version option
@@ -100,7 +100,7 @@ function embm_plugin_uninstall() {
 	$curr_version = floatval(get_option('embm_version'));
 	$new_version = 1.7;
 
-	if ( $curr_version >= $new_version ) { //Keep beer data saved for those upgrading from 1.6 or earlier
+	if ( $curr_version >= $new_version ) { // Keep beer data saved for those upgrading from 1.6 or earlier
 
 		// Remove beer post type
 		global $wp_post_types;

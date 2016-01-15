@@ -38,8 +38,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 1.9.6 - Minor Bug Fix](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.6.zip) ###
-* Fixed 'Warning: Missing argument' error
+### [Version 1.9.7 - Minor Improvements](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.9.7.zip) ###
+* ???
 
 
 
