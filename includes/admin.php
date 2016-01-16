@@ -96,9 +96,7 @@ function embm_custom_columns( $column, $post_id ) {
 
 add_action( 'manage_embm_beer_posts_custom_column', 'embm_custom_columns', 10, 2 );
 
-
 // Make these columns sortable
-
 function embm_sortable_columns() {
 	return array(
 		'title'		=> 'title',
@@ -111,7 +109,6 @@ function embm_sortable_columns() {
 }
 
 add_filter( 'manage_edit-embm_beer_sortable_columns', 'embm_sortable_columns' );
-
 
 /* Only run our customization on the 'edit.php' page in the admin. */
 add_action( 'load-edit.php', 'embm_edit_beer_load' );
@@ -175,7 +172,6 @@ function embm_sort_beers( $vars ) {
 
 	return $vars;
 }
-
 
 // Add Settings page
 add_action('admin_menu', 'embm_admin_menu');
