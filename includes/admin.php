@@ -333,18 +333,17 @@ function embm_settings() {
 	}
 
 ?>
-<div class="wrap embm-beer-settings">
+<div class="wrap embm-settings-page">
 
-	<h1 class="embm-beer-settings-title"><?php _e("EM Beer Manager", "embm"); ?><span class="title-count"><?php echo 'v'.get_option('embm_version'); ?></span></h1>
+	<h1 class="embm-settings-title"><?php _e('EM Beer Manager', 'embm'); ?><span class="embm-version"><?php echo 'v'.get_option('embm_version'); ?></span></h1>
 
 	<div id="embm-settings-tabs">
-
-		<ul>
-			<li><a href="#options">Options</a></li>
-			<li><a href="#usage">Usage</a></li>
+		<ul class="nav-tab-wrapper">
+			<li><a href="#settings" class="nav-tab nav-tab-active nav-tab-settings"><?php _e('Settings', 'embm'); ?></a></li>
+			<li><a href="#usage" class="nav-tab nav-tab-usage"><?php _e('Usage', 'embm'); ?></a></li>
 		</ul>
 
-		<div id="options">
+		<div id="settings" class="embm-settings-section-settings">
 			<form method="post" action="options.php" class="embm-form-settings">
 				<?php
 					settings_fields( 'embm_options' );
@@ -354,22 +353,18 @@ function embm_settings() {
 			</form>
 		</div>
 
-		<div id="usage">
+		<div id="usage" class="embm-settings-section-usage">
 
-			<h2><?php _e("Usage", "embm"); ?></h2>
+			<h2><?php _e('Single Beer Display', 'embm'); ?></h2>
 
-			<p><?php _e("Use these shortcodes to display beers in your posts or use the template tags in your theme files", "embm"); ?></p>
+			<p><?php _e('These will display a single beer entry given it\'s ID number.', 'embm'); ?></p>
 
-			<h3><?php _e("Single Beer Display", "embm"); ?></h3>
-
-			<p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
-
-			<p><strong><?php _e('Shortcode:', 'embm'); ?></strong></p>
+			<h3 class="embm-subhead"><?php _e('Shortcode', 'embm'); ?></h3>
 			<blockquote>
 				<code>[beer id="beer id"]</code>
 			</blockquote>
 
-			<p><strong><?php _e('Template tag:', 'embm'); ?></strong></p>
+			<h3 class="embm-subhead"><?php _e('Template tag', 'embm'); ?></h3>
 			<blockquote>
 				<code><?php echo htmlentities('<?php echo embm_beer_single( $beer_id, $args ); ?>'); ?></code></p>
 				<p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
@@ -379,9 +374,9 @@ function embm_settings() {
 				) ); ?>"); ?></code></p>
 			</blockquote>
 
-			<p style="margin-top:2em;"><strong><?php _e("Options:", "embm"); ?></strong></p>
+			<h3 class="embm-subhead"><?php _e('Options', 'embm'); ?></h3>
 
-			<p><?php _e("For use with both the shortcode and template code", "embm"); ?></p>
+			<p><?php _e('For use with both the shortcode and template code', 'embm'); ?></p>
 
 			<table class="embm-usage-table" cellpadding="0" cellspacing="0" border="0">
 				<thead>
@@ -408,16 +403,18 @@ function embm_settings() {
 				</tbody>
 			</table>
 
-			<h3 style="margin-top:2em;"><?php _e('List All Beers', 'embm'); ?></h3>
+			<br />
+
+			<h2><?php _e('List All Beers', 'embm'); ?></h2>
 
 			<p><?php _e('These will display a formatted listing of all beers.', 'embm'); ?></p>
 
-			<p><strong><?php _e('Shortcode:', 'embm'); ?></strong></p>
+			<h3 class="embm-subhead"><?php _e('Shortcode', 'embm'); ?></h3>
 			<blockquote>
 				<code>[beer-list]</code>
 			</blockquote>
 
-			<p><strong><?php _e('Template tag:', 'embm'); ?></strong></p>
+			<h3 class="embm-subhead"><?php _e('Template tag', 'embm'); ?></h3>
 			<blockquote>
 				<code><?php echo htmlentities('<?php echo embm_beer_list( $args ); ?>'); ?></code></p>
 				<p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:', 'embm'); ?></p>
@@ -429,8 +426,8 @@ function embm_settings() {
 				) ); ?>"); ?></code></p>
 			</blockquote>
 
-			<p style="margin-top:2em;"><strong><?php _e('Options:', 'embm'); ?></strong></p>
-			<p><?php _e("For use with both the shortcode and template code", "embm"); ?></p>
+			<h3 class="embm-subhead"><?php _e('Options', 'embm'); ?></h3>
+			<p><?php _e('For use with both the shortcode and template code', 'embm'); ?></p>
 
 			<table class="embm-usage-table" cellpadding="0" cellspacing="0" border="0">
 				<thead>

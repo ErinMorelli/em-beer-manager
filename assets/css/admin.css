@@ -34,38 +34,58 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	content: "\e604";
 	font-family: 'beer-icons';
 }
-.widefat th.column-id {
+.widefat .column-id {
 	width: 35px;
 }
-.widefat th.column-abv,
-.widefat th.column-ibu,
-.widefat th.column-beer_num {
+.widefat .column-abv,
+.widefat .column-ibu,
+.widefat .column-beer_num {
 	width: 100px;
 }
-.widefat th.column-untappd {
+.widefat .column-untappd {
 	width: 80px;
 }
-.embm-beer-settings .embm-beer-settings-title .title-count {
-
+.embm-settings-page .embm-settings-title .embm-version {
+	color: #888;
+	display: inline-block;
+	font-size: 11px;
+	margin-left: 7px;
 }
-.embm-beer-settings .embm-usage-table tr td {
+.embm-settings-page .nav-tab-wrapper {
+	border-bottom: 1px solid #ccc;
+	margin: 0;
+}
+.embm-settings-page .nav-tab-wrapper .nav-tab-active {
+	background: #f1f1f1;
+	border-bottom: 1px solid #f1f1f1;
+	color: #000;
+	margin-bottom: -1px;
+}
+.embm-settings-page .embm-usage-table tbody td {
+	height: 40px;
+}
+.embm-settings-page .embm-usage-table tr td {
 	border-bottom: 1px solid #ccc;
 	border-collapse: collapse;
-	height: 40px;
 	padding: 5px 10px;
 }
-.embm-beer-settings .embm-usage-table tr:first-child td {
+.embm-settings-page .embm-usage-table tr:first-child td {
 	border-top: 1px solid #ccc;
 }
-.embm-beer-settings .embm-usage-table tr:nth-child(even) td {
+.embm-settings-page .embm-usage-table tr:nth-child(even) td {
 	background: #fafafa;
 }
-.embm-beer-settings .whats-this {
+.embm-settings-page .whats-this {
 	display: inline-block;
 	padding-left: 6px;
 }
 .embm-form-settings > .form-table {
-	margin-bottom: 20px;
+	margin-bottom: 50px;
+}
+.embm-settings-section-usage .embm-subhead {
+	font-size: 14px;
+	font-weight: 600;
+	margin-top: 2em;
 }
 .embm-more-info {
 	float: left;

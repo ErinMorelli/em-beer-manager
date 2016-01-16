@@ -21,29 +21,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 ul.embm-beer-list-widget {
-	padding: 0;
 	margin: 0 0 0 20px;
+	padding: 0;
 }
 ul.embm-beer-list-widget li {
 	list-style: square;
 }
 li.embm-beer-list-widget-item a {
-	font-weight: bold;
 	display: block;
+	font-weight: bold;
 }
 li.embm-beer-list-widget-item .embm-beer-summary {
 	display: inline-block;
 	padding-bottom: 10px;
 }
-li.embm-beer-list-widget-item a.embm-read-more {
-	font-weight: normal;
+li.embm-beer-list-widget-item .embm-read-more {
 	display: inline-block;
-	padding-left: 3px;
 	font-size: 100%;
+	font-weight: normal;
+	padding-left: 3px;
 }
 ul.embm-untappd-list {
-	padding: 0;
 	margin: 0;
+	padding: 0;
 }
 ul.embm-untappd-list li {
 	list-style: none;
@@ -54,9 +54,9 @@ ul.embm-untappd-list li.embm-untappd-list-item {
 	padding-bottom: 10px;
 }
 li.embm-untappd-list-item a.embm-checkin-date {
+	color: #aaa;
 	display: block;
 	font-size: 0.8em;
-	color: #aaa;
 	text-decoration: none;
 }
 li.embm-untappd-list-item a.embm-checkin-date:hover {
