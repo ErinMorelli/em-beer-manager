@@ -30,52 +30,53 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	font-weight: normal;
 	font-style: normal;
 }
-#menu-posts-embm_beer .wp-menu-image:before {
-	font-family: 'beer-icons';
+.menu-icon-embm_beer .wp-menu-image:before {
 	content: "\e604";
+	font-family: 'beer-icons';
 }
-#icon-edit.icon32-posts-embm_beer {
-	background: url('../img/beer-32x32.png') no-repeat;
-}
-.widefat #id.column-id {
+.widefat th.column-id {
 	width: 35px;
 }
-.widefat #abv.column-abv,
-.widefat #ibu.column-ibu,
-.widefat #beer_num.column-beer_num {
+.widefat th.column-abv,
+.widefat th.column-ibu,
+.widefat th.column-beer_num {
 	width: 100px;
 }
-.widefat #untappd.column-untappd {
+.widefat th.column-untappd {
 	width: 80px;
 }
-#embm-beer-settings .usage tr td {
-	border-collapse: collapse;
-	border-bottom: 1px solid #ccc;
+.embm-beer-settings .embm-beer-settings-title .title-count {
 
+}
+.embm-beer-settings .embm-usage-table tr td {
+	border-bottom: 1px solid #ccc;
+	border-collapse: collapse;
+	height: 40px;
 	padding: 5px 10px;
 }
-#embm-beer-settings .usage tr:first-child td {
+.embm-beer-settings .embm-usage-table tr:first-child td {
 	border-top: 1px solid #ccc;
 }
-#embm-beer-settings .usage tr:nth-child(even) td {
+.embm-beer-settings .embm-usage-table tr:nth-child(even) td {
 	background: #fafafa;
 }
-#embm-beer-settings .whats-this {
+.embm-beer-settings .whats-this {
 	display: inline-block;
 	padding-left: 6px;
 }
-.emdm-form-settings > .form-table {
+.embm-form-settings > .form-table {
 	margin-bottom: 20px;
 }
-#contextual-help-link-wrap.embm-help {
-	border-right: none;
-	border-left: none;
-	border-bottom: none;
-	background: transparent;
-	background-image: none !important;
-	float: none;
+.embm-more-info {
+	float: left;
+	width: 33.333%;
 }
-#screen-meta-links .screen-meta-toggle,
-#contextual-help-link-wrap.embm-help {
-	visibility: visible !important;
+.embm-more-info input {
+	max-width: 90%;
+}
+@media screen and (max-width:782px) {
+	.embm-more-info {
+		float: none;
+		width: 100%;
+	}
 }

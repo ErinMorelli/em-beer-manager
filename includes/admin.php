@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Enqueue admin styles
 function embm_admin_styles() {
 	wp_enqueue_style('embm-admin', EMBM_PLUGIN_URL.'assets/css/admin.css');
+	wp_enqueue_script('embm-admin-script', EMBM_PLUGIN_URL.'assets/js/admin.js', array('jquery-ui-tabs'));
 }
 
 add_action('admin_enqueue_scripts', 'embm_admin_styles');
@@ -81,10 +82,11 @@ function embm_custom_columns( $column, $post_id ) {
 			echo embm_get_beer($post_id, 'avail');
 			break;
 		case 'untappd':
-			$untap = embm_get_beer($post_id, 'untappd');
+			$untap = get_post_meta($post_id, 'untappd', true);
 			if ( $untap != '' ) {
+				$untap_link = embm_get_beer($post_id, 'untappd');
 				$uticon = EMBM_PLUGIN_URL.'assets/img/ut-icon.png';
-				echo '<a href="'.$untap.'" target="_blank"><img src="'.$uticon.'" border="0" alt="Untappd" /></a>';
+				echo '<a href="'.$untap_link.'" target="_blank"><img src="'.$uticon.'" border="0" alt="Untappd" /></a>';
 			} else {
 				echo '';
 			}
@@ -190,45 +192,30 @@ function embm_admin_menu() {
 	$embm_admin_page = add_options_page($page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
-// Setup checkboxes
-function options_embm_add_js() { ?>
-	<script type="text/javascript">
-	//<![CDATA[
-		jQuery(document).ready(function($){
-			$("input[name='disble_untappd']").focus(function(){
-				$("#disble_untappd").attr("checked", "checked");
-			});
-		});
-	//]]>
-	</script>
-	<?php
-}
-
-add_action('admin_head', 'options_embm_add_js');
-
 // Register new settings
 function embm_register_settings() { // whitelist options
 	// Register new settings options
 	register_setting( 'embm_options', 'embm_options', 'embm_options_validate' );
 
 	// Global settings
-	add_settings_section('embm_global_settings', 'Global', 'embm_section_text', 'embm');
-	add_settings_field('embm_css_url', 'Custom stylesheet', 'embm_css_box', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
-	add_settings_field('embm_untappd_check', 'General settings', 'embm_general_settings', 'embm', 'embm_global_settings');
-	add_settings_field('embm_profile_show', 'Display settings', 'embm_display_settings', 'embm', 'embm_global_settings');
+	add_settings_section('embm_global_settings', __('Global Settings', 'embm'), 'embm_section_text', 'embm');
+	add_settings_field('embm_css_url', __('Custom stylesheet', 'embm'), 'embm_css_url', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
+	add_settings_field('embm_untappd_settings', __('Untappd settings', 'embm'), 'embm_untappd_settings', 'embm', 'embm_global_settings');
+	add_settings_field('embm_display_settings', __('Display settings', 'embm'), 'embm_display_settings', 'embm', 'embm_global_settings');
 
 	// Group Tax Settings
-	add_settings_section('embm_group_settings', 'Groups', 'embm_section_text', 'embm');
-	add_settings_field('embm_group_slug', 'Custom taxonomy slug:', 'embm_group_box', 'embm', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
-	add_settings_field('embm_profile_show_group', 'Display settings', 'embm_group_display_settings', 'embm', 'embm_group_settings');
+	add_settings_section('embm_group_settings', __('Group Settings', 'embm'), 'embm_section_text', 'embm');
+	add_settings_field('embm_group_slug', __('Custom taxonomy slug', 'embm'), 'embm_group_slug', 'embm', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
+	add_settings_field('embm_group_display_settings', __('Display settings', 'embm'), 'embm_group_display_settings', 'embm', 'embm_group_settings');
 
 	// Style Tax Settings
-	add_settings_section('embm_style_settings', 'Styles', 'embm_section_text', 'embm');
-	add_settings_field('embm_profile_show_style', 'Display settings', 'embm_style_display_settings', 'embm', 'embm_style_settings');
+	add_settings_section('embm_style_settings', __('Style Settings', 'embm'), 'embm_section_text', 'embm');
+	add_settings_field('embm_style_display_settings', __('Display settings', 'embm'), 'embm_style_display_settings', 'embm', 'embm_style_settings');
 
 	// Single Beer Settings
-	add_settings_section('embm_single_settings', 'Single Page', 'embm_section_text', 'embm');
-	add_settings_field('embm_profile_show_single', 'Display settings', 'embm_single_display_settings', 'embm', 'embm_single_settings');
+	add_settings_section('embm_single_settings', __('Single Page Settings', 'embm'), 'embm_section_text', 'embm');
+	add_settings_field('embm_comments_toggle', __('Comments', 'embm'), 'embm_comments_toggle', 'embm', 'embm_single_settings');
+	add_settings_field('embm_single_display_settings', __('Display settings', 'embm'), 'embm_single_display_settings', 'embm', 'embm_single_settings');
 
 }
 
@@ -240,28 +227,22 @@ function embm_options_validate($input) {
 
 function embm_section_text() {}
 
-function embm_css_box() {
+function embm_css_url() {
 	$options = get_option('embm_options');
-	echo '<input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" />';
+	echo '<p>'.__('Override default EM Beer Manager CSS with your own stylesheet.', 'embm').'</p>';
+	echo '<p><input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" /></p>';
+	echo '<p class="description">('.__('Enter a full URL that points to the stylesheet file.', 'embm').')</p>';
 }
 
-function embm_general_settings() {
+function embm_untappd_settings() {
 	$options = get_option('embm_options');
 	$use_untappd = null;
 	if ( isset($options['embm_untappd_check']) ) {
 		$use_untappd = $options['embm_untappd_check'];
 	}
-	$output = '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
-	$output .= '<label for="embm_untappd_check">Disable Untappd integration</label></p>';
-
-	$use_comments = null;
-	if (isset($options['embm_comment_check'])) {
-		$use_comments = $options['embm_comment_check'];
-	}
-	$output .= '<p><input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
-	$output .= '<label for="embm_comment_check">Enable commenting on beers</label></p>';
-
-	echo $output;
+	echo '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
+	echo '<label for="embm_untappd_check">'.__('Disable Untappd integration', 'embm').'</label>';
+	echo '<span class="whats-this"><a href="#TB_inline?width=550&height=250&inlineId=embm-untappd-help-box" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
 }
 
 function embm_display_settings() {
@@ -270,23 +251,24 @@ function embm_display_settings() {
 	if ( isset($options['embm_profile_show']) ) {
 		$view_profile = $options['embm_profile_show'];
 	}
-	$output = '<p><input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
-	$output .= '<label for="embm_profile_show">Globally hide "profile" info</label><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("?", "embm").'</small></a></span></p>';
+	echo '<p><input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
+	echo '<label for="embm_profile_show">'.__('Globally hide "profile" info', 'embm').'</label>';
+	echo '<span class="whats-this"><a href="#TB_inline?width=550&height=450&inlineId=embm-settings-help-box" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
 
 	$view_extras = null;
 	if ( isset($options['embm_extras_show']) ) {
 		$view_extras = $options['embm_extras_show'];
 	}
-	$output .= '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
-	$output .= '<label for="embm_extras_show">Globally hide "extras" info</label><span class="whats-this"><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small>'.__("?", "embm").'</small></a></span></p>';
-
-	echo $output;
+	echo '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
+	echo '<label for="embm_extras_show">'.__('Globally hide "extras" info', 'embm').'</label>';
+	echo '<span class="whats-this"><a href="#TB_inline?width=550&height=450&inlineId=embm-settings-help-box" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'">?</a></span></p>';
 }
 
-function embm_group_box() {
+function embm_group_slug() {
 	$options = get_option('embm_options');
-	echo '<input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" />'."\n";
-	echo '<br /><small>'.__('NOTE: You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting', 'embm').'</small>';
+	echo '<p>'.__('Rewrite the beer group URLs with your own slug. By default URLs will look like: yoursite.com/<strong>group</strong>/your-group-name.', 'embm').'</p>';
+	echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" /></p>';
+	echo '<p class="description">('.__('You will need to refresh your permalinks ','embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting.', 'embm').')</p>';
 }
 
 function embm_group_display_settings() {
@@ -295,17 +277,15 @@ function embm_group_display_settings() {
 	if ( isset($options['embm_profile_show_group']) ) {
 		$view_profile = $options['embm_profile_show_group'];
 	}
-	$output = '<p><input name="embm_options[embm_profile_show_group]" type="checkbox" id="embm_profile_show_group" value="1"'.checked('1', $view_profile, false).' /> ';
-	$output .= '<label for="embm_profile_show_group">Hide "profile" info in groups</label></p>';
+	echo '<p><input name="embm_options[embm_profile_show_group]" type="checkbox" id="embm_profile_show_group" value="1"'.checked('1', $view_profile, false).' /> ';
+	echo '<label for="embm_profile_show_group">'.__('Hide "profile" info in groups', 'embm').'</label></p>';
 
 	$view_extras = null;
 	if ( isset($options['embm_extras_show_group']) ) {
 		$view_extras = $options['embm_extras_show_group'];
 	}
-	$output .= '<p><input name="embm_options[embm_extras_show_group]" type="checkbox" id="embm_extras_show_group" value="1"'.checked('1', $view_extras, false).' /> ';
-	$output .= '<label for="embm_extras_show_group">Hide "extras" info in groups</label></p>';
-
-	echo $output;
+	echo '<p><input name="embm_options[embm_extras_show_group]" type="checkbox" id="embm_extras_show_group" value="1"'.checked('1', $view_extras, false).' /> ';
+	echo '<labe l for="embm_extras_show_group">'.__('Hide "extras" info in groups', 'embm').'</label></p>';
 }
 
 function embm_style_display_settings() {
@@ -314,17 +294,24 @@ function embm_style_display_settings() {
 	if ( isset($options['embm_profile_show_style']) ) {
 		$view_profile = $options['embm_profile_show_style'];
 	}
-	$output = '<p><input name="embm_options[embm_profile_show_style]" type="checkbox" id="embm_profile_show_style" value="1"'.checked('1', $view_profile, false).' /> ';
-	$output .= '<label for="embm_profile_show_style">Hide "profile" info on styles pages</label></p>';
+	echo '<p><input name="embm_options[embm_profile_show_style]" type="checkbox" id="embm_profile_show_style" value="1"'.checked('1', $view_profile, false).' /> ';
+	echo '<label for="embm_profile_show_style">'.__('Hide "profile" info on styles pages', 'embm').'</label></p>';
 
 	$view_extras = null;
 	if ( isset($options['embm_extras_show_style']) ) {
 		$view_extras = $options['embm_extras_show_style'];
 	}
-	$output .= '<p><input name="embm_options[embm_extras_show_style]" type="checkbox" id="embm_extras_show_style" value="1"'.checked('1', $view_extras, false).' /> ';
-	$output .= '<label for="embm_extras_show_group">Hide "extras" info on styles pages</label></p>';
+	echo '<p><input name="embm_options[embm_extras_show_style]" type="checkbox" id="embm_extras_show_style" value="1"'.checked('1', $view_extras, false).' /> ';
+	echo '<label for="embm_extras_show_group">'.__('Hide "extras" info on styles pages', 'embm').'</label></p>';
+}
 
-	echo $output;
+function embm_comments_toggle() {
+	$use_comments = null;
+	if (isset($options['embm_comment_check'])) {
+		$use_comments = $options['embm_comment_check'];
+	}
+	echo '<p><input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
+	echo '<label for="embm_comment_check">'.__('Enable comments on single beer pages', 'embm').'</label></p>';
 }
 
 function embm_single_display_settings() {
@@ -333,140 +320,190 @@ function embm_single_display_settings() {
 	if ( isset($options['embm_profile_show_single']) ) {
 		$view_profile = $options['embm_profile_show_single'];
 	}
-	$output = '<p><input name="embm_options[embm_profile_show_single]" type="checkbox" id="embm_profile_show_single" value="1"'.checked('1', $view_profile, false).' /> ';
-	$output .= '<label for="embm_profile_show_single">Hide "profile" info on single beer pages</label></p>';
+	echo '<p><input name="embm_options[embm_profile_show_single]" type="checkbox" id="embm_profile_show_single" value="1"'.checked('1', $view_profile, false).' /> ';
+	echo '<label for="embm_profile_show_single">'.__('Hide "profile" info on single beer pages', 'embm').'</label></p>';
 
 	$view_extras = null;
 	if ( isset($options['embm_extras_show_single']) ) {
 		$view_extras = $options['embm_extras_show_single'];
 	}
-	$output .= '<p><input name="embm_options[embm_extras_show_single]" type="checkbox" id="embm_extras_show_single" value="1"'.checked('1', $view_extras, false).' /> ';
-	$output .= '<label for="embm_extras_show_single">Hide "extras" info on single beer pages</label></p>';
-
-	echo $output;
+	echo '<p><input name="embm_options[embm_extras_show_single]" type="checkbox" id="embm_extras_show_single" value="1"'.checked('1', $view_extras, false).' /> ';
+	echo '<label for="embm_extras_show_single">'.__('Hide "extras" info on single beer pages', 'embm').'</label></p>';
 }
 
 function embm_settings() {
 	if (!current_user_can('manage_options')) {
-		wp_die('You do not have sufficient permissions to access this page.');
+		wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
 	}
 
 ?>
-<div class="wrap" id="embm-beer-settings">
+<div class="wrap embm-beer-settings">
 
-	<div id="icon-edit" class="icon32 icon32-posts-embm_beer"><br /></div><h2><?php _e("EM Beer Manager", "embm"); ?><span class="add-new-h2"><?php echo 'v'.get_option('embm_version'); ?></span></h2>
+	<h1 class="embm-beer-settings-title"><?php _e("EM Beer Manager", "embm"); ?><span class="title-count"><?php echo 'v'.get_option('embm_version'); ?></span></h1>
 
-	<script type="text/javascript">
-		function untappdHelp() {
-			window.open("<?php echo EMBM_PLUGIN_URL; ?>assets/embm-help.php#settings","Finding Your Untappd Brewery ID","menubar=no,width=460,height=550,toolbar=no");
-		}
-	</script>
+	<div id="embm-settings-tabs">
 
-	<form method="post" action="options.php" class="emdm-form-settings">
+		<ul>
+			<li><a href="#options">Options</a></li>
+			<li><a href="#usage">Usage</a></li>
+		</ul>
 
-		<?php settings_fields( 'embm_options' );
-			do_settings_sections( 'embm' );?>
+		<div id="options">
+			<form method="post" action="options.php" class="embm-form-settings">
+				<?php
+					settings_fields( 'embm_options' );
+					do_settings_sections( 'embm' );
+				?>
+				<p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
+			</form>
+		</div>
 
-		<p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
+		<div id="usage">
 
-	</form>
+			<h2><?php _e("Usage", "embm"); ?></h2>
 
-	<br /><hr />
+			<p><?php _e("Use these shortcodes to display beers in your posts or use the template tags in your theme files", "embm"); ?></p>
 
-	<h2><?php _e("Usage", "embm"); ?></h2>
+			<h3><?php _e("Single Beer Display", "embm"); ?></h3>
 
-	<p><?php _e("Use these shortcodes to display beers in your posts or use the template tags in your theme files", "embm"); ?></p>
+			<p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
 
+			<p><strong><?php _e('Shortcode:', 'embm'); ?></strong></p>
+			<blockquote>
+				<code>[beer id="beer id"]</code>
+			</blockquote>
 
-	<h3><?php _e("Single Beer Display", "embm"); ?></h3>
+			<p><strong><?php _e('Template tag:', 'embm'); ?></strong></p>
+			<blockquote>
+				<code><?php echo htmlentities('<?php echo embm_beer_single( $beer_id, $args ); ?>'); ?></code></p>
+				<p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
+				<p><code><?php echo htmlentities("<?php echo embm_beer_single( 123, array(
+					'show_profile'	=> 'false',
+					'show_extras'	=> 'true'
+				) ); ?>"); ?></code></p>
+			</blockquote>
 
-	<p><?php _e("These will display a single beer entry given it's ID number.", "embm"); ?></p>
+			<p style="margin-top:2em;"><strong><?php _e("Options:", "embm"); ?></strong></p>
 
-	<p><code> [beer id="beer id"] </code></p>
-	<p><code><?php echo htmlentities('<?php echo embm_beer_single( $beer_id, $args ); ?>'); ?></code></p>
-	<p>Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:</p>
-	<p><code><?php echo htmlentities("<?php echo embm_beer_single( 123, array(
-		'show_profile'	=> 'false',
-		'show_extras'	=> 'true'
-	) ); ?>"); ?></code></p>
+			<p><?php _e("For use with both the shortcode and template code", "embm"); ?></p>
 
-	<p style="margin-top:2em;"><?php _e("Optional attributes (for both shortcode and template code):", "embm"); ?></p>
-	<table class="usage" cellpadding="0" cellspacing="0" border="0">
-		<tr>
-			<td><code><strong>show_profile=</strong>"true/false"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
-			<td><em><?php _e('Displays or hides the "Beer Profile" information', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>show_extras=</strong>"true/false"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
-			<td><em><?php _e('Displays or hides the "More Information" section', 'embm'); ?></em></td>
-		</tr>
-	</table>
+			<table class="embm-usage-table" cellpadding="0" cellspacing="0" border="0">
+				<thead>
+					<tr>
+						<th><?php _e('Option Name', 'embm'); ?></th>
+						<th><?php _e('Values', 'embm'); ?></th>
+						<th><?php _e('Default', 'embm'); ?></th>
+						<th><?php _e('Description', 'embm'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code><strong>show_profile</strong></code></td>
+						<td><code>true, false</code></td>
+						<td><code>true</code></td>
+						<td><?php _e('Displays or hides the "Beer Profile" information', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>show_extras</strong></code></td>
+						<td><code>true, false</code></td>
+						<td><code>true</code></td>
+						<td><?php _e('Displays or hides the "More Information" section', 'embm'); ?></td>
+					</tr>
+				</tbody>
+			</table>
 
-	<h3 style="margin-top:2em;"><?php _e('List All Beers', 'embm'); ?></h3>
+			<h3 style="margin-top:2em;"><?php _e('List All Beers', 'embm'); ?></h3>
 
-	<p><?php _e('These will display a formatted listing of all beers in the database.', 'embm'); ?></p>
+			<p><?php _e('These will display a formatted listing of all beers.', 'embm'); ?></p>
 
-	<p><code>[beer-list]</code></p>
-	<p><code><?php echo htmlentities('<?php echo embm_beer_list( $args ); ?>'); ?></code></p>
-	<p>Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:</p>
-	<p><code><?php echo htmlentities("<?php echo embm_beer_list( array(
-		'show_extras'		=> 'false',
-		'beers_per_page'	=> 3,
-		'orderby'		=> 'name',
-		'order'			=> 'ASC'
-	) ); ?>"); ?></code></p>
+			<p><strong><?php _e('Shortcode:', 'embm'); ?></strong></p>
+			<blockquote>
+				<code>[beer-list]</code>
+			</blockquote>
 
-	<p style="margin-top:2em;"><?php _e('Optional attributes (for both shortcode and template code):', 'embm'); ?></p>
+			<p><strong><?php _e('Template tag:', 'embm'); ?></strong></p>
+			<blockquote>
+				<code><?php echo htmlentities('<?php echo embm_beer_list( $args ); ?>'); ?></code></p>
+				<p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs, e.g.:', 'embm'); ?></p>
+				<p><code><?php echo htmlentities("<?php echo embm_beer_list( array(
+					'show_extras'		=> 'false',
+					'beers_per_page'	=> 3,
+					'orderby'		=> 'name',
+					'order'			=> 'ASC'
+				) ); ?>"); ?></code></p>
+			</blockquote>
 
-	<table class="usage" cellpadding="0" cellspacing="0" border="0">
-		<tr>
-			<td><code><strong>exclude=</strong>"beer ids"</code></td>
-			<td>(<?php _e('String separated by commas', 'embm'); ?> e.g. <code>"4,23,24"</code>)</td>
-			<td><em><?php _e('Hides listed beers from output', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>show_profile=</strong>"true/false"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
-			<td><em><?php _e('Displays or hides the "Beer Profile" information for each listing', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>show_extras=</strong>"true/false"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
-			<td><em><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>style=</strong>"style name"</code></td>
-			<td>(<?php _e('String'); ?> e.g. <code>"India Pale Ale"</code>)</td>
-			<td><em><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>group=</strong>"group name"</code></td>
-			<td>(<?php _e('String'); ?> e.g. <code>"Seasonals"</code>)</td>
-			<td><em><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>beers_per_page=</strong>"number"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>-1</code>, <?php _e('shows all beers on one page', 'embm'); ?>)</td>
-			<td><em><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>paginate=</strong>"true/false"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>true</code>)</td>
-			<td><em><?php _e('Disables/enables pagination', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>orderby=</strong>"string"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>date</code>, <?php echo sprintf('See <a href="%s" target="_blank">this list</a> for options', 'http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters'); ?>)</td>
-			<td><em><?php _e('Orders output by given paramater', 'embm'); ?></em></td>
-		</tr>
-		<tr>
-			<td><code><strong>order=</strong>"desc/asc"</code></td>
-			<td>(<?php _e('Default', 'embm'); ?> = <code>desc</code>)</td>
-			<td><em><?php _e('List beer by <code>orderby</code> value in ascending or descending order', 'embm'); ?></em></td>
-		</tr>
-	</table>
+			<p style="margin-top:2em;"><strong><?php _e('Options:', 'embm'); ?></strong></p>
+			<p><?php _e("For use with both the shortcode and template code", "embm"); ?></p>
+
+			<table class="embm-usage-table" cellpadding="0" cellspacing="0" border="0">
+				<thead>
+					<tr>
+						<th><?php _e('Option Name', 'embm'); ?></th>
+						<th><?php _e('Values', 'embm'); ?></th>
+						<th><?php _e('Default', 'embm'); ?></th>
+						<th><?php _e('Description', 'embm'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code><strong>exclude</strong></code></td>
+						<td><?php _e('Comma-separated list of beer IDs', 'embm'); ?><br />e.g. <code>"4,23,24"</code></td>
+						<td>n/a</td>
+						<td><?php _e('Hides listed beers from output', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>show_profile</strong></code></td>
+						<td><code>true, false</code></td>
+						<td><code>true</code></td>
+						<td><?php _e('Displays or hides the "Beer Profile" information for each listing', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>show_extras</strong></code></td>
+						<td><code>true, false</code></td>
+						<td><code>true</code></td>
+						<td><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>style</strong></code></td>
+						<td><?php _e('String of style name'); ?><br />e.g. <code>"India Pale Ale"</code></td>
+						<td>n/a</td>
+						<td><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>group</strong></code></td>
+						<td><?php _e('String of group name'); ?><br />e.g. <code>"Seasonals"</code></td>
+						<td>n/a</td>
+						<td><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>beers_per_page</strong></code></td>
+						<td><?php _e('A number', 'embm'); ?><br /> e.g. <code>5</code></td>
+						<td><code>-1</code><br /><?php _e('Shows all beers', 'embm'); ?></td>
+						<td><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>paginate</strong></code></td>
+						<td><code>true, false</code></td>
+						<td><code>true</code></td>
+						<td><?php _e('Disables/enables pagination', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>orderby</strong></code></td>
+						<td><?php _e('See ', 'embm'); ?><a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank"><?php _e('this list', 'embm'); ?></a><?php _e(' for options', 'embm'); ?></td>
+						<td><code>"date"</code></td>
+						<td><?php _e('Orders beer list output by the given paramater', 'embm'); ?></td>
+					</tr>
+					<tr>
+						<td><code><strong>order</strong></code></td>
+						<td><code>ASC, DSC</code></td>
+						<td><code>DSC</code></td>
+						<td><?php _e('Sorts beer list by <code>orderby</code> value in ascending or descending order', 'embm'); ?></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
 	<br /><hr />
 
@@ -482,6 +519,25 @@ function embm_settings() {
 
 	<p><?php _e('Free beer icon from <a href="http://simpleicon.com" title="simple icon">simple icon</a>.', 'embm'); ?></p>
 
+	<?php add_thickbox(); ?>
+
+	<div id="embm-untappd-help-box" style="display:none;">
+		<h2><?php _e('Untappd Integration', 'embm'); ?></h2>
+		<p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
+		<p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
+	</div>
+
+	<div id="embm-settings-help-box" style="display:none;">
+		<h2><?php _e('Settings FAQ', 'embm'); ?></h2>
+		<p><strong><?php _e('How do I display an image of my beer next to its name and description?', 'embm'); ?></strong></p>
+		<p><?php _e('When creating your new beer entry, set the "featured image" option in the sidebar to the beer image you wish to use, it will display alongside the entry when the beer is displayed on your site. If this option is not available in your post settings, your theme may be blocking post thumbnails.', 'embm'); ?></p>
+
+		<p><strong><?php _e('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm'); ?></strong></p>
+		<p><?php _e('For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.', 'embm'); ?></p>
+
+		<p><strong><?php _e('What\'s the difference between "profile" and "extras"?', 'embm'); ?></strong></p>
+		<p><?php _e('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The "extras" setting refers to the "Additional Notes" and "Availability" information stored for each beer.', 'embm'); ?></p>
+	</div>
 </div>
 <?php
 }

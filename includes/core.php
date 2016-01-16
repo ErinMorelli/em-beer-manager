@@ -154,18 +154,18 @@ function embm_beer_specs_cb() {
 		<tbody>
 			<tr>
 				<td>
-					<p><label for="malts"><strong><?php _e('Malts: ', 'embm'); ?></strong></label><br />
+					<p><label for="malts"><strong><?php _e('Malts', 'embm'); ?></strong></label><br />
 					<input type="text" name="malts" id="malts" style="width:100%;" value="<?php echo $b_malts; ?>" /></p>
-					<p><label for="hops"><strong><?php _e('Hops: ', 'embm'); ?></strong></label><br />
+					<p><label for="hops"><strong><?php _e('Hops', 'embm'); ?></strong></label><br />
 					<input type="text" name="hops" id="hops" style="width:100%;" value="<?php echo $b_hops; ?>" /></p>
-					<p><label for="adds"><strong><?php _e('Additions/Spices: ', 'embm'); ?></strong></label><br />
+					<p><label for="adds"><strong><?php _e('Additions/Spices', 'embm'); ?></strong></label><br />
 					<input type="text" name="adds" id="adds" style="width:100%;" value="<?php echo $b_adds; ?>" /></p>
-					<p><label for="yeast"><strong><?php _e('Yeast: ', 'embm'); ?></strong></label><br />
+					<p><label for="yeast"><strong><?php _e('Yeast', 'embm'); ?></strong></label><br />
 					<input type="text" name="yeast" id="yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" /></p>
 					<hr />
-					<p><label for="abv"><strong><?php _e('ABV: ', 'embm'); ?></strong></label>
+					<p><label for="abv"><strong><?php _e('ABV', 'embm'); ?></strong></label><br />
 					<input type="number" name="abv" id="abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %</p>
-					<p><label for="ibu"><strong><?php _e('IBU: ', 'embm'); ?></strong></label>
+					<p><label for="ibu"><strong><?php _e('IBU', 'embm'); ?></strong></label><br />
 					<input type="number" name="ibu" id="style" min="0" max="100" step="1" value="<?php echo $b_ibu; ?>" /></p>
 				</td>
 			</tr>
@@ -222,24 +222,46 @@ function embm_beer_info_cb() {
 	<table width="100%" cellpadding="0" cellspacing="0">
 		<tbody>
 			<tr>
-				<td width="60%" valign="top">
-					<p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings:', 'embm'); ?></strong></label><br />
-					<textarea name="notes" id="notes" rows="7" cols="70" style="width:95%;"><?php echo $b_notes; ?></textarea></p>
-					</td><td valign="top">
-					<p><label for="beer_num"><strong><?php _e('Beer Number: ','embm'); ?></strong></label>
-					&nbsp;&nbsp;#&nbsp;<input type="number" name="beer_num" id="beer_num" style="width:25%;" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
+				<td valign="top">
+					<div class="embm-more-info">
+						<p><label for="beer_num"><strong><?php _e('Beer Number','embm'); ?></strong></label><br />
+						<input type="number" name="beer_num" id="beer_num" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
+					</div>
 
 					<?php if ( $use_untappd != "1" ) : ?>
-						<p><label for="untappd"><strong><?php _e('Untappd Beer Number:', 'embm'); ?></strong></label>
-						&nbsp;&nbsp;<input type="number" name="untappd" id="untappd" style="width:35%;" value="<?php echo $b_untap; ?>" /></p>
+						<div class="embm-more-info">
+							<p><label for="untappd"><strong><?php _e('Untappd Beer ID', 'embm'); ?></strong></label><br />
+							<input type="number" name="untappd" id="untappd" value="<?php echo $b_untap; ?>" />
+							<span class="whats-this"><a href="#TB_inline?width=550&amp;height=450&amp;inlineId=embm-untappd-id-box" class="thickbox" title="<?php _e('EM Beer Manager Help', 'embm'); ?>">?</a></span></p>
+						</div>
 					<?php endif; ?>
 
-					<p><label for="avail"><strong><?php _e('Availability: ','embm'); ?></strong></label><br />
-					<input type="text" name="avail" id="avail" style="width:95%;" value="<?php echo $b_avail; ?>" /></p>
+					<div class="embm-more-info">
+						<p><label for="avail"><strong><?php _e('Availability','embm'); ?></strong></label><br />
+						<input type="text" name="avail" id="avail" value="<?php echo $b_avail; ?>" /></p>
+					</div>
+				</td>
+			<tr>
+			<tr>
+				<td valign="top">
+					<p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label><br />
+					<textarea name="notes" id="notes" rows="7" style="width:100%"><?php echo $b_notes; ?></textarea></p>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+
+	<?php add_thickbox(); ?>
+
+	<div id="embm-untappd-id-box" style="display:none;">
+		<h2><?php _e('Untappd Integration', 'embm'); ?></h2>
+		<p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
+		<p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
+		<h2><?php _e('Untappd Beer ID', 'embm'); ?></h2>
+		<p><?php _e('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this:', 'embm'); ?></p>
+		<p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p>
+		<p><?php _e('The string of numbers at the end of the URL is your beer\'s ID.', 'embm'); ?></p>
+	</div>
 	<?php
 }
 
