@@ -1,158 +1,243 @@
 <?php
-/*
-Copyright (c) 2013-2016, Erin Morelli.
+/**
+ * Copyright (c) 2013-2016, Erin Morelli.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * @package EMBM\Widget\Untappd
+ */
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
-*
-* EM Beer Manager 'Recent Untappd Check-Ins' widget options & display
-*
-*/
-
+// Get EMBM settings
 $ut_option = get_option('embm_options');
 
-if ( isset($ut_option['embm_untappd_check']) ) {
-	$use_untappd = $ut_option['embm_untappd_check'];
-} else {
-	$use_untappd = null;
+// Get Untappd global settings
+$use_untappd = null;
+if (isset($ut_option['embm_untappd_check'])) {
+    $use_untappd = $ut_option['embm_untappd_check'];
 }
 
-if ( $use_untappd != '1' ) {
-	// Define Beer List widget constuctor
-	class EMBM_Recent_Untappd_Widget extends WP_Widget {
+// If Untappd is enabled, load widget
+if ($use_untappd != '1') {
 
-		function EMBM_Recent_Untappd_Widget() {
-			$widget_options = array(
-				'classname'	=> 'recent_untappd_widget',
-				'description'	=> __('Displays a list of recent Untappd brewery check-ins', 'embm')
-			);
-			parent::__construct("recent_untappd_widget", "Recent Untappd Check-Ins", $widget_options);
-		}
+    /**
+     * Add Recent Untappd Check-ins widget
+     */
+    class EMBM_Widget_Untappd_Recent extends WP_Widget
+    {
+        /**
+         * Define Untappd widget construct
+         *
+         * @return void
+         */
+        public function __construct()
+        {
+            $widget_options = array(
+                'classname'     => 'recent_untappd_widget',
+                'description'   => __('Displays a list of recent Untappd brewery check-ins', 'embm')
+            );
+            parent::__construct('recent_untappd_widget', 'Recent Untappd Check-ins', $widget_options);
+        }
 
-		public function form( $instance ) {
-			$instance = wp_parse_args( (array) $instance, array(
-				'title'		=> '',
-				'items'		=> 3,
-				'brewery'	=> ''
-			) );
+        /**
+         * Outputs the options form on admin
+         *
+         * @param array $instance The widget options
+         *
+         * @return void
+         */
+        public function form($instance)
+        {
+            // Parse widget instance args
+            $instance = wp_parse_args(
+                (array) $instance,
+                array(
+                    'title'     => '',
+                    'items'     => 3,
+                    'brewery'   => ''
+                )
+            );
 
-			$title = $instance['title'];
-			$items = $instance['items'];
-			$brewery = $instance['brewery'];
+            // Set up args
+            $title = $instance['title'];
+            $items = $instance['items'];
+            $brewery = $instance['brewery'];
 
-			?>
-			<script type="text/javascript">
-				function untappdHelp() {
-					window.open("<?php echo EMBM_PLUGIN_URL; ?>assets/embm-help.php#untappd","Finding Your Untappd Brewery ID","menubar=no,width=460,height=360,toolbar=no");
-				}
-			</script>
-			<p>
-				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
-				<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID: ', 'embm'); ?></label>
-				<input id="<?php echo $this->get_field_id('brewery'); ?>" name="<?php echo $this->get_field_name('brewery'); ?>" type="text" style="width: 30%;" value="<?php echo $brewery; ?>" />
-				<span><a href="javascript:untappdHelp()" id="embm-help-link" onclick="createPopup();"><small><?php _e("What's this?", "embm"); ?></small></a></span>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show: ', 'embm'); ?></label>
-				<input id="<?php echo $this->get_field_id('items'); ?>" name="<?php echo $this->get_field_name('items'); ?>" type="number" min="1" step="1" style="width: 20%;" value="<?php echo $items; ?>" />
-			</p>
-			<?php
-		}
+            ?>
+            <p>
+                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
+                <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID: ', 'embm'); ?></label>
+                <input id="<?php echo $this->get_field_id('brewery'); ?>" name="<?php echo $this->get_field_name('brewery'); ?>" type="text" style="width: 30%;" value="<?php echo $brewery; ?>" />
+                <span><a href="#TB_inline?width=550&amp;height=450&amp;inlineId=embm-untappd-brewery-box" class="thickbox" title="<?php _e('EM Beer Manager Help', 'embm'); ?>">?</a></span>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show: ', 'embm'); ?></label>
+                <input id="<?php echo $this->get_field_id('items'); ?>" name="<?php echo $this->get_field_name('items'); ?>" type="number" min="1" step="1" style="width: 20%;" value="<?php echo $items; ?>" />
+            </p>
 
-		public function update( $new_instance, $old_instance ) {
-			$instance = $old_instance;
+            <?php add_thickbox(); ?>
 
-			$instance['title'] = $new_instance['title'];
-			$instance['items'] = $new_instance['items'];
-			$instance['brewery'] = $new_instance['brewery'];
+            <div id="embm-untappd-brewery-box" style="display:none;">
+                <h2><?php _e('Untappd Integration', 'embm'); ?></h2>
+                <p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
+                <p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
+                <h2><?php _e('Untappd Brewery ID', 'embm'); ?></h2>
+                <p><?php _e('Find your Untappd brewery ID number by going to your brewery\'s official page (i.e. <code>https://untappd.com/BreweryName</code>). Click on the "Brewery Feed (RSS)" link in the right-hand sidebar. The link\'s URL will be formatted like this:', 'embm'); ?></p>
+                <p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p>
+                <p><?php _e('The string of numbers at the end of the URL is your brewery ID number.', 'embm'); ?></p>
+            </div>
+            <?php
+        }
 
-			return $instance;
-		}
+        /**
+         * Processing widget options on save
+         *
+         * @param array $new_instance The new options
+         * @param array $old_instance The old options
+         *
+         * @return array
+         */
+        public function update($new_instance, $old_instance)
+        {
+            $instance = $old_instance;
 
-		public function widget( $args, $instance ) {
-			extract( $args );
-			$title = apply_filters( 'widget_title', $instance['title'] );
-			$items = apply_filters( 'widget_items', $instance['items'] );
-			$brewery = apply_filters( 'widget_brewery', $instance['brewery'] );
+            $instance['title'] = $new_instance['title'];
+            $instance['items'] = $new_instance['items'];
+            $instance['brewery'] = $new_instance['brewery'];
 
-			echo $before_widget;
+            return $instance;
+        }
 
-			echo embm_display_untappd_widget( array (
-				'title'		=> $title,
-				'items'		=> $items,
-				'brewery'	=> $brewery
-			) );
+        /**
+         * Outputs the content of the widget
+         *
+         * @param array $args     The widget arguments
+         * @param array $instance The widget options
+         *
+         * @return void
+         */
+        public function widget($args, $instance)
+        {
+            // Extract arguments
+            extract($args);
 
-			echo $after_widget;
-		}
-	}
+            // Set widget options
+            $title = apply_filters('widget_title', $instance['title']);
+            $items = apply_filters('widget_items', $instance['items']);
+            $brewery = apply_filters('widget_brewery', $instance['brewery']);
 
-	add_action( 'widgets_init', create_function('', 'return register_widget("EMBM_Recent_Untappd_Widget");') );
+            // Output pre-widget content
+            echo $before_widget;
 
-	// Generate HTML display of recent untappd widget content
-	function embm_display_untappd_widget($beers) {
+            // Output widget content
+            echo EMBM_Widget_Untappd_Recent_display(
+                array(
+                    'title'     => $title,
+                    'items'     => $items,
+                    'brewery'   => $brewery
+                )
+            );
 
-		// Widget variables
-		$title = $beers['title'];
-		$items = $beers['items'];
-		$brewery = $beers['brewery'];
+            // Out put post-widget content
+            echo $after_widget;
+        }
+    }
 
-		$feed_url = 'https://untappd.com/rss/brewery/'.$brewery; // Get Untappd deed
-
-		$output = '';
-		$output .= "\n".'<h3 class="widget-title">'.$title.'</h3>'."\n";
-		$output .= '<ul class="embm-untappd-list">'."\n";
+    // Load the widget
+    add_action('widgets_init', create_function('', 'return register_widget("EMBM_Widget_Untappd_Recent");'));
 
 
-		if ( !$brewery ) {
-			$output .= '<li class="embm-untappd-list-item">';
-			$output .= __('A brewery ID number has not been set.', 'embm');
-			$output .= '</li>'."\n";
-		} else {
-			// Extract Untappd xml feed data
-			$content = file_get_contents($feed_url);
-			$x = new SimpleXmlElement($content);
+    /**
+     * Generate HTML content of Untappd Recent Check-ins widget
+     *
+     * @param array $beers Widget options
+     *
+     * @return string/html
+     */
+    function EMBM_Widget_Untappd_Recent_display($beers)
+    {
+        // Set widget options
+        $title = $beers['title'];
+        $items = $beers['items'];
+        $brewery = $beers['brewery'];
 
-			$i = 0; // Initiate iterator
+        // Set Untappd brewery rss URL
+        $feed_url = 'https://untappd.com/rss/brewery/'.$brewery;
 
-			foreach( $x->channel->item as $entry ) {
-				if ( $i < $items ) {
-					$output .= '<li class="embm-untappd-list-item">';
-					$output .= $entry->title."\n";
-					$output .= '<a class="embm-checkin-date" href="'.$entry->link.'" title="'.$entry->title.'">';
+        // Initialize output string
+        $output = '';
 
-					// Display date using WP timezone setting
-					$offset = get_option('gmt_offset');
-					$postDate = strtotime($entry->pubDate);
-					$newDate = mktime(date('H', $postDate)+$offset,date('i', $postDate),0,date('n', $postDate),date('j', $postDate),date('y', $postDate));
+        // Widget title
+        $output .= "\n".'<h3 class="widget-title">'.$title.'</h3>'."\n";
 
-					$output .= date('g:i A - j M y', $newDate);
+        // Start check-in list
+        $output .= '<ul class="embm-untappd-list">'."\n";
 
-					$output .= '</a></li>'."\n";
-					$i++;
-				}
-			}
-		}
+        // Fall back content for when a brewery is not defined
+        if (!$brewery) {
+            $output .= '<li class="embm-untappd-list-item">';
+            $output .= __('A brewery ID number has not been set.', 'embm');
+            $output .= '</li>'."\n";
+        } else {
+            // Extract Untappd xml feed data
+            $content = file_get_contents($feed_url);
+            $x = new SimpleXmlElement($content);
 
-		$output .= '</ul>'."\n";
+            // Initiate iterator
+            $i = 0;
 
-		return $output;
-	}
+            // Iterate over XML output
+            foreach ($x->channel->item as $entry) {
+                // Make sure we only show the number of items specified
+                if ($i < $items) {
+                    // Start check-in entry
+                    $output .= '<li class="embm-untappd-list-item">';
+                    $output .= $entry->title."\n";
+                    $output .= '<a class="embm-checkin-date" href="'.$entry->link.'" title="'.$entry->title.'">';
+
+                    // Display date using WP timezone setting
+                    $offset = get_option('gmt_offset');
+                    $postDate = strtotime($entry->pubDate);
+                    $newDate = mktime(
+                        date('H', $postDate) + $offset,
+                        date('i', $postDate),
+                        0,
+                        date('n', $postDate),
+                        date('j', $postDate),
+                        date('y', $postDate)
+                    );
+
+                    // Output formatted date
+                    $output .= date('g:i A - j M y', $newDate);
+
+                    // End check-in entry
+                    $output .= '</a></li>'."\n";
+
+                    // Increase counter
+                    $i++;
+                }
+            }
+        }
+
+        // End check-in list
+        $output .= '</ul>'."\n";
+
+        // Return HTML content
+        return $output;
+    }
 }
-
-?>
