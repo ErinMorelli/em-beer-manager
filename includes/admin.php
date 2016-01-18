@@ -278,6 +278,7 @@ function EMBM_Admin_settings()
 
     // Style Tax Settings
     add_settings_section('embm_style_settings', __('Style Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
+    add_settings_field('embm_style_rest', __('Restore styles', 'embm'), 'EMBM_Admin_Settings_Style_reset', 'embm', 'embm_style_settings');
     add_settings_field('embm_style_display_settings', __('Display settings', 'embm'), 'EMBM_Admin_Settings_Style_display', 'embm', 'embm_style_settings');
 
     // Single Beer Settings
@@ -402,6 +403,17 @@ function EMBM_Admin_Settings_Group_display()
 }
 
 /**
+ * Outputs style reset settings
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Style_reset()
+{
+    echo '<p><button class="embm-settings-styles-reset button-secondary">'.__('Restore Styles', 'embm').'</button></p>';
+    echo '<p class="description">('.__('Restores missing or deleted beer styles from the pre-loaded list.', 'embm').')</p>';
+}
+
+/**
  * Outputs style display settings
  *
  * @return void
@@ -478,8 +490,35 @@ function EMBM_Admin_Settings_Single_display()
  */
 function EMBM_Admin_Settings_page()
 {
+    // Check user permissions
     if (!current_user_can('manage_options')) {
         wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
+    }
+
+    // Handle styles reset request
+    if (isset($_GET['embm-styles-reset'])) {
+        if ($_GET['embm-styles-reset'] == '1') {
+?>
+            <div class="wrap embm-styles-reset-page">
+
+                <h2><?php _e('Restore EM Beer Manager Styles', 'embm'); ?></h2>
+
+                <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded BeerAdvocate list.', 'embm'); ?></p>
+                <p><?php _e('Your custom or modified styles will <span class="emphasis">NOT</span> be affected by this action.', 'embm'); ?></p>
+                <p><?php _e('Do you wish to proceed?', 'embm'); ?></p>
+
+                <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/reset.php'; ?>" class="embm-styles-reset-form">
+                    <input type="hidden" name="embm-styles-reset-request" value="1" />
+                    <input type="hidden" name="embm-settings-page" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
+                    <input name="Yes" type="submit" class="button-primary" value="<?php _e('YES', 'embm'); ?>" />
+                    <input name="No" type="button" class="button-secondary" value="<?php _e('NO', 'embm'); ?>" />
+                </form>
+            </div>
+<?php
+        }
+
+        // Don't display the other content
+        return;
     }
 
 ?>
@@ -499,7 +538,9 @@ function EMBM_Admin_Settings_page()
                     settings_fields('embm_options');
                     do_settings_sections('embm');
                 ?>
-                <p style="margin-top:1em;"><input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
+                <p style="margin-top:1em;">
+                    <input name="Submit" type="submit" class="button-primary" value="<?php _e('Save Changes', 'embm'); ?>" />
+                </p>
             </form>
         </div>
 

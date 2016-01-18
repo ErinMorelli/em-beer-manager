@@ -1,102 +1,108 @@
-/*
-Copyright (c) 2013-2016, Erin Morelli.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
-*
-* EM Beer Manager admin styles
-*
-*/
+/**
+ * Copyright (c) 2013-2016, Erin Morelli.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ *
+ * EM Beer Manager admin styles
+ */
 
 @font-face {
-	font-family: 'beer-icons';
-	src:url('../fonts/beer-icons.eot?rjxbel');
-	src:url('../fonts/beer-icons.eot?#iefixrjxbel') format('embedded-opentype'),
-		url('../fonts/beer-icons.woff?rjxbel') format('woff'),
-		url('../fonts/beer-icons.ttf?rjxbel') format('truetype'),
-		url('../fonts/beer-icons.svg?rjxbel#icomoon') format('svg');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'beer-icons';
+    src:url('../fonts/beer-icons.eot?rjxbel');
+    src:url('../fonts/beer-icons.eot?#iefixrjxbel') format('embedded-opentype'),
+        url('../fonts/beer-icons.woff?rjxbel') format('woff'),
+        url('../fonts/beer-icons.ttf?rjxbel') format('truetype'),
+        url('../fonts/beer-icons.svg?rjxbel#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 .menu-icon-embm_beer .wp-menu-image:before {
-	content: "\e604";
-	font-family: 'beer-icons';
+    content: "\e604";
+    font-family: 'beer-icons';
 }
 .widefat .column-id {
-	width: 35px;
+    width: 35px;
 }
 .widefat .column-abv,
 .widefat .column-ibu,
 .widefat .column-beer_num {
-	width: 100px;
+    width: 100px;
 }
 .widefat .column-untappd {
-	width: 80px;
+    width: 80px;
 }
 .embm-settings-page .embm-settings-title .embm-version {
-	color: #888;
-	display: inline-block;
-	font-size: 11px;
-	margin-left: 7px;
+    color: #888;
+    display: inline-block;
+    font-size: 11px;
+    margin-left: 7px;
 }
 .embm-settings-page .nav-tab-wrapper {
-	border-bottom: 1px solid #ccc;
-	margin: 0;
+    border-bottom: 1px solid #ccc;
+    margin: 0;
 }
 .embm-settings-page .nav-tab-wrapper .nav-tab-active {
-	background: #f1f1f1;
-	border-bottom: 1px solid #f1f1f1;
-	color: #000;
-	margin-bottom: -1px;
+    background: #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+    color: #000;
+    margin-bottom: -1px;
 }
 .embm-settings-page .embm-usage-table tbody td {
-	height: 40px;
+    height: 40px;
 }
 .embm-settings-page .embm-usage-table tr td {
-	border-bottom: 1px solid #ccc;
-	border-collapse: collapse;
-	padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    border-collapse: collapse;
+    padding: 5px 10px;
 }
 .embm-settings-page .embm-usage-table tr:first-child td {
-	border-top: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 .embm-settings-page .embm-usage-table tr:nth-child(even) td {
-	background: #fafafa;
+    background: #fafafa;
 }
 .embm-settings-page .whats-this {
-	display: inline-block;
-	padding-left: 6px;
+    display: inline-block;
+    padding-left: 6px;
 }
 .embm-form-settings > .form-table {
-	margin-bottom: 50px;
+    margin-bottom: 50px;
 }
 .embm-settings-section-usage .embm-subhead {
-	font-size: 14px;
-	font-weight: 600;
-	margin-top: 2em;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 2em;
+}
+.embm-styles-reset-page .warning {
+    color: red;
+}
+.embm-styles-reset-page .emphasis {
+    font-weight: 600;
+    text-decoration: underline;
 }
 .embm-more-info {
-	float: left;
-	width: 33.333%;
+    float: left;
+    width: 33.333%;
 }
 .embm-more-info input {
-	max-width: 90%;
+    max-width: 90%;
 }
 @media screen and (max-width:782px) {
-	.embm-more-info {
-		float: none;
-		width: 100%;
-	}
+    .embm-more-info {
+        float: none;
+        width: 100%;
+    }
 }

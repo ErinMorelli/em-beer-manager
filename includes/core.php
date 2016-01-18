@@ -511,7 +511,7 @@ function EMBM_Core_styles()
     register_taxonomy('embm_style', array('embm_beer'), $args);
 
     // Populate taxonomy with terms, if they haven't been loaded yet
-    if (get_option('embm_styles_loaded') != 'true') {
+    if (get_option('embm_styles_loaded')) {
         EMBM_Core_Styles_populate();
     }
 }
@@ -546,7 +546,7 @@ function EMBM_Core_Styles_populate()
     fclose($beer_styles);
 
     // Store the fact that styles were loaded
-    add_option('embm_styles_loaded', 'true');
+    update_option('embm_styles_loaded', 1);
 }
 
 

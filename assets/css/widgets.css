@@ -1,64 +1,63 @@
-/*
-Copyright (c) 2013-2016, Erin Morelli.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
-*
-* EM Beer Manager widget styles
-*
-*/
+/**
+ * Copyright (c) 2013-2016, Erin Morelli.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ *
+ * EM Beer Manager widget styles
+ */
 
 ul.embm-beer-list-widget {
-	margin: 0 0 0 20px;
-	padding: 0;
+    margin: 0 0 0 20px;
+    padding: 0;
 }
 ul.embm-beer-list-widget li {
-	list-style: square;
+    list-style: square;
 }
 li.embm-beer-list-widget-item a {
-	display: block;
-	font-weight: bold;
+    display: block;
+    font-weight: bold;
 }
 li.embm-beer-list-widget-item .embm-beer-summary {
-	display: inline-block;
-	padding-bottom: 10px;
+    display: inline-block;
+    padding-bottom: 10px;
 }
 li.embm-beer-list-widget-item .embm-read-more {
-	display: inline-block;
-	font-size: 100%;
-	font-weight: normal;
-	padding-left: 3px;
+    display: inline-block;
+    font-size: 100%;
+    font-weight: normal;
+    padding-left: 3px;
 }
 ul.embm-untappd-list {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 ul.embm-untappd-list li {
-	list-style: none;
+    list-style: none;
 }
 ul.embm-untappd-list li.embm-untappd-list-item {
-	font-size: 0.9em;
-	line-height: 1.5em;
-	padding-bottom: 10px;
+    font-size: 0.9em;
+    line-height: 1.5em;
+    padding-bottom: 10px;
 }
 li.embm-untappd-list-item a.embm-checkin-date {
-	color: #aaa;
-	display: block;
-	font-size: 0.8em;
-	text-decoration: none;
+    color: #aaa;
+    display: block;
+    font-size: 0.8em;
+    text-decoration: none;
 }
 li.embm-untappd-list-item a.embm-checkin-date:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }

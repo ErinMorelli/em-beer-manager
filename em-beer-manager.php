@@ -119,7 +119,6 @@ function EMBM_Plugin_activation()
     );
 
     update_option('embm_options', $defaults);
-    update_option('embm_comment_change', 'false');
 }
 
 // Set activation hook
@@ -326,8 +325,8 @@ function EMBM_Plugin_upgrade()
     // Set upgrade version
     $new_version = 1.7;
 
-    // If we haven't upgraded and this is a newer version, do upgrade
-    if (($curr_version >= $new_version) && ($upgrade == false)) {
+    // Do version 1.6 -> 1.7 upgrade
+    if (($curr_version >= $new_version) && (!$upgrade)) {
         // Rename style taxonomy
         $wpdb->query(
             "
@@ -346,8 +345,29 @@ function EMBM_Plugin_upgrade()
         );
 
         // Save upgrade status to DB
-        add_option('embm_db_upgrade', 'true');
+        update_option('embm_db_upgrade', 1);
     }
+
+    // Check for old DB content
+    delete_option('embm_comment_change');
+
+    // Update DB data format for upgrade
+    if ($upgrade == 'true') {
+        update_option('embm_db_upgrade', 1);
+    } elseif (!$upgrade) {
+        update_option('embm_db_upgrade', 0);
+    }
+
+    // Get styles loaded option
+    $loaded = get_option('embm_styles_loaded');
+
+    // Update DB data format for styles
+    if ($upgrade == 'true') {
+        update_option('embm_styles_loaded', 1);
+    } elseif (!$upgrade) {
+        update_option('embm_styles_loaded', 0);
+    }
+
 }
 
 // Initialize plugin update

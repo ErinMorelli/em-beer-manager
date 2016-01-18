@@ -1,122 +1,121 @@
-/*
-Copyright (c) 2013-2016, Erin Morelli.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*
-*
-* EM Beer Manager output styles
-*
-*/
+/**
+ * Copyright (c) 2013-2016, Erin Morelli.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ *
+ * EM Beer Manager output styles
+ */
 
 .embm-beer {
-	margin: 25px 0 30px;
+    margin: 25px 0 30px;
 }
 .embm-beer .embm-beer-header {
-	border-bottom: 1px solid #ccc;
-	display: block;
-	margin-bottom: 20px;
-	padding-bottom: 3px;
+    border-bottom: 1px solid #ccc;
+    display: block;
+    margin-bottom: 20px;
+    padding-bottom: 3px;
 }
 .embm-beer-header > a,
 .embm-beer .embm-beer-header > a {
-	border: 0;
-	text-decoration: none;
+    border: 0;
+    text-decoration: none;
 }
 .embm-beer-header > a > .embm-beer-title,
 .embm-beer-header > .embm-beer-title,
 .embm-beer .embm-beer-header > .embm-beer-title,
 .embm-beer .embm-beer-header > a > .embm-beer-title {
-	border: 0;
-	display: inline-block;
-/*	font-size: 2em;*/
-	margin: 0;
-	text-decoration: none;
+    border: 0;
+    display: inline-block;
+/*    font-size: 2em;*/
+    margin: 0;
+    text-decoration: none;
 }
 .embm-beer .embm-beer-style {
-	display: inline-block;
-	/*font-size: em;*/
-	font-style: italic;
-	padding-left: 10px;
+    display: inline-block;
+    /*font-size: em;*/
+    font-style: italic;
+    padding-left: 10px;
 }
 .embm-beer .embm-beer-style > a {
-	border: 0;
-	color: #888;
-	text-decoration: none;
+    border: 0;
+    color: #888;
+    text-decoration: none;
 }
 .embm-beer .embm-beer-image > .wp-post-image {
-	display: block;
-	float: left;
-	margin: 0 20px 10px 0;
-	width: 150px;
+    display: block;
+    float: left;
+    margin: 0 20px 10px 0;
+    width: 150px;
 }
 .embm-beer .embm-beer-image > img {
-	height: auto;
-	width: 150px;
+    height: auto;
+    width: 150px;
 }
 .embm-beer .embm-beer-description {
-	padding: 0 0 0 20px;
+    padding: 0 0 0 20px;
 }
 .embm-beer .embm-beer-description p:last-child {
-	margin-bottom: 0;
-	padding-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 .embm-beer .embm-beer-description > .untappd {
-	padding: 12px 0;
+    padding: 12px 0;
 }
 .embm-beer .embm-beer-description > .untappd > a {
-	background: transparent url('../img/checkin-button.png') 0 0 no-repeat;
-	border: 0;
-	display: inline-block;
-	height: 25px;
-	text-decoration: none;
-	width: 162px;
+    background: transparent url('../img/checkin-button.png') 0 0 no-repeat;
+    border: 0;
+    display: inline-block;
+    height: 25px;
+    text-decoration: none;
+    width: 162px;
 }
 .embm-beer .embm-beer-meta {
-	background: #eee;
-	border: 1px solid #ddd;
-	clear: both;
-	color: #000;
-	display: block;
-	padding: 15px 20px;
-	margin-bottom: 35px;
+    background: #eee;
+    border: 1px solid #ddd;
+    clear: both;
+    color: #000;
+    display: block;
+    padding: 15px 20px;
+    margin-bottom: 35px;
 }
 .embm-beer .embm-beer-meta > .embm-beer-profile {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 .embm-beer .embm-beer-meta > .embm-beer-extras .label,
 .embm-beer .embm-beer-meta > .embm-beer-profile .label {
-	display: inline-block;
-	font-weight: bold;
-	padding-right: 8px;
+    display: inline-block;
+    font-weight: bold;
+    padding-right: 8px;
 }
 .embm-beer .embm-beer-meta > .embm-beer-profile > .abv,
 .embm-beer .embm-beer-meta > .embm-beer-profile > .ibu {
-	display: inline-block;
-	padding: 0 20px 5px 0;
+    display: inline-block;
+    padding: 0 20px 5px 0;
 }
 .embm-beer .embm-beer-meta > .embm-beer-extras > .notes > .label {
-	display: block;
-	font-weight: bold;
-	padding: 10px 0 3px;
+    display: block;
+    font-weight: bold;
+    padding: 10px 0 3px;
 }
 .embm-beer-list .nav-below {
-	text-align: right;
+    text-align: right;
 }
 .embm-beer .wp-post-image {
-	display: none;
+    display: none;
 }
 .embm-clear {
-	clear: both;
+    clear: both;
 }
