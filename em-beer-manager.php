@@ -8,6 +8,8 @@
  * Author URI: http://erinmorelli.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: embm
+ * Domain Path: /languages
  */
 
 /**
@@ -49,20 +51,20 @@ function EMBM_Plugin_load()
 {
     // Load admin files only in admin
     if (is_admin()) {
-        include_once EMBM_PLUGIN_DIR.'includes/admin.php';
+        include_once EMBM_PLUGIN_DIR.'includes/embm-admin.php';
     }
 
     // Load core and output files
-    include_once EMBM_PLUGIN_DIR.'includes/core.php';
-    include_once EMBM_PLUGIN_DIR.'includes/output.php';
+    include_once EMBM_PLUGIN_DIR.'includes/embm-core.php';
+    include_once EMBM_PLUGIN_DIR.'includes/embm-output.php';
 
-    // Iteratively load any additional components
-    foreach (scandir(EMBM_PLUGIN_DIR.'includes/components') as $filename) {
-        // Set component path
-        $path = EMBM_PLUGIN_DIR.'includes/components/' . $filename;
+    // Iteratively load any widgets
+    foreach (scandir(EMBM_PLUGIN_DIR.'includes/widgets') as $filename) {
+        // Set widgets path
+        $path = EMBM_PLUGIN_DIR.'includes/widgets/' . $filename;
 
-        // If the file exists, load it
-        if (is_file($path) && preg_match('/\.php$/', $filename)) {
+        // If the PHP file exists, load it
+        if (is_file($path) && preg_match('/embm-widget-.*\.php$/', $filename)) {
             include $path;
         }
     }
@@ -138,111 +140,6 @@ function EMBM_Plugin_deactivation()
 
 // Set deactivation hook
 register_deactivation_hook(__FILE__, 'EMBM_Plugin_deactivation');
-
-
-/**
- * Plugin uninstall setup
- *
- * @return void
- */
-function EMBM_Plugin_uninstall()
-{
-    // Get currently installed version
-    $curr_version = floatval(get_option('embm_version'));
-
-    // Old version requiring update
-    $new_version = 1.7;
-
-    // Keep beer data saved for those upgrading from 1.6 or earlier
-    if ($curr_version >= $new_version) {
-
-        // Get global post types variable
-        global $wp_post_types;
-
-        // Remove EMBM post type
-        if (isset($wp_post_types['embm_beer'])) {
-            unset($wp_post_types['embm_beer']);
-        }
-
-        // Set up EMBM post query
-        $args = array(
-            'post_type'     =>'embm_beer',
-            'post_status'   => array(
-                'publish',
-                'pending',
-                'draft',
-                'auto-draft',
-                'future',
-                'private',
-                'inherit',
-                'trash'
-            )
-        );
-
-        // Get all existing EMBM posts
-        $posts = get_posts($args);
-
-        // Iteratively remove existing EMBM posts
-        if (is_array($posts)) {
-            foreach ($posts as $post) {
-                wp_delete_post($post->ID, true);
-            }
-        }
-
-        // Set EMBM taxonomies
-        $tax = array('embm_group', 'embm_style');
-
-        // Get global WP taxonomies
-        global $wp_taxonomies;
-
-        // Remove all EMBM taxonomies
-        foreach ($tax as $taxonomy) {
-            // Set taxonomy
-            register_taxonomy($taxonomy);
-
-            // Fina all terms for taxonomy
-            $terms = get_terms($taxonomy, array('hide_empty' => 0));
-
-            // Iteratively remove all terms for taxonomy
-            foreach ($terms as $term) {
-                wp_delete_term($term->term_id, $taxonomy);
-            }
-
-            // Remove taxonomy from WP
-            unset($wp_taxonomies[$taxonomy]);
-        }
-    }
-
-    // Remove EMBM widget CSS
-    wp_deregister_style('embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css');
-    wp_dequeue_style('embm-widget');
-
-    // Remove EMBM output CSS
-    wp_deregister_style('embm-output', EMBM_PLUGIN_URL.'assets/css/output.css');
-    wp_dequeue_style('embm-output');
-
-    // Remove EMBM admin CSS
-    wp_dequeue_style('embm-admin');
-
-    // Retrieve custom CSS info
-    $get_style_option = get_option('embm_options');
-    $get_custom_css = $style_option['embm_css_url'];
-
-    // Remove custom CSS
-    wp_deregister_style('custom-embm-output', $get_custom_css);
-    wp_dequeue_style('custom-embm-output');
-
-    // Remove EMBM settings
-    delete_option('embm_version');
-    delete_option('embm_options');
-    delete_option('embm_db_upgrade');
-    delete_option('embm_styles_loaded');
-    delete_option('widget_beer_list_widget');
-    delete_option('widget_recent_untappd_widget');
-}
-
-// Set uninstall hook
-register_uninstall_hook(__FILE__, 'EMBM_Plugin_uninstall');
 
 
 /**
@@ -345,7 +242,7 @@ function EMBM_Plugin_upgrade()
         );
 
         // Save upgrade status to DB
-        update_option('embm_db_upgrade', 1);
+        update_option('embm_db_upgrade', true);
     }
 
     // Check for old DB content
@@ -353,19 +250,19 @@ function EMBM_Plugin_upgrade()
 
     // Update DB data format for upgrade
     if ($upgrade == 'true') {
-        update_option('embm_db_upgrade', 1);
+        update_option('embm_db_upgrade', true);
     } elseif (!$upgrade) {
-        update_option('embm_db_upgrade', 0);
+        update_option('embm_db_upgrade', false);
     }
 
     // Get styles loaded option
     $loaded = get_option('embm_styles_loaded');
 
     // Update DB data format for styles
-    if ($upgrade == 'true') {
-        update_option('embm_styles_loaded', 1);
-    } elseif (!$upgrade) {
-        update_option('embm_styles_loaded', 0);
+    if ($loaded == 'true') {
+        update_option('embm_styles_loaded', true);
+    } elseif (!$loaded) {
+        update_option('embm_styles_loaded', false);
     }
 
 }

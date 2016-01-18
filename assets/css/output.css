@@ -22,67 +22,68 @@
 .embm-beer {
     margin: 25px 0 30px;
 }
-.embm-beer .embm-beer-header {
+.embm-beer .embm-beer--header {
     border-bottom: 1px solid #ccc;
     display: block;
     margin-bottom: 20px;
     padding-bottom: 3px;
 }
-.embm-beer-header > a,
-.embm-beer .embm-beer-header > a {
+.embm-beer--header > a,
+.embm-beer .embm-beer--header > a {
     border: 0;
     text-decoration: none;
 }
-.embm-beer-header > a > .embm-beer-title,
-.embm-beer-header > .embm-beer-title,
-.embm-beer .embm-beer-header > .embm-beer-title,
-.embm-beer .embm-beer-header > a > .embm-beer-title {
+.embm-beer--header > a > .embm-beer--header-title,
+.embm-beer--header > .embm-beer--header-title,
+.embm-beer .embm-beer--header > .embm-beer--header-title,
+.embm-beer .embm-beer--header > a > .embm-beer--header-title {
     border: 0;
     display: inline-block;
 /*    font-size: 2em;*/
     margin: 0;
     text-decoration: none;
 }
-.embm-beer .embm-beer-style {
+.embm-beer .embm-beer--header-style {
     display: inline-block;
     /*font-size: em;*/
     font-style: italic;
     padding-left: 10px;
 }
-.embm-beer .embm-beer-style > a {
+.embm-beer .embm-beer--header-style > a {
     border: 0;
     color: #888;
     text-decoration: none;
 }
-.embm-beer .embm-beer-image > .wp-post-image {
+.embm-beer .embm-beer--image > .wp-post-image {
     display: block;
     float: left;
     margin: 0 20px 10px 0;
     width: 150px;
 }
-.embm-beer .embm-beer-image > img {
+.embm-beer .embm-beer--image > img {
     height: auto;
     width: 150px;
 }
-.embm-beer .embm-beer-description {
+.embm-beer .embm-beer--description {
     padding: 0 0 0 20px;
 }
-.embm-beer .embm-beer-description p:last-child {
-    margin-bottom: 0;
+.embm-beer .embm-beer--description p {
+    margin-bottom: 20px;
     padding-bottom: 0;
 }
-.embm-beer .embm-beer-description > .untappd {
-    padding: 12px 0;
+.embm-beer .embm-beer--description > .untappd {
+    padding: 0 0 20px;
 }
-.embm-beer .embm-beer-description > .untappd > a {
+.embm-beer .embm-beer--description > .untappd > a {
     background: transparent url('../img/checkin-button.png') 0 0 no-repeat;
-    border: 0;
+    border-width: 0;
+    box-shadow: none;
     display: inline-block;
     height: 25px;
     text-decoration: none;
     width: 162px;
 }
-.embm-beer .embm-beer-meta {
+.embm-beer .embm-beer--meta {
     background: #eee;
     border: 1px solid #ddd;
     clear: both;
@@ -91,31 +92,31 @@
     padding: 15px 20px;
     margin-bottom: 35px;
 }
-.embm-beer .embm-beer-meta > .embm-beer-profile {
+.embm-beer .embm-beer--meta > .embm-beer--meta-profile {
     padding-bottom: 10px;
 }
-.embm-beer .embm-beer-meta > .embm-beer-extras .label,
-.embm-beer .embm-beer-meta > .embm-beer-profile .label {
+.embm-beer .embm-beer--meta > .embm-beer--meta-extras .label,
+.embm-beer .embm-beer--meta > .embm-beer--meta-profile .label {
     display: inline-block;
     font-weight: bold;
     padding-right: 8px;
 }
-.embm-beer .embm-beer-meta > .embm-beer-profile > .abv,
-.embm-beer .embm-beer-meta > .embm-beer-profile > .ibu {
+.embm-beer .embm-beer--meta > .embm-beer--meta-profile > .abv,
+.embm-beer .embm-beer--meta > .embm-beer--meta-profile > .ibu {
     display: inline-block;
     padding: 0 20px 5px 0;
 }
-.embm-beer .embm-beer-meta > .embm-beer-extras > .notes > .label {
+.embm-beer .embm-beer--meta > .embm-beer--meta-extras > .notes > .label {
     display: block;
     font-weight: bold;
     padding: 10px 0 3px;
 }
-.embm-beer-list .nav-below {
+.embm-beer--list .nav-below {
     text-align: right;
 }
 .embm-beer .wp-post-image {
     display: none;
 }
-.embm-clear {
+.embm-beer--clear {
     clear: both;
 }
