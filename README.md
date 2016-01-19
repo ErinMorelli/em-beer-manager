@@ -38,7 +38,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.0.0 - Major Release](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v2.0.0.zip) ###
+### [Version 2.0.0 - Major Release](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.0.0.zip) ###
 * Massive admin settings page layout overhaul
 * Added new "Restore Styles" button to admin settings page
 * Renamed template tag functions and restructured input format
