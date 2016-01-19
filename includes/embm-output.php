@@ -30,26 +30,18 @@
 function EMBM_Output_beer($atts)
 {
     // Extract shortcode attributes
-    extract(
-        shortcode_atts(
-            array(
-                'id'            => 0,
-                'show_profile'  => 'true',
-                'show_extras'   => 'true',
-            ),
-            $atts,
-            'beer'
-        )
+    $args = shortcode_atts(
+        array(
+            'id'            => 0,
+            'show_profile'  => 'true',
+            'show_extras'   => 'true',
+        ),
+        $atts,
+        'beer'
     );
 
     // Load shortcode content
-    return EMBM_Output_Beer_display(
-        $id,
-        array(
-            'profile'   => $show_profile != 'true' ? false : true,
-            'extras'    => $show_extras != 'true' ? false : true
-        )
-    );
+    return EMBM_Output_Beer_display($args['id'], $args);
 }
 
 // Load single beer shortcode
@@ -63,23 +55,39 @@ add_shortcode('beer', 'EMBM_Output_beer');
  *
  * @return string/html
  */
-function EMBM_Output_Beer_display($post_id, $input)
+function EMBM_Output_Beer_display($post_id, $input=array())
 {
-    // Set default values
-    $defaults = array(
-        'profile'   => true,
-        'extras'    => true
+    // Set default attribut values
+    $attrs = array(
+        'profile'   => array(
+            'key'       => 'show_profile',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'extras'    => array(
+            'key'       => 'show_extras',
+            'default'   => true,
+            'type'      => 'bool'
+        )
     );
 
     // Set up values to pass on, remove bad values
     $args = array('id' => $post_id);
-    foreach ($defaults as $key => $value) {
-        if (!array_key_exists($key, $input)) {
-            $args[$key] = $value;
+    foreach ($attrs as $attr => $value) {
+        // Populate args and fall back to defaults when needed
+        if (!array_key_exists($value['key'], $input)) {
+            $args[$attr] = $value['default'];
         } else {
-            $args[$key] = $input[$key];
+            $args[$attr] = $input[$value['key']];
+        }
+
+        // Check for bools
+        if ($value['type'] == 'bool') {
+            $args[$attr] = $args[$attr] != 'true' ? false : true;
         }
     }
+
+    echo var_dump($args);
 
     // Return formatted beer content
     return EMBM_Output_Beer_load($args);
@@ -140,8 +148,8 @@ function EMBM_Output_Beer_load($beer)
  */
 function EMBM_Output_list($atts)
 {
-    // Extract shortcode attributes
-    extract(
+    // Load shortcode content
+    return EMBM_Output_List_display(
         shortcode_atts(
             array(
                 'exclude'           => '',
@@ -158,21 +166,6 @@ function EMBM_Output_list($atts)
             'beer-list'
         )
     );
-
-    // Load shortcode content
-    return EMBM_Output_List_display(
-        array(
-            'exclude'   => $exclude,
-            'profile'   => $show_profile != 'true' ? false : true,
-            'extras'    => $show_extras != 'true' ? false : true,
-            'style'     => $style,
-            'group'     => $group,
-            'page_num'  => $beers_per_page,
-            'use_pages' => $paginate != 'true' ? false : true,
-            'sortby'    => $orderby,
-            'sort'      => $order
-        )
-    );
 }
 
 // Load beer list shortcode
@@ -185,28 +178,70 @@ add_shortcode('beer-list', 'EMBM_Output_list');
  *
  * @return string/html
  */
-function EMBM_Output_List_display($input)
+function EMBM_Output_List_display($input=array())
 {
-    // Set default values
-    $defaults = array(
-        'exclude'   => '',
-        'profile'   => true,
-        'extras'    => true,
-        'style'     => '',
-        'group'     => '',
-        'page_num'  => -1,
-        'use_pages' => true,
-        'sortby'    => '',
-        'sort'      => ''
+    // Set attribute defaults
+    $attrs = array(
+        'exclude'   => array(
+            'key'       => 'exclude',
+            'default'   => '',
+            'type'      => 'string'
+        ),
+        'profile'   => array(
+            'key'       => 'show_profile',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'extras'    => array(
+            'key'       => 'show_extras',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'style'     => array(
+            'key'       => 'style',
+            'default'   => '',
+            'type'      => 'string'
+        ),
+        'group'     => array(
+            'key'       => 'group',
+            'default'   => '',
+            'type'      => 'string'
+        ),
+        'page_num'  => array(
+            'key'       => 'beers_per_page',
+            'default'   => -1,
+            'type'      => 'int'
+        ),
+        'use_pages' => array(
+            'key'       => 'paginate',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'sortby'    => array(
+            'key'       => 'orderby',
+            'default'   => '',
+            'type'      => 'string'
+        ),
+        'sort'      => array(
+            'key'       => 'order',
+            'default'   => '',
+            'type'      => 'string'
+        )
     );
 
     // Set up values to pass on, remove bad values
     $args = array();
-    foreach ($defaults as $key => $value) {
-        if (!array_key_exists($key, $input)) {
-            $args[$key] = $value;
+    foreach ($attrs as $attr => $value) {
+        // Populate args and fall back to defaults when needed
+        if (!array_key_exists($value['key'], $input)) {
+            $args[$attr] = $value['default'];
         } else {
-            $args[$key] = $input[$key];
+            $args[$attr] = $input[$value['key']];
+        }
+
+        // Check for bools
+        if ($value['type'] == 'bool') {
+            $args[$attr] = $args[$attr] != 'true' ? false : true;
         }
     }
 
@@ -346,7 +381,7 @@ function EMBM_Output_Content_beer($beer_id, $showprofile=true, $showextras=true)
     $output .= '<div id="embm-beer-'.$beer_id.'" class="embm-beer--single embm-beer embm-beer-'.$beer_id.'">'."\n";
 
     // Begin beer header
-    $output .= '<div class="embm-beer--header">'."\n";
+    $output .= '<h2 class="embm-beer--header">'."\n";
 
     // Beer title
     if (is_page() || is_archive() || is_tax('embm_group')) {
@@ -366,7 +401,7 @@ function EMBM_Output_Content_beer($beer_id, $showprofile=true, $showextras=true)
     }
 
     // End beer header
-    $output .= '</div>'."\n";
+    $output .= '</h2>'."\n";
 
     // Beer image
     if (!is_archive()) {

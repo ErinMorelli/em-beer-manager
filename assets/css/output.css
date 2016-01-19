@@ -39,13 +39,12 @@
 .embm-beer .embm-beer--header > a > .embm-beer--header-title {
     border: 0;
     display: inline-block;
-/*    font-size: 2em;*/
     margin: 0;
     text-decoration: none;
 }
 .embm-beer .embm-beer--header-style {
     display: inline-block;
-    /*font-size: em;*/
+    font-size: 60%;
     font-style: italic;
     padding-left: 10px;
 }

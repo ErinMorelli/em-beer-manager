@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: EM Beer Manager
- * Plugin URI: http://erinmorelli.com/projects/em-beer-manager
+ * Plugin URI: http://www.erinmorelli.com/projects/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 1.10.0
+ * Version: 2.0.0
  * Author: Erin Morelli
- * Author URI: http://erinmorelli.com/
+ * Author URI: http://www.erinmorelli.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: embm
@@ -70,7 +70,7 @@ function EMBM_Plugin_load()
     }
 }
 
-// Initialize load
+// Initial load
 EMBM_Plugin_load();
 
 // Plugin localization
@@ -86,10 +86,10 @@ load_plugin_textdomain(
  *
  * @return void
  */
-function EMBM_Plugin_activation()
+function EMBM_Plugin_activate()
 {
     // Set current version
-    $embm_curr_version = '1.10.0';
+    $embm_curr_version = '2.0.0';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {
@@ -109,22 +109,22 @@ function EMBM_Plugin_activation()
         update_option(EMBM_VERSION_KEY, $embm_curr_version);
     }
 
-    // Refresh permalinks
-    flush_rewrite_rules();
-
     // Set default settings options
     $defaults = array(
         'embm_untappd_check'    => '',
-        'embm_untappd_brewery'    => '',
-        'embm_css_url'        => '',
-        'embm_group_slug'    => 'group'
+        'embm_untappd_brewery'  => '',
+        'embm_css_url'          => '',
+        'embm_group_slug'       => 'group'
     );
 
     update_option('embm_options', $defaults);
+
+    // Refresh permalinks
+    flush_rewrite_rules();
 }
 
 // Set activation hook
-register_activation_hook(__FILE__, 'EMBM_Plugin_activation');
+register_activation_hook(__FILE__, 'EMBM_Plugin_activate');
 
 
 /**
@@ -132,14 +132,109 @@ register_activation_hook(__FILE__, 'EMBM_Plugin_activation');
  *
  * @return void
  */
-function EMBM_Plugin_deactivation()
+function EMBM_Plugin_deactivate()
 {
     // Refresh permalinks
     flush_rewrite_rules();
 }
 
 // Set deactivation hook
-register_deactivation_hook(__FILE__, 'EMBM_Plugin_deactivation');
+register_deactivation_hook(__FILE__, 'EMBM_Plugin_deactivate');
+
+
+/**
+ * Plugin uninstallation setup
+ *
+ * @return void
+ */
+function EMBM_Plugin_uninstall()
+{
+    // Get global post types variable
+    global $wp_post_types;
+
+    // Remove EMBM post type
+    if (isset($wp_post_types['embm_beer'])) {
+        unset($wp_post_types['embm_beer']);
+    }
+
+    // Set up EMBM post query
+    $args = array(
+        'post_type'     =>'embm_beer',
+        'post_status'   => array(
+            'publish',
+            'pending',
+            'draft',
+            'auto-draft',
+            'future',
+            'private',
+            'inherit',
+            'trash'
+        )
+    );
+
+    // Get all existing EMBM posts
+    $posts = get_posts($args);
+
+    // Iteratively remove existing EMBM posts
+    if (is_array($posts)) {
+        foreach ($posts as $post) {
+            wp_delete_post($post->ID, true);
+        }
+    }
+
+    // Set EMBM taxonomies
+    $tax = array('embm_group', 'embm_style');
+
+    // Get global WP taxonomies
+    global $wp_taxonomies;
+
+    // Remove all EMBM taxonomies
+    foreach ($tax as $taxonomy) {
+        // Set taxonomy
+        register_taxonomy($taxonomy);
+
+        // Fina all terms for taxonomy
+        $terms = get_terms($taxonomy, array('hide_empty' => 0));
+
+        // Iteratively remove all terms for taxonomy
+        foreach ($terms as $term) {
+            wp_delete_term($term->term_id, $taxonomy);
+        }
+
+        // Remove taxonomy from WP
+        unset($wp_taxonomies[$taxonomy]);
+    }
+
+    // Remove EMBM widget CSS
+    wp_deregister_style('embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css');
+    wp_dequeue_style('embm-widget');
+
+    // Remove EMBM output CSS
+    wp_deregister_style('embm-output', EMBM_PLUGIN_URL.'assets/css/output.css');
+    wp_dequeue_style('embm-output');
+
+    // Remove EMBM admin CSS
+    wp_dequeue_style('embm-admin');
+
+    // Retrieve custom CSS info
+    $get_style_option = get_option('embm_options');
+    $get_custom_css = $style_option['embm_css_url'];
+
+    // Remove custom CSS
+    wp_deregister_style('custom-embm-output', $get_custom_css);
+    wp_dequeue_style('custom-embm-output');
+
+    // Remove EMBM settings
+    delete_option('embm_version');
+    delete_option('embm_options');
+    delete_option('embm_db_upgrade');
+    delete_option('embm_styles_loaded');
+    delete_option('widget_beer_list_widget');
+    delete_option('widget_recent_untappd_widget');
+}
+
+// Set uninstall hook
+register_uninstall_hook(__FILE__, 'EMBM_Plugin_uninstall');
 
 
 /**

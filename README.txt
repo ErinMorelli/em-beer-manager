@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.4.1
-Stable tag: 1.10.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
-* Simple beer checkin integration with Untappd
+* Simple beer check-in integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
@@ -29,7 +29,7 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 __Single Beer Display__
 
-This will display a single beer entry given it's ID number (found in "Beers" admin).
+These will display a single beer entry given it's ID number (found in "Beers" admin).
 
 * __Shortcode__:
 
@@ -37,13 +37,19 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
 
 * __Template tag__:
 
-    `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
+    `<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>`
 
-Options (for both shortcode & template tag):
+    Where `$beer_id` is required and `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
+    `<?php echo EMBM_Output_Beer_display( 123, array( 'show_profile' => 'false', 'show_extras' => 'true' ) ); ?>`
 
-* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
+*Options*:
+
+For use with both the shortcode and template code.
+
+* __show_profile => `"true, false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
+
+* __show_extras => `"true, false"`__ (Default = `true`) // *Displays or hides the "More Beer Information" section*
 
 
 __List All Beers__
@@ -56,27 +62,33 @@ This will display a formatted listing of all beers in the database.
 
 * __Template tag__:
 
-    `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group, beers_per_page, paginate, orderby, order ); ?>`
+    `<?php echo EMBM_Output_List_display( $args ); ?>`
 
-Options (for both shortcode & template tag):
+    Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-* __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
+    `<?php echo EMBM_Output_List_display( array( 'show_extras' => 'false', 'beers_per_page' => 3, 'orderby' => 'name', 'order' => 'ASC' ) ); ?>`
 
-* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information for each listing*
+*Options*:
 
-* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section for each listing*
+For use with both the shortcode and template code.
 
-* __style=`"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
+* __show_profile => `"true, false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information for each listing*
 
-* __group=`"group name"`__ (String e.g. `"Seasonals"`) // *Displays only beers belonging to a specific group*
+* __show_extras => `"true, false"`__ (Default = `true`) // *Displays or hides the "More Beer Information" section for each listing*
 
-* __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
+* __style => `"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
 
-* __paginate=`"true/false"`__ (Default = `true`) // *Disables/enables pagination*
+* __group => `"group name"`__ (String e.g. `"Seasonal Beers"`) // *Displays only beers belonging to a specific group*
 
-* __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
+* __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`) // *Hides listed beers from output*
 
-* __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*
+* __beers\_per\_page => `"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
+
+* __paginate => `"true, false"`__ (Default = `true`) // *Disables/enables pagination*
+
+* __orderby => `"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
+
+* __order => `"DSC, ASC"`__ (Default = `DSC`) // *Sorts beer list by `orderby` value in ascending or descending order*
 
 
 == Installation ==
@@ -88,11 +100,18 @@ Options (for both shortcode & template tag):
 
 == Frequently Asked Questions ==
 
+= I accidentally deleted some of the pre-loaded styles, how do I get them back? =
+
+Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated BeerAdvocate list. It will not affect any already existing or any custom styles.
+
+
 = Nothing is working or there are errors after upgrading to version 1.7.0 =
+
 EM Beer Manager updated the beer database structure in v1.7.0 and should automatically make any necessary changes. However in the case that the automatic update does not work, you will need to uninstall EM Beer Manager and install the latest v1.7.x or higher release to maintain functionality. You will not lose any of your Beer or Styles data when uninstalling the older version.
 
 
 = How do I display an image of my beer next to its name and description? =
+
 When creating your new beer entry, set the "featured image" option in the sidebar to the beer image you wish to use, it will display alongside the entry when the beer is displayed on your site.
 
 
@@ -105,6 +124,10 @@ Use the `[beer id=#]` shortcode inside the WordPress page editor to add a beer t
 
 Use the `[beer-list]` shortcode inside the WordPress page editor to add a list of all your beers to any page.
 
+You can display only beers from a single group using the `group` option, e.g.: `[beer-list group="Seasonal Beers"]`
+
+You can display only beers from a single style using the `style` option, e.g.: `[beer-list style="India Pale Ale"]
+
 
 = I don't want to show that big grey box of information, how do I get rid of it? =
 
@@ -115,7 +138,7 @@ Example: `[beer-list show_profile="false" show_extras="false"]`
 
 = What's the difference between `show_profile` and `show_extras`? =
 
-The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The `show_extras` setting refers to the "Additional Notes" and "Availability" information stored for each beer.
+The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The `show_extras` setting refers to the "More Beer Information" content stored for each beer.
 
 
 = Why isn't the Untappd checkin button hidden when I set `show_extras` to false? =
@@ -144,8 +167,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
-= 1.9.7 =
-* ???
+= 2.0.0 =
+* Massive admin settings page layout overhaul
+* Added new "Restore Styles" button to admin settings page
+* Renamed template tag functions and restructured input format
+* Improved overall CSS to be more compatible with custom themes
+* Lots of under-the-hood code improvements and cleanup
 
 = 1.9.6 =
 * Fixed 'Warning: Missing argument' error
@@ -217,6 +244,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
+= 2.0.0 =
+Added "Restore Styles" feature, improved template tag functions, improved CSS compatibility
+
 = 1.9.4 =
 Plugin localization and translation is now working properly
 
@@ -256,6 +286,5 @@ I would love to be able to expand this section - let me know if you are able to 
 == Planned Features ==
 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Add a [beer-group] shortcode & improve template tag usability
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Expand Untappd integration to include further brewery/beer options

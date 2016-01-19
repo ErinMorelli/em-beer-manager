@@ -604,7 +604,7 @@ function EMBM_Admin_Settings_page()
                         <td><code><strong>show_extras</strong></code></td>
                         <td><code>true, false</code></td>
                         <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "More Information" section', 'embm'); ?></td>
+                        <td><?php _e('Displays or hides the "More Beer Information" section', 'embm'); ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -660,7 +660,7 @@ function EMBM_Admin_Settings_page()
                         <td><code><strong>show_extras</strong></code></td>
                         <td><code>true, false</code></td>
                         <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "More Information" section for each listing', 'embm'); ?></td>
+                        <td><?php _e('Displays or hides the "More Beer Information" section for each listing', 'embm'); ?></td>
                     </tr>
                     <tr>
                         <td><code><strong>style</strong></code></td>
@@ -695,7 +695,7 @@ function EMBM_Admin_Settings_page()
                     <tr>
                         <td><code><strong>orderby</strong></code></td>
                         <td><?php _e('See ', 'embm'); ?><a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank"><?php _e('this list', 'embm'); ?></a><?php _e(' for options', 'embm'); ?></td>
-                        <td><code>"title"</code></td>
+                        <td><code>"date"</code></td>
                         <td><?php _e('Orders beer list output by the given paramater', 'embm'); ?></td>
                     </tr>
                     <tr>
