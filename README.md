@@ -38,8 +38,13 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 1.10.0 - ??](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v1.10.0.zip) ###
-* ???
+### [Version 2.0.0 - Major Release](https://bitbucket.org/ErinMorelli/em-beer-manager/get/v2.0.0.zip) ###
+* Massive admin settings page layout overhaul
+* Added new "Restore Styles" button to admin settings page
+* Renamed template tag functions and restructured input format
+* Improved overall CSS to be more compatible with custom themes
+* Lots of under-the-hood code improvements and cleanup
+* Updated localization POT
 
 
 
@@ -63,7 +68,7 @@ Use these shortcodes to display beers in your posts or use the template tags in 
 
 ### Single Beer Display ###
 
-This will display a single beer entry given it's ID number (found in "Beers" admin).
+These will display a single beer entry given it's ID number (found in "Beers" admin).
 
 * __Shortcode:__
 
@@ -71,19 +76,31 @@ This will display a single beer entry given it's ID number (found in "Beers" adm
 
 * __Template tag:__
 
-    `<?php echo embm_beer_single( beer id (required), show_profile, show_extras ); ?>`
+    `<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>`
 
+    Where `$beer_id` is required and `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-Options (for both shortcode & template tag):
+        <?php echo EMBM_Output_Beer_display( 123, array(
+            'show_profile' => false,
+            'show_extras' => true
+        ) ); ?>
 
-* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
+* __Options__:
 
-* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section*
+    For use with both the shortcode and template code.
+
+    * __show_profile => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the "Beer Profile" information section*
+
+    * __show_extras => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the "More Beer Information" section*
 
 
 ### List All Beers ###
 
-This will display a formatted listing of all beers in the database.
+These will display a formatted listing of all beers.
 
 * __Shortcode:__
 
@@ -91,29 +108,56 @@ This will display a formatted listing of all beers in the database.
 
 * __Template tag:__
 
-    `<?php echo embm_beer_list( exclude, show_profile, show_extras, style, group,`
-    `beers_per_page, paginate, orderby, order ); ?>`
+    `<?php echo EMBM_Output_List_display( $args ); ?>`
 
+    Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-Options (for both shortcode & template tag):
+        <?php echo EMBM_Output_List_display( array(
+            'show_extras' => false,
+            'beers_per_page' => 3,
+            'orderby' => 'name',
+            'order' => 'ASC'
+        ) ); ?>
 
-* __exclude=`"beer ids"`__ (String separated by commas e.g. `"4,23,24"`) // *Hides listed beers from output*
+* __Options__:
 
-* __show_profile=`"true/false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information for each listing*
+    For use with both the shortcode and template code.
 
-* __show_extras=`"true/false"`__ (Default = `true`) // *Displays or hides the "More Information" section for each listing*
+    * __show_profile => `"true, false"`__ (Default = `true`)
 
-* __style=`"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
+        *Displays or hides the "Beer Profile" information section*
 
-* __group=`"group name"`__ (String e.g. `"Seasonals"`) // *Displays only beers belonging to a specific group*
+    * __show_extras => `"true, false"`__ (Default = `true`)
 
-* __beers\_per\_page=`"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
+        *Displays or hides the "More Beer Information" section*
 
-* __paginate=`"true/false"`__ (Default = `true`) // *Disables/enables pagination*
+    * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
 
-* __orderby=`"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
+        *Displays only beers belonging to a specific beer style*
 
-* __order=`"desc/asc"`__ (Default = `desc`) // *List beer by `orderby` value in ascending or descending order*
+    * __group => `"group name"`__ (String e.g. `"Seasonal Beers"`)
+
+        *Displays only beers belonging to a specific group*
+
+    * __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`)
+
+        *Hides listed beers from output*
+
+    * __beers\_per\_page => `"number"`__ (Default = `-1`, shows all beers on one page)
+
+        *Paginates output and displays the given number of beers per page*
+
+    * __paginate => `"true, false"`__ (Default = `true`)
+
+        *Disables/enables pagination*
+
+    * __orderby => `"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options)
+
+        *Orders output by given paramater*
+
+    * __order => `"DSC, ASC"`__ (Default = `DSC`)
+
+        *Sorts beer list by `orderby` value in ascending or descending order*
 
 
 
@@ -130,6 +174,6 @@ I would love to be able to expand this section - let me know if you are able to 
 ### Planned Features ###
 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Add a `[beer-group]` shortcode & improve template tag usability
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
+* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
 * Expand Untappd integration to include further brewery/beer options

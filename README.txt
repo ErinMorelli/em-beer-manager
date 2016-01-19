@@ -41,20 +41,28 @@ These will display a single beer entry given it's ID number (found in "Beers" ad
 
     Where `$beer_id` is required and `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-    `<?php echo EMBM_Output_Beer_display( 123, array( 'show_profile' => 'false', 'show_extras' => 'true' ) ); ?>`
+        <?php echo EMBM_Output_Beer_display( 123, array(
+            'show_profile' => false,
+            'show_extras' => true
+        ) ); ?>
 
-*Options*:
+* __Options__:
 
-For use with both the shortcode and template code.
+    For use with both the shortcode and template code.
 
-* __show_profile => `"true, false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information*
+    * __show_profile => `"true, false"`__ (Default = `true`)
 
-* __show_extras => `"true, false"`__ (Default = `true`) // *Displays or hides the "More Beer Information" section*
+        *Displays or hides the "Beer Profile" information section*
+
+    * __show_extras => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the "More Beer Information" section*
+
 
 
 __List All Beers__
 
-This will display a formatted listing of all beers in the database.
+These will display a formatted listing of all beers.
 
 * __Shortcode__:
 
@@ -66,29 +74,52 @@ This will display a formatted listing of all beers in the database.
 
     Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-    `<?php echo EMBM_Output_List_display( array( 'show_extras' => 'false', 'beers_per_page' => 3, 'orderby' => 'name', 'order' => 'ASC' ) ); ?>`
+        <?php echo EMBM_Output_List_display( array(
+            'show_extras' => false,
+            'beers_per_page' => 3,
+            'orderby' => 'name',
+            'order' => 'ASC'
+        ) ); ?>
 
-*Options*:
+* __Options__:
 
-For use with both the shortcode and template code.
+    For use with both the shortcode and template code.
 
-* __show_profile => `"true, false"`__ (Default = `true`) // *Displays or hides the "Beer Profile" information for each listing*
+    * __show_profile => `"true, false"`__ (Default = `true`)
 
-* __show_extras => `"true, false"`__ (Default = `true`) // *Displays or hides the "More Beer Information" section for each listing*
+        *Displays or hides the "Beer Profile" information section*
 
-* __style => `"style name"`__ (String e.g. `"India Pale Ale"`) // *Displays only beers belonging to a specific beer style*
+    * __show_extras => `"true, false"`__ (Default = `true`)
 
-* __group => `"group name"`__ (String e.g. `"Seasonal Beers"`) // *Displays only beers belonging to a specific group*
+        *Displays or hides the "More Beer Information" section*
 
-* __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`) // *Hides listed beers from output*
+    * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
 
-* __beers\_per\_page => `"number"`__ (Default = `-1`, shows all beers on one page) // *Paginates output and displays the given number of beers per page*
+        *Displays only beers belonging to a specific beer style*
 
-* __paginate => `"true, false"`__ (Default = `true`) // *Disables/enables pagination*
+    * __group => `"group name"`__ (String e.g. `"Seasonal Beers"`)
 
-* __orderby => `"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options) // *Orders output by given paramater*
+        *Displays only beers belonging to a specific group*
 
-* __order => `"DSC, ASC"`__ (Default = `DSC`) // *Sorts beer list by `orderby` value in ascending or descending order*
+    * __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`)
+
+        *Hides listed beers from output*
+
+    * __beers\_per\_page => `"number"`__ (Default = `-1`, shows all beers on one page)
+
+        *Paginates output and displays the given number of beers per page*
+
+    * __paginate => `"true, false"`__ (Default = `true`)
+
+        *Disables/enables pagination*
+
+    * __orderby => `"string"`__ (Default = `date`, see [this list](http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for options)
+
+        *Orders output by given paramater*
+
+    * __order => `"DSC, ASC"`__ (Default = `DSC`)
+
+        *Sorts beer list by `orderby` value in ascending or descending order*
 
 
 == Installation ==
@@ -102,7 +133,7 @@ For use with both the shortcode and template code.
 
 = I accidentally deleted some of the pre-loaded styles, how do I get them back? =
 
-Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated BeerAdvocate list. It will not affect any already existing or any custom styles.
+Starting with v2.0.0, users are now able to easily restore any missing styles. Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated BeerAdvocate list. It will not affect any already existing or any custom styles.
 
 
 = Nothing is working or there are errors after upgrading to version 1.7.0 =
@@ -138,7 +169,9 @@ Example: `[beer-list show_profile="false" show_extras="false"]`
 
 = What's the difference between `show_profile` and `show_extras`? =
 
-The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The `show_extras` setting refers to the "More Beer Information" content stored for each beer.
+The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.
+
+The `show_extras` setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.
 
 
 = Why isn't the Untappd checkin button hidden when I set `show_extras` to false? =
@@ -173,6 +206,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * Renamed template tag functions and restructured input format
 * Improved overall CSS to be more compatible with custom themes
 * Lots of under-the-hood code improvements and cleanup
+* Updated localization POT
 
 = 1.9.6 =
 * Fixed 'Warning: Missing argument' error
@@ -287,4 +321,5 @@ I would love to be able to expand this section - let me know if you are able to 
 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
+* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
 * Expand Untappd integration to include further brewery/beer options

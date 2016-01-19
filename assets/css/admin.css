@@ -100,6 +100,15 @@
     font-weight: 600;
     margin-top: 2em;
 }
+.embm-settings--page .embm-settings--code {
+    background-color: #DFDFDF;
+    background-color: rgba(0, 0, 0, 0.07);
+    font-family: Consolas,Monaco,monospace;
+    font-size: 13px;
+    margin: 0 1px;
+    max-width: 450px;
+    padding: 3px 5px 2px;
+}
 .embm-settings--page .embm-settings--credits {
     font-size: 10px;
     line-height: 18px;

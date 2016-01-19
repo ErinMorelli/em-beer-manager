@@ -350,7 +350,7 @@ function EMBM_Admin_Settings_Global_display()
 
     echo '<p><input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
     echo '<label for="embm_profile_show">'.__('Globally hide "profile" info', 'embm').'</label>';
-    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=450&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
+    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=350&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
 
     $view_extras = null;
     if (isset($options['embm_extras_show'])) {
@@ -359,7 +359,7 @@ function EMBM_Admin_Settings_Global_display()
 
     echo '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
     echo '<label for="embm_extras_show">'.__('Globally hide "extras" info', 'embm').'</label>';
-    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=450&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'">?</a></span></p>';
+    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=350&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'">?</a></span></p>';
 }
 
 /**
@@ -411,7 +411,6 @@ function EMBM_Admin_Settings_Style_reset()
 {
     echo '<p>'.__('Restore missing or deleted beer styles from the pre-loaded list.', 'embm').'</p>';
     echo '<p><button class="embm-settings--styles-button button-secondary">'.__('Restore Styles', 'embm').'</button></p>';
-    // echo '<p class="description">('.__('This will not ', 'embm').')</p>';
 }
 
 /**
@@ -572,12 +571,14 @@ function EMBM_Admin_Settings_page()
             <blockquote>
                 <code><?php echo htmlentities('<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
                 <p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
-                <p><code><?php echo htmlentities(
-                    "<?php echo EMBM_Output_Beer_display( 123, array(
-                        'show_profile'  => 'false',
-                        'show_extras'   => 'true'
-                    ) ); ?>"
-                ); ?></code></p>
+                <p>
+                    <pre class="embm-settings--code"><?php echo htmlentities(
+"<?php echo EMBM_Output_Beer_display( 123, array(
+    'show_profile'  => false,
+    'show_extras'   => true
+) ); ?>"
+                    ); ?></pre>
+                </p>
             </blockquote>
 
             <h3 class="embm-settings--subhead"><?php _e('Options', 'embm'); ?></h3>
@@ -626,14 +627,16 @@ function EMBM_Admin_Settings_page()
             <blockquote>
                 <code><?php echo htmlentities('<?php echo EMBM_Output_List_display( $args ); ?>'); ?></code></p>
                 <p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
-                <p><code><?php echo htmlentities(
-                    "<?php echo EMBM_Output_List_display( array(
-                        'show_extras'       => 'false',
-                        'beers_per_page'    => 3,
-                        'orderby'           => 'name',
-                        'order'             => 'ASC'
-                    ) ); ?>"
-                ); ?></code></p>
+                <p>
+                    <pre class="embm-settings--code"><?php echo htmlentities(
+"<?php echo EMBM_Output_List_display( array(
+    'show_extras'       => false,
+    'beers_per_page'    => 3,
+    'orderby'           => 'name',
+    'order'             => 'ASC'
+) ); ?>"
+                    ); ?></pre>
+                </p>
             </blockquote>
 
             <h3 class="embm-settings--subhead"><?php _e('Options', 'embm'); ?></h3>
@@ -736,14 +739,11 @@ function EMBM_Admin_Settings_page()
 
     <div id="embm-settings--help-faq" style="display:none;">
         <h2><?php _e('Settings FAQ', 'embm'); ?></h2>
-        <p><strong><?php _e('How do I display an image of my beer next to its name and description?', 'embm'); ?></strong></p>
-        <p><?php _e('When creating your new beer entry, set the "featured image" option in the sidebar to the beer image you wish to use, it will display alongside the entry when the beer is displayed on your site. If this option is not available in your post settings, your theme may be blocking post thumbnails.', 'embm'); ?></p>
-
         <p><strong><?php _e('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm'); ?></strong></p>
         <p><?php _e('For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.', 'embm'); ?></p>
-
         <p><strong><?php _e('What\'s the difference between "profile" and "extras"?', 'embm'); ?></strong></p>
-        <p><?php _e('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast. The "extras" setting refers to the "Additional Notes" and "Availability" information stored for each beer.', 'embm'); ?></p>
+        <p><?php _e('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', 'embm'); ?></p>
+        <p><?php _e('The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.', 'embm'); ?></p>
     </div>
 </div>
 <?php

@@ -19,6 +19,10 @@
  * EM Beer Manager widget styles
  */
 
+
+/**
+ * Style EM Beer Manager beer list widget
+ */
 ul.embm-beer-list-widget {
     margin: 0 0 0 20px;
     padding: 0;
@@ -40,6 +44,11 @@ li.embm-beer-list-widget-item .embm-read-more {
     font-weight: normal;
     padding-left: 3px;
 }
+
+
+/**
+ * Style EM Beer Manager recent Untappd check-ins widget
+ */
 ul.embm-untappd-list {
     margin: 0;
     padding: 0;
