@@ -157,7 +157,7 @@ Use the `[beer-list]` shortcode inside the WordPress page editor to add a list o
 
 You can display only beers from a single group using the `group` option, e.g.: `[beer-list group="Seasonal Beers"]`
 
-You can display only beers from a single style using the `style` option, e.g.: `[beer-list style="India Pale Ale"]
+You can display only beers from a single style using the `style` option, e.g.: `[beer-list style="India Pale Ale"]`
 
 
 = I don't want to show that big grey box of information, how do I get rid of it? =
