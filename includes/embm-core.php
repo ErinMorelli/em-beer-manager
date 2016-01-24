@@ -199,18 +199,11 @@ function EMBM_Core_Meta_help()
         return;
     }
 
-    // Untappd Integration help
-    $screen->add_help_tab(
-        array(
-            'id'       => 'embm-untappd-integration',
-            'title'    => __('Untappd Integration', 'embm'),
-            'content'  => __(
-                '<p>Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.</p>'.
-                '<p>You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page</p>',
-                'embm'
-            )
-        )
-    );
+    // Get default help data
+    $default_help = EMBM_Plugin_help();
+
+    // Untappd Integration help tab
+    $screen->add_help_tab($default_help['untappd']);
 
     // Untappd Beer ID help
     $screen->add_help_tab(
@@ -229,9 +222,7 @@ function EMBM_Core_Meta_help()
     // Help sidebar
     $screen->set_help_sidebar(
         '<p><a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=embm-settings">' . __('EM Beer Manager Settings', 'embm') . '</a></p>' .
-        '<p><strong>' . __('For more information:', 'embm') . '</strong></p>' .
-        '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
-        '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'
+        $default_help['sidebar']
     );
 }
 
