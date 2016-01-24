@@ -20,6 +20,10 @@
  */
 
 
+// Set global admin page object
+global $embm_admin_page;
+
+
 /**
  * Loads admin CSS and JS
  *
@@ -234,14 +238,70 @@ add_action('load-edit.php', 'EMBM_Admin_Columns_load');
 
 
 /**
+ * Add custom contextual help menu to admin
+ *
+ * @return void
+ */
+function EMBM_Admin_help()
+{
+    // Get global page vars
+    global $embm_admin_page;
+    $screen = get_current_screen();
+
+    // Check if current screen is admin page
+    if ($screen->id != $embm_admin_page) {
+        return;
+    }
+
+    // Untappd Integration help tab
+    $screen->add_help_tab(
+        array(
+            'id'       => 'embm-untappd-integration',
+            'title'    => __('Untappd Integration', 'embm'),
+            'content'  => __(
+                '<p>Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.</p>'.
+                '<p>You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page</p>',
+                'embm'
+            )
+        )
+    );
+
+    // Settings FAQ help tab
+    $screen->add_help_tab(
+        array(
+            'id'       => 'embm-settings-faq',
+            'title'    => __('Settings FAQ', 'embm'),
+            'content'  => __(
+                '<p><strong>I don\'t want to show that big grey box of information, how do I get rid of it?</strong></p>'.
+                '<p>For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.</p>'.
+                '<p><strong>What\'s the difference between "profile" and "extras"?</strong></p>'.
+                '<p>The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.</p>'.
+                '<p>The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.</p>',
+                'embm'
+            )
+        )
+    );
+
+    // Help sidebar
+    $screen->set_help_sidebar(
+        '<p><strong>' . __('For more information:', 'embm') . '</strong></p>' .
+        '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
+        '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'
+    );
+}
+
+
+/**
  * Add EMBM settings page to the WP menu
  *
  * @return void
  */
 function EMBM_Admin_menu()
 {
+    // Set global admin screen
     global $embm_admin_page;
 
+    // Setup admin page
     $embm_admin_page = add_options_page(
         __('EM Beer Manager Settings', 'embm'), // Page title
         __('EM Beer Manager', 'embm'),          // Menu title
@@ -249,6 +309,9 @@ function EMBM_Admin_menu()
         'embm-settings',                        // Menu slug
         'EMBM_Admin_Settings_page'              // Function
     );
+
+    // Add contextual help
+    add_action('load-' . $embm_admin_page, 'EMBM_Admin_help');
 }
 
 // Load settings page menu link
@@ -331,7 +394,7 @@ function EMBM_Admin_Settings_Global_untappd()
 
     echo '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
     echo '<label for="embm_untappd_check">'.__('Disable Untappd integration', 'embm').'</label>';
-    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=250&inlineId=embm-settings--help-untappd" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
+    echo '<a data-help="embm-untappd-integration" class="embm-settings--help">?</a></p>';
 }
 
 /**
@@ -350,7 +413,7 @@ function EMBM_Admin_Settings_Global_display()
 
     echo '<p><input name="embm_options[embm_profile_show]" type="checkbox" id="embm_profile_show" value="1"'.checked('1', $view_profile, false).' /> ';
     echo '<label for="embm_profile_show">'.__('Globally hide "profile" info', 'embm').'</label>';
-    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=350&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'"">?</a></span></p>';
+    echo '<a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
 
     $view_extras = null;
     if (isset($options['embm_extras_show'])) {
@@ -359,7 +422,7 @@ function EMBM_Admin_Settings_Global_display()
 
     echo '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
     echo '<label for="embm_extras_show">'.__('Globally hide "extras" info', 'embm').'</label>';
-    echo '<span class="whats-this"><a href="#TB_inline?width=550&height=350&inlineId=embm-settings--help-faq" class="thickbox" title="'.__('EM Beer Manager Help', 'embm').'">?</a></span></p>';
+    echo '<a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
 }
 
 /**
@@ -572,12 +635,14 @@ function EMBM_Admin_Settings_page()
                 <code><?php echo htmlentities('<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
                 <p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
                 <p>
-                    <pre class="embm-settings--code"><?php echo htmlentities(
-"<?php echo EMBM_Output_Beer_display( 123, array(
-    'show_profile'  => false,
-    'show_extras'   => true
-) ); ?>"
-                    ); ?></pre>
+                    <pre class="embm-settings--code">
+<?php echo htmlentities(
+    "<?php echo EMBM_Output_Beer_display( 123, array(\n".
+    "    'show_profile'  => false,\n".
+    "    'show_extras'   => true\n".
+    ") ); ?>"
+); ?>
+                    </pre>
                 </p>
             </blockquote>
 
@@ -628,14 +693,16 @@ function EMBM_Admin_Settings_page()
                 <code><?php echo htmlentities('<?php echo EMBM_Output_List_display( $args ); ?>'); ?></code></p>
                 <p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
                 <p>
-                    <pre class="embm-settings--code"><?php echo htmlentities(
-"<?php echo EMBM_Output_List_display( array(
-    'show_extras'       => false,
-    'beers_per_page'    => 3,
-    'orderby'           => 'name',
-    'order'             => 'ASC'
-) ); ?>"
-                    ); ?></pre>
+                    <pre class="embm-settings--code">
+<?php echo htmlentities(
+    "<?php echo EMBM_Output_List_display( array(\n".
+    "    'show_extras'       => false,\n".
+    "    'beers_per_page'    => 3,\n".
+    "    'orderby'           => 'name',\n".
+    "    'order'             => 'ASC'\n".
+    ") ); ?>"
+); ?>
+                    </pre>
                 </p>
             </blockquote>
 
@@ -728,23 +795,6 @@ function EMBM_Admin_Settings_page()
         <?php _e('Free beer icon from <a href="http://simpleicon.com" title="simple icon">simple icon</a>.', 'embm'); ?><br />
         &copy; 2013-<?php echo date('Y'); ?> <a href="http://www.erinmorelli.com" title="Erin Morelli">Erin Morelli</a>.
     </p>
-
-    <?php add_thickbox(); ?>
-
-    <div id="embm-settings--help-untappd" style="display:none;">
-        <h2><?php _e('Untappd Integration', 'embm'); ?></h2>
-        <p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
-        <p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
-    </div>
-
-    <div id="embm-settings--help-faq" style="display:none;">
-        <h2><?php _e('Settings FAQ', 'embm'); ?></h2>
-        <p><strong><?php _e('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm'); ?></strong></p>
-        <p><?php _e('For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.', 'embm'); ?></p>
-        <p><strong><?php _e('What\'s the difference between "profile" and "extras"?', 'embm'); ?></strong></p>
-        <p><?php _e('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', 'embm'); ?></p>
-        <p><?php _e('The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.', 'embm'); ?></p>
-    </div>
 </div>
 <?php
 }

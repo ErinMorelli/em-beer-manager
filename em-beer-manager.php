@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://www.erinmorelli.com/projects/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Erin Morelli
  * Author URI: http://www.erinmorelli.com/
  * License: GPLv2 or later
@@ -49,6 +49,27 @@ if (!defined('PLUGINDIR')) {
  */
 function EMBM_Plugin_load()
 {
+    // Set current version
+    $embm_curr_version = '2.1.0';
+
+    // Define version key name
+    if (!defined('EMBM_VERSION_KEY')) {
+        define('EMBM_VERSION_KEY', 'embm_version');
+    }
+
+    // Create new version option
+    if (!defined('EMBM_VERSION_NUM')) {
+        define('EMBM_VERSION_NUM', $embm_curr_version);
+
+        // Store version in WP database
+        add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);
+    }
+
+    // Update the version value
+    if (get_option(EMBM_VERSION_KEY) != $embm_curr_version) {
+        update_option(EMBM_VERSION_KEY, $embm_curr_version);
+    }
+
     // Load admin files only in admin
     if (is_admin()) {
         include_once EMBM_PLUGIN_DIR.'includes/embm-admin.php';
@@ -70,8 +91,8 @@ function EMBM_Plugin_load()
     }
 }
 
-// Initial load
-EMBM_Plugin_load();
+// Initial plugin load
+add_action('plugins_loaded', 'EMBM_Plugin_load', 10);
 
 // Plugin localization
 load_plugin_textdomain(
@@ -88,27 +109,6 @@ load_plugin_textdomain(
  */
 function EMBM_Plugin_activate()
 {
-    // Set current version
-    $embm_curr_version = '2.0.0';
-
-    // Define version key name
-    if (!defined('EMBM_VERSION_KEY')) {
-        define('EMBM_VERSION_KEY', 'embm_version');
-    }
-
-    // Create new version option
-    if (!defined('EMBM_VERSION_NUM')) {
-        define('EMBM_VERSION_NUM', $embm_curr_version);
-
-        // Store version in WP database
-        add_option(EMBM_VERSION_KEY, EMBM_VERSION_NUM);
-    }
-
-    // Update the version value
-    if (get_option(EMBM_VERSION_KEY) != $embm_curr_version) {
-        update_option(EMBM_VERSION_KEY, $embm_curr_version);
-    }
-
     // Set default settings options
     $defaults = array(
         'embm_untappd_check'    => '',
@@ -225,7 +225,7 @@ function EMBM_Plugin_uninstall()
     wp_dequeue_style('custom-embm-output');
 
     // Remove EMBM settings
-    delete_option('embm_version');
+    delete_option(EMBM_VERSION_KEY);
     delete_option('embm_options');
     delete_option('embm_db_upgrade');
     delete_option('embm_styles_loaded');
@@ -252,7 +252,7 @@ function EMBM_Plugin_links($links)
     $settings_link .= __('Settings', 'embm') . '</a>';
 
     // Add to to existing links array
-    return array_merge($links, array($settings_link));
+    return array_merge(array($settings_link), $links);
 }
 
 // Set plugin links filter

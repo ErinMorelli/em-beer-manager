@@ -33,6 +33,54 @@ if (isset($ut_option['embm_untappd_check'])) {
 if ($use_untappd != '1') {
 
     /**
+     * Add custom contextual help to beer post editor
+     *
+     * @return void
+     */
+    function EMBM_Widget_Untappd_Recent_help()
+    {
+        // Get the current screen
+        $screen = get_current_screen();
+        echo var_dump($screen->help_tabs);
+
+        // Check if current screen is admin page
+        if ($screen->id != 'widgets') {
+            return;
+        }
+
+        // Untappd Integration help
+        $screen->add_help_tab(
+            array(
+                'id'       => 'embm-untappd-integration',
+                'title'    => __('Untappd Integration', 'embm'),
+                'content'  => __(
+                    '<p>Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.</p>'.
+                    '<p>You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page</p>',
+                    'embm'
+                )
+            )
+        );
+
+        // Untappd Integration help
+        $screen->add_help_tab(
+            array(
+                'id'       => 'embm-untappd-brewery-id',
+                'title'    => __('Untappd Beer ID', 'embm'),
+                'content'  => __(
+                    '<p>Find your Untappd brewery ID number by going to your brewery\'s official page (i.e. <code>https://untappd.com/BreweryName</code>). Click on the "Brewery Feed (RSS)" link in the right-hand sidebar. The link\'s URL will be formatted like this:</p>'.
+                    '<p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p>'.
+                    '<p>The string of numbers at the end of the URL is your brewery ID number.</p>',
+                    'embm'
+                )
+            )
+        );
+    }
+
+    // Add contextual help
+    add_action('load-widgets.php', 'EMBM_Widget_Untappd_Recent_help');
+
+
+    /**
      * Add Recent Untappd Check-ins widget
      */
     class EMBM_Widget_Untappd_Recent extends WP_Widget
@@ -75,7 +123,7 @@ if ($use_untappd != '1') {
             $items = $instance['items'];
             $brewery = $instance['brewery'];
 
-            ?>
+?>
             <p>
                 <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
                 <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
@@ -89,19 +137,7 @@ if ($use_untappd != '1') {
                 <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show: ', 'embm'); ?></label>
                 <input id="<?php echo $this->get_field_id('items'); ?>" name="<?php echo $this->get_field_name('items'); ?>" type="number" min="1" step="1" style="width: 20%;" value="<?php echo $items; ?>" />
             </p>
-
-            <?php add_thickbox(); ?>
-
-            <div id="embm-untappd-brewery-box" style="display:none;">
-                <h2><?php _e('Untappd Integration', 'embm'); ?></h2>
-                <p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
-                <p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
-                <h2><?php _e('Untappd Brewery ID', 'embm'); ?></h2>
-                <p><?php _e('Find your Untappd brewery ID number by going to your brewery\'s official page (i.e. <code>https://untappd.com/BreweryName</code>). Click on the "Brewery Feed (RSS)" link in the right-hand sidebar. The link\'s URL will be formatted like this:', 'embm'); ?></p>
-                <p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p>
-                <p><?php _e('The string of numbers at the end of the URL is your brewery ID number.', 'embm'); ?></p>
-            </div>
-            <?php
+<?php
         }
 
         /**

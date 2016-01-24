@@ -100,4 +100,26 @@ jQuery(document).ready(function ($) {
         // Update URL
         window.history.replaceState(null, null, clean_url);
     });
+
+    $('.embm-settings--help').on('click', function (e) {
+        // Get tab name from link
+        var tab = $(this).data('help');
+
+        // Remove 'active' class from all link tabs
+        $('li[id^="tab-link-"]').each(function () {
+            $(this).removeClass('active');
+        });
+
+        // Hide all panels
+        $('div[id^="tab-panel-"]').each(function () {
+            $(this).css('display', 'none');
+        });
+
+        // Set our desired link/panel
+        $('#tab-link-' + tab).addClass('active');
+        $('#tab-panel-' + tab).css('display', 'block');
+
+        // Force click on the Help tab
+        $('#contextual-help-link').click();
+    });
 });

@@ -88,10 +88,6 @@
 .embm-settings--page .embm-settings--table tr:nth-child(even) td {
     background: #fafafa;
 }
-.embm-settings--page .whats-this {
-    display: inline-block;
-    padding-left: 6px;
-}
 .embm-settings--page .embm-settings--form > .form-table {
     margin-bottom: 50px;
 }
@@ -145,4 +141,14 @@
         float: none;
         width: 100%;
     }
+}
+
+/**
+ * Contextual help link styles
+ */
+.embm-settings--help {
+    cursor: pointer;
+    display: inline-block;
+    padding-left: 6px;
+    text-decoration: underline;
 }

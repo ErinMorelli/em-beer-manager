@@ -179,6 +179,69 @@ add_action('init', 'EMBM_Core_Comments_toggle');
 
 
 /**
+ * Add custom contextual help
+ *
+ * @return void
+ */
+function EMBM_Core_Meta_help()
+{
+    // Get the current screen
+    $screen = get_current_screen();
+    // echo var_dump($screen);
+
+    $help_screens = array(
+        'embm_beer',
+        'edit-embm_beer'
+    );
+
+    // Check if current screen is admin page
+    if (!in_array($screen->id, $help_screens)) {
+        return;
+    }
+
+    // Untappd Integration help
+    $screen->add_help_tab(
+        array(
+            'id'       => 'embm-untappd-integration',
+            'title'    => __('Untappd Integration', 'embm'),
+            'content'  => __(
+                '<p>Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.</p>'.
+                '<p>You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page</p>',
+                'embm'
+            )
+        )
+    );
+
+    // Untappd Beer ID help
+    $screen->add_help_tab(
+        array(
+            'id'       => 'embm-untappd-beer-id',
+            'title'    => __('Untappd Beer ID', 'embm'),
+            'content'  => __(
+                '<p>Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this:</p>'.
+                '<p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p>'.
+                '<p>The string of numbers at the end of the URL is your beer\'s ID.</p>',
+                'embm'
+            )
+        )
+    );
+
+    // Help sidebar
+    $screen->set_help_sidebar(
+        '<p><a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=embm-settings">' . __('EM Beer Manager Settings', 'embm') . '</a></p>' .
+        '<p><strong>' . __('For more information:', 'embm') . '</strong></p>' .
+        '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
+        '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'
+    );
+}
+
+// Add contextual help
+add_action('load-post.php', 'EMBM_Core_Meta_help');
+add_action('load-post-new.php', 'EMBM_Core_Meta_help');
+add_action('load-edit.php', 'EMBM_Core_Meta_help');
+
+
+/**
  * Add custom meta boxes to post type
  *
  * @return void
@@ -233,7 +296,7 @@ function EMBM_Core_Meta_specs()
     // Setup nonce field for options
     wp_nonce_field('embm_specs_save', 'embm_specs_save_nonce');
 
-    ?>
+?>
     <table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
@@ -255,7 +318,7 @@ function EMBM_Core_Meta_specs()
             </tr>
         </tbody>
     </table>
-    <?php
+<?php
 }
 
 /**
@@ -335,7 +398,7 @@ function EMBM_Core_Meta_info()
     // Setup nonce field for options
     wp_nonce_field('embm_info_save', 'embm_info_save_nonce');
 
-    ?>
+?>
     <table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
@@ -349,7 +412,7 @@ function EMBM_Core_Meta_info()
                         <div class="embm-more-info">
                             <p><label for="untappd"><strong><?php _e('Untappd Beer ID', 'embm'); ?></strong></label><br />
                             <input type="number" name="untappd" id="untappd" value="<?php echo $b_untap; ?>" />
-                            <span class="whats-this"><a href="#TB_inline?width=550&amp;height=450&amp;inlineId=embm-untappd-id-box" class="thickbox" title="<?php _e('EM Beer Manager Help', 'embm'); ?>">?</a></span></p>
+                            <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a></p>
                         </div>
                     <?php endif; ?>
 
@@ -367,19 +430,7 @@ function EMBM_Core_Meta_info()
             </tr>
         </tbody>
     </table>
-
-    <?php add_thickbox(); ?>
-
-    <div id="embm-untappd-id-box" style="display:none;">
-        <h2><?php _e('Untappd Integration', 'embm'); ?></h2>
-        <p><?php _e('Checking the "Disable Untappd integration" option under the "EM Beer Manager" settings, will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm'); ?></p>
-        <p><?php _e('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm'); ?></p>
-        <h2><?php _e('Untappd Beer ID', 'embm'); ?></h2>
-        <p><?php _e('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this:', 'embm'); ?></p>
-        <p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p>
-        <p><?php _e('The string of numbers at the end of the URL is your beer\'s ID.', 'embm'); ?></p>
-    </div>
-    <?php
+<?php
 }
 
 /**
