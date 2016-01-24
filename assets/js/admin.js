@@ -30,21 +30,10 @@
 jQuery(document).ready(function ($) {
     'use strict';
 
-    // Keep page at top on tab change
-    function stayAtTop() {
-        // Execute immediately
-        window.scrollTo(0, 0);
-
-        // Delay for browser compatibility
-        setTimeout(function () {
-            window.scrollTo(0, 0);
-        }, 1);
-    }
-
     // Check for a hash in the URL
     if (location.hash) {
         // Don't jump to div
-        stayAtTop();
+        $(document.body).scrollTop(0);
 
         // Get hash without #
         var hash = location.hash.slice(1);
@@ -60,7 +49,7 @@ jQuery(document).ready(function ($) {
     $('#embm-settings--tabs').tabs({
         activate: function (ignore, ui) {
             // Don't jump to div
-            stayAtTop();
+            $(document.body).scrollTop(0);
 
             // Get tab links
             var new_tab = ui.newTab.find('.nav-tab'),
@@ -73,6 +62,9 @@ jQuery(document).ready(function ($) {
 
             // Reset URL hash
             location.hash = new_hash;
+
+            // Don't jump to div
+            $(document.body).scrollTop(0);
         }
     });
 
