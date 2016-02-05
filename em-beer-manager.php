@@ -89,7 +89,7 @@ load_plugin_textdomain(
 function EMBM_Plugin_activate()
 {
     // Set current version
-    $embm_curr_version = '2.0.0';
+    $embm_curr_version = '2.0.1';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {

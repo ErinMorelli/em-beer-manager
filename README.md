@@ -38,13 +38,9 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.0.0 - Major Release](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.0.0.zip) ###
-* Massive admin settings page layout overhaul
-* Added new "Restore Styles" button to admin settings page
-* Renamed template tag functions and restructured input format
-* Improved overall CSS to be more compatible with custom themes
-* Lots of under-the-hood code improvements and cleanup
-* Updated localization POT
+### [Version 2.0.1 - Bug Fixes](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.0.1.zip) ###
+* Fixed an issue with the `[beer]` shortcode where debugging output was being output
+* Fixed issue where the option to enable/disable comments was not being saved in the admin settings
 
 
 

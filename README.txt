@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.4.1
-Stable tag: 2.0.0
+Tested up to: 4.4.2
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -200,6 +200,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 2.0.1 =
+* Fixed an issue with the `[beer]` shortcode where debugging output was being output
+* Fixed issue where the option to enable/disable comments was not being saved in the admin settings
+
 = 2.0.0 =
 * Massive admin settings page layout overhaul
 * Added new "Restore Styles" button to admin settings page
@@ -277,6 +281,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+Fixed broken beer shortcode output
 
 = 2.0.0 =
 Added "Restore Styles" feature, improved template tag functions, improved CSS compatibility

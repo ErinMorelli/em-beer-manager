@@ -447,8 +447,9 @@ function EMBM_Admin_Settings_Style_display()
  */
 function EMBM_Admin_Settings_Single_comments()
 {
-    $use_comments = null;
+    $options = get_option('embm_options');
 
+    $use_comments = null;
     if (isset($options['embm_comment_check'])) {
         $use_comments = $options['embm_comment_check'];
     }
