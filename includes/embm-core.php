@@ -55,7 +55,6 @@ function EMBM_Core_beer()
         'has-archive'       => true,
         'menu_position'     => 5,
         'show_in_rest'       => true,
-        'rest_base'          => 'beer-api',
         'rest_controller_class' => 'WP_REST_Posts_Controller',
         'rewrite'           => array(
             'slug'          => 'beers',
