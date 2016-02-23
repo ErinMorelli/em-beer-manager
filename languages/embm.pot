@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the EM Beer Manager package.
 msgid ""
 msgstr ""
-"Project-Id-Version: EM Beer Manager 2.0.0\n"
+"Project-Id-Version: EM Beer Manager 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/em-beer-manager\n"
-"POT-Creation-Date: 2016-01-19 15:27:12+00:00\n"
+"POT-Creation-Date: 2016-02-23 19:36:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,12 +12,12 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: em-beer-manager.php:252 includes/embm-admin.php:541
+#: em-beer-manager.php:252 includes/embm-admin.php:542
 msgid "Settings"
 msgstr ""
 
 #: includes/actions/reset-styles.php:34 includes/actions/reset-styles.php:47
-#: includes/embm-admin.php:495
+#: includes/embm-admin.php:496
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
@@ -65,9 +65,9 @@ msgstr ""
 msgid "EM Beer Manager Settings"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (EM Beer Manager 2.0.0)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (EM Beer Manager 2.0.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: includes/embm-admin.php:247 includes/embm-admin.php:535
+#: includes/embm-admin.php:247 includes/embm-admin.php:536
 msgid "EM Beer Manager"
 msgstr ""
 
@@ -180,215 +180,215 @@ msgstr ""
 msgid "Hide \"extras\" info on styles pages"
 msgstr ""
 
-#: includes/embm-admin.php:457
+#: includes/embm-admin.php:458
 msgid "Enable comments on single beer pages"
 msgstr ""
 
-#: includes/embm-admin.php:475
+#: includes/embm-admin.php:476
 msgid "Hide \"profile\" info on single beer pages"
 msgstr ""
 
-#: includes/embm-admin.php:482
+#: includes/embm-admin.php:483
 msgid "Hide \"extras\" info on single beer pages"
 msgstr ""
 
-#: includes/embm-admin.php:504
+#: includes/embm-admin.php:505
 msgid "Restore EM Beer Manager Styles"
 msgstr ""
 
-#: includes/embm-admin.php:506
+#: includes/embm-admin.php:507
 msgid ""
 "This will restore any missing or deleted beer styles from the pre-loaded "
 "BeerAdvocate list."
 msgstr ""
 
-#: includes/embm-admin.php:507
+#: includes/embm-admin.php:508
 msgid ""
 "Your custom or modified styles will <span class=\"emphasis\">NOT</span> be "
 "affected by this action."
 msgstr ""
 
-#: includes/embm-admin.php:508
+#: includes/embm-admin.php:509
 msgid "Do you wish to proceed?"
 msgstr ""
 
-#: includes/embm-admin.php:513
+#: includes/embm-admin.php:514
 msgid "YES"
 msgstr ""
 
-#: includes/embm-admin.php:514
+#: includes/embm-admin.php:515
 msgid "NO"
 msgstr ""
 
-#: includes/embm-admin.php:524
+#: includes/embm-admin.php:525
 msgid "<strong>Success!</strong> Your beer styles have been restored."
 msgstr ""
 
-#: includes/embm-admin.php:542
+#: includes/embm-admin.php:543
 msgid "Usage"
 msgstr ""
 
-#: includes/embm-admin.php:552
+#: includes/embm-admin.php:553
 msgid "Save Changes"
 msgstr ""
 
-#: includes/embm-admin.php:559
+#: includes/embm-admin.php:560
 msgid "Single Beer Display"
 msgstr ""
 
-#: includes/embm-admin.php:561
+#: includes/embm-admin.php:562
 msgid "These will display a single beer entry given it's ID number."
 msgstr ""
 
-#: includes/embm-admin.php:563 includes/embm-admin.php:619
+#: includes/embm-admin.php:564 includes/embm-admin.php:620
 msgid "Shortcode"
 msgstr ""
 
-#: includes/embm-admin.php:569 includes/embm-admin.php:625
+#: includes/embm-admin.php:570 includes/embm-admin.php:626
 msgid "Template tag"
 msgstr ""
 
-#: includes/embm-admin.php:573
+#: includes/embm-admin.php:574
 msgid ""
 "Where <code>$beer_id</code> is required and <code>$args</code> is a PHP "
 "array of comma-separated <code>key => value</code> pairs. For example:"
 msgstr ""
 
-#: includes/embm-admin.php:584 includes/embm-admin.php:642
+#: includes/embm-admin.php:585 includes/embm-admin.php:643
 msgid "Options"
 msgstr ""
 
-#: includes/embm-admin.php:586 includes/embm-admin.php:644
+#: includes/embm-admin.php:587 includes/embm-admin.php:645
 msgid "For use with both the shortcode and template code."
 msgstr ""
 
-#: includes/embm-admin.php:591 includes/embm-admin.php:649
+#: includes/embm-admin.php:592 includes/embm-admin.php:650
 msgid "Option Name"
 msgstr ""
 
-#: includes/embm-admin.php:592 includes/embm-admin.php:650
+#: includes/embm-admin.php:593 includes/embm-admin.php:651
 msgid "Values"
 msgstr ""
 
-#: includes/embm-admin.php:593 includes/embm-admin.php:651
+#: includes/embm-admin.php:594 includes/embm-admin.php:652
 msgid "Default"
 msgstr ""
 
-#: includes/embm-admin.php:594 includes/embm-admin.php:652
+#: includes/embm-admin.php:595 includes/embm-admin.php:653
 msgid "Description"
 msgstr ""
 
-#: includes/embm-admin.php:602
+#: includes/embm-admin.php:603
 msgid "Displays or hides the \"Beer Profile\" information"
 msgstr ""
 
-#: includes/embm-admin.php:608
+#: includes/embm-admin.php:609
 msgid "Displays or hides the \"More Beer Information\" section"
 msgstr ""
 
-#: includes/embm-admin.php:615
+#: includes/embm-admin.php:616
 msgid "List All Beers"
 msgstr ""
 
-#: includes/embm-admin.php:617
+#: includes/embm-admin.php:618
 msgid "These will display a formatted listing of all beers."
 msgstr ""
 
-#: includes/embm-admin.php:629
+#: includes/embm-admin.php:630
 msgid ""
 "Where <code>$args</code> is a PHP array of comma-separated <code>key => "
 "value</code> pairs. For example:"
 msgstr ""
 
-#: includes/embm-admin.php:660
+#: includes/embm-admin.php:661
 msgid "Displays or hides the \"Beer Profile\" information for each listing"
 msgstr ""
 
-#: includes/embm-admin.php:666
+#: includes/embm-admin.php:667
 msgid ""
 "Displays or hides the \"More Beer Information\" section for each listing"
 msgstr ""
 
-#: includes/embm-admin.php:670
+#: includes/embm-admin.php:671
 msgid "String of style name"
 msgstr ""
 
-#: includes/embm-admin.php:672
+#: includes/embm-admin.php:673
 msgid "Displays only beers belonging to a specific beer style"
 msgstr ""
 
-#: includes/embm-admin.php:676
+#: includes/embm-admin.php:677
 msgid "String of group name"
 msgstr ""
 
-#: includes/embm-admin.php:678
+#: includes/embm-admin.php:679
 msgid "Displays only beers belonging to a specific group"
 msgstr ""
 
-#: includes/embm-admin.php:682
+#: includes/embm-admin.php:683
 msgid "Comma-separated list of beer IDs"
 msgstr ""
 
-#: includes/embm-admin.php:684
+#: includes/embm-admin.php:685
 msgid "Hides listed beers from output"
 msgstr ""
 
-#: includes/embm-admin.php:688
+#: includes/embm-admin.php:689
 msgid "A number"
 msgstr ""
 
-#: includes/embm-admin.php:689
+#: includes/embm-admin.php:690
 msgid "Shows all beers"
 msgstr ""
 
-#: includes/embm-admin.php:690
+#: includes/embm-admin.php:691
 msgid "Paginates output and displays the given number of beers per page"
 msgstr ""
 
-#: includes/embm-admin.php:696
+#: includes/embm-admin.php:697
 msgid "Disables/enables pagination"
 msgstr ""
 
-#: includes/embm-admin.php:700
+#: includes/embm-admin.php:701
 msgid "See "
 msgstr ""
 
-#: includes/embm-admin.php:700
+#: includes/embm-admin.php:701
 msgid "this list"
 msgstr ""
 
-#: includes/embm-admin.php:700
+#: includes/embm-admin.php:701
 msgid " for options"
 msgstr ""
 
-#: includes/embm-admin.php:702
+#: includes/embm-admin.php:703
 msgid "Orders beer list output by the given paramater"
 msgstr ""
 
-#: includes/embm-admin.php:708
+#: includes/embm-admin.php:709
 msgid ""
 "Sorts beer list by <code>orderby</code> value in ascending or descending "
 "order"
 msgstr ""
 
-#: includes/embm-admin.php:717
+#: includes/embm-admin.php:718
 msgid ""
 "If you like this plugin, please consider donating to help support future "
 "development. Thank you!"
 msgstr ""
 
-#: includes/embm-admin.php:728
+#: includes/embm-admin.php:729
 msgid ""
 "Free beer icon from <a href=\"http://simpleicon.com\" title=\"simple icon"
 "\">simple icon</a>."
 msgstr ""
 
-#: includes/embm-admin.php:735 includes/embm-core.php:374
+#: includes/embm-admin.php:736 includes/embm-core.php:374
 #: includes/widgets/embm-widget-untappd.php:96
 msgid "Untappd Integration"
 msgstr ""
 
-#: includes/embm-admin.php:736 includes/embm-core.php:375
+#: includes/embm-admin.php:737 includes/embm-core.php:375
 #: includes/widgets/embm-widget-untappd.php:97
 msgid ""
 "Checking the \"Disable Untappd integration\" option under the \"EM Beer "
@@ -396,7 +396,7 @@ msgid ""
 "including per-beer check-in buttons and the Recent Check-Ins widget."
 msgstr ""
 
-#: includes/embm-admin.php:737 includes/embm-core.php:376
+#: includes/embm-admin.php:738 includes/embm-core.php:376
 #: includes/widgets/embm-widget-untappd.php:98
 msgid ""
 "You can disable the Untappd check-in button for an individual beer by simply "
@@ -404,34 +404,34 @@ msgid ""
 "display a square Untappd icon next to their entry on the Beers admin page."
 msgstr ""
 
-#: includes/embm-admin.php:741
+#: includes/embm-admin.php:742
 msgid "Settings FAQ"
 msgstr ""
 
-#: includes/embm-admin.php:742
+#: includes/embm-admin.php:743
 msgid ""
 "I don't want to show that big grey box of information, how do I get rid of "
 "it?"
 msgstr ""
 
-#: includes/embm-admin.php:743
+#: includes/embm-admin.php:744
 msgid ""
 "For each of the different displays there is the option to \"Hide extras info"
 "\" and \"Hide extras info\". Check both of these to hide the grey box."
 msgstr ""
 
-#: includes/embm-admin.php:744
+#: includes/embm-admin.php:745
 msgid "What's the difference between \"profile\" and \"extras\"?"
 msgstr ""
 
-#: includes/embm-admin.php:745
+#: includes/embm-admin.php:746
 msgid ""
 "The \"profile\" refers to all the content in the \"Beer Profile\" "
 "information stored for each beer. This includes ABV, IBU, Hops, Malts, "
 "Additions, and Yeast."
 msgstr ""
 
-#: includes/embm-admin.php:746
+#: includes/embm-admin.php:747
 msgid ""
 "The \"extras\" setting refers to the \"More Beer Information\" content "
 "stored for each beer, excluding the Untappd check-in button, which is "
@@ -604,43 +604,43 @@ msgstr ""
 msgid "Add or remove groups"
 msgstr ""
 
-#: includes/embm-output.php:422
+#: includes/embm-output.php:420
 msgid "More..."
 msgstr ""
 
-#: includes/embm-output.php:537
+#: includes/embm-output.php:535
 msgid "ABV:"
 msgstr ""
 
-#: includes/embm-output.php:543
+#: includes/embm-output.php:541
 msgid "IBU:"
 msgstr ""
 
-#: includes/embm-output.php:549
+#: includes/embm-output.php:547
 msgid "Malts:"
 msgstr ""
 
-#: includes/embm-output.php:555
+#: includes/embm-output.php:553
 msgid "Hops:"
 msgstr ""
 
-#: includes/embm-output.php:561
+#: includes/embm-output.php:559
 msgid "Other:"
 msgstr ""
 
-#: includes/embm-output.php:567
+#: includes/embm-output.php:565
 msgid "Yeast:"
 msgstr ""
 
-#: includes/embm-output.php:615
+#: includes/embm-output.php:613
 msgid "Beer Number:"
 msgstr ""
 
-#: includes/embm-output.php:621
+#: includes/embm-output.php:619
 msgid "Availability:"
 msgstr ""
 
-#: includes/embm-output.php:627
+#: includes/embm-output.php:625
 msgid "Additional Notes"
 msgstr ""
 
