@@ -87,8 +87,6 @@ function EMBM_Output_Beer_display($post_id, $input=array())
         }
     }
 
-    echo var_dump($args);
-
     // Return formatted beer content
     return EMBM_Output_Beer_load($args);
 }

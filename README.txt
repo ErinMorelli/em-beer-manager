@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.4.1
-Stable tag: 2.0.0
+Tested up to: 4.4.2
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,7 +157,7 @@ Use the `[beer-list]` shortcode inside the WordPress page editor to add a list o
 
 You can display only beers from a single group using the `group` option, e.g.: `[beer-list group="Seasonal Beers"]`
 
-You can display only beers from a single style using the `style` option, e.g.: `[beer-list style="India Pale Ale"]
+You can display only beers from a single style using the `style` option, e.g.: `[beer-list style="India Pale Ale"]`
 
 
 = I don't want to show that big grey box of information, how do I get rid of it? =
@@ -199,6 +199,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 2.0.1 =
+* Fixed an issue with the `[beer]` shortcode where debugging output was being output
+* Fixed issue where the option to enable/disable comments was not being saved in the admin settings
 
 = 2.0.0 =
 * Massive admin settings page layout overhaul
@@ -277,6 +281,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+Fixed broken beer shortcode output
 
 = 2.0.0 =
 Added "Restore Styles" feature, improved template tag functions, improved CSS compatibility
