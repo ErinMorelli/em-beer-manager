@@ -54,7 +54,8 @@ function EMBM_Core_beer()
         'taxonomies'        => array('embm_style', 'embm_group'),
         'has-archive'       => true,
         'menu_position'     => 5,
-        'show_in_rest'       => true,
+        'show_in_rest'      => true,
+        'rest_base'         => 'beer',
         'rest_controller_class' => 'WP_REST_Posts_Controller',
         'rewrite'           => array(
             'slug'          => 'beers',
@@ -506,7 +507,10 @@ function EMBM_Core_styles()
         'rewrite'           => array(
             'slug'          => 'beers/style',
             'with_front'    => false
-        )
+        ),
+        'show_in_rest'       => true,
+        'rest_base'          => 'style',
+        'rest_controller_class' => 'WP_REST_Terms_Controller',
     );
 
     // Register the styles taxonomy with the EMBM custom post type
@@ -596,7 +600,10 @@ function EMBM_Core_group()
         'rewrite'           => array(
             'slug'          => $group_slug,
             'with_front'    => false
-        )
+        ),
+        'show_in_rest'       => true,
+        'rest_base'          => 'group',
+        'rest_controller_class' => 'WP_REST_Terms_Controller',
     );
 
     // Register the group taxonomy with the EMBM custom post type
