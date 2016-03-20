@@ -123,8 +123,17 @@ function EMBM_Admin_Columns_values($column, $post_id)
         echo $post_id;
         break;
     case 'beer_num':
-        // Display formatted beer number
-        echo EMBM_Core_Beer_attr($post_id, 'beer_num');
+        // Get raw beer no
+        $beer_num = get_post_meta($post_id, 'beer_num', true);
+
+        // Check if it's defined
+        if ($beer_num != '') {
+            // Display formatted beer number
+            echo EMBM_Core_Beer_attr($post_id, 'beer_num');
+        } else {
+            echo '';
+        }
+
         break;
     case 'abv':
         // Display formatted beer ABV
