@@ -84,110 +84,6 @@ add_theme_support('post-thumbnails', array('embm_beer'));
 
 
 /**
- * Register custom beer fields with WP API
- *
- * @return void
- */
-function EMBM_Core_Beer_api()
-{
-    // Set API field options
-    $field_options = array(
-        'get_callback'    => 'EMBM_Core_Beer_Api_get',
-        'update_callback' => 'EMBM_Core_Beer_Api_post',
-        'schema'          => null,
-    );
-
-    // Register profile API field
-    register_rest_field('embm_beer', 'profile', $field_options);
-
-    // Register extras API field
-    register_rest_field('embm_beer', 'extras', $field_options);
-
-    // Retrieve Untappd settings
-    $ut_option = get_option('embm_options');
-
-    // Check if Untappd is disabled
-    if (!isset($ut_option['embm_untappd_check'])) {
-        // Register Untappd URL API field
-        register_rest_field('embm_beer', 'untappd', $field_options);
-    }
-}
-
-// Load additional WP API fields
-add_action('rest_api_init', 'EMBM_Core_Beer_api');
-
-
-/**
- * Handle GET requests for additional beer fields
- *
- * @param object $object     The WP object being requested
- * @param string $field_name The name of the API field requested
- * @param object $request    The HTTP request object
- *
- * @return string/array
- */
-function EMBM_Core_Beer_Api_get($object, $field_name, $request)
-{
-    // Get the beer id
-    $beer_id = $object['id'];
-
-    // Return beer profile data
-    if ($field_name == 'profile') {
-        return array(
-            'abv'       => intval(get_post_meta($beer_id, 'abv', true)),
-            'ibu'       => intval(EMBM_Core_Beer_attr($beer_id, 'ibu')),
-            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
-            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
-            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
-            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast')
-        );
-    }
-
-    // Return beer extras data
-    if ($field_name == 'extras') {
-        return array(
-            'beer_number'   => intval(get_post_meta($beer_id, 'beer_num', true)),
-            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
-            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes')
-        );
-    }
-
-    // Return beer Untappd information
-    if ($field_name == 'untappd') {
-        // Get Untappd info
-        $untappd_id = intval(get_post_meta($beer_id, 'untappd', true));
-        $untappd_link = EMBM_Core_Beer_attr($beer_id, 'untappd');
-
-        // Account for no ID
-        if ($untappd_id == '') {
-            $untappd_link = '';
-        }
-
-        // Return formatted info
-        return array(
-            'id'    => $untappd_id,
-            'link'  => $untappd_link
-        );
-    }
-}
-
-
-/**
- * Handle POST requests for additional beer fields
- *
- * @param object $object     The WP object being requested
- * @param string $field_name The name of the API field requested
- * @param object $request    The HTTP request object
- *
- * @return string/array
- */
-function EMBM_Core_Beer_Api_post($object, $field_name, $request)
-{
-    return;
-}
-
-
-/**
  * Determine comment open/closed status
  *
  * @param bool $open    Current open/closed status
@@ -758,3 +654,177 @@ function EMBM_Core_group()
 
 // Loads the custom Group taxonomy
 add_action('init', 'EMBM_Core_group', 0);
+
+
+/**
+ * Register custom beer fields with WP API
+ *
+ * @return void
+ */
+function EMBM_Core_Beer_api()
+{
+    // Set API field options
+    $field_options = array(
+        'get_callback'    => 'EMBM_Core_Beer_Api_get',
+        'update_callback' => 'EMBM_Core_Beer_Api_update',
+        'schema'          => null,
+    );
+
+    // Register profile API field
+    register_rest_field('embm_beer', 'profile', $field_options);
+
+    // Register extras API field
+    register_rest_field('embm_beer', 'extras', $field_options);
+
+    // Retrieve Untappd settings
+    $ut_option = get_option('embm_options');
+
+    // Check if Untappd is disabled
+    if (isset($ut_option['embm_untappd_check'])) {
+        // Register Untappd URL API field
+        register_rest_field('embm_beer', 'untappd', $field_options);
+    }
+}
+
+// Load additional WP API fields
+add_action('rest_api_init', 'EMBM_Core_Beer_api');
+
+/**
+ * Handle GET requests for additional beer fields
+ *
+ * @param object $object     The WP object being requested
+ * @param string $field_name The name of the API field requested
+ * @param object $request    The HTTP request object
+ *
+ * @return string/array
+ */
+function EMBM_Core_Beer_Api_get($object, $field_name, $request)
+{
+    // Get the beer id
+    $beer_id = $object['id'];
+
+    // Return beer profile data
+    if ($field_name == 'profile') {
+        // Set up return array
+        $profile_array = array(
+            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
+            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
+            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
+            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast')
+        );
+
+        // Get int vals
+        $abv = intval(get_post_meta($beer_id, 'abv', true));
+        $ibu = intval(EMBM_Core_Beer_attr($beer_id, 'ibu'));
+
+        // Set int vals
+        $profile_array['abv'] = ($abv == 0) ? null : $abv;
+        $profile_array['ibu'] = ($ibu == 0) ? null : $ibu;
+
+        // Return formatted info
+        return $profile_array;
+    }
+
+    // Return beer extras data
+    if ($field_name == 'extras') {
+        // Set up return array
+        $extras_array = array(
+            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
+            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes')
+        );
+
+        // Get int vals
+        $beer_num = intval(get_post_meta($beer_id, 'beer_num', true));
+
+        // Set int fals
+        $extras_array['beer_number'] = ($beer_num == 0) ? null : $beer_num;
+
+        // Return formatted array
+        return $extras_array;
+    }
+
+    // Return beer Untappd information
+    if ($field_name == 'untappd') {
+        // Get Untappd id
+        $raw_id = intval(get_post_meta($beer_id, 'untappd', true));
+
+        // Set up array
+        $untappd_array = array();
+
+        // Set Untappd id
+        $untappd_array['id'] = ($raw_id == 0) ? null : $raw_id;
+
+        // Set Untappd link
+        if ($raw_id != 0) {
+            $untappd_array['link'] = EMBM_Core_Beer_attr($beer_id, 'untappd');
+        }
+
+        // Return formatted info
+        return $untappd_array;
+    }
+}
+
+/**
+ * Handle PUT/POST requests for additional beer fields
+ *
+ * @param mixed  $value      The value of the field
+ * @param object $object     The object from the response
+ * @param string $field_name Name of field
+ *
+ * @return string/array
+ */
+function EMBM_Core_Beer_Api_update($value, $object, $field_name)
+{
+    // Check for valid entry
+    if (!$value || !is_array($value)) {
+        return;
+    }
+
+    // Get the beer id
+    $beer_id = $object->ID;
+
+    // Return beer profile data
+    if ($field_name == 'profile') {
+        // Save input
+        if (isset($value['malts']) && is_string($value['malts'])) {
+            update_post_meta($beer_id, 'malts', esc_attr($value['malts']));
+        }
+        if (isset($value['hops']) && is_string($value['hops'])) {
+            update_post_meta($beer_id, 'hops', esc_attr($value['hops']));
+        }
+        if (isset($value['additions']) && is_string($value['additions'])) {
+            update_post_meta($beer_id, 'adds', esc_attr($value['additions']));
+        }
+        if (isset($value['yeast']) && is_string($value['yeast'])) {
+            update_post_meta($beer_id, 'yeast', esc_attr($value['yeast']));
+        }
+        if (isset($value['ibu']) && is_int($value['ibu'])) {
+            update_post_meta($beer_id, 'ibu', esc_attr($value['ibu']));
+        }
+        if (isset($value['abv']) && is_int($value['abv'])) {
+            update_post_meta($beer_id, 'abv', esc_attr($value['abv']));
+        }
+    }
+
+    // Return beer extras data
+    if ($field_name == 'extras') {
+        // Save input
+        if (isset($value['beer_number']) && is_int($value['beer_number'])) {
+            update_post_meta($beer_id, 'beer_num', esc_attr($value['beer_number']));
+        }
+        if (isset($value['availability']) && is_string($value['availability'])) {
+            update_post_meta($beer_id, 'avail', esc_attr($value['availability']));
+        }
+        if (isset($value['notes']) && is_string($value['notes'])) {
+            update_post_meta($beer_id, 'notes', esc_attr($value['notes']));
+        }
+    }
+
+    // Return beer Untappd information
+    if ($field_name == 'untappd') {
+        // Save input
+        if (isset($value['id']) && is_int($value['id'])) {
+            update_post_meta($beer_id, 'untappd', esc_attr($value['id']));
+        }
+    }
+}

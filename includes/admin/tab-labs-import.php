@@ -27,7 +27,7 @@ $token = get_option('embm_untappd_token');
 if (!$token || $token == '') {
 ?>
     <p>
-        <button class="embm-labs--authorize-button button-secondary">Log In to Authorize Untappd</button>
+        <button class="embm-labs--authorize-button button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
     </p>
 <?php
     return;
@@ -44,6 +44,8 @@ function EMBM_Admin_Labs_Import_deauthorize()
     // Deauthorize user
     delete_option('embm_untappd_token');
     delete_option('embm_untappd_brewery_id');
+
+    // Display error message
 ?>
     <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
     <p>
@@ -66,41 +68,47 @@ $user = $user_res->response->user;
 // Check for brewery account
 if ($user->account_type != 'brewery') {
     // Deauthorize user
-    EMBM_Admin_Labs_Import_deauthorize()
-} else {
-    // Get brewery ID
-    $brewery_id = get_option('embm_untappd_brewery_id');
+    EMBM_Admin_Labs_Import_deauthorize();
+    return;
+}
 
-    if (!$brewery_id || $brewery_id == '') {
-        // Set up RSS feed regex to retrieve brewery ID
-        $rss_regex = '/<p class="rss"><a href="\/rss\/brewery\/(\d+)">/';
+// Get brewery ID
+$brewery_id = get_option('embm_untappd_brewery_id');
 
-        // Get brewery page contents
-        $brewery_page = file_get_contents($user->untappd_url);
+if (!$brewery_id || $brewery_id == '') {
+    // Set up RSS feed regex to retrieve brewery ID
+    $rss_regex = '/<p class="rss"><a href="\/rss\/brewery\/(\d+)">/';
 
-        // Look for ID
-        preg_match($rss_regex, $brewery_page, $matches);
+    // Get brewery page contents
+    $brewery_page = file_get_contents($user->untappd_url);
 
-        // Store ID
-        $brewery_id = $matches[1];
-        update_option('embm_untappd_brewery_id', $matches[1]);
-    }
+    // Look for ID
+    preg_match($rss_regex, $brewery_page, $matches);
 
-    // Get brewery info from API
-    $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
-    $brewery_res = json_decode(file_get_contents($brewery_url));
-    $brewery = $brewery_res->response->brewery;
+    // Store ID
+    $brewery_id = $matches[1];
+    update_option('embm_untappd_brewery_id', $matches[1]);
+}
 
-    // Make sure brewery is claimed by authorized user
-    if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
-        // Deauthorize user
-        EMBM_Admin_Labs_Import_deauthorize();
-    }
+// Get brewery info from API
+$brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
+$brewery_res = json_decode(file_get_contents($brewery_url));
+$brewery = $brewery_res->response->brewery;
+
+// Make sure brewery is claimed by authorized user
+if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
+    // Deauthorize user
+    EMBM_Admin_Labs_Import_deauthorize();
+    return;
+}
+
+// Display import options
 ?>
     <p>
         <?php _e('You are authorized as'); ?>:
         <a href="<?php echo $user->untappd_url; ?>" target="_blank" class="embm-untappd--user-link">
-            <strong><?php echo $user->first_name; ?></strong> <small>(<a href="#" class="embm-untappd--deauthorize">Deauthorize</a>)</small>
+            <strong><?php echo $user->first_name; ?></strong>
+            <small>(<a href="#" class="embm-untappd--deauthorize"><?php _e('Deauthorize', 'embm'); ?></a>)</small>
         </a>
     </p>
 
@@ -138,7 +146,3 @@ if ($user->account_type != 'brewery') {
             </tr>
         </tbody>
     </table>
-<?php
-}
-
-?>
