@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the EM Beer Manager package.
 msgid ""
 msgstr ""
-"Project-Id-Version: EM Beer Manager 2.0.1\n"
+"Project-Id-Version: EM Beer Manager 2.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/em-beer-manager\n"
-"POT-Creation-Date: 2016-02-23 19:36:37+00:00\n"
+"POT-Creation-Date: 2016-03-20 04:24:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,430 +12,460 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: em-beer-manager.php:252 includes/embm-admin.php:542
+#: em-beer-manager.php:253 includes/embm-admin.php:652
 msgid "Settings"
 msgstr ""
 
-#: includes/actions/reset-styles.php:34 includes/actions/reset-styles.php:47
-#: includes/embm-admin.php:496
+#: em-beer-manager.php:380
+msgid "Untappd Integration"
+msgstr ""
+
+#: em-beer-manager.php:387
+msgid "For more information:"
+msgstr ""
+
+#: em-beer-manager.php:388
+msgid "Plugin Website"
+msgstr ""
+
+#: em-beer-manager.php:389
+msgid "Support Forums"
+msgstr ""
+
+#: includes/admin/action-import-beer.php:34
+#: includes/admin/action-import-beer.php:208
+#: includes/admin/action-reset-styles.php:34
+#: includes/admin/action-reset-styles.php:47 includes/embm-admin.php:594
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: includes/embm-admin.php:60
-msgid "ID"
+#: includes/admin/tab-labs-import.php:50
+msgid "Sorry, Untappd importing is only supported for brewery accounts."
 msgstr ""
 
-#: includes/embm-admin.php:61
-msgid "Beer No."
+#: includes/admin/tab-labs-import.php:81
+msgid "You are authorized as"
 msgstr ""
 
-#: includes/embm-admin.php:62 includes/embm-core.php:33
-msgid "Beer"
+#: includes/admin/tab-labs-import.php:90
+msgid "Import single beer"
 msgstr ""
 
-#: includes/embm-admin.php:63 includes/embm-core.php:563
-msgid "Group"
+#: includes/admin/tab-labs-import.php:101
+msgid "Import"
 msgstr ""
 
-#: includes/embm-admin.php:64 includes/embm-core.php:483
-msgid "Style"
+#: includes/admin/tab-labs-import.php:107
+msgid "Import all beers"
 msgstr ""
 
-#: includes/embm-admin.php:65 includes/embm-core.php:250
-msgid "ABV"
+#: includes/admin/tab-labs-import.php:114
+msgid "Import All"
 msgstr ""
 
-#: includes/embm-admin.php:66 includes/embm-core.php:252
-msgid "IBU"
+#: includes/admin/tab-labs.php:42
+msgid "WARNING"
 msgstr ""
 
-#: includes/embm-admin.php:67 includes/embm-core.php:357
-msgid "Availability"
+#: includes/admin/tab-labs.php:44
+msgid "The features on this page are experimental"
 msgstr ""
 
-#: includes/embm-admin.php:82
-msgid "Untappd"
+#: includes/admin/tab-labs.php:45
+msgid "Use at your own risk"
 msgstr ""
 
-#: includes/embm-admin.php:86
-msgid "Released"
-msgstr ""
-
-#: includes/embm-admin.php:246
-msgid "EM Beer Manager Settings"
-msgstr ""
-
-#. #-#-#-#-#  plugin.pot (EM Beer Manager 2.0.1)  #-#-#-#-#
-#. Plugin Name of the plugin/theme
-#: includes/embm-admin.php:247 includes/embm-admin.php:536
-msgid "EM Beer Manager"
-msgstr ""
-
-#: includes/embm-admin.php:269
-msgid "Global Settings"
-msgstr ""
-
-#: includes/embm-admin.php:270
-msgid "Custom stylesheet"
-msgstr ""
-
-#: includes/embm-admin.php:271
-msgid "Untappd settings"
-msgstr ""
-
-#: includes/embm-admin.php:272 includes/embm-admin.php:277
-#: includes/embm-admin.php:282 includes/embm-admin.php:287
-msgid "Display settings"
-msgstr ""
-
-#: includes/embm-admin.php:275
-msgid "Group Settings"
-msgstr ""
-
-#: includes/embm-admin.php:276
-msgid "Custom taxonomy slug"
-msgstr ""
-
-#: includes/embm-admin.php:280
-msgid "Style Settings"
-msgstr ""
-
-#: includes/embm-admin.php:281
-msgid "Restore styles"
-msgstr ""
-
-#: includes/embm-admin.php:285
-msgid "Single Page Settings"
-msgstr ""
-
-#: includes/embm-admin.php:286
-msgid "Comments"
-msgstr ""
-
-#: includes/embm-admin.php:313
-msgid "Override default EM Beer Manager CSS with your own stylesheet."
-msgstr ""
-
-#: includes/embm-admin.php:315
-msgid "Enter a full URL that points to the stylesheet file."
-msgstr ""
-
-#: includes/embm-admin.php:333
-msgid "Disable Untappd integration"
-msgstr ""
-
-#: includes/embm-admin.php:334 includes/embm-admin.php:353
-#: includes/embm-admin.php:362 includes/embm-core.php:352
-#: includes/widgets/embm-widget-untappd.php:86
-msgid "EM Beer Manager Help"
-msgstr ""
-
-#: includes/embm-admin.php:352
-msgid "Globally hide \"profile\" info"
-msgstr ""
-
-#: includes/embm-admin.php:361
-msgid "Globally hide \"extras\" info"
-msgstr ""
-
-#: includes/embm-admin.php:374
+#: includes/admin/tab-labs.php:49
 msgid ""
-"Rename the beer group URLs with your own custom slug name.<br />By default "
-"URLs will look like:"
+"If you encounter any problems when using these features, please report them "
+"to"
 msgstr ""
 
-#: includes/embm-admin.php:376
-msgid "You will need to refresh your permalinks "
+#: includes/admin/tab-labs.php:55
+msgid "Import from Untappd"
 msgstr ""
 
-#: includes/embm-admin.php:376
-msgid "here"
-msgstr ""
-
-#: includes/embm-admin.php:376
-msgid " after updating this setting."
-msgstr ""
-
-#: includes/embm-admin.php:394
-msgid "Hide \"profile\" info in groups"
-msgstr ""
-
-#: includes/embm-admin.php:402
-msgid "Hide \"extras\" info in groups"
-msgstr ""
-
-#: includes/embm-admin.php:412
-msgid "Restore missing or deleted beer styles from the pre-loaded list."
-msgstr ""
-
-#: includes/embm-admin.php:413
-msgid "Restore Styles"
-msgstr ""
-
-#: includes/embm-admin.php:431
-msgid "Hide \"profile\" info on styles pages"
-msgstr ""
-
-#: includes/embm-admin.php:440
-msgid "Hide \"extras\" info on styles pages"
-msgstr ""
-
-#: includes/embm-admin.php:458
-msgid "Enable comments on single beer pages"
-msgstr ""
-
-#: includes/embm-admin.php:476
-msgid "Hide \"profile\" info on single beer pages"
-msgstr ""
-
-#: includes/embm-admin.php:483
-msgid "Hide \"extras\" info on single beer pages"
-msgstr ""
-
-#: includes/embm-admin.php:505
-msgid "Restore EM Beer Manager Styles"
-msgstr ""
-
-#: includes/embm-admin.php:507
-msgid ""
-"This will restore any missing or deleted beer styles from the pre-loaded "
-"BeerAdvocate list."
-msgstr ""
-
-#: includes/embm-admin.php:508
-msgid ""
-"Your custom or modified styles will <span class=\"emphasis\">NOT</span> be "
-"affected by this action."
-msgstr ""
-
-#: includes/embm-admin.php:509
-msgid "Do you wish to proceed?"
-msgstr ""
-
-#: includes/embm-admin.php:514
-msgid "YES"
-msgstr ""
-
-#: includes/embm-admin.php:515
-msgid "NO"
-msgstr ""
-
-#: includes/embm-admin.php:525
-msgid "<strong>Success!</strong> Your beer styles have been restored."
-msgstr ""
-
-#: includes/embm-admin.php:543
-msgid "Usage"
-msgstr ""
-
-#: includes/embm-admin.php:553
-msgid "Save Changes"
-msgstr ""
-
-#: includes/embm-admin.php:560
+#: includes/admin/tab-usage.php:24
 msgid "Single Beer Display"
 msgstr ""
 
-#: includes/embm-admin.php:562
+#: includes/admin/tab-usage.php:26
 msgid "These will display a single beer entry given it's ID number."
 msgstr ""
 
-#: includes/embm-admin.php:564 includes/embm-admin.php:620
+#: includes/admin/tab-usage.php:28 includes/admin/tab-usage.php:86
 msgid "Shortcode"
 msgstr ""
 
-#: includes/embm-admin.php:570 includes/embm-admin.php:626
+#: includes/admin/tab-usage.php:34 includes/admin/tab-usage.php:92
 msgid "Template tag"
 msgstr ""
 
-#: includes/embm-admin.php:574
+#: includes/admin/tab-usage.php:38
 msgid ""
 "Where <code>$beer_id</code> is required and <code>$args</code> is a PHP "
 "array of comma-separated <code>key => value</code> pairs. For example:"
 msgstr ""
 
-#: includes/embm-admin.php:585 includes/embm-admin.php:643
+#: includes/admin/tab-usage.php:51 includes/admin/tab-usage.php:111
 msgid "Options"
 msgstr ""
 
-#: includes/embm-admin.php:587 includes/embm-admin.php:645
+#: includes/admin/tab-usage.php:53 includes/admin/tab-usage.php:113
 msgid "For use with both the shortcode and template code."
 msgstr ""
 
-#: includes/embm-admin.php:592 includes/embm-admin.php:650
+#: includes/admin/tab-usage.php:58 includes/admin/tab-usage.php:118
 msgid "Option Name"
 msgstr ""
 
-#: includes/embm-admin.php:593 includes/embm-admin.php:651
+#: includes/admin/tab-usage.php:59 includes/admin/tab-usage.php:119
 msgid "Values"
 msgstr ""
 
-#: includes/embm-admin.php:594 includes/embm-admin.php:652
+#: includes/admin/tab-usage.php:60 includes/admin/tab-usage.php:120
 msgid "Default"
 msgstr ""
 
-#: includes/embm-admin.php:595 includes/embm-admin.php:653
+#: includes/admin/tab-usage.php:61 includes/admin/tab-usage.php:121
 msgid "Description"
 msgstr ""
 
-#: includes/embm-admin.php:603
+#: includes/admin/tab-usage.php:69
 msgid "Displays or hides the \"Beer Profile\" information"
 msgstr ""
 
-#: includes/embm-admin.php:609
+#: includes/admin/tab-usage.php:75
 msgid "Displays or hides the \"More Beer Information\" section"
 msgstr ""
 
-#: includes/embm-admin.php:616
+#: includes/admin/tab-usage.php:82
 msgid "List All Beers"
 msgstr ""
 
-#: includes/embm-admin.php:618
+#: includes/admin/tab-usage.php:84
 msgid "These will display a formatted listing of all beers."
 msgstr ""
 
-#: includes/embm-admin.php:630
+#: includes/admin/tab-usage.php:96
 msgid ""
 "Where <code>$args</code> is a PHP array of comma-separated <code>key => "
 "value</code> pairs. For example:"
 msgstr ""
 
-#: includes/embm-admin.php:661
+#: includes/admin/tab-usage.php:129
 msgid "Displays or hides the \"Beer Profile\" information for each listing"
 msgstr ""
 
-#: includes/embm-admin.php:667
+#: includes/admin/tab-usage.php:135
 msgid ""
 "Displays or hides the \"More Beer Information\" section for each listing"
 msgstr ""
 
-#: includes/embm-admin.php:671
+#: includes/admin/tab-usage.php:139
 msgid "String of style name"
 msgstr ""
 
-#: includes/embm-admin.php:673
+#: includes/admin/tab-usage.php:141
 msgid "Displays only beers belonging to a specific beer style"
 msgstr ""
 
-#: includes/embm-admin.php:677
+#: includes/admin/tab-usage.php:145
 msgid "String of group name"
 msgstr ""
 
-#: includes/embm-admin.php:679
+#: includes/admin/tab-usage.php:147
 msgid "Displays only beers belonging to a specific group"
 msgstr ""
 
-#: includes/embm-admin.php:683
+#: includes/admin/tab-usage.php:151
 msgid "Comma-separated list of beer IDs"
 msgstr ""
 
-#: includes/embm-admin.php:685
+#: includes/admin/tab-usage.php:153
 msgid "Hides listed beers from output"
 msgstr ""
 
-#: includes/embm-admin.php:689
+#: includes/admin/tab-usage.php:157
 msgid "A number"
 msgstr ""
 
-#: includes/embm-admin.php:690
+#: includes/admin/tab-usage.php:158
 msgid "Shows all beers"
 msgstr ""
 
-#: includes/embm-admin.php:691
+#: includes/admin/tab-usage.php:159
 msgid "Paginates output and displays the given number of beers per page"
 msgstr ""
 
-#: includes/embm-admin.php:697
+#: includes/admin/tab-usage.php:165
 msgid "Disables/enables pagination"
 msgstr ""
 
-#: includes/embm-admin.php:701
+#: includes/admin/tab-usage.php:169
 msgid "See "
 msgstr ""
 
-#: includes/embm-admin.php:701
+#: includes/admin/tab-usage.php:169
 msgid "this list"
 msgstr ""
 
-#: includes/embm-admin.php:701
+#: includes/admin/tab-usage.php:169
 msgid " for options"
 msgstr ""
 
-#: includes/embm-admin.php:703
+#: includes/admin/tab-usage.php:171
 msgid "Orders beer list output by the given paramater"
 msgstr ""
 
-#: includes/embm-admin.php:709
+#: includes/admin/tab-usage.php:177
 msgid ""
 "Sorts beer list by <code>orderby</code> value in ascending or descending "
 "order"
 msgstr ""
 
-#: includes/embm-admin.php:718
+#: includes/embm-admin.php:74
+msgid "ID"
+msgstr ""
+
+#: includes/embm-admin.php:75
+msgid "Beer No."
+msgstr ""
+
+#: includes/embm-admin.php:76 includes/embm-core.php:33
+msgid "Beer"
+msgstr ""
+
+#: includes/embm-admin.php:77 includes/embm-core.php:700
+msgid "Group"
+msgstr ""
+
+#: includes/embm-admin.php:78 includes/embm-core.php:617
+msgid "Style"
+msgstr ""
+
+#: includes/embm-admin.php:79 includes/embm-core.php:396
+#: includes/embm-output.php:547
+msgid "ABV"
+msgstr ""
+
+#: includes/embm-admin.php:80 includes/embm-core.php:398
+#: includes/embm-output.php:553
+msgid "IBU"
+msgstr ""
+
+#: includes/embm-admin.php:81 includes/embm-core.php:503
+#: includes/embm-output.php:631
+msgid "Availability"
+msgstr ""
+
+#: includes/embm-admin.php:96
+msgid "Untappd"
+msgstr ""
+
+#: includes/embm-admin.php:100
+msgid "Released"
+msgstr ""
+
+#: includes/embm-admin.php:279
+msgid "Settings FAQ"
+msgstr ""
+
+#: includes/embm-admin.php:308 includes/embm-core.php:316
+msgid "EM Beer Manager Settings"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (EM Beer Manager 2.1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: includes/embm-admin.php:309 includes/embm-admin.php:646
+msgid "EM Beer Manager"
+msgstr ""
+
+#: includes/embm-admin.php:334
+msgid "Global Settings"
+msgstr ""
+
+#: includes/embm-admin.php:335
+msgid "Custom stylesheet"
+msgstr ""
+
+#: includes/embm-admin.php:336 includes/embm-admin.php:346
+#: includes/embm-admin.php:351 includes/embm-admin.php:356
+msgid "Display settings"
+msgstr ""
+
+#: includes/embm-admin.php:339
+msgid "Untappd Settings"
+msgstr ""
+
+#: includes/embm-admin.php:340
+msgid "Site-wide integration"
+msgstr ""
+
+#: includes/embm-admin.php:341
+msgid "Icon set"
+msgstr ""
+
+#: includes/embm-admin.php:344
+msgid "Group Settings"
+msgstr ""
+
+#: includes/embm-admin.php:345
+msgid "Custom taxonomy slug"
+msgstr ""
+
+#: includes/embm-admin.php:349
+msgid "Style Settings"
+msgstr ""
+
+#: includes/embm-admin.php:350
+msgid "Restore styles"
+msgstr ""
+
+#: includes/embm-admin.php:354
+msgid "Single Page Settings"
+msgstr ""
+
+#: includes/embm-admin.php:355
+msgid "Comments"
+msgstr ""
+
+#: includes/embm-admin.php:382
+msgid "Override default EM Beer Manager CSS with your own stylesheet."
+msgstr ""
+
+#: includes/embm-admin.php:384
+msgid "Enter a full URL that points to the stylesheet file."
+msgstr ""
+
+#: includes/embm-admin.php:402
+msgid "Globally hide \"profile\" info"
+msgstr ""
+
+#: includes/embm-admin.php:411
+msgid "Globally hide \"extras\" info"
+msgstr ""
+
+#: includes/embm-admin.php:430
+msgid "Disable site-wide integration"
+msgstr ""
+
+#: includes/embm-admin.php:472
+msgid ""
+"Rename the beer group URLs with your own custom slug name.<br />By default "
+"URLs will look like:"
+msgstr ""
+
+#: includes/embm-admin.php:474
+msgid "You will need to refresh your permalinks "
+msgstr ""
+
+#: includes/embm-admin.php:474
+msgid "here"
+msgstr ""
+
+#: includes/embm-admin.php:474
+msgid " after updating this setting."
+msgstr ""
+
+#: includes/embm-admin.php:492
+msgid "Hide \"profile\" info in groups"
+msgstr ""
+
+#: includes/embm-admin.php:500
+msgid "Hide \"extras\" info in groups"
+msgstr ""
+
+#: includes/embm-admin.php:510
+msgid "Restore missing or deleted beer styles from the pre-loaded list."
+msgstr ""
+
+#: includes/embm-admin.php:511
+msgid "Restore Styles"
+msgstr ""
+
+#: includes/embm-admin.php:529
+msgid "Hide \"profile\" info on styles pages"
+msgstr ""
+
+#: includes/embm-admin.php:538
+msgid "Hide \"extras\" info on styles pages"
+msgstr ""
+
+#: includes/embm-admin.php:556
+msgid "Enable comments on single beer pages"
+msgstr ""
+
+#: includes/embm-admin.php:574
+msgid "Hide \"profile\" info on single beer pages"
+msgstr ""
+
+#: includes/embm-admin.php:581
+msgid "Hide \"extras\" info on single beer pages"
+msgstr ""
+
+#: includes/embm-admin.php:603
+msgid "Restore EM Beer Manager Styles"
+msgstr ""
+
+#: includes/embm-admin.php:605
+msgid ""
+"This will restore any missing or deleted beer styles from the pre-loaded "
+"BeerAdvocate list."
+msgstr ""
+
+#: includes/embm-admin.php:606
+msgid ""
+"Your custom or modified styles will <span class=\"emphasis\">NOT</span> be "
+"affected by this action."
+msgstr ""
+
+#: includes/embm-admin.php:607
+msgid "Do you wish to proceed?"
+msgstr ""
+
+#: includes/embm-admin.php:612
+msgid "YES"
+msgstr ""
+
+#: includes/embm-admin.php:613
+msgid "NO"
+msgstr ""
+
+#: includes/embm-admin.php:623
+msgid "<strong>Success!</strong> Your beer styles have been restored."
+msgstr ""
+
+#: includes/embm-admin.php:633
+msgid "<strong>Success!</strong> Your beer has been imported from Untappd."
+msgstr ""
+
+#: includes/embm-admin.php:635
+msgid "<strong>Success!</strong> Your beers have been imported from Untappd."
+msgstr ""
+
+#: includes/embm-admin.php:653
+msgid "Usage"
+msgstr ""
+
+#: includes/embm-admin.php:654
+msgid "Labs"
+msgstr ""
+
+#: includes/embm-admin.php:664
+msgid "Save Changes"
+msgstr ""
+
+#: includes/embm-admin.php:680
 msgid ""
 "If you like this plugin, please consider donating to help support future "
 "development. Thank you!"
 msgstr ""
 
-#: includes/embm-admin.php:729
+#: includes/embm-admin.php:691
 msgid ""
 "Free beer icon from <a href=\"http://simpleicon.com\" title=\"simple icon"
 "\">simple icon</a>."
-msgstr ""
-
-#: includes/embm-admin.php:736 includes/embm-core.php:374
-#: includes/widgets/embm-widget-untappd.php:96
-msgid "Untappd Integration"
-msgstr ""
-
-#: includes/embm-admin.php:737 includes/embm-core.php:375
-#: includes/widgets/embm-widget-untappd.php:97
-msgid ""
-"Checking the \"Disable Untappd integration\" option under the \"EM Beer "
-"Manager\" settings, will completely disable all Untappd functionality, "
-"including per-beer check-in buttons and the Recent Check-Ins widget."
-msgstr ""
-
-#: includes/embm-admin.php:738 includes/embm-core.php:376
-#: includes/widgets/embm-widget-untappd.php:98
-msgid ""
-"You can disable the Untappd check-in button for an individual beer by simply "
-"leaving the setting empty. Beers that have an active check-in button will "
-"display a square Untappd icon next to their entry on the Beers admin page."
-msgstr ""
-
-#: includes/embm-admin.php:742
-msgid "Settings FAQ"
-msgstr ""
-
-#: includes/embm-admin.php:743
-msgid ""
-"I don't want to show that big grey box of information, how do I get rid of "
-"it?"
-msgstr ""
-
-#: includes/embm-admin.php:744
-msgid ""
-"For each of the different displays there is the option to \"Hide extras info"
-"\" and \"Hide extras info\". Check both of these to hide the grey box."
-msgstr ""
-
-#: includes/embm-admin.php:745
-msgid "What's the difference between \"profile\" and \"extras\"?"
-msgstr ""
-
-#: includes/embm-admin.php:746
-msgid ""
-"The \"profile\" refers to all the content in the \"Beer Profile\" "
-"information stored for each beer. This includes ABV, IBU, Hops, Malts, "
-"Additions, and Yeast."
-msgstr ""
-
-#: includes/embm-admin.php:747
-msgid ""
-"The \"extras\" setting refers to the \"More Beer Information\" content "
-"stored for each beer, excluding the Untappd check-in button, which is "
-"handled separately."
 msgstr ""
 
 #: includes/embm-core.php:32 includes/embm-core.php:44
@@ -478,169 +508,140 @@ msgstr ""
 msgid "No beers found in the Trash"
 msgstr ""
 
-#: includes/embm-core.php:241
-msgid "Malts"
-msgstr ""
-
-#: includes/embm-core.php:243
-msgid "Hops"
-msgstr ""
-
-#: includes/embm-core.php:245
-msgid "Additions/Spices"
-msgstr ""
-
-#: includes/embm-core.php:247
-msgid "Yeast"
-msgstr ""
-
-#: includes/embm-core.php:344
-msgid "Beer Number"
-msgstr ""
-
-#: includes/embm-core.php:350 includes/embm-core.php:377
+#: includes/embm-core.php:304 includes/embm-core.php:496
+#: includes/widgets/embm-widget-untappd.php:96
 msgid "Untappd Beer ID"
 msgstr ""
 
-#: includes/embm-core.php:364
+#: includes/embm-core.php:387 includes/embm-output.php:559
+msgid "Malts"
+msgstr ""
+
+#: includes/embm-core.php:389 includes/embm-output.php:565
+msgid "Hops"
+msgstr ""
+
+#: includes/embm-core.php:391
+msgid "Additions/Spices"
+msgstr ""
+
+#: includes/embm-core.php:393 includes/embm-output.php:577
+msgid "Yeast"
+msgstr ""
+
+#: includes/embm-core.php:490 includes/embm-output.php:625
+msgid "Beer Number"
+msgstr ""
+
+#: includes/embm-core.php:510
 msgid "Additional Notes/Food Pairings"
 msgstr ""
 
-#: includes/embm-core.php:378
-msgid ""
-"Find your Untappd beer ID by visiting your beer's official page. The URL "
-"will be formatted like this:"
-msgstr ""
-
-#: includes/embm-core.php:380
-msgid "The string of numbers at the end of the URL is your beer's ID."
-msgstr ""
-
-#: includes/embm-core.php:482 includes/embm-core.php:494
+#: includes/embm-core.php:616 includes/embm-core.php:628
 msgid "Styles"
 msgstr ""
 
-#: includes/embm-core.php:484
+#: includes/embm-core.php:618
 msgid "Search Styles"
 msgstr ""
 
-#: includes/embm-core.php:485 includes/widgets/embm-widget-list.php:98
+#: includes/embm-core.php:619 includes/widgets/embm-widget-list.php:98
 msgid "All Styles"
 msgstr ""
 
-#: includes/embm-core.php:486
+#: includes/embm-core.php:620
 msgid "Edit Style"
 msgstr ""
 
-#: includes/embm-core.php:487
+#: includes/embm-core.php:621
 msgid "Update Style"
 msgstr ""
 
-#: includes/embm-core.php:488
+#: includes/embm-core.php:622
 msgid "Add New Style"
 msgstr ""
 
-#: includes/embm-core.php:489
+#: includes/embm-core.php:623
 msgid "New Style Name"
 msgstr ""
 
-#: includes/embm-core.php:490
+#: includes/embm-core.php:624
 msgid "Popular Styles"
 msgstr ""
 
-#: includes/embm-core.php:491
+#: includes/embm-core.php:625
 msgid "Choose from the most used styles"
 msgstr ""
 
-#: includes/embm-core.php:492
+#: includes/embm-core.php:626
 msgid "Separate styles with commas"
 msgstr ""
 
-#: includes/embm-core.php:493
+#: includes/embm-core.php:627
 msgid "Add or remove styles"
 msgstr ""
 
-#: includes/embm-core.php:562 includes/embm-core.php:574
+#: includes/embm-core.php:699 includes/embm-core.php:711
 msgid "Groups"
 msgstr ""
 
-#: includes/embm-core.php:564
+#: includes/embm-core.php:701
 msgid "Search Groups"
 msgstr ""
 
-#: includes/embm-core.php:565 includes/widgets/embm-widget-list.php:107
+#: includes/embm-core.php:702 includes/widgets/embm-widget-list.php:107
 msgid "All Groups"
 msgstr ""
 
-#: includes/embm-core.php:566
+#: includes/embm-core.php:703
 msgid "Edit Group"
 msgstr ""
 
-#: includes/embm-core.php:567
+#: includes/embm-core.php:704
 msgid "Update Group"
 msgstr ""
 
-#: includes/embm-core.php:568
+#: includes/embm-core.php:705
 msgid "Add New Group"
 msgstr ""
 
-#: includes/embm-core.php:569
+#: includes/embm-core.php:706
 msgid "New Group Name"
 msgstr ""
 
-#: includes/embm-core.php:570
+#: includes/embm-core.php:707
 msgid "Popular Groups"
 msgstr ""
 
-#: includes/embm-core.php:571
+#: includes/embm-core.php:708
 msgid "Choose from the most used groups"
 msgstr ""
 
-#: includes/embm-core.php:572
+#: includes/embm-core.php:709
 msgid "Separate groups with commas"
 msgstr ""
 
-#: includes/embm-core.php:573
+#: includes/embm-core.php:710
 msgid "Add or remove groups"
 msgstr ""
 
-#: includes/embm-output.php:420
+#: includes/embm-output.php:395 includes/embm-output.php:818
+msgid "View all %s beers"
+msgstr ""
+
+#: includes/embm-output.php:422
 msgid "More..."
 msgstr ""
 
-#: includes/embm-output.php:535
-msgid "ABV:"
+#: includes/embm-output.php:492
+msgid "Check in on Untappd"
 msgstr ""
 
-#: includes/embm-output.php:541
-msgid "IBU:"
+#: includes/embm-output.php:571
+msgid "Other"
 msgstr ""
 
-#: includes/embm-output.php:547
-msgid "Malts:"
-msgstr ""
-
-#: includes/embm-output.php:553
-msgid "Hops:"
-msgstr ""
-
-#: includes/embm-output.php:559
-msgid "Other:"
-msgstr ""
-
-#: includes/embm-output.php:565
-msgid "Yeast:"
-msgstr ""
-
-#: includes/embm-output.php:613
-msgid "Beer Number:"
-msgstr ""
-
-#: includes/embm-output.php:619
-msgid "Availability:"
-msgstr ""
-
-#: includes/embm-output.php:625
+#: includes/embm-output.php:637
 msgid "Additional Notes"
 msgstr ""
 
@@ -649,7 +650,7 @@ msgid "Displays a list of beers"
 msgstr ""
 
 #: includes/widgets/embm-widget-list.php:76
-#: includes/widgets/embm-widget-untappd.php:80
+#: includes/widgets/embm-widget-untappd.php:133
 msgid "Title:"
 msgstr ""
 
@@ -693,35 +694,19 @@ msgstr ""
 msgid "No beers found."
 msgstr ""
 
-#: includes/widgets/embm-widget-untappd.php:49
+#: includes/widgets/embm-widget-untappd.php:50
 msgid "Displays a list of recent Untappd brewery check-ins"
 msgstr ""
 
-#: includes/widgets/embm-widget-untappd.php:84
+#: includes/widgets/embm-widget-untappd.php:137
 msgid "Brewery ID: "
 msgstr ""
 
-#: includes/widgets/embm-widget-untappd.php:89
+#: includes/widgets/embm-widget-untappd.php:142
 msgid "Number of items to show: "
 msgstr ""
 
-#: includes/widgets/embm-widget-untappd.php:99
-msgid "Untappd Brewery ID"
-msgstr ""
-
-#: includes/widgets/embm-widget-untappd.php:100
-msgid ""
-"Find your Untappd brewery ID number by going to your brewery's official page "
-"(i.e. <code>https://untappd.com/BreweryName</code>). Click on the \"Brewery "
-"Feed (RSS)\" link in the right-hand sidebar. The link's URL will be "
-"formatted like this:"
-msgstr ""
-
-#: includes/widgets/embm-widget-untappd.php:102
-msgid "The string of numbers at the end of the URL is your brewery ID number."
-msgstr ""
-
-#: includes/widgets/embm-widget-untappd.php:194
+#: includes/widgets/embm-widget-untappd.php:235
 msgid "A brewery ID number has not been set."
 msgstr ""
 
