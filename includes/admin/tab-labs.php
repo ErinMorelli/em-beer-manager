@@ -34,9 +34,6 @@ if (isset($_GET['embm-untappd-token'])) {
     exit;
 }
 
-// Get EMBM options
-$token = get_option('embm_untappd_token');
-
 // Problem email subject
 $email_subj = '[EM Beer Manager] Issue Report';
 
@@ -57,12 +54,4 @@ $email_subj = '[EM Beer Manager] Issue Report';
 
 <h2><?php _e('Import from Untappd', 'embm'); ?></h2>
 
-<?php if (!$token || $token == '') { ?>
-    <p>
-        <button class="embm-labs--authorize-button button-secondary">Log In to Authorize Untappd</button>
-    </p>
-<?php } else {
-    // Include import file
-    include_once EMBM_PLUGIN_DIR.'includes/admin/tab-labs-import.php';
-}
-?>
+<?php require_once EMBM_PLUGIN_DIR.'includes/admin/tab-labs-import.php'; ?>

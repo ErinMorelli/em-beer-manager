@@ -17,6 +17,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
+* [Experimental] Import your brewery's beers directly from Untappd
 
 
 ### Screenshots ###
@@ -38,10 +39,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.0.1 - Bug Fixes](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.0.1.zip) ###
-* Fixed an issue with the `[beer]` shortcode where debugging output was being output
-* Fixed issue where the option to enable/disable comments was not being saved in the admin settings
-
+### [Version 2.1.0 - Feature Release](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.0.zip) ###
+* Added new 'Labs' section with an experimental import from Untappd feature
+* Added ability to select which set of Untappd icons to use
+* Added integration with WordPress API - *thanks to __tlongren__ for his help with this!*
+* Updated translation POT to latest version
 
 
 *****
@@ -172,4 +174,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
-* Expand Untappd integration to include further brewery/beer options

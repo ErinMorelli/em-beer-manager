@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.4.2
-Stable tag: 2.0.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
+* [Experimental] Import your brewery's beers directly from Untappd
 
 = Usage =
 Use these shortcodes to display beers in your posts or use the template tags in your theme files:
@@ -131,6 +132,21 @@ These will display a formatted listing of all beers.
 
 == Frequently Asked Questions ==
 
+= What is the 'Labs' section and how risky is it to use? =
+
+New in v2.1.0 is the EM Beer Manager 'Labs'. This is a section where we plan to introduce new and experimental features for users to test. We do test all of the lab features before making them available, but cannot guarantee that there won't be any issues or bugs when using them, since they are still being worked on. If you experience and issues while using a Labs feature, please contact [labs@wp.erinmorelli.com](mailto:labs@wp.erinmorelli.com).
+
+= How do I access EM Beer Manager beers, styles, and groups in the WordPress API? =
+
+Starting with v2.1.0 you can now access EM Beer Manager beers, styles, and groups from the [WordPress API](http://v2.wp-api.org/).
+
+Beers can be accessed using `/wp-json/wp/v2/embm_beers` or individually at `/wp-json/wp/v2/embm_beers/<beer_id>`.
+
+Styles can be accessed using `/wp-json/wp/v2/embm_styles` or individually at `/wp-json/wp/v2/embm_styles/<style_id>`.
+
+Groups can be accessed using `/wp-json/wp/v2/embm_groups` or individually at `/wp-json/wp/v2/embm_groups/<group_id>`.
+
+
 = I accidentally deleted some of the pre-loaded styles, how do I get them back? =
 
 Starting with v2.0.0, users are now able to easily restore any missing styles. Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated BeerAdvocate list. It will not affect any already existing or any custom styles.
@@ -199,6 +215,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 2.1.0 =
+* Added new 'Labs' section with an experimental import from Untappd feature
+* Added ability to select which set of Untappd icons to use
+* Added integration with WordPress API - *thanks to __tlongren__ for his help with this!*
+* Updated translation POT to latest version
 
 = 2.0.1 =
 * Fixed an issue with the `[beer]` shortcode where debugging output was being output
@@ -329,4 +351,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
-* Expand Untappd integration to include further brewery/beer options

@@ -114,7 +114,6 @@ function EMBM_Plugin_activate()
         'embm_untappd_check'    => '',
         'embm_untappd_brewery'  => '',
         'embm_untappd_icons'    => '1',
-        'embm_untappd_token'    => '',
         'embm_css_url'          => '',
         'embm_group_slug'       => 'group'
     );

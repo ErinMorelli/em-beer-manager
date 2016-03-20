@@ -23,6 +23,16 @@
 // Get API token
 $token = get_option('embm_untappd_token');
 
+// Check for a token
+if (!$token || $token == '') {
+?>
+    <p>
+        <button class="embm-labs--authorize-button button-secondary">Log In to Authorize Untappd</button>
+    </p>
+<?php
+    return;
+}
+
 // Set API Root
 $api_root = 'https://api.untappd.com/v4/%s?access_token='.$token;
 
@@ -77,7 +87,7 @@ if ($user->account_type != 'brewery') {
     <table class="form-table">
         <tbody>
             <tr>
-                <th scope="row"><?php _e('Select a single beer to import', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import single beer', 'embm'); ?></th>
                 <td>
                     <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="1" />
