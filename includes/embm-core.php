@@ -46,24 +46,24 @@ function EMBM_Core_beer()
 
     // Set up custom post type options
     $args = array(
-        'labels'            => $labels,
-        'description'       => 'Holds beer specific data',
-        'public'            => true,
-        'capability_type'   => 'post',
-        'hierarchical'      => false,
-        'taxonomies'        => array('embm_style', 'embm_group'),
-        'has-archive'       => true,
-        'menu_position'     => 5,
-        'show_in_rest'      => true,
-        'rest_base'         => 'beer',
+        'labels'                => $labels,
+        'description'           => 'Holds beer specific data',
+        'public'                => true,
+        'capability_type'       => 'post',
+        'hierarchical'          => false,
+        'taxonomies'            => array('embm_style', 'embm_group'),
+        'has-archive'           => true,
+        'menu_position'         => 5,
+        'show_in_rest'          => true,
+        'rest_base'             => 'embm_beers',
         'rest_controller_class' => 'WP_REST_Posts_Controller',
-        'rewrite'           => array(
-            'slug'          => 'beers',
-            'with_front'    => false,
-            'feeds'         => true,
-            'pages'         => true
+        'rewrite'               => array(
+            'slug'              => 'beers',
+            'with_front'        => false,
+            'feeds'             => true,
+            'pages'             => true
         ),
-        'supports'        => array(
+        'supports'              => array(
             'title',
             'editor',
             'thumbnail',
@@ -81,6 +81,95 @@ add_action('init', 'EMBM_Core_beer');
 
 // Add thumbnail support to custom post type
 add_theme_support('post-thumbnails', array('embm_beer'));
+
+
+/**
+ * Register custom beer fields with WP API
+ *
+ * @return void
+ */
+function EMBM_Core_Beer_api()
+{
+    // Set API field options
+    $field_options = array(
+        'get_callback'    => 'EMBM_Core_Beer_Api_get',
+        'update_callback' => null,
+        'schema'          => null,
+    );
+
+    // Register profile API field
+    register_rest_field('embm_beer', 'profile', $field_options);
+
+    // Register extras API field
+    register_rest_field('embm_beer', 'extras', $field_options);
+
+    // Retrieve Untappd settings
+    $ut_option = get_option('embm_options');
+
+    // Check if Untappd is disabled
+    if (!isset($ut_option['embm_untappd_check'])) {
+        // Register Untappd URL API field
+        register_rest_field('embm_beer', 'untappd', $field_options);
+    }
+}
+
+// Load additional WP API fields
+add_action('rest_api_init', 'EMBM_Core_Beer_api');
+
+
+/**
+ * Handle GET requests for additional beer fields
+ *
+ * @param object $object     The WP object being requested
+ * @param string $field_name The name of the API field requested
+ * @param object $request    The HTTP request object
+ *
+ * @return string/array
+ */
+function EMBM_Core_Beer_Api_get($object, $field_name, $request)
+{
+    // Get the beer id
+    $beer_id = $object['id'];
+
+    // Return beer profile data
+    if ($field_name == 'profile') {
+        return array(
+            'abv'       => intval(get_post_meta($beer_id, 'abv', true)),
+            'ibu'       => intval(EMBM_Core_Beer_attr($beer_id, 'ibu')),
+            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
+            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
+            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
+            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast')
+        );
+    }
+
+    // Return beer extras data
+    if ($field_name == 'extras') {
+        return array(
+            'beer_number'   => intval(get_post_meta($beer_id, 'beer_num', true)),
+            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
+            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes')
+        );
+    }
+
+    // Return beer Untappd information
+    if ($field_name == 'untappd') {
+        // Get Untappd info
+        $untappd_id = intval(get_post_meta($beer_id, 'untappd', true));
+        $untappd_link = EMBM_Core_Beer_attr($beer_id, 'untappd');
+
+        // Account for no ID
+        if ($untappd_id == '') {
+            $untappd_link = '';
+        }
+
+        // Return formatted info
+        return array(
+            'id'    => $untappd_id,
+            'link'   => $untappd_link
+        );
+    }
+}
 
 
 /**
@@ -541,17 +630,17 @@ function EMBM_Core_styles()
 
     // Set up custom taxonomy options
     $args = array(
-        'hierarchical'      => false,
-        'labels'            => $labels,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => array(
-            'slug'          => 'beers/style',
-            'with_front'    => false
+        'hierarchical'          => false,
+        'labels'                => $labels,
+        'show_ui'               => true,
+        'show_admin_column'     => true,
+        'query_var'             => true,
+        'rewrite'               => array(
+            'slug'              => 'beers/style',
+            'with_front'        => false
         ),
-        'show_in_rest'       => true,
-        'rest_base'          => 'style',
+        'show_in_rest'          => true,
+        'rest_base'             => 'embm_styles',
         'rest_controller_class' => 'WP_REST_Terms_Controller',
     );
 
@@ -634,17 +723,17 @@ function EMBM_Core_group()
 
     // Set up custom taxonomy options
     $args = array(
-        'hierarchical'       => true,
-        'labels'            => $labels,
-        'show_ui'           => true,
-        'show_admin_column' => true,
-        'query_var'         => true,
-        'rewrite'           => array(
-            'slug'          => $group_slug,
-            'with_front'    => false
+        'hierarchical'          => true,
+        'labels'                => $labels,
+        'show_ui'               => true,
+        'show_admin_column'     => true,
+        'query_var'             => true,
+        'rewrite'               => array(
+            'slug'              => $group_slug,
+            'with_front'        => false
         ),
-        'show_in_rest'       => true,
-        'rest_base'          => 'group',
+        'show_in_rest'          => true,
+        'rest_base'             => 'embm_groups',
         'rest_controller_class' => 'WP_REST_Terms_Controller',
     );
 

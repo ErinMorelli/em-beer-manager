@@ -43,6 +43,16 @@ function EMBM_Admin_styles()
         EMBM_PLUGIN_URL.'assets/js/admin.js',
         array('jquery-ui-tabs')
     );
+
+    // Share EMBM settings with admin script
+    wp_localize_script(
+        'embm-admin-script',
+        'embm_settings',
+        array(
+              'plugin_url'      => EMBM_PLUGIN_URL,
+              'options'         => get_option('embm_options')
+        )
+    );
 }
 
 // Loads styles in WP admin
@@ -137,8 +147,11 @@ function EMBM_Admin_Columns_values($column, $post_id)
             // Get Untapped link
             $untap_link = EMBM_Core_Beer_attr($post_id, 'untappd');
 
+            // Get EMBM options
+            $options = get_option('embm_options');
+
             // Get Untappd icon
-            $uticon = EMBM_PLUGIN_URL.'assets/img/ut-icon.png';
+            $uticon = EMBM_PLUGIN_URL.'assets/img/ut-icon-'.$options['embm_untappd_icons'].'.png';
 
             // Display linked Untappd icon
             echo '<a href="'.$untap_link.'" target="_blank">';
@@ -320,8 +333,12 @@ function EMBM_Admin_settings()
     // Global settings
     add_settings_section('embm_global_settings', __('Global Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
     add_settings_field('embm_css_url', __('Custom stylesheet', 'embm'), 'EMBM_Admin_Settings_Global_css', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
-    add_settings_field('embm_untappd_settings', __('Untappd settings', 'embm'), 'EMBM_Admin_Settings_Global_untappd', 'embm', 'embm_global_settings');
     add_settings_field('embm_display_settings', __('Display settings', 'embm'), 'EMBM_Admin_Settings_Global_display', 'embm', 'embm_global_settings');
+
+    // Untappd Settings
+    add_settings_section('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
+    add_settings_field('embm_untappd_integration', __('Site-wide integration', 'embm'), 'EMBM_Admin_Settings_Untappd_integration', 'embm', 'embm_untappd_settings');
+    add_settings_field('embm_untappd_icons', __('Icon set', 'embm'), 'EMBM_Admin_Settings_Untappd_icons', 'embm', 'embm_untappd_settings');
 
     // Group Tax Settings
     add_settings_section('embm_group_settings', __('Group Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
@@ -368,25 +385,6 @@ function EMBM_Admin_Settings_Global_css()
 }
 
 /**
- * Outputs Untappd integration options
- *
- * @return void
- */
-function EMBM_Admin_Settings_Global_untappd()
-{
-    $options = get_option('embm_options');
-
-    $use_untappd = null;
-    if (isset($options['embm_untappd_check'])) {
-        $use_untappd = $options['embm_untappd_check'];
-    }
-
-    echo '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
-    echo '<label for="embm_untappd_check">'.__('Disable Untappd integration', 'embm').'</label>';
-    echo '<a data-help="embm-untappd-integration" class="embm-settings--help">?</a></p>';
-}
-
-/**
  * Outputs global display options
  *
  * @return void
@@ -412,6 +410,54 @@ function EMBM_Admin_Settings_Global_display()
     echo '<p><input name="embm_options[embm_extras_show]" type="checkbox" id="embm_extras_show" value="1"'.checked('1', $view_extras, false).' /> ';
     echo '<label for="embm_extras_show">'.__('Globally hide "extras" info', 'embm').'</label>';
     echo '<a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
+}
+
+/**
+ * Outputs Untappd integration options
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Untappd_integration()
+{
+    $options = get_option('embm_options');
+
+    $use_untappd = null;
+    if (isset($options['embm_untappd_check'])) {
+        $use_untappd = $options['embm_untappd_check'];
+    }
+
+    echo '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
+    echo '<label for="embm_untappd_check">'.__('Disable site-wide integration', 'embm').'</label>';
+    echo '<a data-help="embm-untappd-integration" class="embm-settings--help">?</a></p>';
+}
+
+/**
+ * Outputs Untappd icon options
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Untappd_icons()
+{
+    $options = get_option('embm_options');
+    $icon_img = EMBM_PLUGIN_URL.'assets/img/checkin-button-'.$options['embm_untappd_icons'].'.png';
+
+    // Set up possible options
+    $icon_sets = array(
+        '1' => 'Original (v1)',
+        '2' => 'Modern (v2)'
+    );
+
+    echo '<p><select name="embm_options[embm_untappd_icons]" class="embm-settings--untappd-select" id="embm_untappd_icons">';
+
+    foreach ($icon_sets as $set_id => $set_name) {
+        echo '<option value="'.$set_id.'"';
+        if ($options['embm_untappd_icons'] == $set_id) {
+            echo ' selected="selected"';
+        }
+        echo '>'.$set_name.'</option>';
+    }
+
+    echo '</select><img class="embm-settings--untappd-icon" src="'.$icon_img.'"" border="0" /></p>';
 }
 
 /**
@@ -560,7 +606,7 @@ function EMBM_Admin_Settings_page()
                 <p><?php _e('Your custom or modified styles will <span class="emphasis">NOT</span> be affected by this action.', 'embm'); ?></p>
                 <p><?php _e('Do you wish to proceed?', 'embm'); ?></p>
 
-                <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/actions/reset-styles.php'; ?>" class="embm-settings--styles-form">
+                <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-reset-styles.php'; ?>" class="embm-settings--styles-form">
                     <input type="hidden" name="embm-styles-reset-request" value="1" />
                     <input type="hidden" name="embm-settings-page" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
                     <input name="Yes" type="submit" class="button-primary" value="<?php _e('YES', 'embm'); ?>" />
@@ -573,12 +619,24 @@ function EMBM_Admin_Settings_page()
         } elseif ($_GET['embm-styles-reset'] == '2') {
             // Show success message admin notice
 ?>
-            <div class="updated notice embm-settings--styles-notice">
+            <div class="updated notice embm-settings--notice">
                 <p><?php _e('<strong>Success!</strong> Your beer styles have been restored.', 'embm'); ?></p>
                 <button type="button" class="notice-dismiss"></button>
             </div>
 <?php
         }
+    } elseif (isset($_GET['embm-import-success'])) {
+        // Show success notice for Untappd import
+?>
+        <div class="updated notice embm-settings--notice">
+            <?php if ($_GET['embm-import-success'] == '1') : ?>
+                <p><?php _e('<strong>Success!</strong> Your beer has been imported from Untappd.', 'embm'); ?></p>
+            <?php elseif ($_GET['embm-import-success'] == '2') : ?>
+                <p><?php _e('<strong>Success!</strong> Your beers have been imported from Untappd.', 'embm'); ?></p>
+            <?php endif; ?>
+            <button type="button" class="notice-dismiss"></button>
+        </div>
+<?php
     }
 
 ?>
@@ -591,8 +649,9 @@ function EMBM_Admin_Settings_page()
 
     <div id="embm-settings--tabs">
         <ul class="nav-tab-wrapper">
-            <li><a href="#settings" class="nav-tab nav-tab-active nav-tab-settings"><?php _e('Settings', 'embm'); ?></a></li>
-            <li><a href="#usage" class="nav-tab nav-tab-usage"><?php _e('Usage', 'embm'); ?></a></li>
+            <li><a href="#settings" class="embm-nav-tab nav-tab nav-tab-active nav-tab-settings"><?php _e('Settings', 'embm'); ?></a></li>
+            <li><a href="#usage" class="embm-nav-tab nav-tab nav-tab-usage"><?php _e('Usage', 'embm'); ?></a></li>
+            <li><a href="#labs" class="embm-nav-tab nav-tab nav-tab-labs"><?php _e('Labs', 'embm'); ?></a></li>
         </ul>
 
         <div id="settings" class="embm-settings--tab-settings">
@@ -608,164 +667,11 @@ function EMBM_Admin_Settings_page()
         </div>
 
         <div id="usage" class="embm-settings--tab-usage">
+            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tab-usage.php'; ?>
+        </div>
 
-            <h2><?php _e('Single Beer Display', 'embm'); ?></h2>
-
-            <p><?php _e('These will display a single beer entry given it\'s ID number.', 'embm'); ?></p>
-
-            <h3 class="embm-settings--subhead"><?php _e('Shortcode', 'embm'); ?></h3>
-
-            <blockquote>
-                <code>[beer id="beer id"]</code>
-            </blockquote>
-
-            <h3 class="embm-settings--subhead"><?php _e('Template tag', 'embm'); ?></h3>
-
-            <blockquote>
-                <code><?php echo htmlentities('<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
-                <p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
-                <p>
-                    <pre class="embm-settings--code">
-<?php echo htmlentities(
-    "<?php echo EMBM_Output_Beer_display( 123, array(\n".
-    "    'show_profile'  => false,\n".
-    "    'show_extras'   => true\n".
-    ") ); ?>"
-); ?>
-                    </pre>
-                </p>
-            </blockquote>
-
-            <h3 class="embm-settings--subhead"><?php _e('Options', 'embm'); ?></h3>
-
-            <p><?php _e('For use with both the shortcode and template code.', 'embm'); ?></p>
-
-            <table class="embm-settings--table" cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                    <tr>
-                        <th><?php _e('Option Name', 'embm'); ?></th>
-                        <th><?php _e('Values', 'embm'); ?></th>
-                        <th><?php _e('Default', 'embm'); ?></th>
-                        <th><?php _e('Description', 'embm'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code><strong>show_profile</strong></code></td>
-                        <td><code>true, false</code></td>
-                        <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "Beer Profile" information', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>show_extras</strong></code></td>
-                        <td><code>true, false</code></td>
-                        <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "More Beer Information" section', 'embm'); ?></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <br />
-
-            <h2><?php _e('List All Beers', 'embm'); ?></h2>
-
-            <p><?php _e('These will display a formatted listing of all beers.', 'embm'); ?></p>
-
-            <h3 class="embm-settings--subhead"><?php _e('Shortcode', 'embm'); ?></h3>
-
-            <blockquote>
-                <code>[beer-list]</code>
-            </blockquote>
-
-            <h3 class="embm-settings--subhead"><?php _e('Template tag', 'embm'); ?></h3>
-
-            <blockquote>
-                <code><?php echo htmlentities('<?php echo EMBM_Output_List_display( $args ); ?>'); ?></code></p>
-                <p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
-                <p>
-                    <pre class="embm-settings--code">
-<?php echo htmlentities(
-    "<?php echo EMBM_Output_List_display( array(\n".
-    "    'show_extras'       => false,\n".
-    "    'beers_per_page'    => 3,\n".
-    "    'orderby'           => 'name',\n".
-    "    'order'             => 'ASC'\n".
-    ") ); ?>"
-); ?>
-                    </pre>
-                </p>
-            </blockquote>
-
-            <h3 class="embm-settings--subhead"><?php _e('Options', 'embm'); ?></h3>
-
-            <p><?php _e('For use with both the shortcode and template code.', 'embm'); ?></p>
-
-            <table class="embm-settings--table" cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                    <tr>
-                        <th><?php _e('Option Name', 'embm'); ?></th>
-                        <th><?php _e('Values', 'embm'); ?></th>
-                        <th><?php _e('Default', 'embm'); ?></th>
-                        <th><?php _e('Description', 'embm'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code><strong>show_profile</strong></code></td>
-                        <td><code>true, false</code></td>
-                        <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "Beer Profile" information for each listing', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>show_extras</strong></code></td>
-                        <td><code>true, false</code></td>
-                        <td><code>true</code></td>
-                        <td><?php _e('Displays or hides the "More Beer Information" section for each listing', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>style</strong></code></td>
-                        <td><?php _e('String of style name'); ?><br />e.g. <code>"India Pale Ale"</code></td>
-                        <td>n/a</td>
-                        <td><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>group</strong></code></td>
-                        <td><?php _e('String of group name'); ?><br />e.g. <code>"Seasonal Beers"</code></td>
-                        <td>n/a</td>
-                        <td><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>exclude</strong></code></td>
-                        <td><?php _e('Comma-separated list of beer IDs', 'embm'); ?><br />e.g. <code>"4,23,24"</code></td>
-                        <td>n/a</td>
-                        <td><?php _e('Hides listed beers from output', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>beers_per_page</strong></code></td>
-                        <td><?php _e('A number', 'embm'); ?><br /> e.g. <code>5</code></td>
-                        <td><code>-1</code><br /><?php _e('Shows all beers', 'embm'); ?></td>
-                        <td><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>paginate</strong></code></td>
-                        <td><code>true, false</code></td>
-                        <td><code>true</code></td>
-                        <td><?php _e('Disables/enables pagination', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>orderby</strong></code></td>
-                        <td><?php _e('See ', 'embm'); ?><a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank"><?php _e('this list', 'embm'); ?></a><?php _e(' for options', 'embm'); ?></td>
-                        <td><code>"date"</code></td>
-                        <td><?php _e('Orders beer list output by the given paramater', 'embm'); ?></td>
-                    </tr>
-                    <tr>
-                        <td><code><strong>order</strong></code></td>
-                        <td><code>ASC, DSC</code></td>
-                        <td><code>DSC</code></td>
-                        <td><?php _e('Sorts beer list by <code>orderby</code> value in ascending or descending order', 'embm'); ?></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="labs" class="embm-settings--tab-labs">
+            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tab-labs.php'; ?>
         </div>
     </div>
 

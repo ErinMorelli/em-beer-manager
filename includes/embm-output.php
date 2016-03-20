@@ -392,8 +392,10 @@ function EMBM_Output_Content_beer($beer_id, $showprofile=true, $showextras=true)
 
     // Beer style
     if (EMBM_Core_Beer_style($beer_id)) {
+        $link_title = sprintf(__('View all %s beers', 'embm'), EMBM_Core_Beer_style($beer_id));
+
         $output .= '<span class="embm-beer--header-style">(';
-        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($beer_id), 'embm_style').'" title="View All '.EMBM_Core_Beer_style($beer_id).'s">';
+        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($beer_id), 'embm_style').'" title="'.$link_title.'">';
         $output .= EMBM_Core_Beer_style($beer_id);
         $output .= '</a>)</span>'."\n";
     }
@@ -486,9 +488,19 @@ function EMBM_Output_Content_untappd($beer_id)
         // Get raw Untappd value from DB
         $untap = get_post_meta($beer_id, 'untappd', true);
 
+        // Set up translatable title text
+        $untap_title = __('Check in on Untappd', 'embm');
+
+        // Get icon set
+        $untap_icon = $ut_option['embm_untappd_icons'];
+
+        // Set up icon image URL
+        $untap_img = EMBM_PLUGIN_URL.'assets/img/checkin-button-'.$untap_icon.'.png';
+
         // If an Untappd value is set for this beer, display the link
         if ($untap != '') {
-            $output = '<div class="untappd"><a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="Check In on Untappd"></a></div>'."\n";
+            $output = '<div class="untappd"><a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="'.$untap_title.'">';
+            $output .= '<img src="'.$untap_img.'" alt="'.$untap_title.'" border="0" /></a></div>'."\n";
         }
     }
 
@@ -532,37 +544,37 @@ function EMBM_Output_Content_profile($beer_id)
             // Display ABV
             if ($abv != '0%') {
                 $output .= '<div class="abv"><span class="label">';
-                $output .= __('ABV:', 'embm');
+                $output .= __('ABV', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'abv').'</span></div>'."\n";
             }
             // Display IBU
             if ($ibu != '0') {
                 $output .= '<div class="ibu"><span class="label">';
-                $output .= __('IBU:', 'embm');
+                $output .= __('IBU', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'ibu').'</span></div>'."\n";
             }
             // Display Malts
             if ($malts != '') {
                 $output .= '<div class="malts"><span class="label">';
-                $output .= __('Malts:', 'embm');
+                $output .= __('Malts', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'malts').'</span></div>'."\n";
             }
             // Display Hops
             if ($hops != '') {
                 $output .= '<div class="hops"><span class="label">';
-                $output .= __('Hops:', 'embm');
+                $output .= __('Hops', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'hops').'</span></div>'."\n";
             }
             // Display Additions
             if ($adds != '') {
                 $output .= '<div class="other"><span class="label">';
-                $output .= __('Other:', 'embm');
+                $output .= __('Other', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'adds').'</span></div>'."\n";
             }
             // Display Yeast
             if ($yeast != '') {
                 $output .= '<div class="yeast"><span class="label">';
-                $output .= __('Yeast:', 'embm');
+                $output .= __('Yeast', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'yeast').'</span></div>'."\n";
             }
 
@@ -610,13 +622,13 @@ function EMBM_Output_Content_extras($beer_id)
             // Display beer number
             if ($bnum != '#') {
                 $output .= '<div class="beer_num"><span class="label">';
-                $output .= __('Beer Number:', 'embm');
+                $output .= __('Beer Number', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'beer_num').'</span></div>'."\n";
             }
             // Display availability
             if ($avail != '') {
                 $output .= '<div class="avail"><span class="label">';
-                $output .= __('Availability:', 'embm');
+                $output .= __('Availability', 'embm').':';
                 $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'avail').'</span></div>'."\n";
             }
             // Display notes
@@ -803,9 +815,11 @@ function EMBM_Output_Filter_title($title, $id=null)
 
     // Display beer style
     if (EMBM_Core_Beer_style($id) && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
+        $link_title = sprintf(__('View all %s beers', 'embm'), EMBM_Core_Beer_style($id));
+
         $output = '';
         $output .= '</a><span class="embm-beer--header-style">(';
-        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($id), 'embm_style').'" title="View All '.EMBM_Core_Beer_style($id).'s">';
+        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($id), 'embm_style').'" title="'.$link_title.'">';
         $output .= EMBM_Core_Beer_style($id);
         $output .= '</a>)</span>'."\n";
 

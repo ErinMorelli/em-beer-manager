@@ -38,7 +38,7 @@
 /**
  * Style menus and beer list page
  */
-.menu-icon-embm_beer .wp-menu-image:before {
+.menu-icon-embm_beer .wp-menu-image::before {
     content: "\e604";
     font-family: 'beer-icons';
 }
@@ -96,6 +96,16 @@
     font-weight: 600;
     margin-top: 2em;
 }
+.embm-settings--page .embm-settings--untappd-select {
+    display: block;
+    float: left;
+}
+.embm-settings--page .embm-settings--untappd-icon {
+    display: block;
+    float: left;
+    margin-left: 15px;
+    margin-top: 1px;
+}
 .embm-settings--page .embm-settings--code {
     background-color: #DFDFDF;
     background-color: rgba(0, 0, 0, 0.07);
@@ -109,6 +119,9 @@
     font-size: 10px;
     line-height: 18px;
 }
+.embm-settings--notice {
+    position: relative;
+}
 
 
 /**
@@ -121,8 +134,30 @@
 .embm-settings--styles-page .embm-settings--styles-form input {
     margin-right: 10px;
 }
-.embm-settings--styles-notice {
-    position: relative;
+
+
+/**
+ * Style EM Beer Manager labs page
+ */
+.embm-settings--tab-labs .warning {
+    color: red;
+    font-weight: bold;
+}
+.embm-settings--tab-labs .emphasis {
+    font-weight: 600;
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+.embm-settings--tab-labs .labs-section {
+    color: #23282d;
+    font-size: 14px;
+    font-weight: 600;
+}
+.embm-settings--tab-labs .embm-untappd--user-link {
+    text-decoration: none;
+}
+.embm-settings--tab-labs .embm-labs--import-select {
+    margin-right: 10px;
 }
 
 

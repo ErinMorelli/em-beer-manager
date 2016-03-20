@@ -74,13 +74,10 @@
     padding: 0 0 20px;
 }
 .embm-beer .embm-beer--description > .untappd > a {
-    background: transparent url('../img/checkin-button.png') 0 0 no-repeat;
     border-width: 0;
     box-shadow: none;
     display: inline-block;
-    height: 25px;
     text-decoration: none;
-    width: 162px;
 }
 .embm-beer .embm-beer--meta {
     background: #eee;

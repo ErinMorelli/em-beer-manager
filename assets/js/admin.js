@@ -20,7 +20,8 @@
  */
 
 /*global
-    jQuery
+    jQuery,
+    embm_settings
 */
 /*jslint
     browser: true
@@ -33,7 +34,7 @@ jQuery(document).ready(function ($) {
     // Check for a hash in the URL
     if (location.hash) {
         // Don't jump to div
-        $(document.body).scrollTop(0);
+        window.scrollTo(0, 0);
 
         // Get hash without #
         var hash = location.hash.slice(1);
@@ -48,9 +49,6 @@ jQuery(document).ready(function ($) {
     // Setup jquery ui tabs
     $('#embm-settings--tabs').tabs({
         activate: function (ignore, ui) {
-            // Don't jump to div
-            $(document.body).scrollTop(0);
-
             // Get tab links
             var new_tab = ui.newTab.find('.nav-tab'),
                 old_tab = ui.oldTab.find('.nav-tab'),
@@ -64,8 +62,14 @@ jQuery(document).ready(function ($) {
             location.hash = new_hash;
 
             // Don't jump to div
-            $(document.body).scrollTop(0);
+            window.scrollTo(0, 0);
         }
+    });
+
+    // Prevent jumping to divs on tab clicks
+    $('.embm-nav-tab').on('click', function (e) {
+        e.preventDefault();
+        return false;
     });
 
     // Styles reset redirect
@@ -81,14 +85,17 @@ jQuery(document).ready(function ($) {
     });
 
     // Clean up URL after notice dismissal
-    $('.embm-settings--styles-notice.notice button.notice-dismiss').on('click', function (e) {
+    $('.embm-settings--notice.notice button.notice-dismiss').on('click', function (e) {
         e.preventDefault();
 
         // Set vars
-        var $el = $('.embm-settings--styles-notice.notice'), // Notice container
+        var $el = $('.embm-settings--notice.notice'), // Notice container
             url = window.location.href, // Full URL
+            url_hash = window.location.hash, // URL hash
             page = url.substring(url.lastIndexOf('/') + 1), // Page URL
-            clean_url = page.split('?')[0] + '?' + $.param({page: 'embm-settings'}); // Reset URL
+            clean_url = page.split('?')[0] + '?' + $.param({page: 'embm-settings'}) + url_hash; // Reset URL
+
+        console.log('click', clean_url);
 
         // Remove notice
         $el.fadeTo(100, 0, function () {
@@ -101,6 +108,7 @@ jQuery(document).ready(function ($) {
         window.history.replaceState(null, null, clean_url);
     });
 
+    // Toggle contextual help for '?' link clicks
     $('.embm-settings--help').on('click', function (e) {
         // Get tab name from link
         var tab = $(this).data('help');
@@ -121,5 +129,35 @@ jQuery(document).ready(function ($) {
 
         // Force click on the Help tab
         $('#contextual-help-link').click();
+    });
+
+    // Select icon option
+    $('#embm_untappd_icons').val(embm_settings.options.embm_untappd_icons);
+
+    // Toggle icon image on select change
+    $('.embm-settings--untappd-select').on('change', function (e) {
+        // Get URL for selected image
+        var img_src = embm_settings.plugin_url + 'assets/img/checkin-button-' + this.value + '.png';
+
+        // Update icon image source
+        $('.embm-settings--untappd-icon').attr('src', img_src);
+    });
+
+    /* ---- LABS ---- */
+
+    // Redirect to Untappd to authorize user
+    $('button.embm-labs--authorize-button').on('click', function (e) {
+        var url = window.location.href, // Full URL
+            redirect_params = $.param({
+                'page': 'embm-settings'
+            }),
+            redirect_url = url.split('?')[0] + '?' + redirect_params, // Reset URL
+            auth_root = 'https://wp.erinmorelli.com/embm/untappd',
+            auth_params = $.param({
+                'embm-origin': redirect_url
+            }),
+            auth_url = auth_root + '?' + auth_params;
+
+        window.location = auth_url;
     });
 });
