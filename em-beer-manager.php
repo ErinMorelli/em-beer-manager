@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: http://www.erinmorelli.com/projects/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 2.1.0
+ * Version: 2.2.0
  * Author: Erin Morelli
  * Author URI: http://www.erinmorelli.com/
  * License: GPLv2 or later
@@ -50,7 +50,7 @@ if (!defined('PLUGINDIR')) {
 function EMBM_Plugin_load()
 {
     // Set current version
-    $embm_curr_version = '2.1.0';
+    $embm_curr_version = '2.2.0';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {
@@ -112,7 +112,6 @@ function EMBM_Plugin_activate()
     // Set default settings options
     $defaults = array(
         'embm_untappd_check'    => '',
-        'embm_untappd_brewery'  => '',
         'embm_untappd_icons'    => '1',
         'embm_css_url'          => '',
         'embm_group_slug'       => 'group'
@@ -194,7 +193,7 @@ function EMBM_Plugin_uninstall()
         // Set taxonomy
         register_taxonomy($taxonomy);
 
-        // Fina all terms for taxonomy
+        // Find all terms for taxonomy
         $terms = get_terms($taxonomy, array('hide_empty' => 0));
 
         // Iteratively remove all terms for taxonomy
@@ -207,14 +206,15 @@ function EMBM_Plugin_uninstall()
     }
 
     // Remove EMBM widget CSS
-    wp_deregister_style('embm-widget', EMBM_PLUGIN_URL.'assets/css/widget.css');
+    wp_deregister_style('embm-widget');
     wp_dequeue_style('embm-widget');
 
     // Remove EMBM output CSS
-    wp_deregister_style('embm-output', EMBM_PLUGIN_URL.'assets/css/output.css');
+    wp_deregister_style('embm-output');
     wp_dequeue_style('embm-output');
 
     // Remove EMBM admin CSS
+    wp_deregister_style('embm-admin');
     wp_dequeue_style('embm-admin');
 
     // Retrieve custom CSS info
@@ -222,8 +222,12 @@ function EMBM_Plugin_uninstall()
     $get_custom_css = $style_option['embm_css_url'];
 
     // Remove custom CSS
-    wp_deregister_style('custom-embm-output', $get_custom_css);
+    wp_deregister_style('custom-embm-output');
     wp_dequeue_style('custom-embm-output');
+
+    // Remove EMBM admin JS
+    wp_deregister_script('embm-admin-script');
+    wp_dequeue_script('embm-admin-script');
 
     // Remove EMBM settings
     delete_option(EMBM_VERSION_KEY);
@@ -232,6 +236,8 @@ function EMBM_Plugin_uninstall()
     delete_option('embm_styles_loaded');
     delete_option('widget_beer_list_widget');
     delete_option('widget_recent_untappd_widget');
+    delete_option('embm_untappd_brewery_id');
+    delete_option('embm_untappd_token');
 }
 
 // Set uninstall hook
@@ -274,7 +280,7 @@ function EMBM_Plugin_styles()
     // If a file is defined, use it
     if ($has_custom_css != '') {
         // Remove existing output stylesheet
-        wp_deregister_style('embm-output', EMBM_PLUGIN_URL.'assets/css/output.css');
+        wp_deregister_style('embm-output');
         wp_dequeue_style('embm-output');
 
         // Add custom output stylesheet
@@ -282,7 +288,7 @@ function EMBM_Plugin_styles()
         wp_enqueue_style('custom-embm-output');
     } else {
         // Remove custom output stylesheet
-        wp_deregister_style('custom-embm-output', $has_custom_css);
+        wp_deregister_style('custom-embm-output');
         wp_dequeue_style('custom-embm-output');
 
         // Add default stylesheet

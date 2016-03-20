@@ -160,4 +160,18 @@ jQuery(document).ready(function ($) {
 
         window.location = auth_url;
     });
+
+    // Redirect to deauthorize Untappd user
+    $('a.embm-untappd--deauthorize').on('click', function (e) {
+        e.preventDefault();
+        var url = window.location.href, // Full URL
+            url_hash = window.location.hash, // URL hash
+            deauth_params = $.param({
+                'page': 'embm-settings',
+                'embm-untappd-deauthorize': 1
+            }),
+            deauth_url = url.split('?')[0] + '?' + deauth_params + url_hash; // Reset URL
+
+        window.location = deauth_url;
+    });
 });

@@ -93,7 +93,7 @@ function EMBM_Core_Beer_api()
     // Set API field options
     $field_options = array(
         'get_callback'    => 'EMBM_Core_Beer_Api_get',
-        'update_callback' => null,
+        'update_callback' => 'EMBM_Core_Beer_Api_post',
         'schema'          => null,
     );
 
@@ -166,9 +166,24 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         // Return formatted info
         return array(
             'id'    => $untappd_id,
-            'link'   => $untappd_link
+            'link'  => $untappd_link
         );
     }
+}
+
+
+/**
+ * Handle POST requests for additional beer fields
+ *
+ * @param object $object     The WP object being requested
+ * @param string $field_name The name of the API field requested
+ * @param object $request    The HTTP request object
+ *
+ * @return string/array
+ */
+function EMBM_Core_Beer_Api_post($object, $field_name, $request)
+{
+    return;
 }
 
 

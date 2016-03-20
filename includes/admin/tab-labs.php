@@ -34,6 +34,13 @@ if (isset($_GET['embm-untappd-token'])) {
     exit;
 }
 
+// Handle Untappd deauthorization
+if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
+    // Delete Untappd records from db
+    delete_option('embm_untappd_brewery_id');
+    delete_option('embm_untappd_token');
+}
+
 // Problem email subject
 $email_subj = '[EM Beer Manager] Issue Report';
 
