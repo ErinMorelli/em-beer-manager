@@ -174,3 +174,4 @@ I would love to be able to expand this section - let me know if you are able to 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
+* Add POST support for beer metadata in the WordPress API
