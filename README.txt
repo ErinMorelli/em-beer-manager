@@ -138,7 +138,7 @@ New in v2.1.0 is the EM Beer Manager 'Labs'. This is a section where we plan to 
 
 = How do I access EM Beer Manager beers, styles, and groups in the WordPress API? =
 
-Starting with v2.1.0 you can now access EM Beer Manager beers, styles, and groups from the [WordPress API](http://v2.wp-api.org/).
+Starting with v2.1.0 you can now access and update EM Beer Manager beers, styles, and groups from the [WordPress API](http://v2.wp-api.org/).
 
 Beers can be accessed using `/wp-json/wp/v2/embm_beers` or individually at `/wp-json/wp/v2/embm_beers/<beer_id>`.
 
@@ -215,6 +215,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 2.1.1 =
+* Added PUT/POST support for beer metadata via the Wordpress API
+* Further improvements to the 'Import from Untappd' Labs feature
 
 = 2.1.0 =
 * Added new 'Labs' section with an experimental import from Untappd feature
@@ -351,4 +355,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
-* Add POST support for beer metadata in the WordPress API

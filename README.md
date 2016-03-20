@@ -39,11 +39,9 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.0 - Feature Release](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.0.zip) ###
-* Added new 'Labs' section with an experimental import from Untappd feature
-* Added ability to select which set of Untappd icons to use
-* Added integration with WordPress API - *thanks to __tlongren__ for his help with this!*
-* Updated translation POT to latest version
+### [Version 2.1.1 - Minor Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.1.zip) ###
+* Added PUT/POST support for beer metadata via the Wordpress API
+* Further improvements to the 'Import from Untappd' Labs feature
 
 
 *****
@@ -174,4 +172,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
 * Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
 * Allow users to select additional fields to show in the beer list widget (e.g. "ABV")
-* Add POST support for beer metadata in the WordPress API
