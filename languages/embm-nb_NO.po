@@ -1,0 +1,771 @@
+# Copyright (C) 2016 EM Beer Manager
+# This file is distributed under the same license as the EM Beer Manager package.
+msgid ""
+msgstr ""
+"Project-Id-Version: EM Beer Manager 2.1.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/em-beer-manager\n"
+"POT-Creation-Date: 2016-03-22 19:50+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-03-22 20:42+0100\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nb_NO\n"
+
+#: em-beer-manager.php:259 includes/embm-admin.php:661
+msgid "Settings"
+msgstr "Innstillinger"
+
+#: em-beer-manager.php:386
+msgid "Untappd Integration"
+msgstr "Integrasjon med Untappd"
+
+#: em-beer-manager.php:393
+msgid "For more information:"
+msgstr "Mer informasjon:"
+
+#: em-beer-manager.php:394
+msgid "Plugin Website"
+msgstr "Utvidelsens nettside"
+
+#: em-beer-manager.php:395
+msgid "Support Forums"
+msgstr "Brukerstøttefora"
+
+#: includes/admin/action-import-beer.php:34
+#: includes/admin/action-import-beer.php:208
+#: includes/admin/action-reset-styles.php:34
+#: includes/admin/action-reset-styles.php:47 includes/embm-admin.php:603
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Du har ikke rettigheter til å besøke denne nettsiden."
+
+#: includes/admin/tab-labs-import.php:30
+msgid "Log In to Authorize Untappd"
+msgstr "Logg inn for å koble til Untappd "
+
+#: includes/admin/tab-labs-import.php:50
+msgid "Sorry, Untappd importing is only supported for brewery accounts."
+msgstr "Beklager, du må ha en konto for å importere fra Untapped."
+
+#: includes/admin/tab-labs-import.php:52
+msgid "Re-authorize with Untappd"
+msgstr "Bekreft tilkobling til Untappd"
+
+#: includes/admin/tab-labs-import.php:53
+msgid "You will need to log out of Untappd before re-authorizing."
+msgstr "Du må logge ut for å bekrefte tilkobling til Untappd."
+
+#: includes/admin/tab-labs-import.php:108
+msgid "You are authorized as"
+msgstr "Du har ikke tilgang som"
+
+#: includes/admin/tab-labs-import.php:111
+msgid "Deauthorize"
+msgstr "Fjern tilgang"
+
+#: includes/admin/tab-labs-import.php:118
+msgid "Import single beer"
+msgstr "Importer øl"
+
+#: includes/admin/tab-labs-import.php:129
+msgid "Import"
+msgstr "Importer"
+
+#: includes/admin/tab-labs-import.php:135
+msgid "Import all beers"
+msgstr "Importer alle øl"
+
+#: includes/admin/tab-labs-import.php:142
+msgid "Import All"
+msgstr "Importer alt"
+
+#: includes/admin/tab-labs.php:49
+msgid "WARNING"
+msgstr "ADVARSEL"
+
+#: includes/admin/tab-labs.php:51
+msgid "The features on this page are experimental"
+msgstr "Funksjonene på denne siden er eksperimentelle"
+
+#: includes/admin/tab-labs.php:52
+msgid "Use at your own risk"
+msgstr "Bruk på eget ansvar"
+
+#: includes/admin/tab-labs.php:56
+msgid ""
+"If you encounter any problems when using these features, please report them "
+"to"
+msgstr ""
+"Hvis det oppstår problemer med funksjoner på denne siden, vennligst meld de "
+"til"
+
+#: includes/admin/tab-labs.php:62
+msgid "Import from Untappd"
+msgstr "Importer fra Untappd"
+
+#: includes/admin/tab-usage.php:24
+msgid "Single Beer Display"
+msgstr "Visning av enkeltøl"
+
+#: includes/admin/tab-usage.php:26
+msgid "These will display a single beer entry given it's ID number."
+msgstr "Disse vil bli vist som enkeltøl-visning basert på øl'ens ID."
+
+#: includes/admin/tab-usage.php:28 includes/admin/tab-usage.php:86
+msgid "Shortcode"
+msgstr "Kortkode"
+
+#: includes/admin/tab-usage.php:34 includes/admin/tab-usage.php:92
+msgid "Template tag"
+msgstr "Mal kode"
+
+#: includes/admin/tab-usage.php:38
+msgid ""
+"Where <code>$beer_id</code> is required and <code>$args</code> is a PHP "
+"array of comma-separated <code>key => value</code> pairs. For example:"
+msgstr ""
+"Der <code>$beer_id</code> er påkrevet og <code>$args</code> er en PHP-array "
+"med kommaseparerte <code>key=> value</code> par. For eksempel:"
+
+#: includes/admin/tab-usage.php:51 includes/admin/tab-usage.php:111
+msgid "Options"
+msgstr "Alternativer"
+
+#: includes/admin/tab-usage.php:53 includes/admin/tab-usage.php:113
+msgid "For use with both the shortcode and template code."
+msgstr "Brukes med både kortkode og malkode."
+
+#: includes/admin/tab-usage.php:58 includes/admin/tab-usage.php:118
+msgid "Option Name"
+msgstr "Alternativer navn"
+
+#: includes/admin/tab-usage.php:59 includes/admin/tab-usage.php:119
+msgid "Values"
+msgstr "Verdi"
+
+#: includes/admin/tab-usage.php:60 includes/admin/tab-usage.php:120
+msgid "Default"
+msgstr "Basis"
+
+#: includes/admin/tab-usage.php:61 includes/admin/tab-usage.php:121
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: includes/admin/tab-usage.php:69
+msgid "Displays or hides the \"Beer Profile\" information"
+msgstr "Viser eller skjuler \"Beer profile\" informasjon"
+
+#: includes/admin/tab-usage.php:75
+msgid "Displays or hides the \"More Beer Information\" section"
+msgstr "Viser eller skjuler \"More Beer Informasjon\" section"
+
+#: includes/admin/tab-usage.php:82
+msgid "List All Beers"
+msgstr "Vis alle øl"
+
+#: includes/admin/tab-usage.php:84
+msgid "These will display a formatted listing of all beers."
+msgstr "Disse vil vise en formatert liste over alle øl"
+
+#: includes/admin/tab-usage.php:96
+msgid ""
+"Where <code>$args</code> is a PHP array of comma-separated <code>key => "
+"value</code> pairs. For example:"
+msgstr ""
+"Der <code>$args</code> er en PHP array med kommaseparerte <code>key => "
+"value</code> par. For eksempel:"
+
+#: includes/admin/tab-usage.php:129
+msgid "Displays or hides the \"Beer Profile\" information for each listing"
+msgstr "Viser eller skjuler \"Beer Profile\"-informasjon for hver oppføring"
+
+#: includes/admin/tab-usage.php:135
+msgid ""
+"Displays or hides the \"More Beer Information\" section for each listing"
+msgstr "Viser eller skjuler \"More Beer Information\" for hver oppføring"
+
+#: includes/admin/tab-usage.php:139
+msgid "String of style name"
+msgstr "String med ølgruppe-navn"
+
+#: includes/admin/tab-usage.php:141
+msgid "Displays only beers belonging to a specific beer style"
+msgstr "Vis kun øl som tilhører en enkelt ølgruppe"
+
+#: includes/admin/tab-usage.php:145
+msgid "String of group name"
+msgstr "String med ølgruppe-navn"
+
+#: includes/admin/tab-usage.php:147
+msgid "Displays only beers belonging to a specific group"
+msgstr "Vis bare øl fra en ølgruppe"
+
+#: includes/admin/tab-usage.php:151
+msgid "Comma-separated list of beer IDs"
+msgstr "Kommaseparert lise over øl-id"
+
+#: includes/admin/tab-usage.php:153
+msgid "Hides listed beers from output"
+msgstr "Skjul valgte øl fra visning"
+
+#: includes/admin/tab-usage.php:157
+msgid "A number"
+msgstr "Et tall"
+
+#: includes/admin/tab-usage.php:158
+msgid "Shows all beers"
+msgstr "Vis all øl"
+
+#: includes/admin/tab-usage.php:159
+msgid "Paginates output and displays the given number of beers per page"
+msgstr "Vis sidetall på utskrift og angi antall øl per side"
+
+#: includes/admin/tab-usage.php:165
+msgid "Disables/enables pagination"
+msgstr "Slå av/på visning av sidetall"
+
+#: includes/admin/tab-usage.php:169
+msgid "See "
+msgstr "Se"
+
+#: includes/admin/tab-usage.php:169
+msgid "this list"
+msgstr "denne listen"
+
+#: includes/admin/tab-usage.php:169
+msgid " for options"
+msgstr "for alternativer"
+
+#: includes/admin/tab-usage.php:171
+msgid "Orders beer list output by the given paramater"
+msgstr "Generer øl-liste utskrift basert på verdi"
+
+#: includes/admin/tab-usage.php:177
+msgid ""
+"Sorts beer list by <code>orderby</code> value in ascending or descending "
+"order"
+msgstr ""
+"Sorter øl-liste basert på <code>orderby</code>verdi i stigende eller "
+"synkende rekkefølge"
+
+#: includes/embm-admin.php:74
+msgid "ID"
+msgstr "ID"
+
+#: includes/embm-admin.php:75
+msgid "Beer No."
+msgstr "Øl-nr."
+
+#: includes/embm-admin.php:76 includes/embm-core.php:33
+msgid "Beer"
+msgstr "Øl"
+
+#: includes/embm-admin.php:77 includes/embm-core.php:611
+msgid "Group"
+msgstr "Gruppe"
+
+#: includes/embm-admin.php:78 includes/embm-core.php:528
+msgid "Style"
+msgstr "Type"
+
+#: includes/embm-admin.php:79 includes/embm-core.php:307
+#: includes/embm-output.php:547
+msgid "ABV"
+msgstr "ABV"
+
+#: includes/embm-admin.php:80 includes/embm-core.php:309
+#: includes/embm-output.php:553
+msgid "IBU"
+msgstr "IBU"
+
+#: includes/embm-admin.php:81 includes/embm-core.php:414
+#: includes/embm-output.php:631
+msgid "Availability"
+msgstr "Tilgjengelighet"
+
+#: includes/embm-admin.php:96
+msgid "Untappd"
+msgstr "Untappd"
+
+#: includes/embm-admin.php:100
+msgid "Released"
+msgstr "Publisert"
+
+#: includes/embm-admin.php:288
+msgid "Settings FAQ"
+msgstr "OSS for innstillinger"
+
+#: includes/embm-admin.php:317 includes/embm-core.php:227
+msgid "EM Beer Manager Settings"
+msgstr "Innstillinger for EM Beer Manager"
+
+#. Plugin Name of the plugin/theme
+#: includes/embm-admin.php:318 includes/embm-admin.php:655
+msgid "EM Beer Manager"
+msgstr "EM Beer Manager"
+
+#: includes/embm-admin.php:343
+msgid "Global Settings"
+msgstr "Globale innstillinger"
+
+#: includes/embm-admin.php:344
+msgid "Custom stylesheet"
+msgstr "Tilpasset stilark (css)"
+
+#: includes/embm-admin.php:345 includes/embm-admin.php:355
+#: includes/embm-admin.php:360 includes/embm-admin.php:365
+msgid "Display settings"
+msgstr "Vis innstillinger"
+
+#: includes/embm-admin.php:348
+msgid "Untappd Settings"
+msgstr "Innstillinger for Untappd "
+
+#: includes/embm-admin.php:349
+msgid "Site-wide integration"
+msgstr "Integrasjon på nettsiden"
+
+#: includes/embm-admin.php:350
+msgid "Icon set"
+msgstr "Ikoner"
+
+#: includes/embm-admin.php:353
+msgid "Group Settings"
+msgstr "Gruppeinnstillinger"
+
+#: includes/embm-admin.php:354
+msgid "Custom taxonomy slug"
+msgstr "Tilpasset taxonomy slug"
+
+#: includes/embm-admin.php:358
+msgid "Style Settings"
+msgstr "Innstillinger for utseende"
+
+#: includes/embm-admin.php:359
+msgid "Restore styles"
+msgstr "Gjenopprett stiler"
+
+#: includes/embm-admin.php:363
+msgid "Single Page Settings"
+msgstr "Innstillinger for enkeltside"
+
+#: includes/embm-admin.php:364
+msgid "Comments"
+msgstr "Kommentarer"
+
+#: includes/embm-admin.php:391
+msgid "Override default EM Beer Manager CSS with your own stylesheet."
+msgstr "Overstyr standard EM Beer Manager CSS med ditt eget stilark."
+
+#: includes/embm-admin.php:393
+msgid "Enter a full URL that points to the stylesheet file."
+msgstr "Skriv inn hele url'en til ditt stilark."
+
+#: includes/embm-admin.php:411
+msgid "Globally hide \"profile\" info"
+msgstr "Skjul \"profil\"-info for hele siden"
+
+#: includes/embm-admin.php:420
+msgid "Globally hide \"extras\" info"
+msgstr "Skjul \"extras\"-info for hele siden"
+
+#: includes/embm-admin.php:439
+msgid "Disable site-wide integration"
+msgstr "Slå av integrasjon for hele nettsiden"
+
+#: includes/embm-admin.php:481
+msgid ""
+"Rename the beer group URLs with your own custom slug name.<br />By default "
+"URLs will look like:"
+msgstr ""
+"Gi URL til øl-gruppe nytt navn med ditt eget slug-navn.<br />. Originalt "
+"ser URLen slik ut: "
+
+#: includes/embm-admin.php:483
+msgid "You will need to refresh your permalinks "
+msgstr "Du må oppdatere dine permalenker"
+
+#: includes/embm-admin.php:483
+msgid "here"
+msgstr "her"
+
+#: includes/embm-admin.php:483
+msgid " after updating this setting."
+msgstr " etter å ha oppdatert innstillinger."
+
+#: includes/embm-admin.php:501
+msgid "Hide \"profile\" info in groups"
+msgstr "Skjul \"profil\"-info i grupper"
+
+#: includes/embm-admin.php:509
+msgid "Hide \"extras\" info in groups"
+msgstr "Skule ekstras-info i grupper"
+
+#: includes/embm-admin.php:519
+msgid "Restore missing or deleted beer styles from the pre-loaded list."
+msgstr ""
+"Gjenopprett manglende eller slettede ølstiler fra den forhåndslastede "
+"listen."
+
+#: includes/embm-admin.php:520
+msgid "Restore Styles"
+msgstr "Gjenopprett stiler"
+
+#: includes/embm-admin.php:538
+msgid "Hide \"profile\" info on styles pages"
+msgstr "Skjul \"profile\"-info på stil-sider"
+
+#: includes/embm-admin.php:547
+msgid "Hide \"extras\" info on styles pages"
+msgstr "Skjul \"ekstras\"-info på stil-sider"
+
+#: includes/embm-admin.php:565
+msgid "Enable comments on single beer pages"
+msgstr "Aktiver kommentarer på sider for enkelt-øl"
+
+#: includes/embm-admin.php:583
+msgid "Hide \"profile\" info on single beer pages"
+msgstr "Skjul \"profile\"-info  på sider for enkelt-øl"
+
+#: includes/embm-admin.php:590
+msgid "Hide \"extras\" info on single beer pages"
+msgstr "Skul \"extras\"-info på sider for enkelt -øl"
+
+#: includes/embm-admin.php:612
+msgid "Restore EM Beer Manager Styles"
+msgstr "Gjenopprett EM Beer Manager stiler"
+
+#: includes/embm-admin.php:614
+msgid ""
+"This will restore any missing or deleted beer styles from the pre-loaded "
+"BeerAdvocate list."
+msgstr ""
+"Dette vil gjenopprette manglende eller slettede øl-stiler fra den "
+"forhåndslastede listen."
+
+#: includes/embm-admin.php:615
+msgid ""
+"Your custom or modified styles will <span class=\"emphasis\">NOT</span> be "
+"affected by this action."
+msgstr ""
+"Dine tilpassede eller modifiserte stiler vil <span class=\"emphasis\">IKKE</"
+"span> bli påvirket av denne handlingen."
+
+#: includes/embm-admin.php:616
+msgid "Do you wish to proceed?"
+msgstr "Ønsker du å fortsette?"
+
+#: includes/embm-admin.php:621
+msgid "YES"
+msgstr "JA"
+
+#: includes/embm-admin.php:622
+msgid "NO"
+msgstr "NEI"
+
+#: includes/embm-admin.php:632
+msgid "<strong>Success!</strong> Your beer styles have been restored."
+msgstr "<strong>Vellykket!</strong> Dine øl-stiler er gjenopprettet."
+
+#: includes/embm-admin.php:642
+msgid "<strong>Success!</strong> Your beer has been imported from Untappd."
+msgstr "<strong>Vellykket!</strong> Dine øl-stiler er gjenopprettet."
+
+#: includes/embm-admin.php:644
+msgid "<strong>Success!</strong> Your beers have been imported from Untappd."
+msgstr "<strong>Success!</strong> Dine øl er importert fra Untappd."
+
+#: includes/embm-admin.php:662
+msgid "Usage"
+msgstr "Bruk"
+
+#: includes/embm-admin.php:663
+msgid "Labs"
+msgstr "Eksperimentelt"
+
+#: includes/embm-admin.php:673
+msgid "Save Changes"
+msgstr "Lagre endringer"
+
+#: includes/embm-admin.php:689
+msgid ""
+"If you like this plugin, please consider donating to help support future "
+"development. Thank you!"
+msgstr ""
+"Hvis du liker denne utvidelsen, vurder gjerne å donere for å støtte videre "
+"utvikling. Tusen takk!"
+
+#: includes/embm-admin.php:700
+msgid ""
+"Free beer icon from <a href=\"http://simpleicon.com\" title=\"simple icon"
+"\">simple icon</a>."
+msgstr ""
+"Gratis øl-ikoner fra  <a href=\"http://simpleicon.com\" title=\"simple icon"
+"\">simple icon</a>."
+
+#: includes/embm-core.php:32 includes/embm-core.php:44
+msgid "Beers"
+msgstr "Ølsorter"
+
+#: includes/embm-core.php:34
+msgid "Add New"
+msgstr "Legg til ny"
+
+#: includes/embm-core.php:35
+msgid "Add New Beer"
+msgstr "Legg til ny øl"
+
+#: includes/embm-core.php:36
+msgid "Edit Beer"
+msgstr "Rediger øl"
+
+#: includes/embm-core.php:37
+msgid "New Beer"
+msgstr "Ny øl"
+
+#: includes/embm-core.php:38
+msgid "All Beers"
+msgstr "Alle ølsorter"
+
+#: includes/embm-core.php:39
+msgid "View Beer"
+msgstr "Vis øl"
+
+#: includes/embm-core.php:40
+msgid "Search Beers"
+msgstr "Søk ølsorter"
+
+#: includes/embm-core.php:41
+msgid "No beers found"
+msgstr "Ingen ølsorter funnet"
+
+#: includes/embm-core.php:42
+msgid "No beers found in the Trash"
+msgstr "Ingen ølsorter funnet i søppelkassen"
+
+#: includes/embm-core.php:215 includes/embm-core.php:407
+#: includes/widgets/embm-widget-untappd.php:96
+msgid "Untappd Beer ID"
+msgstr "Untappd øl-id"
+
+#: includes/embm-core.php:298 includes/embm-output.php:559
+msgid "Malts"
+msgstr "Malt"
+
+#: includes/embm-core.php:300 includes/embm-output.php:565
+msgid "Hops"
+msgstr "Humle"
+
+#: includes/embm-core.php:302
+msgid "Additions/Spices"
+msgstr "Tilsetninger/krydder"
+
+#: includes/embm-core.php:304 includes/embm-output.php:577
+msgid "Yeast"
+msgstr "Gjær"
+
+#: includes/embm-core.php:401 includes/embm-output.php:625
+msgid "Beer Number"
+msgstr "Øl-nummer"
+
+#: includes/embm-core.php:421
+msgid "Additional Notes/Food Pairings"
+msgstr "Ekstra notater/mat den passer til"
+
+#: includes/embm-core.php:527 includes/embm-core.php:539
+msgid "Styles"
+msgstr "Ølgruppe"
+
+#: includes/embm-core.php:529
+msgid "Search Styles"
+msgstr "Søk ølgruppe"
+
+#: includes/embm-core.php:530 includes/widgets/embm-widget-list.php:98
+msgid "All Styles"
+msgstr "Alle ølgrupper"
+
+#: includes/embm-core.php:531
+msgid "Edit Style"
+msgstr "Rediger ølgruppe"
+
+#: includes/embm-core.php:532
+msgid "Update Style"
+msgstr "Oppdater ølgruppe"
+
+#: includes/embm-core.php:533
+msgid "Add New Style"
+msgstr "Legg til ny ølgruppe"
+
+#: includes/embm-core.php:534
+msgid "New Style Name"
+msgstr "Nytt ølgruppe-navn"
+
+#: includes/embm-core.php:535
+msgid "Popular Styles"
+msgstr "Populære ølgrupper"
+
+#: includes/embm-core.php:536
+msgid "Choose from the most used styles"
+msgstr "Velg fra de hyppigst brukte ølgruppene"
+
+#: includes/embm-core.php:537
+msgid "Separate styles with commas"
+msgstr "Skill ølgrupper med komma"
+
+#: includes/embm-core.php:538
+msgid "Add or remove styles"
+msgstr "Legg til eller fjern ølgrupper"
+
+#: includes/embm-core.php:610 includes/embm-core.php:622
+msgid "Groups"
+msgstr "Grupper"
+
+#: includes/embm-core.php:612
+msgid "Search Groups"
+msgstr "Søk i grupper"
+
+#: includes/embm-core.php:613 includes/widgets/embm-widget-list.php:107
+msgid "All Groups"
+msgstr "Alle grupper"
+
+#: includes/embm-core.php:614
+msgid "Edit Group"
+msgstr "Rediger gruppe"
+
+#: includes/embm-core.php:615
+msgid "Update Group"
+msgstr "Oppdater gruppe"
+
+#: includes/embm-core.php:616
+msgid "Add New Group"
+msgstr "Legg til ny gruppe"
+
+#: includes/embm-core.php:617
+msgid "New Group Name"
+msgstr "Nytt gruppenavn"
+
+#: includes/embm-core.php:618
+msgid "Popular Groups"
+msgstr "Populære gruppenavn"
+
+#: includes/embm-core.php:619
+msgid "Choose from the most used groups"
+msgstr "Velg fra de mest brukte gruppenavnene"
+
+#: includes/embm-core.php:620
+msgid "Separate groups with commas"
+msgstr "Skill grupper med komma"
+
+#: includes/embm-core.php:621
+msgid "Add or remove groups"
+msgstr "Legg til eller fjern grupper"
+
+#: includes/embm-output.php:395 includes/embm-output.php:818
+msgid "View all %s beers"
+msgstr "Vis alle %s øl"
+
+#: includes/embm-output.php:422
+msgid "More..."
+msgstr "Mer..."
+
+#: includes/embm-output.php:492
+msgid "Check in on Untappd"
+msgstr "Sjekk inn på Untappd"
+
+#: includes/embm-output.php:571
+msgid "Other"
+msgstr "Andre"
+
+#: includes/embm-output.php:637
+msgid "Additional Notes"
+msgstr "Ekstra notater"
+
+#: includes/widgets/embm-widget-list.php:37
+msgid "Displays a list of beers"
+msgstr "Vis en liste med øl"
+
+#: includes/widgets/embm-widget-list.php:76
+#: includes/widgets/embm-widget-untappd.php:133
+msgid "Title:"
+msgstr "Tittel:"
+
+#: includes/widgets/embm-widget-list.php:80
+msgid "Exclude Beers: "
+msgstr "Utelukke følgende øl:"
+
+#: includes/widgets/embm-widget-list.php:81
+msgid "Comma separated IDs, e.g. \"1,2,3\""
+msgstr "Kommaseparerte IDer, f.eks. \"1,2,3\""
+
+#: includes/widgets/embm-widget-list.php:84
+msgid "Beer Count: "
+msgstr "Antall øl"
+
+#: includes/widgets/embm-widget-list.php:88
+msgid "Show Summary: "
+msgstr "Vis sammendrag"
+
+#: includes/widgets/embm-widget-list.php:92
+msgid "Summary Length: "
+msgstr "Lengde sammendrag: "
+
+#: includes/widgets/embm-widget-list.php:93
+msgid " Characters"
+msgstr " Tegn"
+
+#: includes/widgets/embm-widget-list.php:96
+msgid "Show Style: "
+msgstr "Vis ølgruppe: "
+
+#: includes/widgets/embm-widget-list.php:105
+msgid "Show Group: "
+msgstr "Vis Gruppe: "
+
+#: includes/widgets/embm-widget-list.php:262
+msgid "More"
+msgstr "Mer"
+
+#: includes/widgets/embm-widget-list.php:278
+msgid "No beers found."
+msgstr "Ingen øl funnet."
+
+#: includes/widgets/embm-widget-untappd.php:50
+msgid "Displays a list of recent Untappd brewery check-ins"
+msgstr "Vis en liste over alle nylig innsjekkinger i Untappd"
+
+#: includes/widgets/embm-widget-untappd.php:137
+msgid "Brewery ID: "
+msgstr "Brewery ID:"
+
+#: includes/widgets/embm-widget-untappd.php:142
+msgid "Number of items to show: "
+msgstr "Antall å vise:"
+
+#: includes/widgets/embm-widget-untappd.php:235
+msgid "A brewery ID number has not been set."
+msgstr "Brewery ID-nummer er ikke definert."
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.erinmorelli.com/projects/em-beer-manager"
+msgstr "http://www.erinmorelli.com/projects/em-beer-manager"
+
+#. Description of the plugin/theme
+msgid ""
+"Catalog and display your beers with WordPress. Integrates very simply with "
+"Untappd for individual beer checkins. Great for everyone from home brewers "
+"to professional breweries!"
+msgstr ""
+"Arkiver og vis dine øl med WordPress. Enkel integrasjon med Untappd for "
+"enkeltøl. Utmerket både for hjemmebryggere og profesjonelle bryggere og "
+"bryggerier!"
+
+#. Author of the plugin/theme
+msgid "Erin Morelli"
+msgstr "Erin Morelli"
+
+#. Author URI of the plugin/theme
+msgid "http://www.erinmorelli.com/"
+msgstr "http://www.erinmorelli.com/"
