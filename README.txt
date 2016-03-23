@@ -355,8 +355,8 @@ Fixed plugin activation error bug
 I would love to be able to expand this section - let me know if you are able to contribute!
 
 * English
-* Icelandic - *thanks to __[rodonmanes](http://bjorspjall.is)__*
-* Norwegian - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
+* Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
+* Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 
 
 == Planned Features ==
