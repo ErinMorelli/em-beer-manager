@@ -54,7 +54,11 @@ if ($use_untappd != '1') {
             add_action('load-widgets.php', array($this, 'helpLoad'));
 
             // Call parent construct
-            parent::__construct('recent_untappd_widget', 'Recent Untappd Check-ins', $widget_options);
+            parent::__construct(
+                'recent_untappd_widget',
+                __('Recent Untappd Check-ins', 'embm'),
+                $widget_options
+            );
         }
 
         /**
@@ -94,12 +98,15 @@ if ($use_untappd != '1') {
                 array(
                     'id'       => 'embm-untappd-brewery-id',
                     'title'    => __('Untappd Beer ID', 'embm'),
-                    'content'  => __(
-                        '<p>Find your Untappd brewery ID number by going to your brewery\'s official page (i.e. <code>https://untappd.com/BreweryName</code>). Click on the "Brewery Feed (RSS)" link in the right-hand sidebar. The link\'s URL will be formatted like this:</p>'.
-                        '<p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p>'.
-                        '<p>The string of numbers at the end of the URL is your brewery ID number.</p>',
-                        'embm'
-                    )
+                    'content'  => '<p>'.
+                        __('Find your Untappd brewery ID number by going to your brewery\'s official page', 'embm').
+                        ' (i.e. <code>https://untappd.com/BreweryName</code>). '.
+                        sprintf(
+                            __('Click on the %s link in the right-hand sidebar. The link\'s URL will be formatted like this', 'embm'),
+                            '"Brewery Feed (RSS)"'
+                        ).':</p><p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p><p>'.
+                        __('The string of numbers at the end of the URL is your brewery ID number.', 'embm').
+                        '</p>'
                 )
             );
         }
@@ -130,16 +137,16 @@ if ($use_untappd != '1') {
 
 ?>
             <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
+                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
                 <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID: ', 'embm'); ?></label>
+                <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID', 'embm'); ?>: </label>
                 <input id="<?php echo $this->get_field_id('brewery'); ?>" name="<?php echo $this->get_field_name('brewery'); ?>" type="text" style="width: 30%;" value="<?php echo $brewery; ?>" />
                 <a data-help="embm-untappd-brewery-id" class="embm-settings--help">?</a>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show: ', 'embm'); ?></label>
+                <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show', 'embm'); ?>: </label>
                 <input id="<?php echo $this->get_field_id('items'); ?>" name="<?php echo $this->get_field_name('items'); ?>" type="number" min="1" step="1" style="width: 20%;" value="<?php echo $items; ?>" />
             </p>
 <?php

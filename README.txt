@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.4.2
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -216,6 +216,11 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 2.1.2 =
+* Under-the-hood localization improvements
+* Added updated translation POT
+* Added new Norwegian (nb_NO) language translation - *thanks to __Lars Kvisle__!*
+
 = 2.1.1 =
 * Added PUT/POST support for beer metadata via the Wordpress API
 * Further improvements to the 'Import from Untappd' Labs feature
@@ -308,6 +313,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
+= 2.1.2 =
+Plugin localization overhaul and new Norwegian translation.
+
 = 2.0.1 =
 Fixed broken beer shortcode output
 
@@ -347,7 +355,8 @@ Fixed plugin activation error bug
 I would love to be able to expand this section - let me know if you are able to contribute!
 
 * English
-* Icelandic - *thanks to __rodonmanes__*
+* Icelandic - *thanks to __[rodonmanes](http://bjorspjall.is)__*
+* Norwegian - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 
 
 == Planned Features ==

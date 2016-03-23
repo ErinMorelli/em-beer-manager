@@ -47,7 +47,7 @@ function EMBM_Core_beer()
     // Set up custom post type options
     $args = array(
         'labels'                => $labels,
-        'description'           => 'Holds beer specific data',
+        'description'           => __('Holds beer specific data', 'embm'),
         'public'                => true,
         'capability_type'       => 'post',
         'hierarchical'          => false,
@@ -213,12 +213,11 @@ function EMBM_Core_Meta_help()
         array(
             'id'       => 'embm-untappd-beer-id',
             'title'    => __('Untappd Beer ID', 'embm'),
-            'content'  => __(
-                '<p>Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this:</p>'.
-                '<p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p>'.
-                '<p>The string of numbers at the end of the URL is your beer\'s ID.</p>',
-                'embm'
-            )
+            'content'  => '<p>'.
+                __('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
+                ':</p><p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p><p>'.
+                __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
+                '</p>'
         )
     );
 
@@ -245,7 +244,7 @@ function EMBM_Core_Meta_boxes()
     // Add Beer Profile metabox to sidebar
     add_meta_box(
         'beer-specs',
-        'Beer Profile',
+        __('Beer Profile', 'embm'),
         'EMBM_Core_Meta_specs',
         'embm_beer',
         'side',
@@ -255,7 +254,7 @@ function EMBM_Core_Meta_boxes()
     // Add More Beer Information metabox to main content
     add_meta_box(
         'beer-info',
-        'More Beer Information',
+        __('More Beer Information', 'embm'),
         'EMBM_Core_Meta_info',
         'embm_beer',
         'normal',

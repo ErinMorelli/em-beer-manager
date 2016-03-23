@@ -36,7 +36,11 @@ class EMBM_Widget_List extends WP_Widget
             'classname'     => 'beer_list_widget',
             'description'   => __('Displays a list of beers', 'embm')
         );
-        parent::__construct('beer_list_widget', 'Beer List', $widget_options);
+        parent::__construct(
+            'beer_list_widget',
+            __('Beer List', 'embm'),
+            $widget_options
+        );
     }
 
     /**
@@ -73,27 +77,27 @@ class EMBM_Widget_List extends WP_Widget
 
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'embm'); ?></label><br />
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
             <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers: ', 'embm'); ?></label><br />
-            <input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs, e.g. "1,2,3"', 'embm'); ?></small>
+            <label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers', 'embm'); ?>: </label><br />
+            <input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs', 'embm'); ?>, e.g. "1,2,3"</small>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Beer Count: ', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Beer Count', 'embm'); ?>: </label>
             <input id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="number" style="width: 25%;" value="<?php echo $count; ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary: ', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary', 'embm'); ?>: </label>
             <input name="<?php echo $this->get_field_name('summary'); ?>" type="checkbox" id="<?php echo $this->get_field_id('summary'); ?>" value="1"<?php checked('1', $summary, true); ?> />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length: ', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length', 'embm'); ?>: </label>
             <input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small><?php _e(' Characters', 'embm'); ?></small>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style: ', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style', 'embm'); ?>: </label>
             <select name="<?php echo $this->get_field_name('style'); ?>" id="<?php echo $this->get_field_id('style'); ?>">
                 <option value="all" <?php selected($style, 'all', true); ?>><?php _e('All Styles', 'embm'); ?></option>
                 <?php $beer_styles = get_terms('embm_style'); foreach ($beer_styles as $beer_style) : ?>
@@ -102,7 +106,7 @@ class EMBM_Widget_List extends WP_Widget
             </select>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('group'); ?>"><?php _e('Show Group: ', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('group'); ?>"><?php _e('Show Group', 'embm'); ?>: </label>
             <select name="<?php echo $this->get_field_name('group'); ?>" id="<?php echo $this->get_field_id('group'); ?>">
                 <option value="all" <?php selected($group, 'all', true); ?>><?php _e('All Groups', 'embm'); ?></option>
                 <?php $beer_groups = get_terms('embm_group'); foreach ($beer_groups as $beer_group) : ?>

@@ -105,7 +105,7 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
 // Display import options
 ?>
     <p>
-        <?php _e('You are authorized as'); ?>:
+        <?php _e('You are authorized as', 'embm'); ?>:
         <a href="<?php echo $user->untappd_url; ?>" target="_blank" class="embm-untappd--user-link">
             <strong><?php echo $user->first_name; ?></strong>
             <small>(<a href="#" class="embm-untappd--deauthorize"><?php _e('Deauthorize', 'embm'); ?></a>)</small>

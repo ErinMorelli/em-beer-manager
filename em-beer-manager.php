@@ -50,7 +50,7 @@ if (!defined('PLUGINDIR')) {
 function EMBM_Plugin_load()
 {
     // Set current version
-    $embm_curr_version = '2.1.1';
+    $embm_curr_version = '2.1.2';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {
@@ -89,17 +89,13 @@ function EMBM_Plugin_load()
             include $path;
         }
     }
+
+    // Plugin localization
+    load_plugin_textdomain('embm', false, plugin_basename(dirname(__FILE__)).'/languages');
 }
 
 // Initial plugin load
 add_action('plugins_loaded', 'EMBM_Plugin_load', 10);
-
-// Plugin localization
-load_plugin_textdomain(
-    'embm',
-    PLUGINDIR.'/em-beer-manager/languages',
-    'em-beer-manager/languages'
-);
 
 
 /**
@@ -384,13 +380,13 @@ function EMBM_Plugin_help()
         'untappd'   => array(
             'id'       => 'embm-untappd-integration',
             'title'    => __('Untappd Integration', 'embm'),
-            'content'  => __(
-                '<p>Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.</p>'.
-                '<p>You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page</p>',
-                'embm'
-            )
+            'content'  => '<p>'.
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm').
+                '</p><p>'.
+                __('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page', 'embm').
+                '</p>'
         ),
-        'sidebar'   => '<p><strong>' . __('For more information:', 'embm') . '</strong></p>' .
+        'sidebar'   => '<p><strong>' . __('For more information', 'embm') . ':</strong></p>' .
             '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
             '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'
     );

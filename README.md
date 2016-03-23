@@ -39,9 +39,10 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.1 - Minor Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.1.zip) ###
-* Added PUT/POST support for beer metadata via the Wordpress API
-* Further improvements to the 'Import from Untappd' Labs feature
+### [Version 2.1.2 - Localization Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.2.zip) ###
+* Under-the-hood localization improvements
+* Added updated translation POT
+* Added new Norwegian (nb_NO) language translation - *thanks to __Lars Kvisle__!*
 
 
 *****
@@ -164,7 +165,8 @@ These will display a formatted listing of all beers.
 I would love to be able to expand this section - let me know if you are able to contribute!
 
 * English
-* Icelandic - *thanks to __rodonmanes__*
+* Icelandic - *thanks to __[rodonmanes](http://bjorspjall.is)__*
+* Norwegian - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 
 
 ### Planned Features ###

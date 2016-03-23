@@ -419,7 +419,7 @@ function EMBM_Output_Content_beer($beer_id, $showprofile=true, $showextras=true)
     // Set read more link
     if ((is_tax('embm_style') || is_archive()) && !is_tax('embm_group')) {
         $output .= ' <a class="read-more" href="'.get_permalink($beer_id).'">';
-        $output .= __('More...', 'embm');
+        $output .= __('More', 'embm').'...';
         $output .= '</a>';
     }
 

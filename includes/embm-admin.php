@@ -286,14 +286,17 @@ function EMBM_Admin_help()
         array(
             'id'       => 'embm-settings-faq',
             'title'    => __('Settings FAQ', 'embm'),
-            'content'  => __(
-                '<p><strong>I don\'t want to show that big grey box of information, how do I get rid of it?</strong></p>'.
-                '<p>For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.</p>'.
-                '<p><strong>What\'s the difference between "profile" and "extras"?</strong></p>'.
-                '<p>The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.</p>'.
-                '<p>The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.</p>',
-                'embm'
-            )
+            'content'  => '<p><strong>'.
+                __('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm').
+                '</strong></p><p>'.
+                __('For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.', 'embm').
+                '</p><p><strong>'.
+                __('What\'s the difference between "profile" and "extras"?', 'embm').
+                '</strong></p><p>'.
+                __('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', 'embm').
+                '</p><p>'.
+                __('The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.', 'embm').
+                '</p>'
         )
     );
 
@@ -452,8 +455,8 @@ function EMBM_Admin_Settings_Untappd_icons()
 
     // Set up possible options
     $icon_sets = array(
-        '1' => 'Original (v1)',
-        '2' => 'Modern (v2)'
+        '1' => __('Original', 'embm').' (v1)',
+        '2' => __('Modern', 'embm').' (v2)'
     );
 
     echo '<p><select name="embm_options[embm_untappd_icons]" class="embm-settings--untappd-select" id="embm_untappd_icons">';
@@ -478,9 +481,13 @@ function EMBM_Admin_Settings_Group_slug()
 {
     $options = get_option('embm_options');
 
-    echo '<p>'.__('Rename the beer group URLs with your own custom slug name.<br />By default URLs will look like:', 'embm').' <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
+    echo '<p>'.__('Rename the beer group URLs with your own custom slug name.', 'embm');
+    echo '<br />'.__('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
     echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" /></p>';
-    echo '<p class="description">('.__('You will need to refresh your permalinks ', 'embm').'<a href="options-permalink.php">'.__('here', 'embm').'</a>'.__(' after updating this setting.', 'embm').')</p>';
+    echo '<p class="description">('.sprintf(
+            __('You will need to refresh your permalinks %s after updating this setting', 'embm'),
+            sprintf('<a href="options-permalink.php">%s</a>', __('here', 'embm'))
+        ).'</p>';
 }
 
 /**
@@ -612,7 +619,14 @@ function EMBM_Admin_Settings_page()
                 <h2><?php _e('Restore EM Beer Manager Styles', 'embm'); ?></h2>
 
                 <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded BeerAdvocate list.', 'embm'); ?></p>
-                <p><?php _e('Your custom or modified styles will <span class="emphasis">NOT</span> be affected by this action.', 'embm'); ?></p>
+                <p>
+                    <?php
+                        printf(
+                            __('Your custom or modified styles will %s be affected by this action.', 'embm'),
+                            sprintf('<span class="emphasis">%s</span>', __('NOT', 'embm'))
+                        );
+                    ?>
+                </p>
                 <p><?php _e('Do you wish to proceed?', 'embm'); ?></p>
 
                 <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-reset-styles.php'; ?>" class="embm-settings--styles-form">
@@ -629,7 +643,7 @@ function EMBM_Admin_Settings_page()
             // Show success message admin notice
 ?>
             <div class="updated notice embm-settings--notice">
-                <p><?php _e('<strong>Success!</strong> Your beer styles have been restored.', 'embm'); ?></p>
+                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beer styles have been restored.', 'embm'); ?></p>
                 <button type="button" class="notice-dismiss"></button>
             </div>
 <?php
@@ -639,9 +653,9 @@ function EMBM_Admin_Settings_page()
 ?>
         <div class="updated notice embm-settings--notice">
             <?php if ($_GET['embm-import-success'] == '1') : ?>
-                <p><?php _e('<strong>Success!</strong> Your beer has been imported from Untappd.', 'embm'); ?></p>
+                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beer has been imported from Untappd.', 'embm'); ?></p>
             <?php elseif ($_GET['embm-import-success'] == '2') : ?>
-                <p><?php _e('<strong>Success!</strong> Your beers have been imported from Untappd.', 'embm'); ?></p>
+                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beers have been imported from Untappd.', 'embm'); ?></p>
             <?php endif; ?>
             <button type="button" class="notice-dismiss"></button>
         </div>
@@ -697,7 +711,7 @@ function EMBM_Admin_Settings_page()
     </form>
 
     <p class="embm-settings--credits">
-        <?php _e('Free beer icon from <a href="http://simpleicon.com" title="simple icon">simple icon</a>.', 'embm'); ?><br />
+        <?php _e('Free beer icon from', 'embm'); ?> <a href="http://simpleicon.com" title="simple icon">simple icon</a>.<br />
         &copy; 2013-<?php echo date('Y'); ?> <a href="http://www.erinmorelli.com" title="Erin Morelli">Erin Morelli</a>.
     </p>
 </div>

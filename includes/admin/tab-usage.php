@@ -35,7 +35,16 @@
 
 <blockquote>
     <code><?php echo htmlentities('<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
-    <p><?php _e('Where <code>$beer_id</code> is required and <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
+    <p>
+        <?php
+            printf(
+                __('Where %s is required and %s is a PHP array of comma-separated %s pairs. For example', 'embm'),
+                '<code>$beer_id</code>',
+                '<code>$args</code>',
+                sprintf('<code>%s => %s</code>', __('key', 'embm'), __('value', 'embm'))
+            );
+        ?>:
+    </p>
     <p>
         <pre class="embm-settings--code">
 <?php echo htmlentities(
@@ -93,7 +102,15 @@
 
 <blockquote>
     <code><?php echo htmlentities('<?php echo EMBM_Output_List_display( $args ); ?>'); ?></code></p>
-    <p><?php _e('Where <code>$args</code> is a PHP array of comma-separated <code>key => value</code> pairs. For example:', 'embm'); ?></p>
+    <p>
+        <?php
+            printf(
+                __('Where %s is a PHP array of comma-separated %s pairs. For example', 'embm'),
+                '<code>$args</code>',
+                sprintf('<code>%s => %s</code>', __('key', 'embm'), __('value', 'embm'))
+            );
+        ?>:
+    </p>
     <p>
         <pre class="embm-settings--code">
 <?php echo htmlentities(
@@ -136,13 +153,13 @@
         </tr>
         <tr>
             <td><code><strong>style</strong></code></td>
-            <td><?php _e('String of style name'); ?><br />e.g. <code>"India Pale Ale"</code></td>
+            <td><?php _e('String of style name', 'embm'); ?><br />e.g. <code>"India Pale Ale"</code></td>
             <td>n/a</td>
             <td><?php _e('Displays only beers belonging to a specific beer style', 'embm'); ?></td>
         </tr>
         <tr>
             <td><code><strong>group</strong></code></td>
-            <td><?php _e('String of group name'); ?><br />e.g. <code>"Seasonal Beers"</code></td>
+            <td><?php _e('String of group name', 'embm'); ?><br />e.g. <code>"Seasonal Beers"</code></td>
             <td>n/a</td>
             <td><?php _e('Displays only beers belonging to a specific group', 'embm'); ?></td>
         </tr>
@@ -166,15 +183,32 @@
         </tr>
         <tr>
             <td><code><strong>orderby</strong></code></td>
-            <td><?php _e('See ', 'embm'); ?><a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank"><?php _e('this list', 'embm'); ?></a><?php _e(' for options', 'embm'); ?></td>
+            <td>
+                <?php
+                    printf(
+                        __('See %s for options', 'embm'),
+                        sprintf(
+                            '<a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank">%s</a>',
+                            __('this list', 'embm')
+                        )
+                    );
+                ?>
+            </td>
             <td><code>"date"</code></td>
-            <td><?php _e('Orders beer list output by the given paramater', 'embm'); ?></td>
+            <td><?php _e('Orders beer list output by the given parameter', 'embm'); ?></td>
         </tr>
         <tr>
             <td><code><strong>order</strong></code></td>
             <td><code>ASC, DSC</code></td>
             <td><code>DSC</code></td>
-            <td><?php _e('Sorts beer list by <code>orderby</code> value in ascending or descending order', 'embm'); ?></td>
+            <td>
+                <?php
+                    printf(
+                        __('Sorts beer list by %s value in ascending or descending order', 'embm'),
+                        '<code>orderby</code>'
+                    );
+                ?>
+            </td>
         </tr>
     </tbody>
 </table>
