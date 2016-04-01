@@ -20,15 +20,15 @@
  */
 
 
-// Get API token
-$token = get_option('embm_untappd_token');
-
-// Check for a token
-if (!$token || $token == '') {
+/**
+ * Cleans up URL after return
+ *
+ * @return void
+ */
+function EMBM_Admin_Labs_Import_urlclean()
+{
 ?>
-    <p>
-        <button class="embm-labs--authorize-button button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
-    </p>
+    <script type="text/javascript">EMBM_Labs_CleanURL();</script>
 <?php
     return;
 }
@@ -56,6 +56,39 @@ function EMBM_Admin_Labs_Import_deauthorize()
     return;
 }
 
+
+// Handle token return
+if (isset($_GET['embm-untappd-token'])) {
+    // Store token
+    $new_token = $_GET['embm-untappd-token'];
+    update_option('embm_untappd_token', $new_token);
+
+     // Clean up URL
+    EMBM_Admin_Labs_Import_urlclean();
+}
+
+// Handle Untappd deauthorization
+if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
+    // Delete Untappd records from db
+    delete_option('embm_untappd_brewery_id');
+    delete_option('embm_untappd_token');
+
+    // Clean up URL
+    EMBM_Admin_Labs_Import_urlclean();
+}
+
+// Get API token
+$token = get_option('embm_untappd_token');
+
+// Check for a token
+if (!$token || $token == '') {
+?>
+    <p>
+        <button class="embm-labs--authorize-button button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
+    </p>
+<?php
+    return;
+}
 
 // Set API Root
 $api_root = 'https://api.untappd.com/v4/%s?access_token='.$token;
@@ -141,6 +174,7 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
                         <p>
                             <input name="import" type="submit" class="button-primary" value="<?php _e('Import All', 'embm'); ?>" />
                         </p>
+                        <p class="description">(<?php _e('If you have a lot of beers, this could take a while.', 'embm'); ?>)</p>
                     </form>
                 </td>
             </tr>

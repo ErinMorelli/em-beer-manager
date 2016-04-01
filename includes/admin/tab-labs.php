@@ -20,27 +20,6 @@
  */
 
 
-// Handle token return
-if (isset($_GET['embm-untappd-token'])) {
-    // Store token
-    $new_token = $_GET['embm-untappd-token'];
-    update_option('embm_untappd_token', $new_token);
-
-    // Set redirect url
-    $redirect = get_admin_url(null, 'options-general.php?page=embm-settings#labs');
-?>
-    <meta http-equiv="refresh" content="0; url=<?php echo $redirect; ?>">
-<?php
-    exit;
-}
-
-// Handle Untappd deauthorization
-if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
-    // Delete Untappd records from db
-    delete_option('embm_untappd_brewery_id');
-    delete_option('embm_untappd_token');
-}
-
 // Problem email subject
 $email_subj = '[EM Beer Manager] Issue Report';
 

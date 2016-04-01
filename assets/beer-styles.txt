@@ -1,104 +1,155 @@
 Altbier
-American Adjunct Lager
-American Amber / Red Ale
-American Amber / Red Lager
-American Barleywine
-American Black Ale
-American Blonde Ale
-American Brown Ale
-American Dark Wheat Ale
-American Double / Imperial IPA
-American Double / Imperial Pilsner
-American Double / Imperial Stout
-American IPA
-American Malt Liquor
-American Pale Ale (APA)
-American Pale Lager
-American Pale Wheat Ale
-American Porter
-American Stout
-American Strong Ale
 American Wild Ale
-Baltic Porter
-Belgian Dark Ale
-Belgian IPA
-Belgian Pale Ale
+Applewine
+Australian Sparkling Ale
+Barleywine - American
+Barleywine - English
+Belgian Dubbel
+Belgian Quad
 Belgian Strong Dark Ale
 Belgian Strong Pale Ale
-Berliner Weissbier
+Belgian Tripel
+Berliner Weisse
 Bière de Champagne / Bière Brut
 Bière de Garde
 Black & Tan
+Blonde Ale
+Blonde Ale - Belgian Blonde / Golden
 Bock
 Braggot
-California Common / Steam Beer
+Brown Ale - American
+Brown Ale - Belgian
+Brown Ale - English
+Brown Ale - Imperial / Double
+Brown Ale - Other
+Burton Ale
+California Common
 Chile Beer
+Cider
 Cream Ale
-Czech Pilsener
-Doppelbock
-Dortmunder / Export Lager
-Dubbel
+Cyser
+Dampfbier
+Dark Ale
+Doppelbock 
 Dunkelweizen
 Eisbock
-English Barleywine
 English Bitter
-English Brown Ale
-English Dark Mild Ale
-English India Pale Ale (IPA)
-English Pale Ale
-English Pale Mild Ale
-English Porter
-English Stout
-English Strong Ale
-Euro Dark Lager
-Euro Pale Lager
-Euro Strong Lager
-Extra Special / Strong Bitter (ESB)
+English Mild Ale
+Extra Special / Strong Bitter
 Faro
+Festbier
 Flanders Oud Bruin
 Flanders Red Ale
-Foreign / Export Stout
-Fruit / Vegetable Beer
-German Pilsener
+Fruit Beer
+Ginger Beer
+Gluten-Free
+Golden Ale
 Gose
+Gruit / Ancient Herbed Ale
+Grätzer / Grodziskie
 Gueuze
 Happoshu
 Hefeweizen
+Hefeweizen Light / Leicht
 Herbed / Spiced Beer
-Irish Dry Stout
-Irish Red Ale
-Japanese Rice Lager
+IPA - American
+IPA - Belgian
+IPA - Black / Cascadian Dark Ale
+IPA - English
+IPA - Imperial / Double
+IPA - Imperial / Double Black
+IPA - International
+IPA - Session / India Session Ale
+IPA - Triple
+IPA - White
 Kellerbier / Zwickelbier
-Kristalweizen
+Kombucha
+Kristallweizen 
 Kvass
 Kölsch
-Lambic - Fruit
-Lambic - Unblended
-Light Lager
-Low Alcohol Beer
-Maibock / Helles Bock
-Milk / Sweet Stout
-Munich Dunkel Lager
-Munich Helles Lager
-Märzen / Oktoberfest
-Oatmeal Stout
+Lager -  Vienna / Amber
+Lager - Amber
+Lager - American Amber / Red
+Lager - American Light
+Lager - Black
+Lager - Czech Dark
+Lager - Dark
+Lager - Dortmunder / Export
+Lager - Dunkel Munich
+Lager - Euro
+Lager - Euro Dark
+Lager - Euro Strong
+Lager - Helles
+Lager - IPL (India Pale Lager)
+Lager - Japanese Rice
+Lager - North American Adjunct
+Lager - Pale
+Lager - Winter
+Lambic
+Maibock/Helles Bock
+Malt Beer
+Malt Liquor 
+Mead
+Melomel
+Mumme
+Märzen
+Non-Alcoholic
 Old Ale
-Pumpkin Ale
-Quadrupel (Quad)
+Other
+Pale Ale - American
+Pale Ale - Australian
+Pale Ale - Belgian
+Pale Ale - English
+Pale Ale - International
+Pale Ale - New Zealand
+Pale Wheat Ale - American
+Patersbier
+Perry
+Pilsner - Czech
+Pilsner - German
+Pilsner - Imperial / Double
+Pilsner - Other
+Porter - American
+Porter - Baltic
+Porter - English
+Porter - Imperial / Double
+Porter - Other
+Pumpkin / Yam Beer
+Pyment
+Radler
 Rauchbier
+Red Ale - American Amber / Red
+Red Ale - Imperial / Double
+Red Ale - Irish
 Roggenbier
-Russian Imperial Stout
-Rye Beer
+Root Beer
+Rye Beer / Rye IPA
 Sahti
 Saison / Farmhouse Ale
 Schwarzbier
 Scotch Ale / Wee Heavy
 Scottish Ale
-Scottish Gruit / Ancient Herbed Ale
+Scottish Export Ale
 Smoked Beer
-Tripel
-Vienna Lager
+Sour Ale
+Specialty Grain
+Stout - American
+Stout - American Imperial / Double
+Stout - Foreign / Export
+Stout - Imperial / Double
+Stout - Imperial Oatmeal
+Stout - Irish Dry
+Stout - Milk / Sweet
+Stout - Oatmeal
+Stout - Other
+Stout - Oyster
+Stout - Russian Imperial
+Strong Ale - American
+Strong Ale - English
+Traditional Ale
 Weizenbock
-Wheatwine
+Wheat Wine
+Winter Ale
 Winter Warmer
 Witbier
+Zoigl

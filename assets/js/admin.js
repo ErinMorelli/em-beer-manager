@@ -27,10 +27,9 @@
     browser: true
     unparam: true
 */
+'use strict';
 
 jQuery(document).ready(function ($) {
-    'use strict';
-
     // Check for a hash in the URL
     if (location.hash) {
         // Don't jump to div
@@ -95,8 +94,6 @@ jQuery(document).ready(function ($) {
             page = url.substring(url.lastIndexOf('/') + 1), // Page URL
             clean_url = page.split('?')[0] + '?' + $.param({page: 'embm-settings'}) + url_hash; // Reset URL
 
-        console.log('click', clean_url);
-
         // Remove notice
         $el.fadeTo(100, 0, function () {
             $el.slideUp(100, function () {
@@ -147,6 +144,7 @@ jQuery(document).ready(function ($) {
 
     // Redirect to Untappd to authorize user
     $('button.embm-labs--authorize-button').on('click', function (e) {
+        e.preventDefault();
         var url = window.location.href, // Full URL
             redirect_params = $.param({
                 'page': 'embm-settings'
@@ -175,3 +173,16 @@ jQuery(document).ready(function ($) {
         window.location = deauth_url;
     });
 });
+
+
+// Update URL to remove unneeded params when using Labs
+function EMBM_Labs_CleanURL() {
+    // Set vars
+    var url = window.location.href, // Full URL
+        url_hash = '#labs', // Set URL hash to labs
+        page = url.substring(url.lastIndexOf('/') + 1), // Page URL
+        clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
+
+    // Update URL
+    window.history.replaceState(null, null, clean_url);
+}
