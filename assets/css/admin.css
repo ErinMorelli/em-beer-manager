@@ -115,12 +115,26 @@
     max-width: 450px;
     padding: 3px 5px 2px;
 }
-.embm-settings--page .embm-settings--credits {
-    font-size: 10px;
-    line-height: 18px;
-}
 .embm-settings--notice {
     position: relative;
+}
+.embm-settings-footer--credits > p {
+    font-size: 10px;
+    line-height: 18px;
+    margin: 0;
+}
+.embm-settings-footer--credits a {
+    display: inline-block;
+}
+.embm-settings-footer--credits-untappd {
+    padding: 5px;
+}
+.embm-settings-footer--donate a,
+.embm-settings-footer--credits-untappd > a {
+    display: inline-block;
+}
+.embm-settings-footer--credits-untappd > a > img {
+     width: 120px;
 }
 
 

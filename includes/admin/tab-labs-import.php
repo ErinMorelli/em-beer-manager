@@ -145,6 +145,14 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
         </a>
     </p>
 
+     <p>
+        <span class="warning"><?php _e('NOTE', 'embm'); ?>: </span>
+        <?php printf(
+            __('At this time, Untappd limits their API to only return %s beers.', 'embm'),
+            '<span class="emphasis">15</span>'
+        ); ?>
+    </p>
+
     <table class="form-table">
         <tbody>
             <tr>

@@ -5,7 +5,7 @@
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
  * Version: 2.1.3
  * Author: Erin Morelli
- * Author URI: http://www.erinmorelli.com/
+ * Author URI: https://www.erinmorelli.com/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: embm
