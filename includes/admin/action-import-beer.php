@@ -37,15 +37,47 @@ if (!current_user_can('manage_options')) {
 /**
  * Insert post from Untappd
  *
- * @param string $beer_url Untappd API URI to GET beer
+ * @param string $beer_url   Untappd API URI to GET beer
+ * @param string $brewery_id Untappd brewery account ID
  *
  * @return void
  */
-function EMBM_Admin_Import_beer($beer_url)
+function EMBM_Admin_Import_beer($beer_url, $brewery_id)
 {
-    // Make GET request to API
-    $beer_res = json_decode(file_get_contents($beer_url));
+    // Force PHP to throw an exception on warnings
+    set_error_handler(
+        function ($errno, $errstr, $errfile, $errline, array $errcontext) {
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        }
+    );
+
+    try {
+        // Make GET request to API
+        $beer_contents = file_get_contents($beer_url);
+    } catch (Exception $e) {
+        // Return to EMBM settings page to show error & exit
+        wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=1#labs'));
+        exit;
+    }
+
+    // Reset error handler
+    restore_error_handler();
+
+    // Decode API request from JSON
+    $beer_res = json_decode($beer_contents);
+
+    // Extract beer info from results
     $beer = $beer_res->response->beer;
+
+    // Check that beer is owned by brewery, if needed
+    if (isset($_POST['embm-untappd-brewery-check'])) {
+        // Compare beer's brewery ID to user's brewery ID
+        if ($beer->brewery->brewery_id != intval($brewery_id)+1) {
+            // Return to EMBM settings page to show error & exit
+            wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs'));
+            exit;
+        }
+    }
 
     // Set beer slug
     $beer_slug = sanitize_title($beer->beer_name);
@@ -66,12 +98,16 @@ function EMBM_Admin_Import_beer($beer_url)
         return;
     }
 
+    // Set post publish date from Untappd created date
+    $beer_date = date('Y-m-d H:i:s', strtotime($beer->created_at));
+
     // Set up post array
     $new_beer_post = array(
         'post_author'   => get_current_user_id(),
         'post_title'    => $beer->beer_name,
         'post_name'     => $beer_slug,
         'post_content'  => $beer->beer_description,
+        'post_date'     => $beer_date,
         'post_status'   => 'publish',
         'post_type'     => 'embm_beer',
         'tax_input'     => array(
@@ -170,12 +206,13 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
         // Get imported vars
         $api_root = $_POST['embm-untappd-api-root'];
         $beer_id = $_POST['embm-untappd-beer-id'];
+        $brewery_id = $_POST['embm-untappd-brewery-id'];
 
         // Set up beer request URL
         $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
 
         // Run import
-        EMBM_Admin_Import_beer($beer_url);
+        EMBM_Admin_Import_beer($beer_url, $brewery_id);
 
         // Return to EMBM settings page & exit
         wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-success=1#labs'));
@@ -196,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
             $beer_url = sprintf($api_root, 'beer/info/'.$item->beer->bid);
 
             // Run import
-            EMBM_Admin_Import_beer($beer_url);
+            EMBM_Admin_Import_beer($beer_url, $brewery_id);
         }
 
         // Return to EMBM settings page & exit

@@ -663,6 +663,20 @@ function EMBM_Admin_Settings_page()
             <button type="button" class="notice-dismiss"></button>
         </div>
 <?php
+    } elseif (isset($_GET['embm-import-error'])) {
+        // Show success notice for Untappd import
+?>
+        <div class="error notice embm-settings--notice">
+            <?php if ($_GET['embm-import-error'] == '1') : ?>
+                <p><strong><?php _e('ERROR', 'embm'); ?>:</strong>
+                <?php _e('There was a problem during the import, you may have reached your API token\'s rate limit for hour. Try again later.', 'embm'); ?></p>
+            <?php elseif ($_GET['embm-import-error'] == '3') : ?>
+                <p><strong><?php _e('ERROR', 'embm'); ?>:</strong>
+                <?php _e('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm'); ?></p>
+            <?php endif; ?>
+            <button type="button" class="notice-dismiss"></button>
+        </div>
+<?php
     }
 
 ?>
