@@ -762,7 +762,10 @@ function EMBM_Output_Filter_content($content)
         $filtered_content = $content;
         foreach ($content_filters as $content_filter) {
             foreach ($content_filter as $filter => $attributes) {
-                if (($filter != __FUNCTION__) && (gettype($attributes['function']) == 'string')) {
+                if (($filter != __FUNCTION__)
+                    && (gettype($attributes['function']) == 'string')
+                    && (function_exists($attributes['function']))
+                ) {
                     $filtered_content = $attributes['function']($filtered_content);
                 }
             }
