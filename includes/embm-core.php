@@ -209,17 +209,7 @@ function EMBM_Core_Meta_help()
     $screen->add_help_tab($default_help['untappd']);
 
     // Untappd Beer ID help
-    $screen->add_help_tab(
-        array(
-            'id'       => 'embm-untappd-beer-id',
-            'title'    => __('Untappd Beer ID', 'embm'),
-            'content'  => '<p>'.
-                __('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
-                ':</p><p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p><p>'.
-                __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
-                '</p>'
-        )
-    );
+    $screen->add_help_tab($default_help['untappd_id']);
 
     // Help sidebar
     $screen->set_help_sidebar(

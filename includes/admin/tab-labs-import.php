@@ -146,11 +146,22 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
     </p>
 
      <p>
-        <span class="warning"><?php _e('NOTE', 'embm'); ?>: </span>
-        <?php printf(
-            __('At this time, Untappd limits their API to only return %s beers.', 'embm'),
-            '<span class="emphasis">15</span>'
-        ); ?>
+        <strong>
+            <?php printf(
+                __('NOTE: At this time, Untappd limits their API to only return %s beers per brewery.', 'embm'),
+                '<span class="emphasis">15</span>'
+            ); ?>
+        </strong>
+        <br />
+        <em>
+            <?php printf(
+                __("If you'd like to see this change, please %s and let them know you'd like API access to all of your brewery's beers.", 'embm'),
+                sprintf(
+                    '<a href="mailto:info@untappd.com" target="_blank">%s</a>',
+                    __('contact Untappd', 'embm')
+                )
+            ); ?>
+        </em>
     </p>
 
     <table class="form-table">
@@ -168,6 +179,26 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
                                 <?php endforeach; ?>
                             </select>
                             <input name="import" type="submit" class="button-secondary" value="<?php _e('Import', 'embm'); ?>" />
+                        </p>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?php _e('Import single beer by ID', 'embm'); ?></th>
+                <td>
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
+                        <input type="hidden" name="embm-labs-untappd-import" value="1" />
+                        <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
+                        <p>
+                            <input
+                                id="embm-untappd-beer-id"
+                                name="embm-untappd-beer-id"
+                                class="embm-labs--import-id"
+                                type="number"
+                                placeholder="<?php _e('Untappd Beer ID', 'embm'); ?>"
+                            />
+                            <input name="import" type="submit" class="button-secondary" value="<?php _e('Import', 'embm'); ?>" />
+                            <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                         </p>
                     </form>
                 </td>

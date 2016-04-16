@@ -64,6 +64,9 @@
     font-size: 11px;
     margin-left: 7px;
 }
+.embm-settings--page .embm-settings--tabs-wrapper {
+    margin-bottom: 20px;
+}
 .embm-settings--page .nav-tab-wrapper {
     border-bottom: 1px solid #ccc;
     margin: 0;
@@ -95,6 +98,9 @@
     font-size: 14px;
     font-weight: 600;
     margin-top: 2em;
+}
+.embm-settings--page .embm-settings--tab-labs {
+    margin-bottom: 35px;
 }
 .embm-settings--page .embm-settings--untappd-select {
     display: block;

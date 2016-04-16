@@ -281,6 +281,9 @@ function EMBM_Admin_help()
     // Untappd Integration help tab
     $screen->add_help_tab($default_help['untappd']);
 
+    // Untappd Beer ID help
+    $screen->add_help_tab($default_help['untappd_id']);
+
     // Settings FAQ help tab
     $screen->add_help_tab(
         array(
@@ -485,9 +488,9 @@ function EMBM_Admin_Settings_Group_slug()
     echo '<br />'.__('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
     echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="'.sanitize_key($options['embm_group_slug']).'" /></p>';
     echo '<p class="description">('.sprintf(
-            __('You will need to refresh your permalinks %s after updating this setting', 'embm'),
-            sprintf('<a href="options-permalink.php">%s</a>', __('here', 'embm'))
-        ).'</p>';
+        __('You will need to refresh your permalinks %s after updating this setting', 'embm'),
+        sprintf('<a href="options-permalink.php">%s</a>', __('here', 'embm'))
+    ).'</p>';
 }
 
 /**
@@ -670,7 +673,7 @@ function EMBM_Admin_Settings_page()
         <span class="embm-settings--title-version"><?php echo 'v'.get_option('embm_version'); ?></span>
     </h1>
 
-    <div id="embm-settings--tabs">
+    <div id="embm-settings--tabs" class="embm-settings--tabs-wrapper">
         <ul class="nav-tab-wrapper">
             <li><a href="#settings" class="embm-nav-tab nav-tab nav-tab-active nav-tab-settings"><?php _e('Settings', 'embm'); ?></a></li>
             <li><a href="#usage" class="embm-nav-tab nav-tab nav-tab-usage"><?php _e('Usage', 'embm'); ?></a></li>
