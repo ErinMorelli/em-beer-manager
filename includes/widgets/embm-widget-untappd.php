@@ -106,6 +106,7 @@ if ($use_untappd != '1') {
                             '"Brewery Feed (RSS)"'
                         ).':</p><p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p><p>'.
                         __('The string of numbers at the end of the URL is your brewery ID number.', 'embm').
+                        __('If you have authenticated with Untappd in the Labs section, your brewery\'s ID will automatically populate the field.', 'embm').
                         '</p>'
                 )
             );
@@ -134,6 +135,14 @@ if ($use_untappd != '1') {
             $title = $instance['title'];
             $items = $instance['items'];
             $brewery = $instance['brewery'];
+
+            // Get brewery ID from Labs
+            $brewery_id = get_option('embm_untappd_brewery_id');
+
+            // If an ID was found and one is not set, auto-populate the field
+            if (($brewery_id && $brewery_id != '') && (!$brewery || $brewery == '')) {
+                $brewery = $brewery_id;
+            }
 
 ?>
             <p>
