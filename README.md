@@ -9,7 +9,7 @@ Manage your beers with WordPress. Integrates simply with Untappd beer checkins. 
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
-* A custom beer "style" taxonomy for classifying your beers pre-populated with styles from BeerAdvocate
+* A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
@@ -39,10 +39,13 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.2 - Localization Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.2.zip) ###
-* Under-the-hood localization improvements
-* Added updated translation POT
-* Added new Norwegian (nb_NO) language translation - *thanks to __Lars Kvisle__!*
+### [Version 2.1.3 - Bug Fixes & Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.3.zip) ###
+* Updated translation POT
+* Updated Untappd graphics to reflect the company's branding, as per their documentation
+* Beers imported from Untappd will now have their published date set by their Untappd creation date
+* The Untappd check-in widget'd brewery ID will now auto-populate with your brewery's ID if you've authenticated with Labs
+* Pre-populated styles will now be populated from Untappd instead of BeerAdvocate
+* Fixed 'undefined function' error
 
 
 *****

@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.5
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Manage your beers with WordPress. Integrates simply with Untappd beer checkins. 
 
 This plugin allows beer creators from home brewers to professional breweries to easily manage and display their beers. Includes a comprehensive beer management section with a variety of options, including:
 
-* A custom beer "style" taxonomy for classifying your beers pre-populated with styles from BeerAdvocate
+* A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
@@ -216,6 +216,14 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 2.1.3=
+* Updated translation POT
+* Updated Untappd graphics to reflect the company's branding, as per their documentation
+* Beers imported from Untappd will now have their published date set by their Untappd creation date
+* The Untappd check-in widget'd brewery ID will now auto-populate with your brewery's ID if you've authenticated with Labs
+* Pre-populated styles will now be populated from Untappd instead of BeerAdvocate
+* Fixed 'undefined function' error
+
 = 2.1.2 =
 * Under-the-hood localization improvements
 * Added updated translation POT
@@ -312,6 +320,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 2.1.3 =
+Fixed 'undefined function' error bug
 
 = 2.1.2 =
 Plugin localization overhaul and new Norwegian translation.
