@@ -39,13 +39,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.3 - Bug Fixes & Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.3.zip) ###
-* Updated translation POT
-* Updated Untappd graphics to reflect the company's branding, as per their documentation
-* Beers imported from Untappd will now have their published date set by their Untappd creation date
-* The Untappd check-in widget'd brewery ID will now auto-populate with your brewery's ID if you've authenticated with Labs
-* Pre-populated styles will now be populated from Untappd instead of BeerAdvocate
-* Fixed 'undefined function' error
+### [Version 2.1.4 - Language Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.4.zip) ###
+* Adding Brazilian Portuguese (pt_BR) language files
 
 
 *****
@@ -170,6 +165,7 @@ I would love to be able to expand this section - let me know if you are able to 
 * English
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
+* Brazilian Portuguese (pt_BR) - *thanks to __cerevisiae__*
 
 
 ### Planned Features ###

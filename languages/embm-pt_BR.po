@@ -1,0 +1,774 @@
+# Copyright (C) 2016 EM Beer Manager
+# This file is distributed under the same license as the EM Beer Manager package.
+msgid ""
+msgstr ""
+"Project-Id-Version: EM Beer Manager 2.1.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/em-beer-manager\n"
+"POT-Creation-Date: 2016-03-22 19:50+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-04-15 00:58-0300\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.7\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: pt_BR\n"
+
+#: em-beer-manager.php:259 includes/embm-admin.php:661
+msgid "Settings"
+msgstr "Configurações"
+
+#: em-beer-manager.php:386
+msgid "Untappd Integration"
+msgstr "Integração com Untappd"
+
+#: em-beer-manager.php:393
+msgid "For more information:"
+msgstr "Para mais informações:"
+
+#: em-beer-manager.php:394
+msgid "Plugin Website"
+msgstr "Site do Plugin"
+
+#: em-beer-manager.php:395
+msgid "Support Forums"
+msgstr "Fórum de suporte"
+
+#: includes/admin/action-import-beer.php:34
+#: includes/admin/action-import-beer.php:208
+#: includes/admin/action-reset-styles.php:34
+#: includes/admin/action-reset-styles.php:47 includes/embm-admin.php:603
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Você não tem permissões suficientes para abrir esta página."
+
+#: includes/admin/tab-labs-import.php:30
+msgid "Log In to Authorize Untappd"
+msgstr "Faça Login para autorizar Untappd"
+
+#: includes/admin/tab-labs-import.php:50
+msgid "Sorry, Untappd importing is only supported for brewery accounts."
+msgstr ""
+"Desculpe, a importação do Untappd está disponível apenas para contas de "
+"cervejarias."
+
+#: includes/admin/tab-labs-import.php:52
+msgid "Re-authorize with Untappd"
+msgstr "Reautorizar o Untappd"
+
+#: includes/admin/tab-labs-import.php:53
+msgid "You will need to log out of Untappd before re-authorizing."
+msgstr "Você precisa realizar logout do Untappd antes de reautorizar."
+
+#: includes/admin/tab-labs-import.php:108
+msgid "You are authorized as"
+msgstr "Você está autorizado como"
+
+#: includes/admin/tab-labs-import.php:111
+msgid "Deauthorize"
+msgstr "Desautorizar"
+
+#: includes/admin/tab-labs-import.php:118
+msgid "Import single beer"
+msgstr "Importar uma Cerveja"
+
+#: includes/admin/tab-labs-import.php:129
+msgid "Import"
+msgstr "Importar"
+
+#: includes/admin/tab-labs-import.php:135
+msgid "Import all beers"
+msgstr "Importar todas Cervejas"
+
+#: includes/admin/tab-labs-import.php:142
+msgid "Import All"
+msgstr "Importador Tudo"
+
+#: includes/admin/tab-labs.php:49
+msgid "WARNING"
+msgstr "ADVERTÊNCIA"
+
+#: includes/admin/tab-labs.php:51
+msgid "The features on this page are experimental"
+msgstr "As funcionalidades nesta página são experimentais"
+
+#: includes/admin/tab-labs.php:52
+msgid "Use at your own risk"
+msgstr "Uso por sua conta e risco"
+
+#: includes/admin/tab-labs.php:56
+msgid ""
+"If you encounter any problems when using these features, please report them "
+"to"
+msgstr ""
+"Ao encontrar qualquer problema utilizando estas funcionalidades, entre em "
+"contato com "
+
+#: includes/admin/tab-labs.php:62
+msgid "Import from Untappd"
+msgstr "Importar do Untappd"
+
+#: includes/admin/tab-usage.php:24
+msgid "Single Beer Display"
+msgstr "Exibir uma Cerveja"
+
+#: includes/admin/tab-usage.php:26
+msgid "These will display a single beer entry given it's ID number."
+msgstr "Essa opção exibe uma cerveja a partir do seu número de ID."
+
+#: includes/admin/tab-usage.php:28 includes/admin/tab-usage.php:86
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: includes/admin/tab-usage.php:34 includes/admin/tab-usage.php:92
+msgid "Template tag"
+msgstr "Tag do Template"
+
+#: includes/admin/tab-usage.php:38
+msgid ""
+"Where <code>$beer_id</code> is required and <code>$args</code> is a PHP "
+"array of comma-separated <code>key => value</code> pairs. For example:"
+msgstr ""
+"Onde <code>$beer_id</code> é obrigatório e <code>$args</code> é um array "
+"PHP de pares <code>key=> value</code> separados por vírgulas. Por exemplo:"
+
+#: includes/admin/tab-usage.php:51 includes/admin/tab-usage.php:111
+msgid "Options"
+msgstr "Opções"
+
+#: includes/admin/tab-usage.php:53 includes/admin/tab-usage.php:113
+msgid "For use with both the shortcode and template code."
+msgstr "Para uso com template e shortcode."
+
+#: includes/admin/tab-usage.php:58 includes/admin/tab-usage.php:118
+msgid "Option Name"
+msgstr "Opção"
+
+#: includes/admin/tab-usage.php:59 includes/admin/tab-usage.php:119
+msgid "Values"
+msgstr "Valores"
+
+#: includes/admin/tab-usage.php:60 includes/admin/tab-usage.php:120
+msgid "Default"
+msgstr "Padrão"
+
+#: includes/admin/tab-usage.php:61 includes/admin/tab-usage.php:121
+msgid "Description"
+msgstr "Descrição"
+
+#: includes/admin/tab-usage.php:69
+msgid "Displays or hides the \"Beer Profile\" information"
+msgstr "Exibe ou esconde seção \"Perfil da Cerveja\""
+
+#: includes/admin/tab-usage.php:75
+msgid "Displays or hides the \"More Beer Information\" section"
+msgstr "Exibe ou esconde seção \"Informações Adicionais da Cerveja\""
+
+#: includes/admin/tab-usage.php:82
+msgid "List All Beers"
+msgstr "Listar todas Cervejas"
+
+#: includes/admin/tab-usage.php:84
+msgid "These will display a formatted listing of all beers."
+msgstr "Essa opção exibirá uma lista formatada de todas as cervejas."
+
+#: includes/admin/tab-usage.php:96
+msgid ""
+"Where <code>$args</code> is a PHP array of comma-separated <code>key => "
+"value</code> pairs. For example:"
+msgstr ""
+"Onde <code>$args</code> é um array PHP de pares <code>key => value</code> "
+"separados por vírgulas. Por exemplo:"
+
+#: includes/admin/tab-usage.php:129
+msgid "Displays or hides the \"Beer Profile\" information for each listing"
+msgstr "Exibe ou esconde seção \"Perfil da Cerveja\" para cada listagem"
+
+#: includes/admin/tab-usage.php:135
+msgid ""
+"Displays or hides the \"More Beer Information\" section for each listing"
+msgstr ""
+"Exibe ou esconde seção \"Informações Adicionais da Cerveja\" para cada "
+"listagem"
+
+#: includes/admin/tab-usage.php:139
+msgid "String of style name"
+msgstr "String do nome de estilo"
+
+#: includes/admin/tab-usage.php:141
+msgid "Displays only beers belonging to a specific beer style"
+msgstr "Exibe somente cervejas correspondentes ao estilo desejado"
+
+#: includes/admin/tab-usage.php:145
+msgid "String of group name"
+msgstr "String do nome de grupo"
+
+#: includes/admin/tab-usage.php:147
+msgid "Displays only beers belonging to a specific group"
+msgstr "Exibe somente cervejas correspondentes ao grupo desejado"
+
+#: includes/admin/tab-usage.php:151
+msgid "Comma-separated list of beer IDs"
+msgstr "Lista de ID de Cervejas separada por vírgulas"
+
+#: includes/admin/tab-usage.php:153
+msgid "Hides listed beers from output"
+msgstr "Ocultar cervejas listadas da saída"
+
+#: includes/admin/tab-usage.php:157
+msgid "A number"
+msgstr "Um número"
+
+#: includes/admin/tab-usage.php:158
+msgid "Shows all beers"
+msgstr "Exibir todas as cervejas"
+
+#: includes/admin/tab-usage.php:159
+msgid "Paginates output and displays the given number of beers per page"
+msgstr "Realiza paginação exibindo dado número de cervejas por página"
+
+#: includes/admin/tab-usage.php:165
+msgid "Disables/enables pagination"
+msgstr "Desabilitar/Habilitar paginação"
+
+#: includes/admin/tab-usage.php:169
+msgid "See "
+msgstr "Visualize"
+
+#: includes/admin/tab-usage.php:169
+msgid "this list"
+msgstr "esta lista"
+
+#: includes/admin/tab-usage.php:169
+msgid " for options"
+msgstr "para opções"
+
+#: includes/admin/tab-usage.php:171
+msgid "Orders beer list output by the given paramater"
+msgstr "Ordena listagem de cervejas dado um parâmetro"
+
+#: includes/admin/tab-usage.php:177
+msgid ""
+"Sorts beer list by <code>orderby</code> value in ascending or descending "
+"order"
+msgstr ""
+"Classifica as cervejas <code>ordenando por</code>ascendente ou descendente"
+
+#: includes/embm-admin.php:74
+msgid "ID"
+msgstr "ID"
+
+#: includes/embm-admin.php:75
+msgid "Beer No."
+msgstr "Cerveja #.:"
+
+#: includes/embm-admin.php:76 includes/embm-core.php:33
+msgid "Beer"
+msgstr "Cerveja"
+
+#: includes/embm-admin.php:77 includes/embm-core.php:611
+msgid "Group"
+msgstr "Grupo"
+
+#: includes/embm-admin.php:78 includes/embm-core.php:528
+msgid "Style"
+msgstr "Estilo"
+
+#: includes/embm-admin.php:79 includes/embm-core.php:307
+#: includes/embm-output.php:547
+msgid "ABV"
+msgstr "ABV"
+
+#: includes/embm-admin.php:80 includes/embm-core.php:309
+#: includes/embm-output.php:553
+msgid "IBU"
+msgstr "IBU"
+
+#: includes/embm-admin.php:81 includes/embm-core.php:414
+#: includes/embm-output.php:631
+msgid "Availability"
+msgstr "Disponibilidade"
+
+#: includes/embm-admin.php:96
+msgid "Untappd"
+msgstr "Untappd"
+
+#: includes/embm-admin.php:100
+msgid "Released"
+msgstr "Publicado"
+
+#: includes/embm-admin.php:288
+msgid "Settings FAQ"
+msgstr "FAQ das Configurações"
+
+#: includes/embm-admin.php:317 includes/embm-core.php:227
+msgid "EM Beer Manager Settings"
+msgstr "Configurações do EM Beer Manager"
+
+#. Plugin Name of the plugin/theme
+#: includes/embm-admin.php:318 includes/embm-admin.php:655
+msgid "EM Beer Manager"
+msgstr "EM Beer Manager"
+
+#: includes/embm-admin.php:343
+msgid "Global Settings"
+msgstr "Configurações Globais"
+
+#: includes/embm-admin.php:344
+msgid "Custom stylesheet"
+msgstr "Tabela de estilos customizada"
+
+#: includes/embm-admin.php:345 includes/embm-admin.php:355
+#: includes/embm-admin.php:360 includes/embm-admin.php:365
+msgid "Display settings"
+msgstr "Exibir configurações"
+
+#: includes/embm-admin.php:348
+msgid "Untappd Settings"
+msgstr "Configurações do Untappd "
+
+#: includes/embm-admin.php:349
+msgid "Site-wide integration"
+msgstr "Integração global com o site"
+
+#: includes/embm-admin.php:350
+msgid "Icon set"
+msgstr "Ícones"
+
+#: includes/embm-admin.php:353
+msgid "Group Settings"
+msgstr "Configurações de Grupo"
+
+#: includes/embm-admin.php:354
+msgid "Custom taxonomy slug"
+msgstr "Taxonomia da cerveja"
+
+#: includes/embm-admin.php:358
+msgid "Style Settings"
+msgstr "Configurações de Estilo"
+
+#: includes/embm-admin.php:359
+msgid "Restore styles"
+msgstr "Recuperar estilos"
+
+#: includes/embm-admin.php:363
+msgid "Single Page Settings"
+msgstr "Configurações de Página Simples"
+
+#: includes/embm-admin.php:364
+msgid "Comments"
+msgstr "Comentários"
+
+#: includes/embm-admin.php:391
+msgid "Override default EM Beer Manager CSS with your own stylesheet."
+msgstr ""
+"Sobreescreva o CSS padrão do EM Beer Manager com sua própria folha de "
+"estilos."
+
+#: includes/embm-admin.php:393
+msgid "Enter a full URL that points to the stylesheet file."
+msgstr "Entre com a URL completa do arquivo de estilos."
+
+#: includes/embm-admin.php:411
+msgid "Globally hide \"profile\" info"
+msgstr "Ocultar informações \"Perfil\" em todos posts."
+
+#: includes/embm-admin.php:420
+msgid "Globally hide \"extras\" info"
+msgstr "Ocultar informações \"extra\" em todos posts."
+
+#: includes/embm-admin.php:439
+msgid "Disable site-wide integration"
+msgstr "Desabilitar integração total no site"
+
+#: includes/embm-admin.php:481
+msgid ""
+"Rename the beer group URLs with your own custom slug name.<br />By default "
+"URLs will look like:"
+msgstr ""
+"Renomeie a URL do grupo da sua cerveja usando o nome da sua breja.<br />. "
+"URL padrão é: "
+
+#: includes/embm-admin.php:483
+msgid "You will need to refresh your permalinks "
+msgstr "Você necessita atualizar seus permalinks"
+
+#: includes/embm-admin.php:483
+msgid "here"
+msgstr "aqui"
+
+#: includes/embm-admin.php:483
+msgid " after updating this setting."
+msgstr "após atualizar esta configuração."
+
+#: includes/embm-admin.php:501
+msgid "Hide \"profile\" info in groups"
+msgstr "Ocultar informações \"Perfil\" nos grupos"
+
+#: includes/embm-admin.php:509
+msgid "Hide \"extras\" info in groups"
+msgstr "Ocultar informações \"extras\" nos grupos"
+
+#: includes/embm-admin.php:519
+msgid "Restore missing or deleted beer styles from the pre-loaded list."
+msgstr "Recuperar estilos faltantes ou apagados da lista original"
+
+#: includes/embm-admin.php:520
+msgid "Restore Styles"
+msgstr "Recuperar estilos"
+
+#: includes/embm-admin.php:538
+msgid "Hide \"profile\" info on styles pages"
+msgstr "Ocultar informações \"Perfil\" nas páginas de estilos"
+
+#: includes/embm-admin.php:547
+msgid "Hide \"extras\" info on styles pages"
+msgstr "Ocultar informações \"extras\" nas páginas de estilos"
+
+#: includes/embm-admin.php:565
+msgid "Enable comments on single beer pages"
+msgstr "Ativar comentários em páginas simples"
+
+#: includes/embm-admin.php:583
+msgid "Hide \"profile\" info on single beer pages"
+msgstr "Ocultar informações \"Perfil\" nas páginas de uma cerveja"
+
+#: includes/embm-admin.php:590
+msgid "Hide \"extras\" info on single beer pages"
+msgstr "Ocultar informações \"extras\" nas páginas de uma cerveja"
+
+#: includes/embm-admin.php:612
+msgid "Restore EM Beer Manager Styles"
+msgstr "Recuperar estilos originais do EM Beer Manager"
+
+#: includes/embm-admin.php:614
+msgid ""
+"This will restore any missing or deleted beer styles from the pre-loaded "
+"BeerAdvocate list."
+msgstr ""
+"Recupera qualquer estilo perdido ou apagado da lista original pré-carregada "
+"do BeerAdvocate."
+
+#: includes/embm-admin.php:615
+msgid ""
+"Your custom or modified styles will <span class=\"emphasis\">NOT</span> be "
+"affected by this action."
+msgstr ""
+"Seus estilos customizados ou modificados <span class=\"emphasis\">NÃO</"
+"span> serão afetados por esta ação."
+
+#: includes/embm-admin.php:616
+msgid "Do you wish to proceed?"
+msgstr "Deseja continuar?"
+
+#: includes/embm-admin.php:621
+msgid "YES"
+msgstr "SIM"
+
+#: includes/embm-admin.php:622
+msgid "NO"
+msgstr "NÃO"
+
+#: includes/embm-admin.php:632
+msgid "<strong>Success!</strong> Your beer styles have been restored."
+msgstr "<strong>Pronto!</strong> Seus estilos foram recuperados."
+
+#: includes/embm-admin.php:642
+msgid "<strong>Success!</strong> Your beer has been imported from Untappd."
+msgstr "<strong>Pronto!</strong> Sua cerveja foi importada do Untappd."
+
+#: includes/embm-admin.php:644
+msgid "<strong>Success!</strong> Your beers have been imported from Untappd."
+msgstr "<strong>Pronto!</strong> Suas cervejas foram importadas do Untappd."
+
+#: includes/embm-admin.php:662
+msgid "Usage"
+msgstr "Uso"
+
+#: includes/embm-admin.php:663
+msgid "Labs"
+msgstr "Experimental"
+
+#: includes/embm-admin.php:673
+msgid "Save Changes"
+msgstr "Salvar"
+
+#: includes/embm-admin.php:689
+msgid ""
+"If you like this plugin, please consider donating to help support future "
+"development. Thank you!"
+msgstr ""
+"Se você gostou deste plugin, considere fazer uma doação para suportar o seu "
+"desenvolvimento. Obrigado!"
+
+#: includes/embm-admin.php:700
+msgid ""
+"Free beer icon from <a href=\"http://simpleicon.com\" title=\"simple icon"
+"\">simple icon</a>."
+msgstr ""
+"Ícones de cerveja grátis:  <a href=\"http://simpleicon.com\" title=\"simple "
+"icon\">simple icon</a>."
+
+#: includes/embm-core.php:32 includes/embm-core.php:44
+msgid "Beers"
+msgstr "Cervejas"
+
+#: includes/embm-core.php:34
+msgid "Add New"
+msgstr "Nova"
+
+#: includes/embm-core.php:35
+msgid "Add New Beer"
+msgstr "Nova Cerveja"
+
+#: includes/embm-core.php:36
+msgid "Edit Beer"
+msgstr "Editar Cerveja"
+
+#: includes/embm-core.php:37
+msgid "New Beer"
+msgstr "Nova Cerveja"
+
+#: includes/embm-core.php:38
+msgid "All Beers"
+msgstr "Listar Todas"
+
+#: includes/embm-core.php:39
+msgid "View Beer"
+msgstr "Exibir cerveja"
+
+#: includes/embm-core.php:40
+msgid "Search Beers"
+msgstr "Procurar cervejas"
+
+#: includes/embm-core.php:41
+msgid "No beers found"
+msgstr "Nenhuma Cerveja encontrada"
+
+#: includes/embm-core.php:42
+msgid "No beers found in the Trash"
+msgstr "Nenhuma Cerveja encontrada na Lixeira"
+
+#: includes/embm-core.php:215 includes/embm-core.php:407
+#: includes/widgets/embm-widget-untappd.php:96
+msgid "Untappd Beer ID"
+msgstr "Untappd Beer ID"
+
+#: includes/embm-core.php:298 includes/embm-output.php:559
+msgid "Malts"
+msgstr "Maltes"
+
+#: includes/embm-core.php:300 includes/embm-output.php:565
+msgid "Hops"
+msgstr "Lúpulos"
+
+#: includes/embm-core.php:302
+msgid "Additions/Spices"
+msgstr "Especiarias"
+
+#: includes/embm-core.php:304 includes/embm-output.php:577
+msgid "Yeast"
+msgstr "Levedura"
+
+#: includes/embm-core.php:401 includes/embm-output.php:625
+msgid "Beer Number"
+msgstr "Cerveja Número"
+
+#: includes/embm-core.php:421
+msgid "Additional Notes/Food Pairings"
+msgstr "Notas adicionais/Harmonização"
+
+#: includes/embm-core.php:527 includes/embm-core.php:539
+msgid "Styles"
+msgstr "Estilos"
+
+#: includes/embm-core.php:529
+msgid "Search Styles"
+msgstr "Procurar Estilos"
+
+#: includes/embm-core.php:530 includes/widgets/embm-widget-list.php:98
+msgid "All Styles"
+msgstr "Todos Estilos"
+
+#: includes/embm-core.php:531
+msgid "Edit Style"
+msgstr "Editar Estilo"
+
+#: includes/embm-core.php:532
+msgid "Update Style"
+msgstr "Atualizar Estilo"
+
+#: includes/embm-core.php:533
+msgid "Add New Style"
+msgstr "Novo Estilo"
+
+#: includes/embm-core.php:534
+msgid "New Style Name"
+msgstr "Novo Estilo"
+
+#: includes/embm-core.php:535
+msgid "Popular Styles"
+msgstr "Estilos populares"
+
+#: includes/embm-core.php:536
+msgid "Choose from the most used styles"
+msgstr "Escolha a partir dos estilos mais usados"
+
+#: includes/embm-core.php:537
+msgid "Separate styles with commas"
+msgstr "Separar os estilos com vírgulas"
+
+#: includes/embm-core.php:538
+msgid "Add or remove styles"
+msgstr "Adicionar ou remover estilos"
+
+#: includes/embm-core.php:610 includes/embm-core.php:622
+msgid "Groups"
+msgstr "Grupos"
+
+#: includes/embm-core.php:612
+msgid "Search Groups"
+msgstr "Procurar Grupos"
+
+#: includes/embm-core.php:613 includes/widgets/embm-widget-list.php:107
+msgid "All Groups"
+msgstr "Todos Grupos"
+
+#: includes/embm-core.php:614
+msgid "Edit Group"
+msgstr "Editar Grupo"
+
+#: includes/embm-core.php:615
+msgid "Update Group"
+msgstr "Atualizar Grupo"
+
+#: includes/embm-core.php:616
+msgid "Add New Group"
+msgstr "Novo Grupo"
+
+#: includes/embm-core.php:617
+msgid "New Group Name"
+msgstr "Novo Grupo"
+
+#: includes/embm-core.php:618
+msgid "Popular Groups"
+msgstr "Grupos populares"
+
+#: includes/embm-core.php:619
+msgid "Choose from the most used groups"
+msgstr "Escolha a partir dos grupos mais usados"
+
+#: includes/embm-core.php:620
+msgid "Separate groups with commas"
+msgstr "Separar os grupos com vírgulas"
+
+#: includes/embm-core.php:621
+msgid "Add or remove groups"
+msgstr "Adicionar ou Remover grupos"
+
+#: includes/embm-output.php:395 includes/embm-output.php:818
+msgid "View all %s beers"
+msgstr "Visualizar todas as %s cervejas"
+
+#: includes/embm-output.php:422
+msgid "More..."
+msgstr "Mais..."
+
+#: includes/embm-output.php:492
+msgid "Check in on Untappd"
+msgstr "Check in no Untappd"
+
+#: includes/embm-output.php:571
+msgid "Other"
+msgstr "Especiarias"
+
+#: includes/embm-output.php:637
+msgid "Additional Notes"
+msgstr "Notas adicionais"
+
+#: includes/widgets/embm-widget-list.php:37
+msgid "Displays a list of beers"
+msgstr "Exibir listagem de cervejas"
+
+#: includes/widgets/embm-widget-list.php:76
+#: includes/widgets/embm-widget-untappd.php:133
+msgid "Title:"
+msgstr "Título:"
+
+#: includes/widgets/embm-widget-list.php:80
+msgid "Exclude Beers: "
+msgstr "Excluir Cervejas:"
+
+#: includes/widgets/embm-widget-list.php:81
+msgid "Comma separated IDs, e.g. \"1,2,3\""
+msgstr "Separe os IDs por vírgulas, ex.: \"1,2,3\""
+
+#: includes/widgets/embm-widget-list.php:84
+msgid "Beer Count: "
+msgstr "Cervejas:"
+
+#: includes/widgets/embm-widget-list.php:88
+msgid "Show Summary: "
+msgstr "Exibir Resumo:"
+
+#: includes/widgets/embm-widget-list.php:92
+msgid "Summary Length: "
+msgstr "Tamanho do Resumo: "
+
+#: includes/widgets/embm-widget-list.php:93
+msgid " Characters"
+msgstr " Caracteres"
+
+#: includes/widgets/embm-widget-list.php:96
+msgid "Show Style: "
+msgstr "Exibir Estilo:"
+
+#: includes/widgets/embm-widget-list.php:105
+msgid "Show Group: "
+msgstr "Exibir Grupo:"
+
+#: includes/widgets/embm-widget-list.php:262
+msgid "More"
+msgstr "Mais"
+
+#: includes/widgets/embm-widget-list.php:278
+msgid "No beers found."
+msgstr "Nenhuma Cerveja encontrada."
+
+#: includes/widgets/embm-widget-untappd.php:50
+msgid "Displays a list of recent Untappd brewery check-ins"
+msgstr "Exibir listagem de checkins recentes da cervejaria no Untappd"
+
+#: includes/widgets/embm-widget-untappd.php:137
+msgid "Brewery ID: "
+msgstr "ID Cervejaria:"
+
+#: includes/widgets/embm-widget-untappd.php:142
+msgid "Number of items to show: "
+msgstr "Número de itens a exibir:"
+
+#: includes/widgets/embm-widget-untappd.php:235
+msgid "A brewery ID number has not been set."
+msgstr "O ID da cervejaria não foi configurado."
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.erinmorelli.com/projects/em-beer-manager"
+msgstr "http://www.erinmorelli.com/projects/em-beer-manager"
+
+#. Description of the plugin/theme
+msgid ""
+"Catalog and display your beers with WordPress. Integrates very simply with "
+"Untappd for individual beer checkins. Great for everyone from home brewers "
+"to professional breweries!"
+msgstr ""
+"Catalogue e exiba suas cervejas no WordPress. Integração simples com "
+"Untappd para checkins. Ótimo para todos cervejeiros caseiros ou "
+"profissionais."
+
+#. Author of the plugin/theme
+msgid "Erin Morelli"
+msgstr "Erin Morelli"
+
+#. Author URI of the plugin/theme
+msgid "http://www.erinmorelli.com/"
+msgstr "http://www.erinmorelli.com/"
