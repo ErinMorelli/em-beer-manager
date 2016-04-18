@@ -368,7 +368,7 @@ I would love to be able to expand this section - let me know if you are able to 
 * English
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
-* Brazilian Portuguese (pt_BR) - *thanks to __cerevisiae__*
+* Brazilian Portuguese (pt_BR) - *thanks to __Lucas Alexandre__*
 
 
 == Planned Features ==
