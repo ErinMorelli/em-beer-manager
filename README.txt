@@ -226,7 +226,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 = 2.1.4 =
 * Adding Brazilian Portuguese (pt_BR) language files
 
-= 2.1.3=
+= 2.1.3 =
 * Updated translation POT
 * Updated Untappd graphics to reflect the company's branding, as per their documentation
 * Beers imported from Untappd will now have their published date set by their Untappd creation date
