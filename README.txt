@@ -216,6 +216,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 2.1.5 =
+* Added "offset" option to the [beer-list] shortcode
+
+= 2.1.4 =
+* Adding Brazilian Portuguese (pt_BR) language files
+
 = 2.1.3=
 * Updated translation POT
 * Updated Untappd graphics to reflect the company's branding, as per their documentation
