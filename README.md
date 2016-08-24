@@ -40,7 +40,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 
 ### [Version 2.1.5 - Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.5.zip) ###
-* Adding Brazilian Portuguese (pt_BR) language files
+* Added "offset" option to the [beer-list] shortcode
 
 
 *****
