@@ -110,6 +110,10 @@ These will display a formatted listing of all beers.
 
         *Paginates output and displays the given number of beers per page*
 
+    * __offset => `"number"`__ (Default = `0`, starts at the first beer)
+
+        *Offsets the output of beers by given number*
+
     * __paginate => `"true, false"`__ (Default = `true`)
 
         *Disables/enables pagination*

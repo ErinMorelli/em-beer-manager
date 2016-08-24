@@ -176,6 +176,12 @@
             <td><?php _e('Paginates output and displays the given number of beers per page', 'embm'); ?></td>
         </tr>
         <tr>
+            <td><code><strong>offset</strong></code></td>
+            <td><?php _e('A number', 'embm'); ?><br /> e.g. <code>2</code></td>
+            <td><code>0</code><br /><?php _e('Starts at the first beer', 'embm'); ?></td>
+            <td><?php _e('Offsets the output of beers by given number', 'embm'); ?></td>
+        </tr>
+        <tr>
             <td><code><strong>paginate</strong></code></td>
             <td><code>true, false</code></td>
             <td><code>true</code></td>
