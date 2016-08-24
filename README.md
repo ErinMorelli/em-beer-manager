@@ -39,7 +39,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.4 - Language Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.4.zip) ###
+### [Version 2.1.5 - Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.5.zip) ###
 * Adding Brazilian Portuguese (pt_BR) language files
 
 
