@@ -156,6 +156,7 @@ function EMBM_Output_list($atts)
                 'style'             => '',
                 'group'             => '',
                 'beers_per_page'    => -1,
+                'offset'            => 0,
                 'paginate'          => 'true',
                 'orderby'           => '',
                 'order'             => ''
@@ -208,6 +209,11 @@ function EMBM_Output_List_display($input=array())
         'page_num'  => array(
             'key'       => 'beers_per_page',
             'default'   => -1,
+            'type'      => 'int'
+        ),
+        'offset'  => array(
+            'key'       => 'offset',
+            'default'   => 0,
             'type'      => 'int'
         ),
         'use_pages' => array(
@@ -263,6 +269,7 @@ function EMBM_Output_List_load($beers)
     $showstyle = $beers['style'];
     $showgroup = $beers['group'];
     $showpages = $beers['page_num'];
+    $offset = $beers['offset'];
     $usepages = $beers['use_pages'];
     $sortby = $beers['sortby'];
     $sort = strtoupper($beers['sort']);
@@ -287,10 +294,20 @@ function EMBM_Output_List_load($beers)
 
     // Set up query args
     $args = array (
-        'post_type'    => 'embm_beer',
-        'showposts'    => $showpages,
-        'paged'        => $paged,
+        'post_type'         => 'embm_beer',
+        'posts_per_page'    => $showpages
     );
+
+    // Add offset filter
+    if ($offset != 0) {
+        $args['offset'] = $offset;
+
+        if ($showpages == -1) {
+            unset($args['posts_per_page']);
+        }
+    } else {
+        $args['paged'] = $paged;
+    }
 
     // Add styles filter
     if ($showstyle != '') {
