@@ -39,7 +39,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.1.6 - Minor Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.6.zip) ###
+### [Version 2.1.6 - Minor Bug Fix](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.1.6.zip) ###
 * Fixing WP REST API compatibility issue after 4.6.1 upgrade
 
 
