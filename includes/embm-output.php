@@ -431,7 +431,26 @@ function EMBM_Output_Content_beer($beer_id, $showprofile=true, $showextras=true)
 
     // Begin beer description
     $output .= '<div class="embm-beer--description">'."\n";
-    $output .= apply_filters('the_content', get_the_content($beer_id));
+
+    // Get all content filters
+    global $wp_filter;
+    $content_filters = $wp_filter['the_content'];
+
+    // Apply all content filters
+    $filtered_content = get_the_content($beer_id);
+    foreach ($content_filters as $content_filter) {
+        foreach ($content_filter as $filter => $attributes) {
+            if (($filter != __FUNCTION__)
+                && (gettype($attributes['function']) == 'string')
+                && (function_exists($attributes['function']))
+            ) {
+                $filtered_content = $attributes['function']($filtered_content);
+            }
+        }
+    }
+
+    // Set up content
+    $output .= $filtered_content;
 
     // Set read more link
     if ((is_tax('embm_style') || is_archive()) && !is_tax('embm_group')) {

@@ -621,7 +621,7 @@ function EMBM_Admin_Settings_page()
 
                 <h2><?php _e('Restore EM Beer Manager Styles', 'embm'); ?></h2>
 
-                <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded BeerAdvocate list.', 'embm'); ?></p>
+                <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded Untappd list.', 'embm'); ?></p>
                 <p>
                     <?php
                         printf(

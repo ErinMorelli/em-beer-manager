@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.6
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -153,7 +153,7 @@ Groups can be accessed using `/wp-json/wp/v2/embm_groups` or individually at `/w
 
 = I accidentally deleted some of the pre-loaded styles, how do I get them back? =
 
-Starting with v2.0.0, users are now able to easily restore any missing styles. Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated BeerAdvocate list. It will not affect any already existing or any custom styles.
+Starting with v2.0.0, users are now able to easily restore any missing styles. Go to the EM Beer Manager settings page. Under the "Settings" tab, click on the "Restore Styles" button. This will restore any missing styles from the pre-populated Untappd list. It will not affect any already existing or any custom styles.
 
 
 = Nothing is working or there are errors after upgrading to version 1.7.0 =
@@ -219,6 +219,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 2.1.6 =
+* Fixing WP REST API compatibility issue after 4.6.1 upgrade
 
 = 2.1.5 =
 * Added "offset" option to the [beer-list] shortcode

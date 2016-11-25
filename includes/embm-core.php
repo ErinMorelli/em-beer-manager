@@ -652,6 +652,11 @@ add_action('init', 'EMBM_Core_group', 0);
  */
 function EMBM_Core_Beer_api()
 {
+    // Make sure that the WP REST API plugin is installed
+    if (!function_exists('register_rest_field')) {
+        return;
+    }
+
     // Set API field options
     $field_options = array(
         'get_callback'    => 'EMBM_Core_Beer_Api_get',
