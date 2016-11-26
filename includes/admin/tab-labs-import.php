@@ -20,42 +20,8 @@
  */
 
 
-/**
- * Cleans up URL after return
- *
- * @return void
- */
-function EMBM_Admin_Labs_Import_urlclean()
-{
-?>
-    <script type="text/javascript">EMBM_Labs_CleanURL();</script>
-<?php
-    return;
-}
-
-
-/**
- * Deauthorize user and display error message
- *
- * @return void
- */
-function EMBM_Admin_Labs_Import_deauthorize()
-{
-    // Deauthorize user
-    delete_option('embm_untappd_token');
-    delete_option('embm_untappd_brewery_id');
-
-    // Display error message
-?>
-    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
-    <p>
-        <button class="embm-labs--authorize-button button-secondary"><?php _e('Re-authorize with Untappd', 'embm'); ?></button><br />
-        <small><em><?php _e('You will need to log out of Untappd before re-authorizing.', 'embm'); ?></em></small>
-    <p>
-<?php
-    return;
-}
-
+// Import shared labs functions
+require 'labs.php';
 
 // Handle token return
 if (isset($_GET['embm-untappd-token'])) {
@@ -64,7 +30,7 @@ if (isset($_GET['embm-untappd-token'])) {
     update_option('embm_untappd_token', $new_token);
 
      // Clean up URL
-    EMBM_Admin_Labs_Import_urlclean();
+    EMBM_Admin_Labs_urlclean();
 }
 
 // Handle Untappd deauthorization
@@ -74,7 +40,7 @@ if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'
     delete_option('embm_untappd_token');
 
     // Clean up URL
-    EMBM_Admin_Labs_Import_urlclean();
+    EMBM_Admin_Labs_urlclean();
 }
 
 // Get API token
@@ -91,49 +57,34 @@ if (!$token || $token == '') {
 }
 
 // Set API Root
-$api_root = 'https://api.untappd.com/v4/%s?access_token='.$token;
+$api_root = EMBM_API_URL_FORMAT.$token;
 
-// Get API user info
-$user_info_url = sprintf($api_root, 'user/info');
-$user_res = json_decode(file_get_contents($user_info_url));
-$user = $user_res->response->user;
+// Get Untappd user info
+$user = EMBM_Admin_Labs_Untappd_user($api_root);
 
 // Check for brewery account
 if ($user->account_type != 'brewery') {
     // Deauthorize user
-    EMBM_Admin_Labs_Import_deauthorize();
+    EMBM_Admin_Labs_deauthorize();
     return;
 }
 
-// Get brewery ID
-$brewery_id = get_option('embm_untappd_brewery_id');
+// Get Untappd brewery ID
+$brewery_id = EMBM_Admin_Labs_Untappd_id($user->untappd_url);
 
-if (!$brewery_id || $brewery_id == '') {
-    // Set up RSS feed regex to retrieve brewery ID
-    $rss_regex = '/<p class="rss"><a href="\/rss\/brewery\/(\d+)">/';
-
-    // Get brewery page contents
-    $brewery_page = file_get_contents($user->untappd_url);
-
-    // Look for ID
-    preg_match($rss_regex, $brewery_page, $matches);
-
-    // Store ID
-    $brewery_id = $matches[1];
-    update_option('embm_untappd_brewery_id', $matches[1]);
-}
-
-// Get brewery info from API
-$brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
-$brewery_res = json_decode(file_get_contents($brewery_url));
-$brewery = $brewery_res->response->brewery;
+// Get Untappd brewery info from API
+$brewery = EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id);
 
 // Make sure brewery is claimed by authorized user
 if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
     // Deauthorize user
-    EMBM_Admin_Labs_Import_deauthorize();
+    EMBM_Admin_Labs_deauthorize();
     return;
 }
+
+// Get all the Untappd beers for the brewery
+$beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
+
 
 // Display import options
 ?>
@@ -143,25 +94,6 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
             <strong><?php echo $user->first_name; ?></strong>
             <small>(<a href="#" class="embm-untappd--deauthorize"><?php _e('Deauthorize', 'embm'); ?></a>)</small>
         </a>
-    </p>
-
-     <p>
-        <strong>
-            <?php printf(
-                __('NOTE: At this time, Untappd limits their API to only return %s beers per brewery.', 'embm'),
-                '<span class="emphasis">15</span>'
-            ); ?>
-        </strong>
-        <br />
-        <em>
-            <?php printf(
-                __("If you'd like to see this change, please %s and let them know you'd like API access to all of your brewery's beers.", 'embm'),
-                sprintf(
-                    '<a href="mailto:info@untappd.com" target="_blank">%s</a>',
-                    __('contact Untappd', 'embm')
-                )
-            ); ?>
-        </em>
     </p>
 
     <table class="form-table">
@@ -175,7 +107,7 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
                         <p>
                             <select id="embm-untappd-beer-id" name="embm-untappd-beer-id" class="embm-labs--import-select">
-                                <?php foreach ($brewery->beer_list->items as $item) : $beer = $item->beer; ?>
+                                <?php foreach ($beer_list as $item) : $beer = $item->beer; ?>
                                     <option value="<?php echo $beer->bid; ?>"><?php echo $beer->beer_name; ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -192,7 +124,11 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
                         <p>
-                            <input name="import" type="submit" class="button-primary" value="<?php _e('Import All', 'embm'); ?>" />
+                            <input
+                                name="import"
+                                type="submit"
+                                class="button-primary"
+                                value="<?php echo __('Import All', 'embm') . ' (' . count($beer_list) . ')'; ?>"
                         </p>
                         <p class="description">(<?php _e('If you have a lot of beers, this could take a while.', 'embm'); ?>)</p>
                     </form>

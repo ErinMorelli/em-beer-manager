@@ -655,11 +655,14 @@ function EMBM_Admin_Settings_page()
         // Show success notice for Untappd import
 ?>
         <div class="updated notice embm-settings--notice">
-            <?php if ($_GET['embm-import-success'] == '1') : ?>
-                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beer has been imported from Untappd.', 'embm'); ?></p>
-            <?php elseif ($_GET['embm-import-success'] == '2') : ?>
-                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beers have been imported from Untappd.', 'embm'); ?></p>
-            <?php endif; ?>
+             <p>
+                <strong><?php _e('Success!', 'embm'); ?></strong>
+                <?php if ($_GET['embm-import-success'] == '1') : ?>
+                    <?php _e('Your beer has been imported from Untappd.', 'embm'); ?></p>
+                <?php elseif ($_GET['embm-import-success'] == '2') : ?>
+                    <?php _e('Your beers have been imported from Untappd.', 'embm'); ?></p>
+                <?php endif; ?>
+            </div>
             <button type="button" class="notice-dismiss"></button>
         </div>
 <?php
@@ -667,13 +670,16 @@ function EMBM_Admin_Settings_page()
         // Show success notice for Untappd import
 ?>
         <div class="error notice embm-settings--notice">
-            <?php if ($_GET['embm-import-error'] == '1') : ?>
-                <p><strong><?php _e('ERROR', 'embm'); ?>:</strong>
-                <?php _e('There was a problem during the import, you may have reached your API token\'s rate limit for hour. Try again later.', 'embm'); ?></p>
-            <?php elseif ($_GET['embm-import-error'] == '3') : ?>
-                <p><strong><?php _e('ERROR', 'embm'); ?>:</strong>
-                <?php _e('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm'); ?></p>
-            <?php endif; ?>
+            <p>
+                <strong><?php _e('ERROR', 'embm'); ?>:</strong>
+                <?php if ($_GET['embm-import-error'] == '1') : ?>
+                    <?php _e('There was a problem! You may have reached your API token\'s rate limit for the hour. Try again later.', 'embm'); ?></p>
+                <?php elseif ($_GET['embm-import-error'] == '2') : ?>
+                    <?php _e('There was a problem during the import! The beer you specified was not found on Untappd.', 'embm'); ?></p>
+                <?php elseif ($_GET['embm-import-error'] == '3') : ?>
+                    <?php _e('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm'); ?></p>
+                <?php endif; ?>
+            </p>
             <button type="button" class="notice-dismiss"></button>
         </div>
 <?php
