@@ -20,9 +20,14 @@
  */
 
 
+// Die if this file is being accessed directly
+// if(count(get_included_files()) <= 1){
+//     header("HTTP/1.0 403 Forbidden");
+// }
+
 // Set constants
-define('EMBM_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#labs');
-define('EMBM_API_URL_FORMAT', 'https://api.untappd.com/v4/%s?access_token=');
+define('EMBM_LABS_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#labs');
+define('EMBM_LABS_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 
 
 /**
@@ -84,7 +89,7 @@ function EMBM_Admin_Labs_Untappd_request($request_url, $decode = true)
         $response = file_get_contents($request_url);
     } catch (Exception $e) {
         // Return to EMBM settings page to show error & exit
-        wp_redirect(get_admin_url(null, sprintf(EMBM_RETURN_URL, 'error', 1)));
+        wp_redirect(get_admin_url(null, sprintf(EMBM_LABS_RETURN_URL, 'error', 1)));
         exit;
     }
 
@@ -115,10 +120,13 @@ function EMBM_Admin_Labs_Untappd_user($api_root)
 
     // Get user info if it's not cached
     if (false === $user) {
+        error_log('user::new');
         $user_info_url = sprintf($api_root, 'user/info');
         $user_res = EMBM_Admin_Labs_Untappd_request($user_info_url);
         $user = $user_res->response->user;
         wp_cache_set($user_info_cache, $user);
+    } else {
+        error_log('user::cached');
     }
 
     return $user;
@@ -173,10 +181,13 @@ function EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id)
 
     // Get brewery info if it's not cached
     if (false === $brewery) {
+        error_log('brewery::new');
         $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
         $brewery_res = EMBM_Admin_Labs_Untappd_request($brewery_url);
         $brewery = $brewery_res->response->brewery;
         wp_cache_set($brewery_cache, $brewery);
+    } else {
+        error_log('brewery::cached');
     }
 
     return $brewery;
@@ -198,6 +209,7 @@ function EMBM_Admin_Labs_Untappd_beers($api_root, $brewery)
 
     // Get beer list if it's not cached
     if (false === $beer_list) {
+        error_log('beers::new');
         $beer_list = [];
         $beer_offset = 0;
         $beer_count = $brewery->beer_count;
@@ -213,6 +225,8 @@ function EMBM_Admin_Labs_Untappd_beers($api_root, $brewery)
         }
 
         wp_cache_add($beer_list_cache, $beer_list);
+    } else {
+        error_log('beers::cached');
     }
 
     return $beer_list;
@@ -240,5 +254,3 @@ function EMBM_Admin_Labs_find($beer_id, $beer_list)
     // Return null if not found
     return null;
 }
-
-?>

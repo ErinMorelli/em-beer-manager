@@ -57,7 +57,7 @@ if (!$token || $token == '') {
 }
 
 // Set API Root
-$api_root = EMBM_API_URL_FORMAT.$token;
+$api_root = EMBM_LABS_API_URL.$token;
 
 // Get Untappd user info
 $user = EMBM_Admin_Labs_Untappd_user($api_root);
@@ -99,19 +99,29 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
     <table class="form-table">
         <tbody>
             <tr>
-                <th scope="row"><?php _e('Import single beer', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import specific beers', 'embm'); ?></th>
                 <td>
                     <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="1" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
                         <p>
-                            <select id="embm-untappd-beer-id" name="embm-untappd-beer-id" class="embm-labs--import-select">
+                            <select multiple id="embm-untappd-beer-ids" name="embm-untappd-beer-ids[]" class="embm-labs--import-select">
                                 <?php foreach ($beer_list as $item) : $beer = $item->beer; ?>
                                     <option value="<?php echo $beer->bid; ?>"><?php echo $beer->beer_name; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <input name="import" type="submit" class="button-secondary" value="<?php _e('Import', 'embm'); ?>" />
+                            <input name="import" type="submit" class="button-primary" value="<?php _e('Import', 'embm'); ?>" />
+                        </p>
+                        <p class="description">
+                            (<?php
+                                printf(
+                                    __('Use the %s and %s/%s keys to select multiple beers.', 'embm'),
+                                    '<code>shift</code>',
+                                    '<code>ctrl</code>',
+                                    '<code>command</code>'
+                                );
+                            ?>)
                         </p>
                     </form>
                 </td>
@@ -120,7 +130,7 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
                 <th scope="row"><?php _e('Import all beers', 'embm'); ?></th>
                 <td>
                     <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
-                        <input type="hidden" name="embm-labs-untappd-import" value="2" />
+                        <input type="hidden" name="embm-labs-untappd-import" value="3" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
                         <p>
@@ -138,7 +148,7 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
                 <th scope="row"><?php _e('Import single beer by ID', 'embm'); ?></th>
                 <td>
                     <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
-                        <input type="hidden" name="embm-labs-untappd-import" value="1" />
+                        <input type="hidden" name="embm-labs-untappd-import" value="2" />
                         <input type="hidden" name="embm-untappd-brewery-check" value="1" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -151,7 +161,7 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
                                 type="number"
                                 placeholder="<?php _e('Untappd Beer ID', 'embm'); ?>"
                             />
-                            <input name="import" type="submit" class="button-secondary" value="<?php _e('Import', 'embm'); ?>" />
+                            <input name="import" type="submit" class="button-primary" value="<?php _e('Import', 'embm'); ?>" />
                             <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                         </p>
                         <p class="description">(<?php _e('You can only import beers that your brewery account owns.', 'embm'); ?>)</p>

@@ -50,7 +50,7 @@ function EMBM_Admin_Import_beer($beer, $brewery_id)
     // Check that beer is owned by brewery, if needed
     if (isset($_POST['embm-untappd-brewery-check'])) {
         // Compare beer's brewery ID to user's brewery ID
-        if ($beer->brewery->brewery_id != intval($brewery_id)+1) {
+        if ($beer->brewery->brewery_id != intval($brewery_id)) {
             // Return to EMBM settings page to show error & exit
             wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs'));
             exit;
@@ -189,28 +189,48 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
     // Get all the Untappd beers for the brewery
     $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
 
-    // Import single beer
+    // Import specific beers
     if ($_POST['embm-labs-untappd-import'] == '1') {
+        // Get beer id
+        $beer_ids = $_POST['embm-untappd-beer-ids'];
+
+        // Iteratively add beers
+        foreach ($beer_ids as $beer_id) {
+            // Locate beer in cached array
+            $beer = EMBM_Admin_Labs_find($beer_id, $beer_list);
+
+            // Skip beer if not found
+            if (is_null($beer)) {
+                continue;
+            }
+
+            // Run import
+            EMBM_Admin_Import_beer($beer, $brewery_id);
+        }
+
+        // Return to EMBM settings page & exit
+        wp_redirect(get_admin_url(null, sprintf(EMBM_LABS_RETURN_URL, 'success', 2)));
+        exit;
+    } elseif ($_POST['embm-labs-untappd-import'] == '2') {  // Import beer by ID
         // Get beer id
         $beer_id = $_POST['embm-untappd-beer-id'];
 
-        // Locate beer in cached array
-        $beer = EMBM_Admin_Labs_find($beer_id, $beer_list);
+        // Set up beer request URL
+        // $beer_url = sprintf(EMBM_LABS_API_URL, 'beer/info/'.$beer_id);
 
-        // Make sure we found a beer
-        if (is_null($beer)) {
-            // Return to EMBM settings page to show error & exit
-            wp_redirect(get_admin_url(null, sprintf(EMBM_RETURN_URL, 'error', 2)));
-            exit;
-        }
+        // // Make API request
+        // $beer_res = EMBM_Admin_Labs_Untappd_request($beer_url);
 
-        // Run import
-        EMBM_Admin_Import_beer($beer, $brewery_id);
+        // // Extract beer info from results
+        // $beer = $beer_res->response->beer;
 
-        // Return to EMBM settings page & exit
-        wp_redirect(get_admin_url(null, sprintf(EMBM_RETURN_URL, 'success', 1)));
-        exit;
-    } elseif ($_POST['embm-labs-untappd-import'] == '2') {  // Import all beers
+        // // Run import
+        // EMBM_Admin_Import_beer($beer, $brewery_id);
+
+        // // Return to EMBM settings page & exit
+        // wp_redirect(get_admin_url(null, sprintf(EMBM_LABS_RETURN_URL, 'success', 1)));
+        // exit;
+    } elseif ($_POST['embm-labs-untappd-import'] == '3') {  // Import all beers
         // Iteratively add beers
         foreach ($beer_list as $item) {
             // Run import
@@ -218,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
         }
 
         // Return to EMBM settings page & exit
-        wp_redirect(get_admin_url(null, sprintf(EMBM_RETURN_URL, 'success', 2)));
+        wp_redirect(get_admin_url(null, sprintf(EMBM_LABS_RETURN_URL, 'success', 2)));
         exit;
     }
 } else {
