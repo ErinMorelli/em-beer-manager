@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.6
-Stable tag: 2.1.6
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -219,6 +219,14 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 2.2.0 =
+* [Labs] Import access to all of a brewery's Untappd beers, instead of just 15
+* [Labs] Fixed ID importing, which was throwing an incorrect error
+* Moved Untappd authentication out of Labs, available to all users, not just breweries
+* Associate an existing beer with an Untappd beer
+* Updated Untappd Check-Ins widget to work with Untappd API
+* Display Untappd rates & reviews for beers
 
 = 2.1.6 =
 * Fixing WP REST API compatibility issue after 4.6.1 upgrade

@@ -28,22 +28,28 @@ if (isset($_GET['embm-untappd-token'])) {
     // Store token
     $new_token = $_GET['embm-untappd-token'];
     update_option('embm_untappd_token', $new_token);
+
+    // Clean up URL
+    EMBM_Admin_Labs_urlclean();
 }
 
 // Handle cache flush request
 if (isset($_GET['embm-untappd-flush']) && $_GET['embm-untappd-flush'] == '1') {
     // Flush the transient cache
     EMBM_Admin_Labs_flush();
+
+    // Clean up URL
+    EMBM_Admin_Labs_urlclean();
 }
 
 // Handle Untappd deauthorization
 if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
     // Deauthorize the user
     EMBM_Admin_Labs_deauthorize(false);
-}
 
-// Clean up URL
-EMBM_Admin_Labs_urlclean();
+    // Clean up URL
+    EMBM_Admin_Labs_urlclean();
+}
 
 // Get API token
 $token = get_option('embm_untappd_token');
