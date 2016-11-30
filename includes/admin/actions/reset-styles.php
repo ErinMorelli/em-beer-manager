@@ -20,8 +20,13 @@
  */
 
 
-// Load WP Functions
-require '../../../../../wp-load.php';
+// Find WP root path
+$wp_root_path = explode('/', explode('/plugins', $_SERVER['SCRIPT_FILENAME'])[0]);
+array_pop($wp_root_path);
+$wp_load = implode('/', $wp_root_path) . '/wp-load.php';
+
+// Include WP functions
+require $wp_load;
 
 // Check that user is logged in
 if (!is_user_logged_in()) {

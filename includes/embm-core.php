@@ -190,7 +190,6 @@ function EMBM_Core_Meta_help()
 {
     // Get the current screen
     $screen = get_current_screen();
-    // echo var_dump($screen);
 
     $help_screens = array(
         'embm_beer',

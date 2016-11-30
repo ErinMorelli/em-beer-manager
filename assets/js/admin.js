@@ -144,20 +144,33 @@ jQuery(document).ready(function ($) {
     /* ---- LABS ---- */
 
     // Redirect to Untappd to authorize user
-    $('button.embm-labs--authorize-button').on('click', function (e) {
+    $('button.embm-labs--authorize').on('click', function (e) {
         e.preventDefault();
         var url = window.location.href, // Full URL
             redirect_params = $.param({
                 'page': 'embm-settings'
             }),
             redirect_url = url.split('?')[0] + '?' + redirect_params, // Reset URL
-            auth_root = 'https://wp.erinmorelli.com/embm/untappd',
             auth_params = $.param({
                 'embm-origin': redirect_url
             }),
-            auth_url = auth_root + '?' + auth_params;
+            auth_url = embm_settings.untappd_auth_url + '?' + auth_params;
 
         window.location = auth_url;
+    });
+
+    // Redirect to reauthorize Untappd user
+    $('a.embm-untappd--reauthorize').on('click', function (e) {
+        e.preventDefault();
+        var url = window.location.href, // Full URL
+            url_hash = window.location.hash, // URL hash
+            reauth_params = $.param({
+                'page': 'embm-settings',
+                'embm-untappd-reauthorize': 1
+            }),
+            reauth_url = url.split('?')[0] + '?' + reauth_params + url_hash; // Reset URL
+
+        window.location = reauth_url;
     });
 
     // Redirect to deauthorize Untappd user
@@ -188,19 +201,17 @@ jQuery(document).ready(function ($) {
 
         window.location = flush_url;
     });
+
+    /* ---- CLEAN URL AFTER PAGE LOAD ---- */
+
+    if ( !!window.location.search.substring(1).match(/page=embm-settings/) ) {
+        // Set vars
+        var url = window.location.href, // Full URL
+            url_hash = window.location.hash, // URL hash
+            page = url.substring(url.lastIndexOf('/') + 1), // Page URL
+            clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
+
+        // Update URL
+        window.history.replaceState(null, null, clean_url);
+    }
 });
-
-
-// Update URL to remove unneeded params when using Labs
-function EMBM_Labs_CleanURL() {
-    'use strict';
-
-    // Set vars
-    var url = window.location.href, // Full URL
-        url_hash = '#labs', // Set URL hash to labs
-        page = url.substring(url.lastIndexOf('/') + 1), // Page URL
-        clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
-
-    // Update URL
-    window.history.replaceState(null, null, clean_url);
-}

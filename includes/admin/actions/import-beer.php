@@ -16,15 +16,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\ImportBeer
+ * @package EMBM\Admin\Action\ImportBeer
  */
 
 
-// Load WP Functions
-require '../../../../../wp-load.php';
+// Find WP root path
+$wp_root_path = explode('/', explode('/plugins', $_SERVER['SCRIPT_FILENAME'])[0]);
+array_pop($wp_root_path);
+$wp_load = implode('/', $wp_root_path) . '/wp-load.php';
+
+// Include WP functions
+require $wp_load;
 
 // Import shared labs functions
-require 'labs.php';
+require EMBM_PLUGIN_DIR.'includes/admin/untappd.php';
 
 // Check that user is logged in
 if (!is_user_logged_in()) {
@@ -149,7 +154,7 @@ function EMBM_Admin_Import_Beer_image($post_id, $beer)
     $filename = $upload_dir['path'] . '/' . $beer->beer_slug . '.' . $img_type;
 
     // Save image from URL
-    file_put_contents($filename, EMBM_Admin_Labs_Untappd_request($beer->beer_label_hd, false));
+    file_put_contents($filename, EMBM_Admin_Untappd_request($beer->beer_label_hd, false));
 
     // Check the type of file
     $filetype = wp_check_filetype(basename($filename), null);
@@ -186,10 +191,10 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
     $brewery_id = $_POST['embm-untappd-brewery-id'];
 
     // Get Untappd brewery info from API
-    $brewery = EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id);
+    $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
 
     // Get all the Untappd beers for the brewery
-    $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
+    $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
 
     // Set success type
     $success_type = 2;
@@ -202,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
         // Iteratively add beers
         foreach ($beer_ids as $beer_id) {
             // Locate beer in cached array
-            $beer = EMBM_Admin_Labs_find($beer_id, $beer_list);
+            $beer = EMBM_Admin_Untappd_find($beer_id, $beer_list);
 
             // Skip beer if not found
             if (is_null($beer)) {
@@ -218,10 +223,10 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
         $success_type = 1;
 
         // Set up beer request URL
-        $beer_url = sprintf(EMBM_LABS_API_URL, 'beer/info/'.$beer_id);
+        $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
 
         // Make API request
-        $beer_res = EMBM_Admin_Labs_Untappd_request($beer_url);
+        $beer_res = EMBM_Admin_Untappd_request($beer_url);
 
         // Extract beer info from results
         $beer = $beer_res->response->beer;
@@ -237,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST['embm-labs-untappd-import'])) {
     }
 
     // Return to EMBM settings page & exit
-    wp_redirect(get_admin_url(null, sprintf(EMBM_LABS_RETURN_URL, 'success', $success_type)));
+    wp_redirect(get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', $success_type)));
     exit;
 } else {
     // Die if this isn't a valid POST request
