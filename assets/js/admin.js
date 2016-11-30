@@ -27,9 +27,10 @@
     browser: true
     unparam: true
 */
-'use strict';
 
 jQuery(document).ready(function ($) {
+    'use strict';
+
     // Check for a hash in the URL
     if (location.hash) {
         // Don't jump to div
@@ -172,11 +173,28 @@ jQuery(document).ready(function ($) {
 
         window.location = deauth_url;
     });
+
+    // Redirect to flush Untappd cache
+    $('a.embm-untappd--flush').on('click', function (e) {
+        console.log('flush');
+        e.preventDefault();
+        var url = window.location.href, // Full URL
+            url_hash = window.location.hash, // URL hash
+            flush_params = $.param({
+                'page': 'embm-settings',
+                'embm-untappd-flush': 1
+            }),
+            flush_url = url.split('?')[0] + '?' + flush_params + url_hash; // Reset URL
+
+        window.location = flush_url;
+    });
 });
 
 
 // Update URL to remove unneeded params when using Labs
 function EMBM_Labs_CleanURL() {
+    'use strict';
+
     // Set vars
     var url = window.location.href, // Full URL
         url_hash = '#labs', // Set URL hash to labs

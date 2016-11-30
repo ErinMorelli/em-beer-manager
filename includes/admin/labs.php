@@ -20,14 +20,16 @@
  */
 
 
-// Die if this file is being accessed directly
-// if(count(get_included_files()) <= 1){
-//     header("HTTP/1.0 403 Forbidden");
-// }
-
 // Set constants
 define('EMBM_LABS_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#labs');
 define('EMBM_LABS_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
+
+// Set cache names
+$GLOBALS['EMBM_LABS_CACHE'] = array(
+    'beer_list'     => 'embm_untappd_beer_list',
+    'brewery'       => 'embm_untappd_brewery_info',
+    'user'          => 'embm_untappd_user_info'
+);
 
 
 /**
@@ -47,15 +49,21 @@ function EMBM_Admin_Labs_urlclean()
 /**
  * Deauthorize user and display error message
  *
+ * @param bool $show_error Whether or not to show error message (default: true)
+ *
  * @return void
  */
-function EMBM_Admin_Labs_deauthorize()
+function EMBM_Admin_Labs_deauthorize($show_error = true)
 {
     // Deauthorize user
     delete_option('embm_untappd_token');
     delete_option('embm_untappd_brewery_id');
 
+    // Flush cache
+    EMBM_Admin_Labs_flush();
+
     // Display error message
+    if ($show_error) {
 ?>
     <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
     <p>
@@ -63,7 +71,8 @@ function EMBM_Admin_Labs_deauthorize()
         <small><em><?php _e('You will need to log out of Untappd before re-authorizing.', 'embm'); ?></em></small>
     <p>
 <?php
-    return;
+        return;
+    }
 }
 
 
@@ -71,7 +80,7 @@ function EMBM_Admin_Labs_deauthorize()
  * Makes a request to Untappd API and intercept any errors.
  *
  * @param string $request_url URL for an Untappd API endpoint
- * @param bool   $decode      Whether or not to decode JSON (default: True)
+ * @param bool   $decode      Whether or not to decode JSON (default: true)
  *
  * @return array Decoded JSON API response or raw JSON string
  */
@@ -106,34 +115,6 @@ function EMBM_Admin_Labs_Untappd_request($request_url, $decode = true)
 
 
 /**
- * Retrieves Untappd user data from either the WP cache or API.
- *
- * @param string $api_root A templated string for the Untappd API root URL
- *
- * @return array Array of user data from Untappd
- */
-function EMBM_Admin_Labs_Untappd_user($api_root)
-{
-    // Get API user info
-    $user_info_cache = 'embm_untappd_user_info';
-    $user = wp_cache_get($user_info_cache);
-
-    // Get user info if it's not cached
-    if (false === $user) {
-        error_log('user::new');
-        $user_info_url = sprintf($api_root, 'user/info');
-        $user_res = EMBM_Admin_Labs_Untappd_request($user_info_url);
-        $user = $user_res->response->user;
-        wp_cache_set($user_info_cache, $user);
-    } else {
-        error_log('user::cached');
-    }
-
-    return $user;
-}
-
-
-/**
  * Retrieves Untappd brewery ID from the WP DB or website.
  *
  * @param string $untappd_url URL of an Untappd brewery page.
@@ -158,10 +139,36 @@ function EMBM_Admin_Labs_Untappd_id($untappd_url)
 
         // Store ID
         $brewery_id = $matches[1];
-        update_option('embm_untappd_brewery_id', $matches[1]);
+        update_option('embm_untappd_brewery_id', $brewery_id);
     }
 
     return $brewery_id;
+}
+
+
+/**
+ * Retrieves Untappd user data from either the WP cache or API.
+ *
+ * @param string $api_root A templated string for the Untappd API root URL
+ *
+ * @return array Array of user data from Untappd
+ */
+function EMBM_Admin_Labs_Untappd_user($api_root)
+{
+    // Attempt to retrieve user info from cache
+    $user = get_transient($GLOBALS['EMBM_LABS_CACHE']['user']);
+
+    // Get user info if it's not cached
+    if (false === $user) {
+        $user_info_url = sprintf($api_root, 'user/info');
+        $user_res = EMBM_Admin_Labs_Untappd_request($user_info_url);
+        $user = $user_res->response->user;
+
+        // Store for 1 week
+        set_transient($GLOBALS['EMBM_LABS_CACHE']['user'], $user, WEEK_IN_SECONDS);
+    }
+
+    return $user;
 }
 
 
@@ -175,19 +182,17 @@ function EMBM_Admin_Labs_Untappd_id($untappd_url)
  */
 function EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id)
 {
-    // Get brewery info from API
-    $brewery_cache = 'embm_untappd_brewery_info';
-    $brewery = wp_cache_get($brewery_cache);
+    // Attempt to retrieve brewery info from cache
+    $brewery = get_transient($GLOBALS['EMBM_LABS_CACHE']['brewery']);
 
     // Get brewery info if it's not cached
     if (false === $brewery) {
-        error_log('brewery::new');
         $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
         $brewery_res = EMBM_Admin_Labs_Untappd_request($brewery_url);
         $brewery = $brewery_res->response->brewery;
-        wp_cache_set($brewery_cache, $brewery);
-    } else {
-        error_log('brewery::cached');
+
+        // Store for 1 week
+        set_transient($GLOBALS['EMBM_LABS_CACHE']['brewery'], $brewery, WEEK_IN_SECONDS);
     }
 
     return $brewery;
@@ -204,12 +209,11 @@ function EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id)
  */
 function EMBM_Admin_Labs_Untappd_beers($api_root, $brewery)
 {
-    $beer_list_cache = 'embm_untappd_beer_list';
-    $beer_list = wp_cache_get($beer_list_cache);
+    // Attempt to retrieve beer list from cache
+    $beer_list = get_transient($GLOBALS['EMBM_LABS_CACHE']['beer_list']);
 
     // Get beer list if it's not cached
     if (false === $beer_list) {
-        error_log('beers::new');
         $beer_list = [];
         $beer_offset = 0;
         $beer_count = $brewery->beer_count;
@@ -224,12 +228,32 @@ function EMBM_Admin_Labs_Untappd_beers($api_root, $brewery)
             $beer_offset += $beers->count;
         }
 
-        wp_cache_add($beer_list_cache, $beer_list);
-    } else {
-        error_log('beers::cached');
+        // Store for 1 week
+        set_transient($GLOBALS['EMBM_LABS_CACHE']['beer_list'], $beer_list, WEEK_IN_SECONDS);
     }
 
     return $beer_list;
+}
+
+
+/**
+ * Flushes the cached labs data
+ *
+ * @param string $key Optional. Name of cached item to flush.
+ *
+ * @return void
+ */
+function EMBM_Admin_Labs_flush($key = null)
+{
+    // Check for specified key
+    if (!is_null($key)) {
+        delete_transient($GLOBALS['EMBM_LABS_CACHE'][$key]);
+    } else {
+        // Iteratively remove items
+        foreach ($GLOBALS['EMBM_LABS_CACHE'] as $name => $value) {
+            delete_transient($value);
+        }
+    }
 }
 
 

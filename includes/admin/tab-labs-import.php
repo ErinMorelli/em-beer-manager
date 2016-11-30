@@ -28,20 +28,22 @@ if (isset($_GET['embm-untappd-token'])) {
     // Store token
     $new_token = $_GET['embm-untappd-token'];
     update_option('embm_untappd_token', $new_token);
+}
 
-     // Clean up URL
-    EMBM_Admin_Labs_urlclean();
+// Handle cache flush request
+if (isset($_GET['embm-untappd-flush']) && $_GET['embm-untappd-flush'] == '1') {
+    // Flush the transient cache
+    EMBM_Admin_Labs_flush();
 }
 
 // Handle Untappd deauthorization
 if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
-    // Delete Untappd records from db
-    delete_option('embm_untappd_brewery_id');
-    delete_option('embm_untappd_token');
-
-    // Clean up URL
-    EMBM_Admin_Labs_urlclean();
+    // Deauthorize the user
+    EMBM_Admin_Labs_deauthorize(false);
 }
+
+// Clean up URL
+EMBM_Admin_Labs_urlclean();
 
 // Get API token
 $token = get_option('embm_untappd_token');
@@ -149,7 +151,6 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
                 <td>
                     <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="2" />
-                        <input type="hidden" name="embm-untappd-brewery-check" value="1" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
                         <p><?php _e('Import beers that are not accessible in the features above.', 'embm'); ?></p>
@@ -166,6 +167,14 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
                         </p>
                         <p class="description">(<?php _e('You can only import beers that your brewery account owns.', 'embm'); ?>)</p>
                     </form>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?php _e('Refresh Untappd Data', 'embm'); ?></th>
+                <td>
+                    <p><?php _e('Flushes cache and fetches fresh API data from Untappd.', 'embm'); ?></p>
+                    <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Refresh', 'embm'); ?></a></p>
+                    <p class="description">(<?php _e('Use this to refresh the beer data in the above features.', 'embm'); ?>)</p>
                 </td>
             </tr>
         </tbody>
