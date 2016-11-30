@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Labs
+ * @package EMBM\Admin\Tabs\Labs
  */
 
 
@@ -40,4 +40,4 @@ $email_subj = '[EM Beer Manager] Issue Report';
 
 <h2><?php _e('Import from Untappd', 'embm'); ?></h2>
 
-<?php require_once EMBM_PLUGIN_DIR.'includes/admin/tab-labs-import.php'; ?>
+<?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/labs/import.php'; ?>

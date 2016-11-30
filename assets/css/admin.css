@@ -112,6 +112,9 @@
     margin-left: 15px;
     margin-top: 1px;
 }
+.embm-settings--page .embm-settings--status .embm-untappd--user-link {
+    text-decoration: none;
+}
 .embm-settings--page .embm-settings--code {
     background-color: #DFDFDF;
     background-color: rgba(0, 0, 0, 0.07);
@@ -172,9 +175,6 @@
     color: #23282d;
     font-size: 14px;
     font-weight: 600;
-}
-.embm-settings--tab-labs .embm-untappd--user-link {
-    text-decoration: none;
 }
 .embm-settings--tab-labs .embm-labs--import-select {
     margin-right: 10px;

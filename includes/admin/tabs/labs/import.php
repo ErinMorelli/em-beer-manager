@@ -16,94 +16,80 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Labs\Import
+ * @package EMBM\Admin\Tabs\Labs\Import
  */
 
 
-// Import shared labs functions
-require 'labs.php';
-
-// Handle token return
-if (isset($_GET['embm-untappd-token'])) {
-    // Store token
-    $new_token = $_GET['embm-untappd-token'];
-    update_option('embm_untappd_token', $new_token);
+/**
+ * Displays an unauthorized error message
+ *
+ * @return void
+ */
+function EMBM_Admin_Labs_Import_error()
+{
+?>
+    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
+    <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
+    <p>
+        <button class="embm-labs--reauthorize button-secondary"><?php _e('Re-authorize with Untappd', 'embm'); ?></button><br />
+        <small><em><?php _e('You will need to log out of the Untappd.com website before re-authorizing.', 'embm'); ?></em></small>
+    <p>
+<?php
 }
 
 // Handle cache flush request
 if (isset($_GET['embm-untappd-flush']) && $_GET['embm-untappd-flush'] == '1') {
     // Flush the transient cache
-    EMBM_Admin_Labs_flush();
+    EMBM_Admin_Untappd_flush();
 }
 
-// Handle Untappd deauthorization
-if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
-    // Deauthorize the user
-    EMBM_Admin_Labs_deauthorize(false);
-}
+// Check authorization
+EMBM_Admin_Authorize_status();
 
-// Clean up URL
-EMBM_Admin_Labs_urlclean();
+// Get token
+$token = EMBM_Admin_Authorize_token();
 
-// Get API token
-$token = get_option('embm_untappd_token');
-
-// Check for a token
-if (!$token || $token == '') {
-?>
-    <p>
-        <button class="embm-labs--authorize-button button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
-    </p>
-<?php
+// Make sure we're authorized
+if (null == $token) {
     return;
 }
 
 // Set API Root
-$api_root = EMBM_LABS_API_URL.$token;
+$api_root = EMBM_UNTAPPD_API_URL.$token;
 
 // Get Untappd user info
-$user = EMBM_Admin_Labs_Untappd_user($api_root);
+$user = EMBM_Admin_Untappd_user($api_root);
 
 // Check for brewery account
 if ($user->account_type != 'brewery') {
-    // Deauthorize user
-    EMBM_Admin_Labs_deauthorize();
+    EMBM_Admin_Labs_Import_error();
     return;
 }
 
 // Get Untappd brewery ID
-$brewery_id = EMBM_Admin_Labs_Untappd_id($user->untappd_url);
+$brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
 
 // Get Untappd brewery info from API
-$brewery = EMBM_Admin_Labs_Untappd_brewery($api_root, $brewery_id);
+$brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
 
 // Make sure brewery is claimed by authorized user
 if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
-    // Deauthorize user
-    EMBM_Admin_Labs_deauthorize();
+    EMBM_Admin_Labs_Import_error();
     return;
 }
 
 // Get all the Untappd beers for the brewery
-$beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
+$beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
 
 
 // Display import options
 ?>
-    <p>
-        <?php _e('You are authorized as', 'embm'); ?>:
-        <a href="<?php echo $user->untappd_url; ?>" target="_blank" class="embm-untappd--user-link">
-            <strong><?php echo $user->first_name; ?></strong>
-            <small>(<a href="#" class="embm-untappd--deauthorize"><?php _e('Deauthorize', 'embm'); ?></a>)</small>
-        </a>
-    </p>
-
     <table class="form-table">
         <tbody>
             <tr>
                 <th scope="row"><?php _e('Import specific beers', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="1" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -131,7 +117,7 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Import all beers', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="3" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -149,7 +135,7 @@ $beer_list = EMBM_Admin_Labs_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Import single beer by ID', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/action-import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="2" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
