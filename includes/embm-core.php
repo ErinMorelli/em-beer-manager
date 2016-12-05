@@ -249,6 +249,16 @@ function EMBM_Core_Meta_boxes()
         'normal',
         'core'
     );
+
+    // Add Untappd metabox to main content
+    add_meta_box(
+        'beer-untappd',
+        __('Untappd', 'embm'),
+        'EMBM_Core_Meta_untappd',
+        'embm_beer',
+        'normal',
+        'core'
+    );
 }
 
 // Load metaboxes
@@ -370,13 +380,6 @@ function EMBM_Core_Meta_info()
     $b_untap = isset($beer_entry['untappd']) ? esc_attr($beer_entry['untappd'][0]) : '';
     $b_notes = isset($beer_entry['notes']) ? esc_attr($beer_entry['notes'][0]) : '';
 
-    // Get Untapped settings from DB
-    $ut_option = get_option('embm_options');
-    $use_untappd = null;
-    if (isset($ut_option['embm_untappd_check'])) {
-        $use_untappd = $ut_option['embm_untappd_check'];
-    }
-
     // Setup nonce field for options
     wp_nonce_field('embm_info_save', 'embm_info_save_nonce');
 
@@ -384,30 +387,23 @@ function EMBM_Core_Meta_info()
     <table width="100%" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
-                <td valign="top">
+                <td valign="top" style="width:40%">
                     <div class="embm-more-info">
                         <p><label for="beer_num"><strong><?php _e('Beer Number', 'embm'); ?></strong></label><br />
                         <input type="number" name="beer_num" id="beer_num" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
                     </div>
-
-                    <?php if ($use_untappd != '1') : ?>
-                        <div class="embm-more-info">
-                            <p><label for="untappd"><strong><?php _e('Untappd Beer ID', 'embm'); ?></strong></label><br />
-                            <input type="number" name="untappd" id="untappd" value="<?php echo $b_untap; ?>" />
-                            <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a></p>
-                        </div>
-                    <?php endif; ?>
-
+                </td>
+                <td valign="top" rowspan="3" style="width:60%">
+                    <p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label><br />
+                    <textarea name="notes" id="notes" rows="7" style="width:100%"><?php echo $b_notes; ?></textarea></p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
                     <div class="embm-more-info">
                         <p><label for="avail"><strong><?php _e('Availability', 'embm'); ?></strong></label><br />
                         <input type="text" name="avail" id="avail" value="<?php echo $b_avail; ?>" /></p>
                     </div>
-                </td>
-            <tr>
-            <tr>
-                <td valign="top">
-                    <p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label><br />
-                    <textarea name="notes" id="notes" rows="7" style="width:100%"><?php echo $b_notes; ?></textarea></p>
                 </td>
             </tr>
         </tbody>
@@ -449,13 +445,167 @@ function EMBM_Core_Meta_Info_save($post_id)
     if (isset($_POST['notes'])) {
         update_post_meta($post_id, 'notes', esc_attr($_POST['notes']));
     }
-    if (isset($_POST['untappd'])) {
-        update_post_meta($post_id, 'untappd', esc_attr($_POST['untappd']));
-    }
 }
 
 // Save Beer meta box inputs
 add_action('save_post', 'EMBM_Core_Meta_Info_save');
+
+
+/**
+ * Outputs Untappd metabox content
+ *
+ * @return void
+ */
+function EMBM_Core_Meta_untappd()
+{
+    // Don't load box if Untappd integration is disabled
+    $ut_option = get_option('embm_options');
+    if (isset($ut_option['embm_untappd_check']) && $ut_option['embm_untappd_check'] == '1') {
+        return;
+    }
+
+    // Get global post object
+    global $post;
+
+    // Get current post custom data
+    $beer_entry = get_post_custom($post->ID);
+
+    // Set custom post data values
+    $untappd_id = isset($beer_entry['untappd']) ? esc_attr($beer_entry['untappd'][0]) : '';
+    $untappd_data = isset($beer_entry['untappd_data']) ? esc_attr($beer_entry['untappd_data'][0]) : null;
+
+    // Brewery account status
+    $is_brewery = false;
+    $api_root = '';
+
+    // Get token
+    $token = EMBM_Admin_Authorize_token();
+
+    // Make sure we're authorized
+    if (null !== $token) {
+        // Set API Root
+        $api_root = EMBM_UNTAPPD_API_URL.$token;
+
+        // Get Untappd user info
+        $user = EMBM_Admin_Untappd_user($api_root);
+
+        // Check for brewery account
+        if ($user->account_type == 'brewery') {
+            $is_brewery = true;
+
+            // Get Untappd brewery ID
+            $brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
+
+            // Get Untappd brewery info from API
+            $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+
+            // Make sure brewery is claimed by authorized user
+            if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
+                $is_brewery = false;
+            } else {
+                // Get all the Untappd beers for the brewery
+                $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
+            }
+        }
+    }
+
+    // Setup nonce field for options
+    wp_nonce_field('embm_untappd_save', 'embm_untappd_save_nonce');
+
+?>
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr>
+                <td valign="top">
+                    <div class="embm-untappd--id">
+                        <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
+                        <p><label for="untappd"><strong><?php _e('Beer ID', 'embm'); ?></strong></label><br />
+                        <input
+                            type="number"
+                            name="untappd"
+                            id="untappd"
+                            value="<?php echo $untappd_id; ?>"
+                            <?php if ($is_brewery && $untappd_id !== '') echo 'readonly'; ?>
+                        />
+                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a></p>
+                    </div>
+                </td>
+            <?php if ($is_brewery): ?>
+                <td valign="top" style="width:50%">
+                    <div class="embm-untappd--select">
+                        <p><label for="untappd_id_select"><strong><?php _e('Brewery Beer', 'embm'); ?></strong></label><br />
+                        <select id="untappd_id_select" name="untappd_id_select">
+                            <option value=""
+                                <?php selected($untappd_id, ''); ?>
+                            >-- <?php _e('Custom/Unaffiliated', 'embm'); ?> --</option>
+                        <?php foreach ($beer_list as $item) : $beer = $item->beer; ?>
+                            <option
+                                value="<?php echo $beer->bid; ?>"
+                                <?php selected($untappd_id, $beer->bid); ?>
+                            ><?php echo $beer->beer_name; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                </td>
+            <?php endif; ?>
+            <tr>
+        </tbody>
+    </table>
+<?php
+}
+
+/**
+ * Save the options from the Untappd metabox
+ *
+ * @param int $post_id WP post ID
+ *
+ * @return void
+ */
+function EMBM_Core_Meta_Untappd_save($post_id)
+{
+    // Check for autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Validate nonce
+    if (!isset($_POST['embm_untappd_save_nonce']) || !wp_verify_nonce($_POST['embm_untappd_save_nonce'], 'embm_untappd_save')) {
+        return;
+    }
+
+    // Check user permissions
+    if (!current_user_can('edit_post')) {
+        return;
+    }
+
+    // Save input
+    if (isset($_POST['untappd'])) {
+        $beer_id = esc_attr($_POST['untappd']);
+        $old_id = get_post_meta($post_id, 'untappd', true);
+
+        // Skip if this is not a new ID
+        if ($beer_id === $old_id) {
+            error_log('old');
+            return;
+        }
+
+        error_log('new');
+
+        // Save new ID
+        update_post_meta($post_id, 'untappd', $beer_id);
+
+        // Get beer data from Untappd API
+        if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '') {
+            $beer = EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id);
+
+            // Save beer data
+            update_post_meta($post_id, 'untappd_data', $beer);
+        }
+    }
+}
+
+// Save untappd box inputs
+add_action('save_post', 'EMBM_Core_Meta_Untappd_save');
 
 
 /**

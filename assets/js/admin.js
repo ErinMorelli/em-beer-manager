@@ -31,19 +31,36 @@
 jQuery(document).ready(function ($) {
     'use strict';
 
+    // Get URL and hash
+    var url = window.location.href,
+        url_hash = window.location.hash,
+        hash,
+        page,
+        clean_url;
+
     // Check for a hash in the URL
     if (location.hash) {
         // Don't jump to div
         window.scrollTo(0, 0);
 
-        // Get hash without #
-        var hash = location.hash.slice(1);
+        // Get hash without the #
+        hash = url_hash.slice(1);
 
         // Add/remove active classes
         if (hash !== '') {
             $('#embm-settings--tabs').find('.nav-tab').removeClass('nav-tab-active');
             $('#embm-settings--tabs').find('.nav-tab-' + hash).addClass('nav-tab-active');
         }
+    }
+
+    // Clean URL after page load
+    if (!!window.location.search.substring(1).match(/page=embm-settings/)) {
+        // Set vars
+        page = url.substring(url.lastIndexOf('/') + 1); // Page URL
+        clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
+
+        // Update URL
+        window.history.replaceState(null, null, clean_url);
     }
 
     // Setup jquery ui tabs
@@ -81,7 +98,7 @@ jQuery(document).ready(function ($) {
     // Handle "NO" button press on reset page
     $('.embm-settings--styles-form input[name="No"]').on('click', function (e) {
         e.preventDefault();
-        location.search = '?page=embm-settings';
+        window.location.reload();
     });
 
     // Clean up URL after notice dismissal
@@ -89,11 +106,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
         // Set vars
-        var $el = $('.embm-settings--notice.notice'), // Notice container
-            url = window.location.href, // Full URL
-            url_hash = window.location.hash, // URL hash
-            page = url.substring(url.lastIndexOf('/') + 1), // Page URL
-            clean_url = page.split('?')[0] + '?' + $.param({page: 'embm-settings'}) + url_hash; // Reset URL
+        var $el = $('.embm-settings--notice.notice');
 
         // Remove notice
         $el.fadeTo(100, 0, function () {
@@ -101,9 +114,6 @@ jQuery(document).ready(function ($) {
                 $el.remove();
             });
         });
-
-        // Update URL
-        window.history.replaceState(null, null, clean_url);
     });
 
     // Toggle contextual help for '?' link clicks
@@ -143,11 +153,21 @@ jQuery(document).ready(function ($) {
 
     /* ---- LABS ---- */
 
+    // Toggle beer selection dropdown
+    $('.embm-untappd--select select').on('change', function (e) {
+        var id_input = $('.embm-untappd--id input');
+
+        // Set input readonly
+        id_input.attr('readonly', (this.value !== ''));
+
+        // Set input value
+        id_input.val(this.value);
+    });
+
     // Redirect to Untappd to authorize user
     $('button.embm-labs--authorize').on('click', function (e) {
         e.preventDefault();
-        var url = window.location.href, // Full URL
-            redirect_params = $.param({
+        var redirect_params = $.param({
                 'page': 'embm-settings'
             }),
             redirect_url = url.split('?')[0] + '?' + redirect_params, // Reset URL
@@ -162,9 +182,7 @@ jQuery(document).ready(function ($) {
     // Redirect to reauthorize Untappd user
     $('a.embm-untappd--reauthorize').on('click', function (e) {
         e.preventDefault();
-        var url = window.location.href, // Full URL
-            url_hash = window.location.hash, // URL hash
-            reauth_params = $.param({
+        var reauth_params = $.param({
                 'page': 'embm-settings',
                 'embm-untappd-reauthorize': 1
             }),
@@ -176,9 +194,7 @@ jQuery(document).ready(function ($) {
     // Redirect to deauthorize Untappd user
     $('a.embm-untappd--deauthorize').on('click', function (e) {
         e.preventDefault();
-        var url = window.location.href, // Full URL
-            url_hash = window.location.hash, // URL hash
-            deauth_params = $.param({
+        var deauth_params = $.param({
                 'page': 'embm-settings',
                 'embm-untappd-deauthorize': 1
             }),
@@ -189,11 +205,8 @@ jQuery(document).ready(function ($) {
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
-        console.log('flush');
         e.preventDefault();
-        var url = window.location.href, // Full URL
-            url_hash = window.location.hash, // URL hash
-            flush_params = $.param({
+        var flush_params = $.param({
                 'page': 'embm-settings',
                 'embm-untappd-flush': 1
             }),
@@ -201,17 +214,4 @@ jQuery(document).ready(function ($) {
 
         window.location = flush_url;
     });
-
-    /* ---- CLEAN URL AFTER PAGE LOAD ---- */
-
-    if ( !!window.location.search.substring(1).match(/page=embm-settings/) ) {
-        // Set vars
-        var url = window.location.href, // Full URL
-            url_hash = window.location.hash, // URL hash
-            page = url.substring(url.lastIndexOf('/') + 1), // Page URL
-            clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
-
-        // Update URL
-        window.history.replaceState(null, null, clean_url);
-    }
 });

@@ -21,7 +21,7 @@
 
 
 // Include additional Admin functions
-require EMBM_PLUGIN_DIR.'includes/admin/settings.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-settings.php';
 
 // Set global admin page object
 global $embm_admin_page;

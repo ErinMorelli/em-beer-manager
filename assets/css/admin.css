@@ -138,12 +138,15 @@
 .embm-settings-footer--credits-untappd {
     padding: 5px;
 }
+.embm-settings-footer--donate-text {
+    font-size: 12px;
+}
 .embm-settings-footer--donate a,
 .embm-settings-footer--credits-untappd > a {
     display: inline-block;
 }
 .embm-settings-footer--credits-untappd > a > img {
-     width: 120px;
+    width: 120px;
 }
 
 
@@ -185,11 +188,10 @@
  * Style More Beer Information meta box
  */
 .embm-more-info {
-    float: left;
-    width: 33.333%;
+    width: 100%;
 }
 .embm-more-info input {
-    max-width: 90%;
+    width: 80%;
 }
 @media screen and (max-width:782px) {
     .embm-more-info {
@@ -197,6 +199,19 @@
         width: 100%;
     }
 }
+
+
+/**
+ * Style Untappd meta box
+ */
+.embm-untappd--id {
+    width: 100%;
+}
+.embm-untappd--id input,
+.embm-untappd--select select {
+    width: 80%;
+}
+
 
 /**
  * Contextual help link styles
