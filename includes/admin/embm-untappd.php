@@ -28,8 +28,7 @@ define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
     'beer_list'     => 'embm_untappd_beer_list',
     'brewery'       => 'embm_untappd_brewery_info',
-    'user'          => 'embm_untappd_user_info',
-    'beer'          => 'embm_untappd_beer_info'
+    'user'          => 'embm_untappd_user_info'
 );
 
 
@@ -197,15 +196,65 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
  * Retrieves Untappd beer data from the API.
  *
  * @param string $api_root A templated string for the Untappd API root URL
- * @param array  $beer_id  Untappd beer ID
+ * @param int    $beer_id  Untappd beer ID
+ * @param int    $post_id  The beer's post ID
  *
  * @return object Object of the beer's data
  */
-function EMBM_Admin_Untappd_beer($api_root, $beer_id)
+function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id)
 {
-    $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
-    $beer_res = EMBM_Admin_Untappd_request($beer_url);
-    return $beer_res->response->beer;
+    // Set vars
+    $beer = null;
+    $beer_cache = null;
+    $refresh = false;
+    $now = time();
+    $six_hours = 6 * HOUR_IN_SECONDS;
+
+    // Attempt to retrieve beer data from cache
+    $beer_data = get_post_meta($post_id, 'embm_untappd_data', true);
+
+    // Check for data
+    if ($beer_data) {
+        $beer = $beer_data['beer'];
+        $beer_cache = $beer_data['cached'];
+    }
+
+    // Check cached time
+    if (!is_null($beer_cache)) {
+        // Get time delta
+        $delta = $now - $beer_cache;
+        error_log('delta: '.$delta);
+
+        // Check for
+        if ($delta >= $six_hours) {
+            $refresh = true;
+        }
+    }
+
+    // Check for beer data
+    if (is_null($beer) || false == $beer) {
+        $refresh = true;
+    }
+
+    // Get fresh beer data from API
+    if ($refresh) {
+        $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
+        $beer_res = EMBM_Admin_Untappd_request($beer_url);
+        $beer = $beer_res->response->beer;
+
+        // Remove unneeded data
+        unset($beer->similar);
+        unset($beer->friends);
+
+        // Set up data for storage
+        $fresh_data = array(
+            'beer'      => $beer,
+            'cached'    => $now
+        );
+
+        // Store for 6 hours
+        update_post_meta($post_id, 'embm_untappd_data', $fresh_data);
+    }
 }
 
 

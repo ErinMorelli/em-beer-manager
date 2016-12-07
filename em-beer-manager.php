@@ -105,6 +105,19 @@ add_action('plugins_loaded', 'EMBM_Plugin_load', 10);
  */
 function EMBM_Plugin_activate()
 {
+    // Load core files
+    if (!function_exists('EMBM_Core_beer')) {
+        include_once EMBM_PLUGIN_DIR.'includes/embm-core.php';
+    }
+
+    // Load CPTs
+    EMBM_Core_beer();
+    EMBM_Core_styles();
+    EMBM_Core_group();
+
+    // Do any upgrades
+    EMBM_Plugin_upgrade();
+
     // Set default settings options
     $defaults = array(
         'embm_untappd_check'    => '',
@@ -112,7 +125,6 @@ function EMBM_Plugin_activate()
         'embm_css_url'          => '',
         'embm_group_slug'       => 'group'
     );
-
     update_option('embm_options', $defaults);
 
     // Refresh permalinks
@@ -308,65 +320,94 @@ add_action('wp_enqueue_scripts', 'EMBM_Plugin_styles');
  */
 function EMBM_Plugin_upgrade()
 {
-    // Get global WP database reference
-    global $wpdb;
-
     // Get upgrade status from DB
     $upgrade = get_option('embm_db_upgrade');
+
+    // Stop if we've done this before
+    if ($upgrade == 2) {
+        return;
+    }
+
+    // Get global WP database reference
+    global $wpdb;
 
     // Get current EMBM version
     $curr_version = floatval(get_option('embm_version'));
 
-    // Set upgrade version
-    $new_version = 1.7;
+    // Do version 1.7.0 upgrade
+    if ($curr_version >= 1.7) {
 
-    // Do version 1.6 -> 1.7 upgrade
-    if (($curr_version >= $new_version) && (!$upgrade)) {
-        // Rename style taxonomy
-        $wpdb->query(
-            "
-            UPDATE $wpdb->term_taxonomy
-            SET taxonomy = 'embm_style'
-            WHERE taxonomy = 'style'
-            "
-        );
-        // Rename beer taxonomy
-        $wpdb->query(
-            "
-            UPDATE $wpdb->posts
-            SET post_type = 'embm_beer'
-            WHERE post_type = 'beer'
-            "
-        );
+        // Check for old DB content
+        delete_option('embm_comment_change');
 
-        // Save upgrade status to DB
-        update_option('embm_db_upgrade', true);
+        // Update DB data format for upgrade
+        if ($upgrade == 'true') {
+            update_option('embm_db_upgrade', true);
+        } elseif (!$upgrade) {
+            update_option('embm_db_upgrade', false);
+        }
+
+        // Get styles loaded option
+        $loaded = get_option('embm_styles_loaded');
+
+        // Update DB data format for styles
+        if ($loaded == 'true') {
+            update_option('embm_styles_loaded', true);
+        } elseif (!$loaded) {
+            update_option('embm_styles_loaded', false);
+        }
+
+        if (!$upgrade) {
+            // Taxonomies to update
+            $tax_names = ['style', 'beer'];
+
+            // Rename taxonomies
+            foreach ($tax_names as $tax_name) {
+                // Set new tax name
+                $new_tax_name = 'embm_' . $tax_name;
+
+                // Update column names
+                $wpdb->query(
+                    "
+                    UPDATE $wpdb->term_taxonomy
+                    SET taxonomy = '$new_tax_name'
+                    WHERE taxonomy = '$tax_name'
+                    "
+                );
+            }
+
+            // Save upgrade status to DB
+            update_option('embm_db_upgrade', true);
+        }
     }
 
-    // Check for old DB content
-    delete_option('embm_comment_change');
+    // Do version 2.2.0 upgrade
+    if (($curr_version >= 2.2) && ($upgrade && $upgrade != 2)) {
+        // List of attributes to update
+        $attrs = [
+            'malts', 'hops', 'adds', 'yeast', 'ibu', 'abv',
+            'beer_num', 'avail', 'notes', 'untappd', 'untappd_data'
+        ];
 
-    // Update DB data format for upgrade
-    if ($upgrade == 'true') {
-        update_option('embm_db_upgrade', true);
-    } elseif (!$upgrade) {
-        update_option('embm_db_upgrade', false);
+        // Update each attribute
+        foreach ($attrs as $attr) {
+            // New attribute name
+            $new_attr = 'embm_' . $attr;
+
+            // Update column names
+            $wpdb->query(
+                "
+                UPDATE $wpdb->postmeta
+                SET meta_key = '$new_attr'
+                WHERE meta_key = '$attr'
+                "
+            );
+
+            // Save upgrade status to DB
+            update_option('embm_db_upgrade', 2);
+        }
     }
-
-    // Get styles loaded option
-    $loaded = get_option('embm_styles_loaded');
-
-    // Update DB data format for styles
-    if ($loaded == 'true') {
-        update_option('embm_styles_loaded', true);
-    } elseif (!$loaded) {
-        update_option('embm_styles_loaded', false);
-    }
-
 }
-
-// Initialize plugin update
-add_action('init', 'EMBM_Plugin_upgrade');
 
 
 /**

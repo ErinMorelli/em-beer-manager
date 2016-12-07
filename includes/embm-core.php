@@ -278,12 +278,12 @@ function EMBM_Core_Meta_specs()
     $beer_entry = get_post_custom($post->ID);
 
     // Set custom post data values
-    $b_malts = isset($beer_entry['malts']) ? esc_attr($beer_entry['malts'][0]) : '';
-    $b_hops = isset($beer_entry['hops']) ? esc_attr($beer_entry['hops'][0]) : '';
-    $b_adds= isset($beer_entry['adds']) ? esc_attr($beer_entry['adds'][0]) : '';
-    $b_yeast = isset($beer_entry['yeast']) ? esc_attr($beer_entry['yeast'][0]) : '';
-    $b_ibu = isset($beer_entry['ibu']) ? esc_attr($beer_entry['ibu'][0]) : '0';
-    $b_abv = isset($beer_entry['abv']) ? esc_attr($beer_entry['abv'][0]) : '0';
+    $b_malts = isset($beer_entry['embm_malts']) ? esc_attr($beer_entry['embm_malts'][0]) : '';
+    $b_hops = isset($beer_entry['embm_hops']) ? esc_attr($beer_entry['embm_hops'][0]) : '';
+    $b_adds= isset($beer_entry['embm_adds']) ? esc_attr($beer_entry['embm_adds'][0]) : '';
+    $b_yeast = isset($beer_entry['embm_yeast']) ? esc_attr($beer_entry['embm_yeast'][0]) : '';
+    $b_ibu = isset($beer_entry['embm_ibu']) ? esc_attr($beer_entry['embm_ibu'][0]) : '0';
+    $b_abv = isset($beer_entry['embm_abv']) ? esc_attr($beer_entry['embm_abv'][0]) : '0';
 
     // Setup nonce field for options
     wp_nonce_field('embm_specs_save', 'embm_specs_save_nonce');
@@ -293,19 +293,19 @@ function EMBM_Core_Meta_specs()
         <tbody>
             <tr>
                 <td>
-                    <p><label for="malts"><strong><?php _e('Malts', 'embm'); ?></strong></label><br />
-                    <input type="text" name="malts" id="malts" style="width:100%;" value="<?php echo $b_malts; ?>" /></p>
-                    <p><label for="hops"><strong><?php _e('Hops', 'embm'); ?></strong></label><br />
-                    <input type="text" name="hops" id="hops" style="width:100%;" value="<?php echo $b_hops; ?>" /></p>
-                    <p><label for="adds"><strong><?php _e('Additions/Spices', 'embm'); ?></strong></label><br />
-                    <input type="text" name="adds" id="adds" style="width:100%;" value="<?php echo $b_adds; ?>" /></p>
-                    <p><label for="yeast"><strong><?php _e('Yeast', 'embm'); ?></strong></label><br />
-                    <input type="text" name="yeast" id="yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" /></p>
+                    <p><label for="embm_malts"><strong><?php _e('Malts', 'embm'); ?></strong></label><br />
+                    <input type="text" name="embm_malts" id="embm_malts" style="width:100%;" value="<?php echo $b_malts; ?>" /></p>
+                    <p><label for="embm_hops"><strong><?php _e('Hops', 'embm'); ?></strong></label><br />
+                    <input type="text" name="embm_hops" id="embm_hops" style="width:100%;" value="<?php echo $b_hops; ?>" /></p>
+                    <p><label for="embm_adds"><strong><?php _e('Additions/Spices', 'embm'); ?></strong></label><br />
+                    <input type="text" name="embm_adds" id="embm_adds" style="width:100%;" value="<?php echo $b_adds; ?>" /></p>
+                    <p><label for="embm_yeast"><strong><?php _e('Yeast', 'embm'); ?></strong></label><br />
+                    <input type="text" name="embm_yeast" id="embm_yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" /></p>
                     <hr />
-                    <p><label for="abv"><strong><?php _e('ABV', 'embm'); ?></strong></label><br />
-                    <input type="number" name="abv" id="abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %</p>
-                    <p><label for="ibu"><strong><?php _e('IBU', 'embm'); ?></strong></label><br />
-                    <input type="number" name="ibu" id="style" min="0" max="100" step="1" value="<?php echo $b_ibu; ?>" /></p>
+                    <p><label for="embm_abv"><strong><?php _e('ABV', 'embm'); ?></strong></label><br />
+                    <input type="number" name="embm_abv" id="embm_abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %</p>
+                    <p><label for="embm_ibu"><strong><?php _e('IBU', 'embm'); ?></strong></label><br />
+                    <input type="number" name="embm_ibu" id="embm_style" min="0" max="100" step="1" value="<?php echo $b_ibu; ?>" /></p>
                 </td>
             </tr>
         </tbody>
@@ -338,23 +338,23 @@ function EMBM_Core_Meta_Specs_save($post_id)
     }
 
     // Save input
-    if (isset($_POST['malts'])) {
-        update_post_meta($post_id, 'malts', esc_attr($_POST['malts']));
+    if (isset($_POST['embm_malts'])) {
+        update_post_meta($post_id, 'embm_malts', esc_attr($_POST['embm_malts']));
     }
-    if (isset($_POST['hops'])) {
-        update_post_meta($post_id, 'hops', esc_attr($_POST['hops']));
+    if (isset($_POST['embm_hops'])) {
+        update_post_meta($post_id, 'embm_hops', esc_attr($_POST['embm_hops']));
     }
-    if (isset($_POST['adds'])) {
-        update_post_meta($post_id, 'adds', esc_attr($_POST['adds']));
+    if (isset($_POST['embm_adds'])) {
+        update_post_meta($post_id, 'embm_adds', esc_attr($_POST['embm_adds']));
     }
-    if (isset($_POST['yeast'])) {
-        update_post_meta($post_id, 'yeast', esc_attr($_POST['yeast']));
+    if (isset($_POST['embm_yeast'])) {
+        update_post_meta($post_id, 'embm_yeast', esc_attr($_POST['embm_yeast']));
     }
-    if (isset($_POST['ibu'])) {
-        update_post_meta($post_id, 'ibu', esc_attr($_POST['ibu']));
+    if (isset($_POST['embm_ibu'])) {
+        update_post_meta($post_id, 'embm_ibu', esc_attr($_POST['embm_ibu']));
     }
-    if (isset($_POST['abv'])) {
-        update_post_meta($post_id, 'abv', esc_attr($_POST['abv']));
+    if (isset($_POST['embm_abv'])) {
+        update_post_meta($post_id, 'embm_abv', esc_attr($_POST['embm_abv']));
     }
 }
 
@@ -375,10 +375,9 @@ function EMBM_Core_Meta_info()
     $beer_entry = get_post_custom($post->ID);
 
     // Set custom post data values
-    $b_num = isset($beer_entry['beer_num']) ? esc_attr($beer_entry['beer_num'][0]) : '';
-    $b_avail = isset($beer_entry['avail']) ? esc_attr($beer_entry['avail'][0]) : '';
-    $b_untap = isset($beer_entry['untappd']) ? esc_attr($beer_entry['untappd'][0]) : '';
-    $b_notes = isset($beer_entry['notes']) ? esc_attr($beer_entry['notes'][0]) : '';
+    $b_num = isset($beer_entry['embm_beer_num']) ? esc_attr($beer_entry['embm_beer_num'][0]) : '';
+    $b_avail = isset($beer_entry['embm_avail']) ? esc_attr($beer_entry['embm_avail'][0]) : '';
+    $b_notes = isset($beer_entry['embm_notes']) ? esc_attr($beer_entry['embm_notes'][0]) : '';
 
     // Setup nonce field for options
     wp_nonce_field('embm_info_save', 'embm_info_save_nonce');
@@ -389,20 +388,20 @@ function EMBM_Core_Meta_info()
             <tr>
                 <td valign="top" style="width:40%">
                     <div class="embm-more-info">
-                        <p><label for="beer_num"><strong><?php _e('Beer Number', 'embm'); ?></strong></label><br />
-                        <input type="number" name="beer_num" id="beer_num" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
+                        <p><label for="embm_beer_num"><strong><?php _e('Beer Number', 'embm'); ?></strong></label><br />
+                        <input type="number" name="embm_beer_num" id="embm_beer_num" min="000" max="999" step="1" value="<?php echo $b_num; ?>" /></p>
                     </div>
                 </td>
                 <td valign="top" rowspan="3" style="width:60%">
-                    <p><label for="notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label><br />
-                    <textarea name="notes" id="notes" rows="7" style="width:100%"><?php echo $b_notes; ?></textarea></p>
+                    <p><label for="embm_notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label><br />
+                    <textarea name="embm_notes" id="embm_notes" rows="7" style="width:100%"><?php echo $b_notes; ?></textarea></p>
                 </td>
             </tr>
             <tr>
                 <td valign="top">
                     <div class="embm-more-info">
-                        <p><label for="avail"><strong><?php _e('Availability', 'embm'); ?></strong></label><br />
-                        <input type="text" name="avail" id="avail" value="<?php echo $b_avail; ?>" /></p>
+                        <p><label for="embm_avail"><strong><?php _e('Availability', 'embm'); ?></strong></label><br />
+                        <input type="text" name="embm_avail" id="embm_avail" value="<?php echo $b_avail; ?>" /></p>
                     </div>
                 </td>
             </tr>
@@ -436,14 +435,14 @@ function EMBM_Core_Meta_Info_save($post_id)
     }
 
     // Save input
-    if (isset($_POST['beer_num'])) {
-        update_post_meta($post_id, 'beer_num', esc_attr($_POST['beer_num']));
+    if (isset($_POST['embm_beer_num'])) {
+        update_post_meta($post_id, 'embm_beer_num', esc_attr($_POST['embm_beer_num']));
     }
-    if (isset($_POST['avail'])) {
-        update_post_meta($post_id, 'avail', esc_attr($_POST['avail']));
+    if (isset($_POST['embm_avail'])) {
+        update_post_meta($post_id, 'embm_avail', esc_attr($_POST['embm_avail']));
     }
-    if (isset($_POST['notes'])) {
-        update_post_meta($post_id, 'notes', esc_attr($_POST['notes']));
+    if (isset($_POST['embm_notes'])) {
+        update_post_meta($post_id, 'embm_notes', esc_attr($_POST['embm_notes']));
     }
 }
 
@@ -469,10 +468,12 @@ function EMBM_Core_Meta_untappd()
 
     // Get current post custom data
     $beer_entry = get_post_custom($post->ID);
+    $untappd_data = EMBM_Core_Beer_attr($post->ID, 'untappd_data');
 
     // Set custom post data values
-    $untappd_id = isset($beer_entry['untappd']) ? esc_attr($beer_entry['untappd'][0]) : '';
-    $untappd_data = isset($beer_entry['untappd_data']) ? esc_attr($beer_entry['untappd_data'][0]) : null;
+    $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
+
+    error_log(print_r($untappd_data,true));
 
     // Brewery account status
     $is_brewery = false;
@@ -519,11 +520,11 @@ function EMBM_Core_Meta_untappd()
                 <td valign="top">
                     <div class="embm-untappd--id">
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
-                        <p><label for="untappd"><strong><?php _e('Beer ID', 'embm'); ?></strong></label><br />
+                        <p><label for="embm_untappd"><strong><?php _e('Beer ID', 'embm'); ?></strong></label><br />
                         <input
                             type="number"
-                            name="untappd"
-                            id="untappd"
+                            name="embm_untappd"
+                            id="embm_untappd"
                             value="<?php echo $untappd_id; ?>"
                             <?php if ($is_brewery && $untappd_id !== '') echo 'readonly'; ?>
                         />
@@ -579,27 +580,24 @@ function EMBM_Core_Meta_Untappd_save($post_id)
     }
 
     // Save input
-    if (isset($_POST['untappd'])) {
-        $beer_id = esc_attr($_POST['untappd']);
-        $old_id = get_post_meta($post_id, 'untappd', true);
+    if (isset($_POST['embm_untappd'])) {
+        $beer_id = esc_attr($_POST['embm_untappd']);
+        $old_id = get_post_meta($post_id, 'embm_untappd', true);
 
         // Skip if this is not a new ID
-        if ($beer_id === $old_id) {
-            error_log('old');
-            return;
-        }
+        // if ($beer_id === $old_id) {
+        //     error_log('old');
+        //     return;
+        // }
 
         error_log('new');
 
         // Save new ID
-        update_post_meta($post_id, 'untappd', $beer_id);
+        update_post_meta($post_id, 'embm_untappd', $beer_id);
 
         // Get beer data from Untappd API
         if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '') {
-            $beer = EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id);
-
-            // Save beer data
-            update_post_meta($post_id, 'untappd_data', $beer);
+            EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id);
         }
     }
 }
@@ -618,8 +616,11 @@ add_action('save_post', 'EMBM_Core_Meta_Untappd_save');
  */
 function EMBM_Core_Beer_attr($post_id, $attr)
 {
+    // Set attr name
+    $attr_name = 'embm_' . $attr;
+
     // Get beer attribute data
-    $b_attr = get_post_meta($post_id, $attr, true);
+    $b_attr = get_post_meta($post_id, $attr_name, true);
 
     // Format the data
     if ($attr == 'abv') {
@@ -628,6 +629,12 @@ function EMBM_Core_Beer_attr($post_id, $attr)
         return '#' . $b_attr;
     } elseif ($attr == 'untappd') {
         return 'https://untappd.com/beer/' . $b_attr;
+    } elseif ($attr == 'untappd_data') {
+        if ($b_attr && array_key_exists('beer', $b_attr)) {
+            return $b_attr['beer'];
+        } else {
+            return null;
+        }
     } else {
         return $b_attr;
     }
@@ -712,8 +719,7 @@ add_action('init', 'EMBM_Core_styles', 0);
  */
 function EMBM_Core_Styles_populate()
 {
-    // Load styles list from text files
-    // Generated from BeerAdvocate (http://www.beeradvocate.com/beer/style/)
+    // Load styles list from text files (Generated from Untappd)
     $beer_styles_file = EMBM_PLUGIN_DIR.'assets/beer-styles.txt';
 
     // Open file
@@ -857,7 +863,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         );
 
         // Get int vals
-        $abv = intval(get_post_meta($beer_id, 'abv', true));
+        $abv = intval(get_post_meta($beer_id, 'embm_abv', true));
         $ibu = intval(EMBM_Core_Beer_attr($beer_id, 'ibu'));
 
         // Set int vals
@@ -877,7 +883,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         );
 
         // Get int vals
-        $beer_num = intval(get_post_meta($beer_id, 'beer_num', true));
+        $beer_num = intval(get_post_meta($beer_id, 'embm_beer_num', true));
 
         // Set int fals
         $extras_array['beer_number'] = ($beer_num == 0) ? null : $beer_num;
@@ -889,7 +895,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     // Return beer Untappd information
     if ($field_name == 'untappd') {
         // Get Untappd id
-        $raw_id = intval(get_post_meta($beer_id, 'untappd', true));
+        $raw_id = intval(get_post_meta($beer_id, 'embm_untappd', true));
 
         // Set up array
         $untappd_array = array();

@@ -127,7 +127,7 @@ function EMBM_Admin_Columns_values($column, $post_id)
         break;
     case 'beer_num':
         // Get raw beer no
-        $beer_num = get_post_meta($post_id, 'beer_num', true);
+        $beer_num = get_post_meta($post_id, 'embm_beer_num', true);
 
         // Check if it's defined
         if ($beer_num != '') {
@@ -152,7 +152,7 @@ function EMBM_Admin_Columns_values($column, $post_id)
         break;
     case 'untappd':
         // Get raw Untappd value from DB
-        $untap = get_post_meta($post_id, 'untappd', true);
+        $untap = get_post_meta($post_id, 'embm_untappd', true);
 
         // If it's defined, add icon
         if ($untap != '') {
