@@ -92,6 +92,9 @@ function EMBM_Plugin_load()
 
     // Plugin localization
     load_plugin_textdomain('embm', false, plugin_basename(dirname(__FILE__)).'/languages');
+
+    // Do any upgrades
+    EMBM_Plugin_upgrade();
 }
 
 // Initial plugin load
@@ -105,6 +108,15 @@ add_action('plugins_loaded', 'EMBM_Plugin_load', 10);
  */
 function EMBM_Plugin_activate()
 {
+    // Set default settings options
+    $defaults = array(
+        'embm_untappd_check'    => '',
+        'embm_untappd_icons'    => '1',
+        'embm_css_url'          => '',
+        'embm_group_slug'       => 'group'
+    );
+    update_option('embm_options', $defaults);
+
     // Load core files
     if (!function_exists('EMBM_Core_beer')) {
         include_once EMBM_PLUGIN_DIR.'includes/embm-core.php';
@@ -114,18 +126,6 @@ function EMBM_Plugin_activate()
     EMBM_Core_beer();
     EMBM_Core_styles();
     EMBM_Core_group();
-
-    // Do any upgrades
-    EMBM_Plugin_upgrade();
-
-    // Set default settings options
-    $defaults = array(
-        'embm_untappd_check'    => '',
-        'embm_untappd_icons'    => '1',
-        'embm_css_url'          => '',
-        'embm_group_slug'       => 'group'
-    );
-    update_option('embm_options', $defaults);
 
     // Refresh permalinks
     flush_rewrite_rules();
@@ -327,6 +327,8 @@ function EMBM_Plugin_upgrade()
     if ($upgrade == 2) {
         return;
     }
+
+    error_log('EMBM_Plugin_upgrade');
 
     // Get global WP database reference
     global $wpdb;

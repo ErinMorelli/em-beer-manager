@@ -522,7 +522,7 @@ function EMBM_Output_Content_untappd($beer_id)
 
     if ($use_untappd != '1') {
         // Get raw Untappd value from DB
-        $untap = get_post_meta($beer_id, 'untappd', true);
+        $untap = get_post_meta($beer_id, 'embm_untappd', true);
 
         // Set up translatable title text
         $untap_title = __('Check in on Untappd', 'embm');

@@ -51,6 +51,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
 
     try {
         // Make GET request to API
+        error_log($request_url);
         $response = file_get_contents($request_url);
     } catch (Exception $e) {
         // Return to EMBM settings page to show error & exit
@@ -223,7 +224,6 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id)
     if (!is_null($beer_cache)) {
         // Get time delta
         $delta = $now - $beer_cache;
-        error_log('delta: '.$delta);
 
         // Check for
         if ($delta >= $six_hours) {
@@ -245,6 +245,8 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id)
         // Remove unneeded data
         unset($beer->similar);
         unset($beer->friends);
+        unset($beer->media);
+        unset($beer->vintages);
 
         // Set up data for storage
         $fresh_data = array(

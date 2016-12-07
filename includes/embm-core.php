@@ -473,8 +473,6 @@ function EMBM_Core_Meta_untappd()
     // Set custom post data values
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
 
-    error_log(print_r($untappd_data,true));
-
     // Brewery account status
     $is_brewery = false;
     $api_root = '';
@@ -549,7 +547,20 @@ function EMBM_Core_Meta_untappd()
                     </div>
                 </td>
             <?php endif; ?>
+            </tr>
             <tr>
+                <td valign="top" <?php if ($is_brewery) echo 'colspan="2"'; ?>>
+                    <ul>
+                        <li><?php echo $untappd_data->beer_name; ?></li>
+                        <li><?php echo $untappd_data->beer_style; ?></li>
+                        <li>ABV: <?php echo $untappd_data->beer_abv; ?>%</li>
+                        <li>IBU: <?php echo $untappd_data->beer_ibu; ?></li>
+                        <li>Rating: <?php printf('%.1f', $untappd_data->rating_score); ?> (<?php echo $untappd_data->rating_count; ?> ratings)</li>
+                        <li>Brewery: <?php echo $untappd_data->brewery->brewery_name; ?></li>
+                        <li>Check-ins: <?php echo $untappd_data->stats->total_count; ?> (<?php echo $untappd_data->stats->total_user_count; ?> users)</li>
+                    </ul>
+                </td>
+            </tr>
         </tbody>
     </table>
 <?php
@@ -863,7 +874,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         );
 
         // Get int vals
-        $abv = intval(get_post_meta($beer_id, 'embm_abv', true));
+        $abv = floatval(get_post_meta($beer_id, 'embm_abv', true));
         $ibu = intval(EMBM_Core_Beer_attr($beer_id, 'ibu'));
 
         // Set int vals
@@ -936,22 +947,22 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     if ($field_name == 'profile') {
         // Save input
         if (isset($value['malts']) && is_string($value['malts'])) {
-            update_post_meta($beer_id, 'malts', esc_attr($value['malts']));
+            update_post_meta($beer_id, 'embm_malts', esc_attr($value['malts']));
         }
         if (isset($value['hops']) && is_string($value['hops'])) {
-            update_post_meta($beer_id, 'hops', esc_attr($value['hops']));
+            update_post_meta($beer_id, 'embm_hops', esc_attr($value['hops']));
         }
         if (isset($value['additions']) && is_string($value['additions'])) {
-            update_post_meta($beer_id, 'adds', esc_attr($value['additions']));
+            update_post_meta($beer_id, 'embm_adds', esc_attr($value['additions']));
         }
         if (isset($value['yeast']) && is_string($value['yeast'])) {
-            update_post_meta($beer_id, 'yeast', esc_attr($value['yeast']));
+            update_post_meta($beer_id, 'embm_yeast', esc_attr($value['yeast']));
         }
         if (isset($value['ibu']) && is_int($value['ibu'])) {
-            update_post_meta($beer_id, 'ibu', esc_attr($value['ibu']));
+            update_post_meta($beer_id, 'embm_ibu', esc_attr($value['ibu']));
         }
-        if (isset($value['abv']) && is_int($value['abv'])) {
-            update_post_meta($beer_id, 'abv', esc_attr($value['abv']));
+        if (isset($value['abv']) && is_float($value['abv'])) {
+            update_post_meta($beer_id, 'embm_abv', esc_attr($value['abv']));
         }
     }
 
@@ -959,13 +970,13 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     if ($field_name == 'extras') {
         // Save input
         if (isset($value['beer_number']) && is_int($value['beer_number'])) {
-            update_post_meta($beer_id, 'beer_num', esc_attr($value['beer_number']));
+            update_post_meta($beer_id, 'embm_beer_num', esc_attr($value['beer_number']));
         }
         if (isset($value['availability']) && is_string($value['availability'])) {
-            update_post_meta($beer_id, 'avail', esc_attr($value['availability']));
+            update_post_meta($beer_id, 'embm_avail', esc_attr($value['availability']));
         }
         if (isset($value['notes']) && is_string($value['notes'])) {
-            update_post_meta($beer_id, 'notes', esc_attr($value['notes']));
+            update_post_meta($beer_id, 'embm_notes', esc_attr($value['notes']));
         }
     }
 
@@ -973,7 +984,7 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     if ($field_name == 'untappd') {
         // Save input
         if (isset($value['id']) && is_int($value['id'])) {
-            update_post_meta($beer_id, 'untappd', esc_attr($value['id']));
+            update_post_meta($beer_id, 'embm_untappd', esc_attr($value['id']));
         }
     }
 }
