@@ -43,6 +43,9 @@ if (isset($_GET['embm-untappd-flush']) && $_GET['embm-untappd-flush'] == '1') {
     EMBM_Admin_Labs_flush();
 }
 
+// Show status
+EMBM_Admin_Authorize_status();
+
 // Get token
 $token = EMBM_Admin_Authorize_token();
 

@@ -155,13 +155,15 @@ jQuery(document).ready(function ($) {
 
     // Toggle beer selection dropdown
     $('.embm-untappd--select select').on('change', function (e) {
-        var id_input = $('.embm-untappd--id input');
+        var id_input = $('#embm_untappd'),
+            is_reset = (this.value === ''),
+            new_value = is_reset ? id_input.data('value') : this.value;
 
         // Set input readonly
-        id_input.attr('readonly', (this.value !== ''));
+        id_input.attr('readonly', !is_reset);
 
         // Set input value
-        id_input.val(this.value);
+        id_input.val(new_value);
     });
 
     // Redirect to Untappd to authorize user

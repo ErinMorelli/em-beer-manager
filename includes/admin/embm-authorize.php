@@ -80,12 +80,22 @@ function EMBM_Admin_Authorize_status()
     // Get Untappd user info
     $user = EMBM_Admin_Untappd_user(EMBM_UNTAPPD_API_URL.$token);
 
+    // Get brewery status
+    $is_brewery = ($user->account_type == 'brewery');
+
 ?>
     <div class="embm-settings--status">
         <p>
             <?php _e('You are logged in as', 'embm'); ?>:
-            <a href="<?php echo $user->untappd_url; ?>" target="_blank" class="embm-untappd--user-link"><strong><?php echo $user->first_name; ?></strong></a>
-            &nbsp;<a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', 'embm'); ?></a>
+            <a
+                href="<?php echo $user->untappd_url; ?>"
+                target="_blank"
+                class="embm-untappd--user-link"
+                title="<?php echo $user->user_name . ' (' . $user->account_type . ')'; ?>"
+            ><span
+                class="dashicons dashicons-<?php echo ($is_brewery ? 'groups' : 'admin-users'); ?>"
+            ></span><strong><?php echo $user->first_name . ' ' . $user->last_name; ?></strong></a>
+            <a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', 'embm'); ?></a>
         </p>
     </div>
 <?php
