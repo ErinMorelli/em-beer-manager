@@ -37,11 +37,6 @@ function EMBM_Admin_Labs_Import_error()
 <?php
 }
 
-// Handle cache flush request
-if (isset($_GET['embm-untappd-flush']) && $_GET['embm-untappd-flush'] == '1') {
-    // Flush the transient cache
-    EMBM_Admin_Labs_flush();
-}
 
 // Show status
 EMBM_Admin_Authorize_status();
@@ -89,7 +84,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Import specific beers', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/embm-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="1" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -117,7 +112,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Import all beers', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/embm-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="3" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -135,7 +130,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Import single beer by ID', 'embm'); ?></th>
                 <td>
-                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/import-beer.php'; ?>" class="embm-labs--import-form">
+                    <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/embm-import-beer.php'; ?>" class="embm-labs--import-form">
                         <input type="hidden" name="embm-labs-untappd-import" value="2" />
                         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
                         <input type="hidden" name="embm-untappd-brewery-id" value="<?php echo $brewery->brewery_id; ?>" />
@@ -158,9 +153,9 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
             <tr>
                 <th scope="row"><?php _e('Refresh Untappd Data', 'embm'); ?></th>
                 <td>
-                    <p><?php _e('Flushes cache and fetches fresh API data from Untappd.', 'embm'); ?></p>
-                    <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Refresh', 'embm'); ?></a></p>
-                    <p class="description">(<?php _e('Use this to refresh the beer data in the above features.', 'embm'); ?>)</p>
+                    <p><?php _e('Update the data from Untappd used in the above features.', 'embm'); ?></p>
+                    <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
+                    <p class="description">(<?php _e('This is automatically done weekly.', 'embm'); ?>)</p>
                 </td>
             </tr>
         </tbody>

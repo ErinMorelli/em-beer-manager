@@ -74,6 +74,9 @@ function EMBM_Core_beer()
 
     // Register post type
     register_post_type('embm_beer', $args);
+
+    // Load metaboxes
+    EMBM_Core_metaboxes();
 }
 
 // Loads the custom post type
@@ -81,6 +84,29 @@ add_action('init', 'EMBM_Core_beer');
 
 // Add thumbnail support to custom post type
 add_theme_support('post-thumbnails', array('embm_beer'));
+
+
+/**
+ * Add custom metaboxes to post type
+ *
+ * @return void
+ */
+function EMBM_Core_metaboxes()
+{
+    // Set path to metabox files
+    $metabox_root = EMBM_PLUGIN_DIR.'includes/metaboxes';
+
+    // Iteratively load any metaboxes
+    foreach (scandir($metabox_root) as $filename) {
+        // Set metaboxes path
+        $path = $metabox_root . '/' . $filename;
+
+        // If the PHP file exists, load it
+        if (is_file($path) && preg_match('/embm-metabox-.*\.php$/', $filename)) {
+            include $path;
+        }
+    }
+}
 
 
 /**
@@ -221,32 +247,6 @@ function EMBM_Core_Meta_help()
 add_action('load-post.php', 'EMBM_Core_Meta_help');
 add_action('load-post-new.php', 'EMBM_Core_Meta_help');
 add_action('load-edit.php', 'EMBM_Core_Meta_help');
-
-
-/**
- * Add custom meta boxes to post type
- *
- * @return void
- */
-function EMBM_Core_Meta_boxes()
-{
-    // Set path to metabox files
-    $metabox_root = EMBM_PLUGIN_DIR.'includes/metaboxes';
-
-    // Iteratively load any metaboxes
-    foreach (scandir($metabox_root) as $filename) {
-        // Set metaboxes path
-        $path = $metabox_root . '/' . $filename;
-
-        // If the PHP file exists, load it
-        if (is_file($path) && preg_match('/embm-metabox-.*\.php$/', $filename)) {
-            include $path;
-        }
-    }
-}
-
-// Load metaboxes
-add_action('add_meta_boxes', 'EMBM_Core_Meta_boxes');
 
 
 /**

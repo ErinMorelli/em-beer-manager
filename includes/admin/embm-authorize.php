@@ -36,6 +36,25 @@ function EMBM_Admin_Authorize_deauthorize()
 
     // Flush cache
     EMBM_Admin_Untappd_flush();
+
+    // Get global WP database reference
+    global $wpdb;
+
+    // Remove individual beer Untappd data
+    $wpdb->query(
+        "
+        DELETE
+        FROM
+            $wpdb->postmeta
+        WHERE
+            meta_key IN (
+                'embm_untappd_data',
+                'embm_show_rating',
+                'embm_show_reviews',
+                'embm_review_count'
+            )
+        "
+    );
 }
 
 
@@ -83,6 +102,9 @@ function EMBM_Admin_Authorize_status()
     // Get brewery status
     $is_brewery = ($user->account_type == 'brewery');
 
+    // Set API Root
+    $api_root = EMBM_UNTAPPD_API_URL.$token;
+
 ?>
     <div class="embm-settings--status">
         <p>
@@ -107,28 +129,4 @@ if (isset($_GET['embm-untappd-token'])) {
     // Store token
     $new_token = $_GET['embm-untappd-token'];
     update_option('embm_untappd_token', $new_token);
-}
-
-// Handle Untappd deauthorization
-if (isset($_GET['embm-untappd-deauthorize']) && $_GET['embm-untappd-deauthorize'] == '1') {
-    // Deauthorize the user
-    EMBM_Admin_Authorize_deauthorize();
-}
-
-// Handle Untappd reauthorization
-if (isset($_GET['embm-untappd-reauthorize']) && $_GET['embm-untappd-reauthorize'] == '1') {
-    // Deauthorize the user
-    EMBM_Admin_Authorize_deauthorize();
-
-    // Return URL
-    $return_url = get_admin_url(null, 'options-general.php?page=embm-settings');
-
-    // Set up auth URL params
-    $auth_params = http_build_query(array('embm-origin' => $return_url));
-
-    // Set up full auth URL
-    $auth_url = EMBM_UNTAPPD_AUTH_URL . '?' . $auth_params;
-
-    // Redirect for authorization
-    wp_redirect($auth_url);
 }

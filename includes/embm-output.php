@@ -671,7 +671,7 @@ function EMBM_Output_Content_extras($beer_id)
             if ($notes != '') {
                 $output .= '<div class="notes"><span class="label">';
                 $output .= __('Additional Notes', 'embm');
-                $output .= '</span><span class="value">'.wpautop(EMBM_Core_Beer_attr($beer_id, 'notes')).'</span></div>'."\n";
+                $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'notes').'</span></div>'."\n";
             }
 
             // End extras output
@@ -852,14 +852,27 @@ function EMBM_Output_Filter_title($title, $id=null)
     // Load global post object
     global $post;
 
+    // Get style for post
+    $style = EMBM_Core_Beer_style($id);
+
     // Display beer style
-    if (EMBM_Core_Beer_style($id) && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
-        $link_title = sprintf(__('View all %s beers', 'embm'), EMBM_Core_Beer_style($id));
+    if ($style && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
+        $link_title = sprintf(__('View all %s beers', 'embm'), $style);
+
+        error_log('EMBM_Output_Filter_title');
+        error_log('title: '.$title);
+        error_log('id: '.$id);
+        error_log('style: '.$style);
+        error_log('is_singular: '.is_singular('embm_beer'));
+        error_log('is_tax: '.is_tax('embm_group'));
+        error_log('in_the_loop: '.in_the_loop());
+        error_log('post_title: '.$post->post_title);
+        error_log('');
 
         $output = '';
         $output .= '</a><span class="embm-beer--header-style">(';
-        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($id), 'embm_style').'" title="'.$link_title.'">';
-        $output .= EMBM_Core_Beer_style($id);
+        $output .= '<a href="'.get_term_link($style, 'embm_style').'" title="'.$link_title.'">';
+        $output .= $style;
         $output .= '</a>)</span>'."\n";
 
         $title .= $output;

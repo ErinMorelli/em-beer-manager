@@ -22,6 +22,7 @@
 
 // Include additional Admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-settings.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-actions.php';
 
 // Set global admin page object
 global $embm_admin_page;
@@ -46,13 +47,16 @@ function EMBM_Admin_styles()
         array('jquery-ui-tabs')
     );
 
+    // Set AJAX Nonce
+    $ajax_nonce = wp_create_nonce(EMBM_AJAX_NONCE);
+
     // Share EMBM settings with admin script
     wp_localize_script(
         'embm-admin-script',
         'embm_settings',
         array(
+              'ajax_nonce'          => $ajax_nonce,
               'plugin_url'          => EMBM_PLUGIN_URL,
-              'untappd_auth_url'    => EMBM_UNTAPPD_AUTH_URL,
               'options'             => get_option('embm_options')
         )
     );

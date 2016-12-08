@@ -199,10 +199,11 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
  * @param string $api_root A templated string for the Untappd API root URL
  * @param int    $beer_id  Untappd beer ID
  * @param int    $post_id  The beer's post ID
+ * @param bool   $refresh  Forces a refresh of beer data (Default: false)
  *
  * @return object Object of the beer's data
  */
-function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id)
+function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false)
 {
     // Set vars
     $beer = null;
@@ -249,14 +250,16 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id)
         unset($beer->vintages);
 
         // Set up data for storage
-        $fresh_data = array(
+        $beer_data = array(
             'beer'      => $beer,
             'cached'    => $now
         );
 
         // Store for 6 hours
-        update_post_meta($post_id, 'embm_untappd_data', $fresh_data);
+        update_post_meta($post_id, 'embm_untappd_data', $beer_data);
     }
+
+    return $beer_data;
 }
 
 

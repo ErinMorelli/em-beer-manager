@@ -34,12 +34,31 @@ jQuery(document).ready(function ($) {
     // Get URL and hash
     var url = window.location.href,
         url_hash = window.location.hash,
+        url_params = {},
+        ajax_params = {
+            '_nonce': embm_settings.ajax_nonce,
+        },
+        ajax_response = function(response) {
+            if ((typeof response === 'object') && ('redirect' in response)) {
+                window.location = response.redirect;
+            } else {
+                window.location.reload();
+            }
+        },
         hash,
         page,
         clean_url;
 
+    // Get URL params
+    if (window.location.search) {
+        window.location.search.replace(/^\?/, '').split('&').forEach(function(param) {
+            var split = param.split('=');
+            url_params[split[0]] = split[1];
+        });
+    }
+
     // Check for a hash in the URL
-    if (location.hash) {
+    if (url_hash) {
         // Don't jump to div
         window.scrollTo(0, 0);
 
@@ -166,54 +185,64 @@ jQuery(document).ready(function ($) {
         id_input.val(new_value);
     });
 
+    // Handle beer cache flush requests
+    $('.embm-metabox--untappd-flush a').on('click', function (e) {
+        e.preventDefault();
+        // Get API root and Untappd ID
+        var api_root = $(this).data('api-root'),
+            untappd_id = $('#embm_untappd').val();
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-flush-beer';
+        ajax_params.post_id = url_params.post;
+        ajax_params.beer_id = untappd_id;
+        ajax_params.api_root = api_root;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
     // Redirect to Untappd to authorize user
     $('button.embm-labs--authorize').on('click', function (e) {
         e.preventDefault();
-        var redirect_params = $.param({
-                'page': 'embm-settings'
-            }),
-            redirect_url = url.split('?')[0] + '?' + redirect_params, // Reset URL
-            auth_params = $.param({
-                'embm-origin': redirect_url
-            }),
-            auth_url = embm_settings.untappd_auth_url + '?' + auth_params;
 
-        window.location = auth_url;
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-authorize';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, ajax_response);
     });
 
     // Redirect to reauthorize Untappd user
-    $('a.embm-untappd--reauthorize').on('click', function (e) {
+    $('button.embm-labs--reauthorize').on('click', function (e) {
         e.preventDefault();
-        var reauth_params = $.param({
-                'page': 'embm-settings',
-                'embm-untappd-reauthorize': 1
-            }),
-            reauth_url = url.split('?')[0] + '?' + reauth_params + url_hash; // Reset URL
 
-        window.location = reauth_url;
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-reauthorize';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, ajax_response);
     });
 
     // Redirect to deauthorize Untappd user
     $('a.embm-untappd--deauthorize').on('click', function (e) {
         e.preventDefault();
-        var deauth_params = $.param({
-                'page': 'embm-settings',
-                'embm-untappd-deauthorize': 1
-            }),
-            deauth_url = url.split('?')[0] + '?' + deauth_params + url_hash; // Reset URL
 
-        window.location = deauth_url;
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-deauthorize';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, ajax_response);
     });
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
         e.preventDefault();
-        var flush_params = $.param({
-                'page': 'embm-settings',
-                'embm-untappd-flush': 1
-            }),
-            flush_url = url.split('?')[0] + '?' + flush_params + url_hash; // Reset URL
 
-        window.location = flush_url;
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-flush';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, ajax_response);
     });
 });
