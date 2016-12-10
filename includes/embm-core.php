@@ -76,7 +76,7 @@ function EMBM_Core_beer()
     register_post_type('embm_beer', $args);
 
     // Load metaboxes
-    EMBM_Core_metaboxes();
+    EMBM_Core_Beer_metaboxes();
 }
 
 // Loads the custom post type
@@ -91,7 +91,7 @@ add_theme_support('post-thumbnails', array('embm_beer'));
  *
  * @return void
  */
-function EMBM_Core_metaboxes()
+function EMBM_Core_Beer_metaboxes()
 {
     // Set path to metabox files
     $metabox_root = EMBM_PLUGIN_DIR.'includes/metaboxes';
@@ -126,20 +126,16 @@ function EMBM_Core_Comments_status($open, $post_id)
     $options = get_option('embm_options');
 
     // Get setting for comments
-    $use_comments = null;
-    if (isset($options['embm_comment_check'])) {
-        $use_comments = $options['embm_comment_check'];
-    }
+    $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     // Close comments if disabled
-    if ($use_comments != '1') {
-        if ($post->post_type == 'embm_beer') {
-            $open = false;
-        }
+    if (($use_comments != '1') && ($post->post_type == 'embm_beer')) {
+        $open = false;
     }
 
     return $open;
 }
+
 
 /**
  * Set comments template
@@ -155,18 +151,14 @@ function EMBM_Core_Comments_template()
     $options = get_option('embm_options');
 
     // Get setting for comments
-    $use_comments = null;
-    if (isset($options['embm_comment_check'])) {
-        $use_comments = $options['embm_comment_check'];
-    }
+    $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     // Load blank template if disabled
-    if ($use_comments != '1') {
-        if ($post->post_type == 'embm_beer') {
-            return EMBM_PLUGIN_DIR.'includes/templates/embm-comments.php';
-        }
+    if (($use_comments != '1') && ($post->post_type == 'embm_beer')) {
+        return EMBM_PLUGIN_DIR.'includes/templates/embm-template-comments.php';
     }
 }
+
 
 /**
  * Toggles comments as enabled/disabled
@@ -179,10 +171,7 @@ function EMBM_Core_Comments_toggle()
     $options = get_option('embm_options');
 
     // Get settings for comments
-    $use_comments = null;
-    if (isset($options['embm_comment_check'])) {
-        $use_comments = $options['embm_comment_check'];
-    }
+    $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     if ($use_comments != '1') {
         // If disabled, remove support for comments from post type
@@ -266,19 +255,20 @@ function EMBM_Core_Beer_attr($post_id, $attr)
     $b_attr = get_post_meta($post_id, $attr_name, true);
 
     // Format the data
-    if ($attr == 'abv') {
+    switch ($attr) {
+    case 'abv':
         return $b_attr . '%';
-    } elseif ($attr == 'beer_num') {
+    case 'beer_num':
         return '#' . $b_attr;
-    } elseif ($attr == 'untappd') {
+    case 'untappd':
         return 'https://untappd.com/beer/' . $b_attr;
-    } elseif ($attr == 'untappd_data') {
+    case 'untappd_data':
         if ($b_attr && array_key_exists('beer', $b_attr)) {
             return $b_attr['beer'];
         } else {
             return null;
         }
-    } else {
+    default:
         return $b_attr;
     }
 }
@@ -354,6 +344,7 @@ function EMBM_Core_styles()
 
 // Loads the custom Styles taxonomy
 add_action('init', 'EMBM_Core_styles', 0);
+
 
 /**
  * Populates the styles taxonomy with terms from Beer Advocate
@@ -481,6 +472,7 @@ function EMBM_Core_Beer_api()
 // Load additional WP API fields
 add_action('rest_api_init', 'EMBM_Core_Beer_api');
 
+
 /**
  * Handle GET requests for additional beer fields
  *
@@ -555,6 +547,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         return $untappd_array;
     }
 }
+
 
 /**
  * Handle PUT/POST requests for additional beer fields

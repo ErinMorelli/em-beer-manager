@@ -25,6 +25,35 @@ define('EMBM_AJAX_NONCE', '_embm_ajax_request_nonce');
 
 
 /**
+ * Reset Untappt beer styles
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Styles_reset()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Soft reset all styles
+    EMBM_Core_Styles_populate();
+
+    // Set up redirect URL
+    $redirect_url = get_admin_url(null, 'options-general.php?page=embm-settings&embm-styles-reset=1');
+
+    // Set up response
+    $response = array(
+        'redirect' => $redirect_url
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add flush beer action to AJAX
+add_action('wp_ajax_embm-styles-reset', 'EMBM_Admin_Actions_Styles_reset');
+
+
+/**
  * Deauthorize the current user from Untappd
  *
  * @return void
@@ -157,3 +186,103 @@ function EMBM_Admin_Actions_Untappd_Flush_beer()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-flush-beer', 'EMBM_Admin_Actions_Untappd_Flush_beer');
+
+
+/**
+ * Import beers from Untappd to WP
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Untappd_import()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get imported vars
+    $import_type = intval($_POST['import_type']);
+    $brewery_id = intval($_POST['brewery_id']);
+    $api_root = $_POST['api_root'];
+
+    // Get Untappd brewery info from API
+    $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+
+    // Get all the Untappd beers for the brewery
+    $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
+
+    // Setup return URL
+    $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'labs'));
+
+    // Handle import types
+    switch ($import_type) {
+
+    // Import specific beers
+    case 1:
+        // Get beer IDs
+        $beer_ids = $_POST['beer_ids'];
+
+        // Make sure we have IDs
+        if (!$beer_ids) {
+            wp_die();
+        }
+
+        // Iteratively add beers
+        foreach ($beer_ids as $beer_id) {
+            // Locate beer in cached array
+            $beer = EMBM_Admin_Untappd_find($beer_id, $beer_list);
+
+            // Skip beer if not found
+            if (is_null($beer)) {
+                continue;
+            }
+
+            // Run import
+            EMBM_Admin_Untappd_import($beer, $brewery_id);
+        }
+        break;
+
+    // Import beer by ID
+    case 2:
+        // Get beer id
+        $beer_id = $_POST['beer_id'];
+
+        // Make sure we have an ID
+        if (!$beer_id) {
+            wp_die();
+        }
+
+        // Get beer from API
+        $beer = EMBM_Admin_Untappd_beer($api_root, $beer_id);
+
+        // Run import with brewery check
+        EMBM_Admin_Untappd_import($beer, $brewery_id, true);
+
+        // Setup return URL
+        $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'labs'));
+        break;
+
+    // Import all beers
+    case 3:
+        // Iteratively add beers
+        foreach ($beer_list as $item) {
+            // Run import
+            EMBM_Admin_Untappd_import($item->beer, $brewery_id);
+        }
+        break;
+
+    // Fallback
+    default:
+        // Setup return URL
+        $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'labs'));
+    }
+
+    // Set up response
+    $response = array(
+        'redirect' => $redirect
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add flush beer action to AJAX
+add_action('wp_ajax_embm-untappd-import', 'EMBM_Admin_Actions_Untappd_import');

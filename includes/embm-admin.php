@@ -21,11 +21,13 @@
 
 
 // Include additional Admin functions
-require EMBM_PLUGIN_DIR.'includes/admin/embm-settings.php';
-require EMBM_PLUGIN_DIR.'includes/admin/embm-actions.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-actions.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-settings.php';
 
 // Set global admin page object
 global $embm_admin_page;
+
 
 /**
  * Loads admin CSS and JS
@@ -92,11 +94,7 @@ function EMBM_Admin_columns($cols)
     $ut_option = get_option('embm_options');
 
     // Check if we should use Untappd
-    if (isset($ut_option['embm_untappd_check'])) {
-        $use_untappd = $ut_option['embm_untappd_check'];
-    } else {
-        $use_untappd = null;
-    }
+    $use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
 
     // Add Untappd column, if enabled
     if ($use_untappd != '1') {
@@ -140,7 +138,6 @@ function EMBM_Admin_Columns_values($column, $post_id)
         } else {
             echo '';
         }
-
         break;
     case 'abv':
         // Display formatted beer ABV

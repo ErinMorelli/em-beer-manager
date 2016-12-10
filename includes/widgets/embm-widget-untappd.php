@@ -24,10 +24,7 @@
 $ut_option = get_option('embm_options');
 
 // Get Untappd global settings
-$use_untappd = null;
-if (isset($ut_option['embm_untappd_check'])) {
-    $use_untappd = $ut_option['embm_untappd_check'];
-}
+$use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
 
 // If Untappd is enabled, load widget
 if ($use_untappd != '1') {

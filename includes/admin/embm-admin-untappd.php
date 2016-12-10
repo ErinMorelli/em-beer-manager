@@ -21,7 +21,7 @@
 
 
 // Set constants
-define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#labs');
+define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#%s');
 define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 
 // Set cache names
@@ -55,7 +55,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
         $response = file_get_contents($request_url);
     } catch (Exception $e) {
         // Return to EMBM settings page to show error & exit
-        wp_redirect(get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1)));
+        wp_redirect(get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, '')));
         exit;
     }
 
@@ -304,4 +304,142 @@ function EMBM_Admin_Untappd_find($beer_id, $beer_list)
 
     // Return null if not found
     return null;
+}
+
+
+/**
+ * Insert post from Untappd
+ *
+ * @param array $beer       Untappd beer data
+ * @param int   $brewery_id Untappd brewery account ID
+ * @param bool  $check      Whether or not to verify brewery (default: false)
+ *
+ * @return void
+ */
+function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
+{
+    // Check that beer is owned by brewery, if needed
+    if ($check) {
+        // Compare beer's brewery ID to user's brewery ID
+        if ($beer->brewery->brewery_id != intval($brewery_id)) {
+            // Return to EMBM settings page to show error & exit
+            wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs'));
+            exit;
+        }
+    }
+
+    // Set beer slug
+    $beer_slug = sanitize_title($beer->beer_name);
+
+    // Set up args for duplicate check
+    $dup_args = array(
+        'name'           => $beer_slug,
+        'post_type'      => 'embm_beer',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1
+    );
+
+    // Run post query
+    $beer_exists = get_posts($dup_args);
+
+    // If we found a beer, exit
+    if ($beer_exists) {
+        return;
+    }
+
+    // Set post publish date from Untappd created date
+    $beer_date = date('Y-m-d H:i:s', strtotime($beer->created_at));
+
+    // Set up post array
+    $new_beer_post = array(
+        'post_author'   => get_current_user_id(),
+        'post_title'    => $beer->beer_name,
+        'post_name'     => $beer_slug,
+        'post_content'  => $beer->beer_description,
+        'post_date'     => $beer_date,
+        'post_status'   => 'publish',
+        'post_type'     => 'embm_beer',
+        'tax_input'     => array(
+            'embm_style'    => $beer->beer_style
+        ),
+        'meta_input'    => array(
+            'abv'       => $beer->beer_abv,
+            'ibu'       => $beer->beer_ibu,
+            'untappd'   => $beer->bid
+        )
+    );
+
+    // Insert post
+    $post_id = wp_insert_post($new_beer_post, true);
+
+    // Add post image
+    EMBM_Admin_Untappd_Import_image($post_id, $beer);
+}
+
+
+/**
+ * Upload and set beer featured image
+ *
+ * @param int    $post_id The beer post ID
+ * @param object $beer    Beer object from Untappd API
+ *
+ * @return void
+ */
+function EMBM_Admin_Untappd_Import_image($post_id, $beer)
+{
+    // Set beer slug
+    $img_slug = sanitize_title($beer->beer_slug);
+
+    // Set up args for duplicate check
+    $dup_args = array(
+        'name'           => $img_slug,
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 1
+    );
+
+    // Run post query
+    $img_exists = get_posts($dup_args);
+
+    // Handle if we found the image
+    if ($img_exists) {
+        // Set as post image and exit
+        set_post_thumbnail($post_id, $img_exists[0]->ID);
+        return;
+    }
+
+    // Get WP upload dir info
+    $upload_dir = wp_upload_dir();
+
+    // Get image type from URL
+    $img_parts = explode('.', $beer->beer_label_hd);
+    $img_type = end($img_parts);
+
+    // Set file save path
+    $filename = $upload_dir['path'] . '/' . $beer->beer_slug . '.' . $img_type;
+
+    // Save image from URL
+    file_put_contents($filename, EMBM_Admin_Untappd_request($beer->beer_label_hd, false));
+
+    // Check the type of file
+    $filetype = wp_check_filetype(basename($filename), null);
+
+    // Prepare an post data for attachment
+    $attachment = array(
+        'guid'           => $upload_dir['url'] . '/' . basename($filename),
+        'post_mime_type' => $filetype['type'],
+        'post_title'     => $beer->beer_slug,
+        'post_content'   => '',
+        'post_status'    => 'inherit'
+    );
+
+    // Insert the attachment
+    $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
+
+    // Generate the metadata for the attachment, and update the database record.
+    $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+    wp_update_attachment_metadata($attach_id, $attach_data);
+
+    // Set as thumbnail for beer
+    set_post_thumbnail($post_id, $attach_id);
 }

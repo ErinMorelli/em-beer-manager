@@ -133,9 +133,6 @@
     max-width: 450px;
     padding: 3px 5px 2px;
 }
-.embm-settings--notice {
-    position: relative;
-}
 .embm-settings-footer--credits > p {
     font-size: 10px;
     line-height: 18px;
@@ -160,14 +157,26 @@
 
 
 /**
- * Style EM Beer Manager style reset page
+ * EMBM Admin Notices
  */
-.embm-settings--styles-page .emphasis {
+.embm-notice {
+    position: relative;
+}
+.embm-notice--title {
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+
+/**
+ * Style EM Beer Manager style reset prompt
+ */
+.embm-styles-reset-prompt--content p {
+    margin: 5px 0;
+}
+.embm-styles-reset-prompt--content .emphasis {
     font-weight: 600;
     text-decoration: underline;
-}
-.embm-settings--styles-page .embm-settings--styles-form input {
-    margin-right: 10px;
 }
 
 

@@ -21,6 +21,8 @@
 
 /*global
     jQuery,
+    ajaxurl,
+    tb_remove,
     embm_settings
 */
 /*jslint
@@ -38,8 +40,8 @@ jQuery(document).ready(function ($) {
         ajax_params = {
             '_nonce': embm_settings.ajax_nonce,
         },
-        ajax_response = function(response) {
-            if ((typeof response === 'object') && ('redirect' in response)) {
+        ajax_response = function (response) {
+            if (typeof response === 'object' && response.hasOwnProperty('redirect')) {
                 window.location = response.redirect;
             } else {
                 window.location.reload();
@@ -51,7 +53,7 @@ jQuery(document).ready(function ($) {
 
     // Get URL params
     if (window.location.search) {
-        window.location.search.replace(/^\?/, '').split('&').forEach(function(param) {
+        window.location.search.replace(/^\?/, '').split('&').forEach(function (param) {
             var split = param.split('=');
             url_params[split[0]] = split[1];
         });
@@ -73,7 +75,7 @@ jQuery(document).ready(function ($) {
     }
 
     // Clean URL after page load
-    if (!!window.location.search.substring(1).match(/page=embm-settings/)) {
+    if (url_params.hasOwnProperty('page') && url_params.page === 'embm-settings') {
         // Set vars
         page = url.substring(url.lastIndexOf('/') + 1); // Page URL
         clean_url = page.split('?')[0] + '?page=embm-settings' + url_hash; // Reset URL
@@ -108,24 +110,12 @@ jQuery(document).ready(function ($) {
         return false;
     });
 
-    // Styles reset redirect
-    $('button.embm-settings--styles-button').on('click', function (e) {
-        e.preventDefault();
-        location.search = '?page=embm-settings&embm-styles-reset=1';
-    });
-
-    // Handle "NO" button press on reset page
-    $('.embm-settings--styles-form input[name="No"]').on('click', function (e) {
-        e.preventDefault();
-        window.location.reload();
-    });
-
-    // Clean up URL after notice dismissal
-    $('.embm-settings--notice.notice button.notice-dismiss').on('click', function (e) {
+    // Dismiss notices
+    $('.embm-notice.notice button.notice-dismiss').on('click', function (e) {
         e.preventDefault();
 
         // Set vars
-        var $el = $('.embm-settings--notice.notice');
+        var $el = $('.embm-notice.notice');
 
         // Remove notice
         $el.fadeTo(100, 0, function () {
@@ -163,14 +153,53 @@ jQuery(document).ready(function ($) {
 
     // Toggle icon image on select change
     $('.embm-settings--untappd-select').on('change', function (e) {
-        // Get URL for selected image
         var img_src = embm_settings.plugin_url + 'assets/img/checkin-button-' + this.value + '.png';
-
-        // Update icon image source
         $('.embm-settings--untappd-icon').attr('src', img_src);
     });
 
-    /* ---- LABS ---- */
+    // Styles reset prompt
+    $('button.embm-settings--styles-button').on('click', function (e) {
+        e.preventDefault();
+        $('#embm-styles-reset-prompt--button').click();
+    });
+
+    // Styles reset no
+    $('#embm-styles-reset-prompt--no').on('click', function (e) {
+        e.preventDefault();
+        tb_remove();
+    });
+
+    // Styles reset yes
+    $('#embm-styles-reset-prompt--yes').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-styles-reset';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    /* ---- UNTAPPD AUTHORIZATION ---- */
+
+    // Redirect to Untappd to authorize user
+    $('button.embm-labs--authorize').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-untappd-authorize';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Redirect to reauthorize Untappd user
+    $('button.embm-labs--reauthorize').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-untappd-reauthorize';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Redirect to deauthorize Untappd user
+    $('a.embm-untappd--deauthorize').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-untappd-deauthorize';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    /* ---- UNTAPPD METABOX ---- */
 
     // Toggle beer selection dropdown
     $('.embm-untappd--select select').on('change', function (e) {
@@ -178,17 +207,15 @@ jQuery(document).ready(function ($) {
             is_reset = (this.value === ''),
             new_value = is_reset ? id_input.data('value') : this.value;
 
-        // Set input readonly
+        // Set input & readonly
         id_input.attr('readonly', !is_reset);
-
-        // Set input value
         id_input.val(new_value);
     });
 
     // Handle beer cache flush requests
     $('.embm-metabox--untappd-flush a').on('click', function (e) {
         e.preventDefault();
-        // Get API root and Untappd ID
+
         var api_root = $(this).data('api-root'),
             untappd_id = $('#embm_untappd').val();
 
@@ -202,45 +229,30 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, ajax_response);
     });
 
-    // Redirect to Untappd to authorize user
-    $('button.embm-labs--authorize').on('click', function (e) {
-        e.preventDefault();
-
-        // Set AJAX params
-        ajax_params.action = 'embm-untappd-authorize';
-
-        // Make AJAX request & reload page
-        $.post(ajaxurl, ajax_params, ajax_response);
-    });
-
-    // Redirect to reauthorize Untappd user
-    $('button.embm-labs--reauthorize').on('click', function (e) {
-        e.preventDefault();
-
-        // Set AJAX params
-        ajax_params.action = 'embm-untappd-reauthorize';
-
-        // Make AJAX request & reload page
-        $.post(ajaxurl, ajax_params, ajax_response);
-    });
-
-    // Redirect to deauthorize Untappd user
-    $('a.embm-untappd--deauthorize').on('click', function (e) {
-        e.preventDefault();
-
-        // Set AJAX params
-        ajax_params.action = 'embm-untappd-deauthorize';
-
-        // Make AJAX request & reload page
-        $.post(ajaxurl, ajax_params, ajax_response);
-    });
+    /* ---- LABS ---- */
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
         e.preventDefault();
+        ajax_params.action = 'embm-untappd-flush';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Handle import requests
+    $('a.embm-untappd--import').on('click', function (e) {
+        e.preventDefault();
+
+        var import_type = $(this).data('type'),
+            api_root = $('#embm-untappd-api-root').val(),
+            brewery_id = $('#embm-untappd-brewery-id').val();
 
         // Set AJAX params
-        ajax_params.action = 'embm-untappd-flush';
+        ajax_params.action = 'embm-untappd-import';
+        ajax_params.import_type = import_type;
+        ajax_params.api_root = api_root;
+        ajax_params.brewery_id = brewery_id;
+        ajax_params.beer_ids = $('#embm-untappd-beer-ids').val();
+        ajax_params.beer_id = $('#embm-untappd-beer-id').val();
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, ajax_response);

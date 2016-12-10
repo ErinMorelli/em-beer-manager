@@ -40,4 +40,6 @@ $email_subj = '[EM Beer Manager] Issue Report';
 
 <h2><?php _e('Import from Untappd', 'embm'); ?></h2>
 
-<?php include_once EMBM_PLUGIN_DIR.'includes/admin/labs/embm-untappd-import.php'; ?>
+<?php
+
+require_once EMBM_PLUGIN_DIR.'includes/admin/labs/embm-labs-untappd.php';

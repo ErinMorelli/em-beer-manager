@@ -16,13 +16,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Tabs\Settings
+ * @package EMBM\Admin\Settings
  */
 
 
-// Import Untappd functions
-require EMBM_PLUGIN_DIR.'includes/admin/embm-untappd.php';
-require EMBM_PLUGIN_DIR.'includes/admin/embm-authorize.php';
+// Import additional admin functions
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-notices.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-authorize.php';
+
 
 // Set global admin page object
 global $embm_admin_page;
@@ -258,6 +259,37 @@ function EMBM_Admin_Settings_Style_reset()
 {
     echo '<p>'.__('Restore missing or deleted beer styles from the pre-loaded list.', 'embm').'</p>';
     echo '<p><button class="embm-settings--styles-button button-secondary">'.__('Restore Styles', 'embm').'</button></p>';
+
+    // Add modal prompt
+    add_thickbox();
+
+?>
+    <div id="embm-styles-reset-prompt" style="display:none;">
+        <div class="embm-styles-reset-prompt--content">
+            <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded Untappd list.', 'embm'); ?></p>
+            <p>
+                <?php
+                    printf(
+                        __('Your custom or modified styles will %s be affected by this action.', 'embm'),
+                        sprintf('<span class="emphasis">%s</span>', __('NOT', 'embm'))
+                    );
+                ?>
+            </p>
+            <p><strong><?php _e('Do you wish to proceed?', 'embm'); ?></strong></p>
+            <p>
+                <a href="#" id="embm-styles-reset-prompt--yes" class="button-primary"><?php _e('YES', 'embm'); ?></a>
+                <a href="#" id="embm-styles-reset-prompt--no" class="button-secondary"><?php _e('NO', 'embm'); ?></a>
+            </p>
+        </div>
+    </div>
+    <a
+        href="#TB_inline?width=550&height=155&inlineId=embm-styles-reset-prompt"
+        class="thickbox"
+        id="embm-styles-reset-prompt--button"
+        title="<?php _e('Restore EM Beer Manager Styles', 'embm'); ?>"
+        style="display:none;"
+    ></a>
+<?php
 }
 
 /**
@@ -342,77 +374,8 @@ function EMBM_Admin_Settings_page()
         wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
     }
 
-    // Handle styles reset request
-    if (isset($_GET['embm-styles-reset'])) {
-        if ($_GET['embm-styles-reset'] == '1') {
-?>
-            <div class="wrap embm-settings--styles-page">
-
-                <h2><?php _e('Restore EM Beer Manager Styles', 'embm'); ?></h2>
-
-                <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded Untappd list.', 'embm'); ?></p>
-                <p>
-                    <?php
-                        printf(
-                            __('Your custom or modified styles will %s be affected by this action.', 'embm'),
-                            sprintf('<span class="emphasis">%s</span>', __('NOT', 'embm'))
-                        );
-                    ?>
-                </p>
-                <p><?php _e('Do you wish to proceed?', 'embm'); ?></p>
-
-                <form method="post" action="<?php echo EMBM_PLUGIN_URL.'includes/admin/actions/embm-reset-styles.php'; ?>" class="embm-settings--styles-form">
-                    <input type="hidden" name="embm-styles-reset-request" value="1" />
-                    <input type="hidden" name="embm-settings-page" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-                    <input name="Yes" type="submit" class="button-primary" value="<?php _e('YES', 'embm'); ?>" />
-                    <input name="No" type="button" class="button-secondary" value="<?php _e('NO', 'embm'); ?>" />
-                </form>
-            </div>
-<?php
-            // Don't display the other content
-            return;
-        } elseif ($_GET['embm-styles-reset'] == '2') {
-            // Show success message admin notice
-?>
-            <div class="updated notice embm-settings--notice">
-                <p><strong><?php _e('Success!', 'embm'); ?></strong> <?php _e('Your beer styles have been restored.', 'embm'); ?></p>
-                <button type="button" class="notice-dismiss"></button>
-            </div>
-<?php
-        }
-    } elseif (isset($_GET['embm-import-success'])) {
-        // Show success notice for Untappd import
-?>
-        <div class="updated notice embm-settings--notice">
-             <p>
-                <strong><?php _e('Success!', 'embm'); ?></strong>
-                <?php if ($_GET['embm-import-success'] == '1') : ?>
-                    <?php _e('Your beer has been imported from Untappd.', 'embm'); ?></p>
-                <?php elseif ($_GET['embm-import-success'] == '2') : ?>
-                    <?php _e('Your beers have been imported from Untappd.', 'embm'); ?></p>
-                <?php endif; ?>
-            </div>
-            <button type="button" class="notice-dismiss"></button>
-        </div>
-<?php
-    } elseif (isset($_GET['embm-import-error'])) {
-        // Show success notice for Untappd import
-?>
-        <div class="error notice embm-settings--notice">
-            <p>
-                <strong><?php _e('ERROR', 'embm'); ?>:</strong>
-                <?php if ($_GET['embm-import-error'] == '1') : ?>
-                    <?php _e('There was a problem! You may have reached your API token\'s rate limit for the hour. Try again later.', 'embm'); ?></p>
-                <?php elseif ($_GET['embm-import-error'] == '2') : ?>
-                    <?php _e('There was a problem during the import! The beer you specified was not found on Untappd.', 'embm'); ?></p>
-                <?php elseif ($_GET['embm-import-error'] == '3') : ?>
-                    <?php _e('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm'); ?></p>
-                <?php endif; ?>
-            </p>
-            <button type="button" class="notice-dismiss"></button>
-        </div>
-<?php
-    }
+    // Show any notices
+    EMBM_Admin_Notices_show();
 
 ?>
 <div class="wrap embm-settings--page">
@@ -442,15 +405,15 @@ function EMBM_Admin_Settings_page()
         </div>
 
         <div id="labs" class="embm-settings--tab-labs">
-            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-labs.php'; ?>
+            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php'; ?>
         </div>
 
         <div id="usage" class="embm-settings--tab-usage">
-            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-usage.php'; ?>
+            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-usage.php'; ?>
         </div>
     </div>
 
-    <?php include_once EMBM_PLUGIN_DIR.'includes/admin/embm-footer.php'; ?>
+    <?php include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-footer.php'; ?>
 
 </div>
 <?php

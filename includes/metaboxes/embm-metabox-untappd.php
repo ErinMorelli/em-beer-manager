@@ -125,13 +125,15 @@ function EMBM_Admin_Metabox_Untappd_content()
                     id="embm_untappd"
                     data-value="<?php echo $untappd_id; ?>"
                     value="<?php echo $untappd_id; ?>"
-                    <?php if ($is_brewery && $beer_found) echo 'readonly'; ?>
+                <?php if ($is_brewery && $beer_found) : ?>
+                    readonly
+                <?php endif; ?>
                 />
                 <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
             </p>
         </div>
         <div class="embm-metabox__field embm-metabox--untappd-select">
-            <?php if ($is_brewery): ?>
+            <?php if ($is_brewery) : ?>
                 <p>
                     <label for="untappd_id_select"><strong><?php _e('Brewery Beer', 'embm'); ?></strong></label><br />
                     <select id="untappd_id_select" name="untappd_id_select">
@@ -152,6 +154,18 @@ function EMBM_Admin_Metabox_Untappd_content()
     <div class="embm-metabox__right">
     <?php if (null !== $token) : ?>
         <div class="embm-metabox--untappd-checkboxes">
+            <div class="embm-metabox--untappd-rating">
+                <p>
+                    <input
+                        name="embm_show_rating"
+                        id="embm_show_rating"
+                        value="1"
+                        type="checkbox"
+                        <?php checked('1', $show_rating); ?>
+                    >
+                    <label for="embm_show_rating"><strong><?php _e('Display Untappd rating', 'embm'); ?></strong></label>
+                </p>
+            </div>
             <div class="embm-metabox--untappd-reviews">
                 <p>
                     <input
@@ -176,31 +190,6 @@ function EMBM_Admin_Metabox_Untappd_content()
                         >
                         <?php printf(__('reviews (max. %d)', 'embm'), 15); ?>
                     </label>
-                </p>
-            </div>
-            <div class="embm-metabox--untappd-rating">
-                <p>
-                    <input
-                        name="embm_show_rating"
-                        id="embm_show_rating"
-                        value="1"
-                        type="checkbox"
-                        <?php checked('1', $show_rating); ?>
-                    >
-                    <label for="embm_show_rating"><strong><?php _e('Display Untappd rating', 'embm'); ?></strong></label>
-                </p>
-                <p class="embm-metabox--untappd-rating-stars">
-                    <?php
-                        if ($untappd_data) {
-                            printf(
-                                '%s (%.2f) | %s %s',
-                                EMBM_Admin_Metabox_Untappd_stars($untappd_data->rating_score),
-                                $untappd_data->rating_score,
-                                number_format($untappd_data->rating_count),
-                                __('Ratings', 'embm')
-                            );
-                        }
-                    ?>
                 </p>
             </div>
         </div>
@@ -290,42 +279,3 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
 
 // Save untappd box inputs
 add_action('save_post', 'EMBM_Admin_Metabox_Untappd_save');
-
-
-/**
- * Generate star HTML from a given rating
- *
- * @param float $rating Untappd beer rating value
- *
- * @return void
- */
-function EMBM_Admin_Metabox_Untappd_stars($rating)
-{
-    $full_count = floor($rating);
-    $empty_count = (5 - $full_count);
-    $has_half = (ceil($rating) > $full_count);
-
-    if ($has_half) {
-        $empty_count = 4 - $full_count;
-    }
-
-    $output = '';
-
-    if ($full_count > 0) {
-        foreach (range(1, $full_count) as $full_star) {
-            $output .= '<span class="dashicons dashicons-star-filled"></span>';
-        }
-    }
-
-    if ($has_half) {
-        $output .= '<span class="dashicons dashicons-star-half"></span>';
-    }
-
-    if ($empty_count > 0) {
-        foreach (range(1, $empty_count) as $empty_star) {
-            $output .= '<span class="dashicons dashicons-star-empty"></span>';
-        }
-    }
-
-    return $output;
-}
