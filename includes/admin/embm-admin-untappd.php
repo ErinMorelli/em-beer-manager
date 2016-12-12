@@ -28,6 +28,7 @@ define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
     'beer_list'     => 'embm_untappd_beer_list',
     'brewery'       => 'embm_untappd_brewery_info',
+    'checkins'      => 'embm_untappd_brewery_checkins',
     'user'          => 'embm_untappd_user_info'
 );
 
@@ -153,6 +154,33 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
     }
 
     return $brewery;
+}
+
+
+/**
+ * Retrieves Untappd brewery check-in data from either the WP cache or API.
+ *
+ * @param string $api_root   A templated string for the Untappd API root URL
+ * @param int    $brewery_id Untappd brewery ID
+ *
+ * @return array Array of brewery check-ins from Untappd
+ */
+function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
+{
+    // Attempt to retrieve brewery checkins from cache
+    $checkins = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
+
+    // Get brewery checkins if it's not cached
+    if (false === $checkins) {
+        $checkins_url = sprintf($api_root, 'brewery/checkins/'.$brewery_id);
+        $checkins_res = EMBM_Admin_Untappd_request($checkins_url);
+        $checkins = $checkins_res->response->checkins;
+
+        // Store for 1 hour
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, HOUR_IN_SECONDS);
+    }
+
+    return $checkins;
 }
 
 
