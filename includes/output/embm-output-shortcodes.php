@@ -35,6 +35,9 @@ function EMBM_Output_Shortcodes_beer($atts)
             'id'            => 0,
             'show_profile'  => 'true',
             'show_extras'   => 'true',
+            'show_rating'   => 'true',
+            'show_reviews'  => 'true',
+            'review_count'  => 5
         ),
         $atts,
         'beer'
@@ -60,15 +63,30 @@ function EMBM_Output_Shortcodes_Beer_display($post_id, $input=array())
 {
     // Set default attribut values
     $attrs = array(
-        'profile'   => array(
+        'profile'       => array(
             'key'       => 'show_profile',
             'default'   => true,
             'type'      => 'bool'
         ),
-        'extras'    => array(
+        'extras'        => array(
             'key'       => 'show_extras',
             'default'   => true,
             'type'      => 'bool'
+        ),
+        'rating'        => array(
+            'key'       => 'show_rating',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'reviews'       => array(
+            'key'       => 'show_reviews',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'review_count'  => array(
+            'key'       => 'review_count',
+            'default'   => 5,
+            'type'      => 'int'
         )
     );
 
@@ -104,8 +122,6 @@ function EMBM_Output_Shortcodes_Beer_load($beer)
 {
     // Set up display options
     $bid = $beer['id'];
-    $showprofile = $beer['profile'];
-    $showextras = $beer['extras'];
 
     // Initialize output string
     $output = '';
@@ -128,7 +144,7 @@ function EMBM_Output_Shortcodes_Beer_load($beer)
     // Enter post data loop
     while ($wp_query->have_posts()) {
         $wp_query->the_post();
-        $output .= EMBM_Output_beer($post->ID, $showprofile, $showextras);
+        $output .= EMBM_Output_beer($post->ID, $beer);
     }
 
     // Reset query and post data
@@ -155,6 +171,9 @@ function EMBM_Output_Shortcodes_list($atts)
                 'exclude'           => '',
                 'show_profile'      => 'true',
                 'show_extras'       => 'true',
+                'show_rating'       => 'true',
+                'show_reviews'      => 'true',
+                'review_count'      => 5,
                 'style'             => '',
                 'group'             => '',
                 'beers_per_page'    => -1,
@@ -197,6 +216,21 @@ function EMBM_Output_Shortcodes_List_display($input=array())
             'key'       => 'show_extras',
             'default'   => true,
             'type'      => 'bool'
+        ),
+        'rating'        => array(
+            'key'       => 'show_rating',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'reviews'       => array(
+            'key'       => 'show_reviews',
+            'default'   => true,
+            'type'      => 'bool'
+        ),
+        'review_count'  => array(
+            'key'       => 'review_count',
+            'default'   => 5,
+            'type'      => 'int'
         ),
         'style'     => array(
             'key'       => 'style',
@@ -343,7 +377,7 @@ function EMBM_Output_Shortcodes_List_load($beers)
     // Enter post data loop
     while ($wp_query->have_posts()) {
         $wp_query->the_post();
-        $output .= EMBM_Output_beer($post->ID, $showprofile, $showextras);
+        $output .= EMBM_Output_beer($post->ID, $beers);
     }
 
     // Display pagination

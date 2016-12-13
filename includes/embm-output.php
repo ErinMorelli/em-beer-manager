@@ -34,7 +34,7 @@ require EMBM_PLUGIN_DIR.'includes/output/embm-output-filters.php';
  *
  * @return string/html
  */
-function EMBM_Output_beer($beer_id, $showprofile=true, $showextras=true)
+function EMBM_Output_beer($beer_id, $options)
 {
     // Initialize output string
     $output = '';
@@ -111,12 +111,12 @@ function EMBM_Output_beer($beer_id, $showprofile=true, $showextras=true)
     $output .= '</div>'."\n";
 
     // Beer meta
-    if ($showprofile || $showextras) {
+    if ($options['profile'] || $options['extras']) {
         // Begin beer meta output
         $output .= '<div class="embm-beer--meta">'."\n";
 
         // Display beer profile
-        if ($showprofile) {
+        if ($options['profile']) {
             // Get profile HTML
             $profile = EMBM_Output_profile($beer_id);
 
@@ -126,7 +126,7 @@ function EMBM_Output_beer($beer_id, $showprofile=true, $showextras=true)
         }
 
         // Display beer extras
-        if ($showextras) {
+        if ($options['extras']) {
             // Get extras HTML
             $extras = EMBM_Output_extras($beer_id);
 
@@ -339,7 +339,7 @@ function EMBM_Output_extras($beer_id)
  *
  * @param float $rating Untappd beer rating value
  *
- * @return void
+ * @return string/html
  */
 function EMBM_Output_rating($rating)
 {
@@ -370,27 +370,16 @@ function EMBM_Output_rating($rating)
     }
 
     return $output;
-
-    printf(
-        '%s (%.2f) | %s %s',
-        EMBM_Admin_Metabox_Untappd_stars($untappd_data->rating_score),
-        $untappd_data->rating_score,
-        number_format($untappd_data->rating_count),
-        __('Ratings', 'embm')
-    );
 }
 
 
 /**
  * Generate star HTML from a given rating
  *
- * @param float $rating Untappd beer rating value
+ * @param int $beer_id WP post ID for beer entry
  *
- * @return void
+ * @return string/html
  */
-function EMBM_Output_reviews()
+function EMBM_Output_reviews($beer_id)
 {
 }
-
-
-

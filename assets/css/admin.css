@@ -115,6 +115,13 @@
     margin-left: 15px;
     margin-top: 1px;
 }
+.embm-settings--page .embm-settings--review-count {
+    margin-left: 25px;
+}
+.embm-settings--page .embm-settings--review-count input[type="number"] {
+    margin: 5px 5px 0;
+    width: 50px;
+}
 .embm-settings--page .embm-settings--status .embm-untappd--user-link {
     text-decoration: none;
 }
@@ -256,11 +263,8 @@
 .embm-metabox--untappd-select select {
     width: 80%;
 }
-.embm-metabox--untappd-reviews input[type="number"] {
-    width: 50px;
-}
 .embm-metabox--untappd-reviews-count,
-.embm-metabox--untappd-rating-stars {
+.embm-metabox--untappd-rating-format {
     margin-bottom: 20px;
     margin-left: 25px;
 }

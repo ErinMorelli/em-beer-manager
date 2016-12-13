@@ -334,40 +334,40 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $brewery, $count)
     /// Start output
     $output = '';
 
-    // Iterate over XML output
-    foreach (range(0, $count-1) as $i) {
-        // Get checkin
-        $checkin = $checkins->items[$i];
-        $user = $checkin->user;
-        $beer = $checkin->beer;
-        $venue = $checkin->venue;
+    // // Iterate over XML output
+    // foreach (range(0, $count-1) as $i) {
+    //     // Get checkin
+    //     $checkin = $checkins->items[$i];
+    //     $user = $checkin->user;
+    //     $beer = $checkin->beer;
+    //     $venue = $checkin->venue;
 
-        // Start check-in
-        $output .= '<li class="embm-untappd-list-item">';
+    //     // Start check-in
+    //     $output .= '<li class="embm-untappd-list-item">';
 
-        // Formate text
-        $output .= sprintf(
-            '%s %s is drinking a %s at %s',
-            $user->first_name,
-            $user->last_name,
-            $beer->beer_name,
-            $venue->venue_name
-        );
+    //     // Formate text
+    //     $output .= sprintf(
+    //         '%s %s is drinking a %s at %s',
+    //         $user->first_name,
+    //         $user->last_name,
+    //         $beer->beer_name,
+    //         $venue->venue_name
+    //     );
 
-        $output .= '<a class="embm-checkin-date" href="';
-        $output .= sprintf(
-            'https://untappd.com/user/%s/checkin/%s',
-            $user->user_name,
-            $checkin->checkin_id
-        );
-        $output .= '">';
+    //     $output .= '<a class="embm-checkin-date" href="';
+    //     $output .= sprintf(
+    //         'https://untappd.com/user/%s/checkin/%s',
+    //         $user->user_name,
+    //         $checkin->checkin_id
+    //     );
+    //     $output .= '">';
 
-        // Output formatted date
-        $output .= EMBM_Widget_Untappd_Recent_Display_date($checkin->created_at);
+    //     // Output formatted date
+    //     $output .= EMBM_Widget_Untappd_Recent_Display_date($checkin->created_at);
 
-        // End check-in entrt
-        $output .= '</a></li>'."\n";
-    }
+    //     // End check-in entrt
+    //     $output .= '</a></li>'."\n";
+    // }
 
     // Return HTML output
     return $output;

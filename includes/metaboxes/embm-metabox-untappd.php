@@ -64,9 +64,8 @@ function EMBM_Admin_Metabox_Untappd_content()
 
     // Set custom post data values
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
-    $show_rating = isset($beer_entry['embm_show_rating']) ? esc_attr($beer_entry['embm_show_rating'][0]) : '';
-    $show_reviews = isset($beer_entry['embm_show_reviews']) ? esc_attr($beer_entry['embm_show_reviews'][0]) : '';
-    $review_count = isset($beer_entry['embm_review_count']) ? esc_attr($beer_entry['embm_review_count'][0]) : 5;
+    $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
+    $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
 
     // Brewery account status
     $is_brewery = false;
@@ -108,6 +107,9 @@ function EMBM_Admin_Metabox_Untappd_content()
             }
         }
     }
+
+    // Get ratings formats
+    $rating_formats = EMBM_Admin_Rating_formats();
 
     // Setup nonce field for options
     wp_nonce_field('embm_untappd_save', '_embm_untappd_save_nonce');
@@ -154,48 +156,37 @@ function EMBM_Admin_Metabox_Untappd_content()
     <div class="embm-metabox__right">
     <?php if (null !== $token) : ?>
         <div class="embm-metabox--untappd-checkboxes">
+            <p>
+                <strong><?php printf('Override single page settings', 'embm'); ?>:</strong>
+            </p>
             <div class="embm-metabox--untappd-rating">
                 <p>
                     <input
-                        name="embm_show_rating"
-                        id="embm_show_rating"
+                        name="embm_hide_rating"
+                        id="embm_hide_rating"
                         value="1"
                         type="checkbox"
-                        <?php checked('1', $show_rating); ?>
+                        <?php checked('1', $hide_rating); ?>
                     >
-                    <label for="embm_show_rating"><strong><?php _e('Display Untappd rating', 'embm'); ?></strong></label>
+                    <label for="embm_hide_rating"><?php _e('Hide Untappd rating', 'embm'); ?></label>
                 </p>
             </div>
             <div class="embm-metabox--untappd-reviews">
                 <p>
                     <input
-                        name="embm_show_reviews"
-                        id="embm_show_reviews"
+                        name="embm_hide_reviews"
+                        id="embm_hide_reviews"
                         value="1"
                         type="checkbox"
-                        <?php checked('1', $show_reviews); ?>
+                        <?php checked('1', $hide_reviews); ?>
                     >
-                    <label for="embm_show_reviews"><strong><?php _e('Display Untappd reviews', 'embm'); ?></strong></label>
-                </p>
-                <p class="embm-metabox--untappd-reviews-count">
-                    <label for="embm_review_count">
-                        <?php _e('Show', 'embm'); ?>
-                        <input
-                            type="number"
-                            name="embm_review_count"
-                            id="embm_review_count"
-                            value="<?php echo $review_count; ?>"
-                            min="1"
-                            max="15"
-                        >
-                        <?php printf(__('reviews (max. %d)', 'embm'), 15); ?>
-                    </label>
+                    <label for="embm_hide_reviews"><?php _e('Hide Untappd reviews', 'embm'); ?></label>
                 </p>
             </div>
         </div>
         <div class="embm-metabox--untappd-flush">
             <p>
-                <?php _e('Update ratings/review data from Untappd for this beer.', 'embm'); ?>
+                <strong><?php _e('Update beer data from Untappd', 'embm'); ?>:</strong>
             </p>
             <p>
                 <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
@@ -203,7 +194,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </a>
             </p>
             <p class="description">
-                (<?php _e('This is automatically done every 6 hours.', 'embm'); ?>)
+                (<?php _e('Automatically done every 6 hours.', 'embm'); ?>)
             </p>
         </div>
     <?php else : ?>
@@ -253,6 +244,9 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
     // Save input
     if (isset($_POST['embm_show_rating'])) {
         update_post_meta($post_id, 'embm_show_rating', esc_attr($_POST['embm_show_rating']));
+    }
+    if (isset($_POST['embm_rating_format'])) {
+        update_post_meta($post_id, 'embm_rating_format', esc_attr($_POST['embm_rating_format']));
     }
     if (isset($_POST['embm_show_reviews'])) {
         update_post_meta($post_id, 'embm_show_reviews', esc_attr($_POST['embm_show_reviews']));

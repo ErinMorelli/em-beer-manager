@@ -110,10 +110,11 @@ function EMBM_Plugin_activate()
 {
     // Set default settings options
     $defaults = array(
-        'embm_untappd_check'    => '',
-        'embm_untappd_icons'    => '1',
-        'embm_css_url'          => '',
-        'embm_group_slug'       => 'group'
+        'embm_untappd_check'            => '',
+        'embm_untappd_icons'            => '1',
+        'embm_untappd_rating_format'    => '1',
+        'embm_css_url'                  => '',
+        'embm_group_slug'               => 'group'
     );
     update_option('embm_options', $defaults);
 
@@ -307,6 +308,9 @@ function EMBM_Plugin_styles()
     // Add widget stylesheet
     wp_register_style('embm-widget', EMBM_PLUGIN_URL.'assets/css/widgets.css');
     wp_enqueue_style('embm-widget');
+
+    // Add WP Dashicons
+    wp_enqueue_style('dashicons');
 }
 
 // Enqueue plugin styles
