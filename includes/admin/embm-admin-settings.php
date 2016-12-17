@@ -138,7 +138,7 @@ function EMBM_Admin_Settings_Untappd_integration()
 function EMBM_Admin_Settings_Untappd_rating()
 {
     $options = get_option('embm_options');
-    $formats = EMBM_Admin_Rating_formats();
+    $formats = EMBM_Core_Beer_ratings();
 
     echo '<p><select name="embm_options[embm_untappd_rating_format]" class="embm-settings--rating-format-select" id="embm_untappd_rating_format">';
 

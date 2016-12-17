@@ -47,9 +47,32 @@ jQuery(document).ready(function ($) {
                 window.location.reload();
             }
         },
+        untappd_check = $('#embm_untappd_check'),
         hash,
         page,
         clean_url;
+
+    // Show/hide Untappd content
+    function untappdShowHide(checked) {
+        var tables = $('form.embm-settings--form > table.form-table');
+        tables.each(function (index, table) {
+            var rows = $(table).find('tr');
+            if (!rows.length) {
+                return;
+            }
+            if (checked) {
+                $(rows[2]).hide();
+                if (!index) {
+                    $(rows[1]).hide();
+                }
+            } else {
+                $(rows[2]).show();
+                if (!index) {
+                    $(rows[1]).show();
+                }
+            }
+        });
+    }
 
     // Get URL params
     if (window.location.search) {
@@ -82,6 +105,11 @@ jQuery(document).ready(function ($) {
 
         // Update URL
         window.history.replaceState(null, null, clean_url);
+    }
+
+    // Show/hide Untappd content on page load
+    if (untappd_check) {
+        untappdShowHide(untappd_check.is(':checked'));
     }
 
     // Setup jquery ui tabs
@@ -176,6 +204,11 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, ajax_response);
     });
 
+    // Untappd integration checkbox
+    $('#embm_untappd_check').on('change', function (e) {
+        untappdShowHide(e.target.checked);
+    });
+
     /* ---- UNTAPPD AUTHORIZATION ---- */
 
     // Redirect to Untappd to authorize user
@@ -217,7 +250,11 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
         var api_root = $(this).data('api-root'),
-            untappd_id = $('#embm_untappd').val();
+            untappd_id = $('#embm_untappd').val(),
+            spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
+
+        // Start spinner
+        spinner.insertAfter($(this));
 
         // Set AJAX params
         ajax_params.action = 'embm-untappd-flush-beer';
@@ -225,8 +262,10 @@ jQuery(document).ready(function ($) {
         ajax_params.beer_id = untappd_id;
         ajax_params.api_root = api_root;
 
-        // Make AJAX request & reload page
-        $.post(ajaxurl, ajax_params, ajax_response);
+        // Make AJAX request
+        $.post(ajaxurl, ajax_params, function () {
+            spinner.remove();
+        });
     });
 
     /* ---- LABS ---- */
@@ -234,8 +273,20 @@ jQuery(document).ready(function ($) {
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
         e.preventDefault();
+
+        var spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
         ajax_params.action = 'embm-untappd-flush';
-        $.post(ajaxurl, ajax_params, ajax_response);
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        });
     });
 
     // Handle import requests
@@ -244,7 +295,11 @@ jQuery(document).ready(function ($) {
 
         var import_type = $(this).data('type'),
             api_root = $('#embm-untappd-api-root').val(),
-            brewery_id = $('#embm-untappd-brewery-id').val();
+            brewery_id = $('#embm-untappd-brewery-id').val(),
+            spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
+
+        // Start spinner
+        spinner.insertAfter($(this));
 
         // Set AJAX params
         ajax_params.action = 'embm-untappd-import';
@@ -255,6 +310,9 @@ jQuery(document).ready(function ($) {
         ajax_params.beer_id = $('#embm-untappd-beer-id').val();
 
         // Make AJAX request & reload page
-        $.post(ajaxurl, ajax_params, ajax_response);
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        });
     });
 });

@@ -20,17 +20,6 @@
  */
 
 
-// Get EMBM settings
-$ut_option = get_option('embm_options');
-
-// Get Untappd global settings
-$use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
-
-// If Untappd is enabled, load widget
-if ($use_untappd == '1') {
-    exit();
-}
-
 /**
  * Add Recent Untappd Check-ins widget
  */
@@ -244,6 +233,17 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
  */
 function EMBM_Widget_Untappd_Recent_register()
 {
+    // Get EMBM settings
+    $ut_option = get_option('embm_options');
+
+    // Get Untappd global settings
+    $use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
+
+    // If Untappd is disabled, exit
+    if ($use_untappd == '1') {
+        return;
+    }
+
     // Include Untappd functions
     if (!function_exists('EMBM_Admin_Untappd_checkins')) {
         include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';

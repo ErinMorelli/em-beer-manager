@@ -310,30 +310,3 @@ function EMBM_Admin_help()
     // Help sidebar
     $screen->set_help_sidebar($default_help['sidebar']);
 }
-
-
-/**
- * Get an array of ratings format options
- *
- * @return array Ratings formats and options
- */
-function EMBM_Admin_Rating_formats()
-{
-    return array(
-        '1' => array(
-            'form'  => '%s',
-            'desc'  => '&starf;&starf;&starf;&starf;&star;'
-        ),
-        '2' => array(
-            'form'  => '%s (%.2f)',
-            'desc'  => '&starf;&starf;&starf;&starf;&star; (4.0)'
-        ),
-        '3' => array(
-            'form'  => '%s (%.2f) | %s %s',
-            'desc'  => sprintf(
-                '&starf;&starf;&starf;&starf;&star; (4.0) | 1,234 %s',
-                __('Ratings', 'embm')
-            )
-        )
-    );
-}

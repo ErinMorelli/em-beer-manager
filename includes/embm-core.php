@@ -275,6 +275,37 @@ function EMBM_Core_Beer_attr($post_id, $attr)
 
 
 /**
+ * Get an array of ratings format options
+ *
+ * @return array Ratings formats and options
+ */
+function EMBM_Core_Beer_ratings()
+{
+    $stars = '<span class="rating-stars">%s</span>';
+    $rating = '<span class="rating-score">(%.2f)</span>';
+    $count = '<span class="rating-count">%s %s</span>';
+
+    return array(
+        '1' => array(
+            'form'  => $stars,
+            'desc'  => '&starf;&starf;&starf;&starf;&star;'
+        ),
+        '2' => array(
+            'form'  => $stars . ' ' . $rating,
+            'desc'  => '&starf;&starf;&starf;&starf;&star; (4.0)'
+        ),
+        '3' => array(
+            'form'  => $stars . ' ' . $rating . ' | ' . $count,
+            'desc'  => sprintf(
+                '&starf;&starf;&starf;&starf;&star; (4.0) | 1,234 %s',
+                __('Ratings', 'embm')
+            )
+        )
+    );
+}
+
+
+/**
  * Retrieves beer style name
  *
  * @param int $post_id WP post ID

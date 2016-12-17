@@ -70,14 +70,14 @@ function EMBM_Plugin_load()
         update_option(EMBM_VERSION_KEY, $embm_curr_version);
     }
 
+    // Load core and output files
+    include_once EMBM_PLUGIN_DIR.'includes/embm-core.php';
+    include_once EMBM_PLUGIN_DIR.'includes/embm-output.php';
+
     // Load admin files only in admin
     if (is_admin()) {
         include_once EMBM_PLUGIN_DIR.'includes/embm-admin.php';
     }
-
-    // Load core and output files
-    include_once EMBM_PLUGIN_DIR.'includes/embm-core.php';
-    include_once EMBM_PLUGIN_DIR.'includes/embm-output.php';
 
     // Iteratively load any widgets
     foreach (scandir(EMBM_PLUGIN_DIR.'includes/widgets') as $filename) {

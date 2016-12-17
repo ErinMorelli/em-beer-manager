@@ -35,29 +35,11 @@ function EMBM_Output_Filters_content($content)
     // Get EMBM settings
     $options = get_option('embm_options');
 
-    // Get beer profile content
-    $profile = EMBM_Output_profile($post->ID);
-
-    // Get beer extras content
-    $extras = EMBM_Output_extras($post->ID);
-
-    // Get beer rating content
-    $rating = EMBM_Output_rating(3.5);
-
-    // Get beer reviews content
-    $reviews = EMBM_Output_reviews($post->ID);
-
     // Initialize output string
     $output = '';
 
     // Enter the post loop
     if (in_the_loop() && (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group'))) {
-
-        // Display Untappd content
-        $output .= EMBM_Output_untappd($post->ID);
-
-        // End post content div
-        $output .= '</div>'."\n";
 
         // Set view defaults
         $show_profile = true;
@@ -113,21 +95,49 @@ function EMBM_Output_Filters_content($content)
             }
         }
 
+        // Show rating
+        if ($show_rating) {
+            $rating = EMBM_Output_rating($post->ID);
+            if ($rating != null) {
+                $output .= '<div class="embm-beer--rating">'."\n";
+                $output .= $rating;
+                $output .= '</div>'."\n";
+            }
+        }
+
+        // Display Untappd content
+        $output .= EMBM_Output_untappd($post->ID);
+
+        // End post content div
+        $output .= '</div>'."\n";
+
         // Display beer meta
         if ($show_profile || $show_extras) {
             // Start beer meta output
             $output .= '<div class="embm-beer--meta">'."\n";
 
+            $profile = EMBM_Output_profile($post->ID);
             if ($show_profile && $profile != null) {
                 $output .= $profile;
             }
 
+            $extras = EMBM_Output_extras($post->ID);
             if ($show_extras && $extras != null) {
                 $output .= $extras;
             }
 
             // End beer meta output
             $output .= '</div>'."\n";
+        }
+
+        // Display reviews
+        if ($show_reviews) {
+            $reviews = EMBM_Output_reviews($post->ID);
+            if ($reviews != null) {
+                $output .= '<div class="embm-beer--reviews">'."\n";
+                $output .= $reviews;
+                $output .= '</div>'."\n";
+            }
         }
 
         // Initialize thumbnail string
@@ -155,16 +165,6 @@ function EMBM_Output_Filters_content($content)
                     $filtered_content = $attributes['function']($filtered_content);
                 }
             }
-        }
-
-        // Show rating
-        if ($show_rating) {
-            $rating_output = '<div class="embm-beer--rating">'."\n";
-            $rating_output .= $rating;
-            $rating_output .= '</div>'."\n";
-
-            // Add to content
-            $filtered_content = $rating_output.$filtered_content;
         }
 
         // Set up content
@@ -219,15 +219,15 @@ function EMBM_Output_Filters_title($title, $id=null)
     if ($style && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
         $link_title = sprintf(__('View all %s beers', 'embm'), $style);
 
-        error_log('EMBM_Output_Filter_title');
-        error_log('title: '.$title);
-        error_log('id: '.$id);
-        error_log('style: '.$style);
-        error_log('is_singular: '.is_singular('embm_beer'));
-        error_log('is_tax: '.is_tax('embm_group'));
-        error_log('in_the_loop: '.in_the_loop());
-        error_log('post_title: '.$post->post_title);
-        error_log('');
+        // error_log('EMBM_Output_Filter_title');
+        // error_log('title: '.$title);
+        // error_log('id: '.$id);
+        // error_log('style: '.$style);
+        // error_log('is_singular: '.is_singular('embm_beer'));
+        // error_log('is_tax: '.is_tax('embm_group'));
+        // error_log('in_the_loop: '.in_the_loop());
+        // error_log('post_title: '.$post->post_title);
+        // error_log('');
 
         $output = '';
         $output .= '</a><span class="embm-beer--header-style">(';
