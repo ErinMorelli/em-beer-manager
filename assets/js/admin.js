@@ -47,6 +47,7 @@ jQuery(document).ready(function ($) {
                 window.location.reload();
             }
         },
+        spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
         hash,
         page,
@@ -176,6 +177,31 @@ jQuery(document).ready(function ($) {
         $('#contextual-help-link').click();
     });
 
+    // Untappd integration checkbox
+    $('#embm_untappd_check').on('change', function (e) {
+        untappdShowHide(e.target.checked);
+    });
+
+    // Activate color picker
+    $('#embm_untappd_rating_color').wpColorPicker();
+
+    // Activate opacity slider
+    $('#embm-settings--rating-opacity--slider').slider({
+        min: 0,
+        max: 100,
+        step: 1,
+        value: parseFloat($('#embm_untappd_rating_opacity').val()),
+        slide: function (event, ui) {
+            $('#embm_untappd_rating_opacity').val(ui.value);
+            $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(ui.value + '%');
+        },
+        create: function (event, ui) {
+            $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(
+                $(this).slider('value') + '%'
+            );
+        }
+    });
+
     // Select icon option
     $('#embm_untappd_icons').val(embm_settings.options.embm_untappd_icons);
 
@@ -202,11 +228,6 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         ajax_params.action = 'embm-styles-reset';
         $.post(ajaxurl, ajax_params, ajax_response);
-    });
-
-    // Untappd integration checkbox
-    $('#embm_untappd_check').on('change', function (e) {
-        untappdShowHide(e.target.checked);
     });
 
     /* ---- UNTAPPD AUTHORIZATION ---- */
@@ -250,8 +271,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
         var api_root = $(this).data('api-root'),
-            untappd_id = $('#embm_untappd').val(),
-            spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
+            untappd_id = $('#embm_untappd').val();
 
         // Start spinner
         spinner.insertAfter($(this));
@@ -274,8 +294,6 @@ jQuery(document).ready(function ($) {
     $('a.embm-untappd--flush').on('click', function (e) {
         e.preventDefault();
 
-        var spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
-
         // Start spinner
         spinner.insertAfter($(this));
 
@@ -295,8 +313,7 @@ jQuery(document).ready(function ($) {
 
         var import_type = $(this).data('type'),
             api_root = $('#embm-untappd-api-root').val(),
-            brewery_id = $('#embm-untappd-brewery-id').val(),
-            spinner = $('<span class="dashicons dashicons-update embm-settings--spinner"></span>');
+            brewery_id = $('#embm-untappd-brewery-id').val();
 
         // Start spinner
         spinner.insertAfter($(this));

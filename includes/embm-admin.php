@@ -41,12 +41,17 @@ function EMBM_Admin_styles()
         'embm-admin',
         EMBM_PLUGIN_URL.'assets/css/admin.css'
     );
+    wp_enqueue_style('wp-color-picker');
 
     // Load EMBM admin JS
     wp_enqueue_script(
         'embm-admin-script',
         EMBM_PLUGIN_URL.'assets/js/admin.js',
-        array('jquery-ui-tabs')
+        array(
+          'jquery-ui-tabs',
+          'jquery-ui-slider',
+          'wp-color-picker'
+        )
     );
 
     // Set AJAX Nonce

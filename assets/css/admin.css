@@ -162,24 +162,8 @@
     width: 120px;
 }
 .embm-settings--spinner {
-    -moz-animation: rotation 2s linear infinite;
-    -ms-animation: rotation 2s linear infinite;
-    -webkit-animation: rotation 2s linear infinite;
-    left: 4px;
-    position: relative;
-    top: 4px;
-}
-@-webkit-keyframes rotation {
-    0%   { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-}
-@-moz-keyframes rotation {
-    0%   { -moz-transform: rotate(0deg); }
-    100% { -moz-transform: rotate(360deg); }
-}
-@-ms-keyframes rotation {
-    0%   { -ms-transform: rotate(0deg); }
-    100% { -ms-transform: rotate(360deg); }
+    float: none;
+    margin-top: 0;
 }
 
 
@@ -316,4 +300,131 @@
     display: inline-block;
     padding-left: 6px;
     text-decoration: underline;
+}
+
+
+/**
+ * jQuery UI Slider CSS
+ */
+#embm-settings--rating-opacity--slider {
+    max-width: 225px;
+    width: 100%;
+}
+#embm-settings--rating-opacity--slider .ui-slider-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+.embm-settings--rating-opacity .ui-slider {
+    position: relative;
+    text-align: left;
+}
+.embm-settings--rating-opacity .ui-slider .ui-slider-handle {
+    position: absolute;
+    z-index: 2;
+    width: 1.2em;
+    height: 1.2em;
+    cursor: default;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+.embm-settings--rating-opacity .ui-slider .ui-slider-range {
+    position: absolute;
+    z-index: 1;
+    font-size: .7em;
+    display: block;
+    border: 0;
+    background-position: 0 0;
+}
+/* support: IE8 - See #6727 */
+.embm-settings--rating-opacity .ui-slider.ui-state-disabled .ui-slider-handle,
+.embm-settings--rating-opacity .ui-slider.ui-state-disabled .ui-slider-range {
+    filter: inherit;
+}
+
+.embm-settings--rating-opacity .ui-slider-horizontal {
+    height: .8em;
+}
+.embm-settings--rating-opacity .ui-slider-horizontal .ui-slider-handle {
+    top: -.3em;
+    margin-left: -.6em;
+}
+.embm-settings--rating-opacity .ui-slider-horizontal .ui-slider-range {
+    top: 0;
+    height: 100%;
+}
+.embm-settings--rating-opacity .ui-slider-horizontal .ui-slider-range-min {
+    left: 0;
+}
+.embm-settings--rating-opacity .ui-slider-horizontal .ui-slider-range-max {
+    right: 0;
+}
+.embm-settings--rating-opacity .ui-slider-vertical {
+    width: .8em;
+    height: 100px;
+}
+.embm-settings--rating-opacity .ui-slider-vertical .ui-slider-handle {
+    left: -.3em;
+    margin-left: 0;
+    margin-bottom: -.6em;
+}
+.embm-settings--rating-opacity .ui-slider-vertical .ui-slider-range {
+    left: 0;
+    width: 100%;
+}
+.embm-settings--rating-opacity .ui-slider-vertical .ui-slider-range-min {
+    bottom: 0;
+}
+.embm-settings--rating-opacity .ui-slider-vertical .ui-slider-range-max {
+    top: 0;
+}
+.embm-settings--rating-opacity .ui-widget {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 1em;
+}
+.embm-settings--rating-opacity .ui-widget-content {
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    color: #333333;
+}
+.embm-settings--rating-opacity .ui-widget.ui-widget-content {
+    border: 1px solid #c5c5c5;
+}
+
+.embm-settings--rating-opacity .ui-widget .ui-widget {
+    font-size: 1em;
+}
+.embm-settings--rating-opacity .ui-corner-all,
+.embm-settings--rating-opacity .ui-corner-bottom,
+.embm-settings--rating-opacity .ui-corner-right,
+.embm-settings--rating-opacity .ui-corner-br {
+    border-bottom-right-radius: 3px;
+}
+.embm-settings--rating-opacity .ui-corner-all,
+.embm-settings--rating-opacity .ui-corner-bottom,
+.embm-settings--rating-opacity .ui-corner-left,
+.embm-settings--rating-opacity .ui-corner-bl {
+    border-bottom-left-radius: 3px;
+}
+.embm-settings--rating-opacity .ui-corner-all,
+.embm-settings--rating-opacity .ui-corner-top,
+.embm-settings--rating-opacity .ui-corner-right,
+.embm-settings--rating-opacity .ui-corner-tr {
+    border-top-right-radius: 3px;
+}
+.embm-settings--rating-opacity .ui-corner-all,
+.embm-settings--rating-opacity .ui-corner-top,
+.embm-settings--rating-opacity .ui-corner-left,
+.embm-settings--rating-opacity .ui-corner-tl {
+    border-top-left-radius: 3px;
+}
+.embm-settings--rating-opacity .ui-state-default,
+.embm-settings--rating-opacity .ui-widget-content .ui-state-default {
+    border: 1px solid #c5c5c5;
+    background: #f6f6f6;
+    font-weight: normal;
+    color: #454545;
 }

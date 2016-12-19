@@ -112,7 +112,9 @@ function EMBM_Plugin_activate()
     $defaults = array(
         'embm_untappd_check'            => '',
         'embm_untappd_icons'            => '1',
-        'embm_untappd_rating_format'    => '1',
+        'embm_untappd_rating_format'    => '3',
+        'embm_untappd_rating_color'     => '#FFCC00',
+        'embm_untappd_rating_opacity'   => '25',
         'embm_css_url'                  => '',
         'embm_group_slug'               => 'group'
     );

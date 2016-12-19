@@ -281,9 +281,9 @@ function EMBM_Core_Beer_attr($post_id, $attr)
  */
 function EMBM_Core_Beer_ratings()
 {
-    $stars = '<span class="rating-stars">%s</span>';
-    $rating = '<span class="rating-score">(%.2f)</span>';
-    $count = '<span class="rating-count">%s %s</span>';
+    $stars = '<span class="embm-beer--rating-stars">%s</span>';
+    $rating = '<span class="embm-beer--rating-score">(%.2f)</span>';
+    $count = '<span class="embm-beer--rating-count">%s %s</span>';
 
     return array(
         '1' => array(

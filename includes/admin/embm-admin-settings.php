@@ -68,8 +68,10 @@ function EMBM_Admin_settings()
     // Untappd Settings
     add_settings_section('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_untappd', 'embm');
     add_settings_field('embm_untappd_integration', __('Site-wide integration', 'embm'), 'EMBM_Admin_Settings_Untappd_integration', 'embm', 'embm_untappd_settings');
-    add_settings_field('embm_untappd_rating_format', __('Rating display format', 'embm'), 'EMBM_Admin_Settings_Untappd_rating', 'embm', 'embm_untappd_settings');
     add_settings_field('embm_untappd_icons', __('Icon set', 'embm'), 'EMBM_Admin_Settings_Untappd_icons', 'embm', 'embm_untappd_settings');
+    add_settings_field('embm_untappd_rating_format', __('Rating display format', 'embm'), 'EMBM_Admin_Settings_Untappd_rating', 'embm', 'embm_untappd_settings');
+    add_settings_field('embm_untappd_rating_color', __('Rating star color', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_color', 'embm', 'embm_untappd_settings');
+    add_settings_field('embm_untappd_rating_opacity', __('Rating empty star opacity', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_opacity', 'embm', 'embm_untappd_settings');
 
     // Global settings
     add_settings_section('embm_global_settings', __('Global Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
@@ -140,8 +142,8 @@ function EMBM_Admin_Settings_Untappd_rating()
     $options = get_option('embm_options');
     $formats = EMBM_Core_Beer_ratings();
 
+    // Format select
     echo '<p><select name="embm_options[embm_untappd_rating_format]" class="embm-settings--rating-format-select" id="embm_untappd_rating_format">';
-
     foreach ($formats as $format_id => $format) {
         echo '<option value="'.$format_id.'"';
         if ($options['embm_untappd_rating_format'] == $format_id) {
@@ -149,6 +151,36 @@ function EMBM_Admin_Settings_Untappd_rating()
         }
         echo '>'.$format['desc'].'</option>';
     }
+    echo '</select></p>';
+}
+
+/**
+ * Outputs Untappd rating color settings
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Untappd_Rating_color()
+{
+    $options = get_option('embm_options');
+
+    echo '<p><input name="embm_options[embm_untappd_rating_color]" id="embm_untappd_rating_color" value="';
+    echo $options['embm_untappd_rating_color'];
+    echo '" data-default-color="#FFCC00" class="embm-settings--rating-color" /></p>';
+}
+
+/**
+ * Outputs Untappd rating opacity settings
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Untappd_Rating_opacity()
+{
+    $options = get_option('embm_options');
+
+    echo '<div class="embm-settings--rating-opacity">';
+    echo '<input type="hidden" name="embm_options[embm_untappd_rating_opacity]" id="embm_untappd_rating_opacity" value="';
+    echo $options['embm_untappd_rating_opacity'].'" />';
+    echo '<div id="embm-settings--rating-opacity--slider"><div class="ui-slider-handle"></div></div></div>';
 }
 
 /**
@@ -256,7 +288,7 @@ function EMBM_Admin_Settings_Global_untappd()
     }
 
     echo '<p><input name="embm_options[embm_reviews_show]" type="checkbox" id="embm_reviews_show" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show">'.__('Globally hide Untappd reviews', 'embm').'</label>';
+    echo '<label for="embm_reviews_show">'.__('Globally hide Untappd checkins', 'embm').'</label>';
 
     $reviews_count = 5;
     if (isset($options['embm_reviews_count'])) {
@@ -265,7 +297,7 @@ function EMBM_Admin_Settings_Global_untappd()
 
     echo '<p class="embm-settings--review-count"><label for="embm_reviews_count">'.__('Show', 'embm');
     echo '<input id="embm_reviews_count" name="embm_options[embm_reviews_count]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('reviews (max. %d)', 'embm'), 15);
+    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 }
 
@@ -337,7 +369,7 @@ function EMBM_Admin_Settings_Group_untappd()
     }
 
     echo '<p><input name="embm_options[embm_reviews_show_group]" type="checkbox" id="embm_reviews_show_group" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_group">'.__('Hide Untappd reviews in groups', 'embm').'</label>';
+    echo '<label for="embm_reviews_show_group">'.__('Hide Untappd checkins in groups', 'embm').'</label>';
 
     $reviews_count = 5;
     if (isset($options['embm_reviews_count_group'])) {
@@ -346,7 +378,7 @@ function EMBM_Admin_Settings_Group_untappd()
 
     echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_group">'.__('Show', 'embm');
     echo '<input id="embm_reviews_count_group" name="embm_options[embm_reviews_count_group]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('reviews (max. %d)', 'embm'), 15);
+    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 }
 
@@ -442,7 +474,7 @@ function EMBM_Admin_Settings_Style_untappd()
     }
 
     echo '<p><input name="embm_options[embm_reviews_show_style]" type="checkbox" id="embm_reviews_show_style" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_style">'.__('Hide Untappd reviews on styles pages', 'embm').'</label>';
+    echo '<label for="embm_reviews_show_style">'.__('Hide Untappd checkins on styles pages', 'embm').'</label>';
 
     $reviews_count = 5;
     if (isset($options['embm_reviews_count_style'])) {
@@ -451,7 +483,7 @@ function EMBM_Admin_Settings_Style_untappd()
 
     echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_style">'.__('Show', 'embm');
     echo '<input id="embm_reviews_count_style" name="embm_options[embm_reviews_count_style]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('reviews (max. %d)', 'embm'), 15);
+    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 }
 
@@ -521,7 +553,7 @@ function EMBM_Admin_Settings_Single_untappd()
     }
 
     echo '<p><input name="embm_options[embm_reviews_show_single]" type="checkbox" id="embm_reviews_show_single" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd reviews on single beer pages', 'embm').'</label>';
+    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd checkins on single beer pages', 'embm').'</label>';
 
     $reviews_count = 5;
     if (isset($options['embm_reviews_count_single'])) {
@@ -530,7 +562,7 @@ function EMBM_Admin_Settings_Single_untappd()
 
     echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_single">'.__('Show', 'embm');
     echo '<input id="embm_reviews_count_single" name="embm_options[embm_reviews_count_single]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('reviews (max. %d)', 'embm'), 15);
+    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 }
 

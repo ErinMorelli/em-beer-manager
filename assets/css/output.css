@@ -64,8 +64,24 @@
     width: 150px;
 }
 .embm-beer .embm-beer--rating {
+    font-size: 80%;
     line-height: 20px;
     padding: 0 0 20px 0;
+}
+.embm-beer .embm-beer--rating p {
+    display: none;
+    visibility: hidden;
+}
+.embm-beer .embm-beer--rating-stars {
+    padding-right: 5px;
+}
+.embm-beer .embm-beer--rating-stars > svg  {
+    display: block;
+    float: left;
+    height: 20px;
+}
+.embm-beer .embm-beer--rating-stars polygon {
+    stroke-width: 15px;
 }
 .embm-beer .embm-beer--description {
     padding: 0 0 0 20px;
@@ -74,10 +90,10 @@
     margin-bottom: 20px;
     padding-bottom: 0;
 }
-.embm-beer .embm-beer--description > .untappd {
+.embm-beer .embm-beer--description > .embm-beer--untappd {
     padding: 0 0 20px;
 }
-.embm-beer .embm-beer--description > .untappd > a {
+.embm-beer .embm-beer--description > .embm-beer--untappd > a {
     border-width: 0;
     box-shadow: none;
     display: inline-block;
@@ -110,6 +126,56 @@
     display: block;
     font-weight: bold;
     padding: 10px 0 3px;
+}
+.embm-beer .embm-beer--review:not(:last-of-type) {
+    margin-bottom: 25px;
+}
+.embm-beer .embm-beer--review::after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+.embm-beer .embm-beer--review > div {
+    display: block;
+    float: left;
+}
+.embm-beer .embm-beer--review .embm-beer--review-thumb {
+    height: 64px;
+    margin-right: 15px;
+    width: 64px;
+}
+.embm-beer .embm-beer--review .embm-beer--review-author {
+    margin: 0;
+    padding: 0;
+}
+.embm-beer .embm-beer--review .embm-beer--rating-stars {
+    display: block;
+    height: 20px;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta {
+    font-size: 0.8em;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta a {
+    border-bottom: none;
+    text-decoration: none;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-date {
+    padding-right: 10px;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-date::after {
+    content: '-';
+    color: #999;
+    display: inline-block;
+    padding-left: 10px;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-date a {
+    color: #999;
+}
+.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-source a {
+    color: #C60;
 }
 .embm-beer--list .nav-below {
     text-align: right;

@@ -109,7 +109,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     }
 
     // Get ratings formats
-    $rating_formats = EMBM_Admin_Rating_formats();
+    $rating_formats = EMBM_Core_Beer_ratings();
 
     // Setup nonce field for options
     wp_nonce_field('embm_untappd_save', '_embm_untappd_save_nonce');
@@ -180,7 +180,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                         type="checkbox"
                         <?php checked('1', $hide_reviews); ?>
                     >
-                    <label for="embm_hide_reviews"><?php _e('Hide Untappd reviews', 'embm'); ?></label>
+                    <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', 'embm'); ?></label>
                 </p>
             </div>
         </div>

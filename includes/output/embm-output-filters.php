@@ -99,9 +99,7 @@ function EMBM_Output_Filters_content($content)
         if ($show_rating) {
             $rating = EMBM_Output_rating($post->ID);
             if ($rating != null) {
-                $output .= '<div class="embm-beer--rating">'."\n";
                 $output .= $rating;
-                $output .= '</div>'."\n";
             }
         }
 
@@ -116,14 +114,20 @@ function EMBM_Output_Filters_content($content)
             // Start beer meta output
             $output .= '<div class="embm-beer--meta">'."\n";
 
-            $profile = EMBM_Output_profile($post->ID);
-            if ($show_profile && $profile != null) {
-                $output .= $profile;
+            // Display beer profile
+            if ($show_profile) {
+                $profile = EMBM_Output_profile($post->ID);
+                if ($profile != null) {
+                    $output .= $profile;
+                }
             }
 
-            $extras = EMBM_Output_extras($post->ID);
-            if ($show_extras && $extras != null) {
-                $output .= $extras;
+            // Display beer extras
+            if ($show_extras) {
+                $extras = EMBM_Output_extras($post->ID);
+                if ($extras != null) {
+                    $output .= $extras;
+                }
             }
 
             // End beer meta output
@@ -134,7 +138,6 @@ function EMBM_Output_Filters_content($content)
         if ($show_reviews) {
             $reviews = EMBM_Output_reviews($post->ID);
             if ($reviews != null) {
-                $output .= '<div class="embm-beer--reviews">'."\n";
                 $output .= $reviews;
                 $output .= '</div>'."\n";
             }
