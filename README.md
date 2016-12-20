@@ -39,7 +39,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 
-### [Version 2.2.0 - Untappd Feature Update](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.2.2.0.zip) ###
+### [Version 3.0.0 - Expanded Feature Release](https://bitbucket.org/ErinMorelli/em-beer-manager/downloads/em-beer-manager.3.0.0.zip) ###
 * [Labs] Import access to all of a brewery's Untappd beers, instead of just 15
 * [Labs] Fixed ID importing, which was throwing an incorrect error
 * Moved Untappd authentication out of Labs, available to all users, not just breweries

@@ -139,7 +139,6 @@ function EMBM_Output_Filters_content($content)
             $reviews = EMBM_Output_reviews($post->ID);
             if ($reviews != null) {
                 $output .= $reviews;
-                $output .= '</div>'."\n";
             }
         }
 
@@ -220,21 +219,26 @@ function EMBM_Output_Filters_title($title, $id=null)
 
     // Display beer style
     if ($style && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
-        $link_title = sprintf(__('View all %s beers', 'embm'), $style);
+        // Check for the_title() call
+        $is_the_title = false;
+        $backtrace = debug_backtrace();
+        foreach ($backtrace as $call) {
+            if ($call['function'] == 'the_title') {
+                $is_the_title = true;
+                break;
+            }
+        }
 
-        // error_log('EMBM_Output_Filter_title');
-        // error_log('title: '.$title);
-        // error_log('id: '.$id);
-        // error_log('style: '.$style);
-        // error_log('is_singular: '.is_singular('embm_beer'));
-        // error_log('is_tax: '.is_tax('embm_group'));
-        // error_log('in_the_loop: '.in_the_loop());
-        // error_log('post_title: '.$post->post_title);
-        // error_log('');
+        // Bail if this isn't a the_title() call
+        if (!$is_the_title) {
+            return $title;
+        }
 
-        $output = '';
-        $output .= '</a><span class="embm-beer--header-style">(';
-        $output .= '<a href="'.get_term_link($style, 'embm_style').'" title="'.$link_title.'">';
+        // Add formatting
+        $output = !is_singular('embm_beer') ? '</a>' : '';
+        $output .= '<span class="embm-beer--header-style">(';
+        $output .= '<a href="'.get_term_link($style, 'embm_style').'" title="';
+        $output .= sprintf(__('View all %s beers', 'embm'), $style).'">';
         $output .= $style;
         $output .= '</a>)</span>'."\n";
 

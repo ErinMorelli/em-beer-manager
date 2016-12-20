@@ -66,6 +66,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
     $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
     $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
+    $review_count = isset($beer_entry['embm_review_count']) ? esc_attr($beer_entry['embm_review_count'][0]) : '5';
 
     // Brewery account status
     $is_brewery = false;
@@ -110,6 +111,20 @@ function EMBM_Admin_Metabox_Untappd_content()
 
     // Get ratings formats
     $rating_formats = EMBM_Core_Beer_ratings();
+
+    // Set review_count input
+    $review_count_input = sprintf(
+        __('Show %s checkins (max. %d)', 'embm'),
+        '<input
+            id="embm_review_count"
+            name="embm_review_count"
+            class="small-text"
+            type="number"
+            min="1"
+            max="15"
+            value="'.$review_count.'"
+        />', 15
+    ); 
 
     // Setup nonce field for options
     wp_nonce_field('embm_untappd_save', '_embm_untappd_save_nonce');
@@ -157,7 +172,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     <?php if (null !== $token) : ?>
         <div class="embm-metabox--untappd-checkboxes">
             <p>
-                <strong><?php printf('Override single page settings', 'embm'); ?>:</strong>
+                <strong><?php printf('Override Display Settings', 'embm'); ?></strong>
             </p>
             <div class="embm-metabox--untappd-rating">
                 <p>
@@ -182,11 +197,14 @@ function EMBM_Admin_Metabox_Untappd_content()
                     >
                     <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', 'embm'); ?></label>
                 </p>
+                <p class="embm-metabox--untappd-review-count">
+                    <label for="embm_reviews_count_style"><?php echo $review_count_input; ?></label>
+                </p>
             </div>
         </div>
         <div class="embm-metabox--untappd-flush">
             <p>
-                <strong><?php _e('Update beer data from Untappd', 'embm'); ?>:</strong>
+                <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
             </p>
             <p>
                 <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
@@ -194,18 +212,18 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </a>
             </p>
             <p class="description">
-                (<?php _e('Automatically done every 6 hours.', 'embm'); ?>)
+                <?php _e('This is automatically done every 6 hours.', 'embm'); ?>
             </p>
         </div>
     <?php else : ?>
         <p class="embm-metabox--untappd-empty">
             <?php
                 printf(
-                    __('Log in Untappd on the %s to access additional display options.', 'embm'),
+                    __('Log in to Untappd on the %s to access additional display options.', 'embm'),
                     sprintf(
                         '<a href="%s">%s</a>',
                         get_admin_url(null, 'options-general.php?page=embm-settings'),
-                        __('EM Beer Manager settings page', 'embm')
+                        __('settings page', 'embm')
                     )
                 );
             ?>

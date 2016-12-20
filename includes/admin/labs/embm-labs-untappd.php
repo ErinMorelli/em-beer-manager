@@ -86,7 +86,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
     <table class="form-table">
         <tbody>
             <tr>
-                <th scope="row"><?php _e('Import specific beers', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import Specific Beers', 'embm'); ?></th>
                 <td>
                     <p>
                         <select multiple id="embm-untappd-beer-ids" name="embm-untappd-beer-ids[]" class="embm-labs--import-select">
@@ -94,36 +94,37 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
                                 <option value="<?php echo $beer->bid; ?>"><?php echo $beer->beer_name; ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <a class="button-primary embm-untappd--import" data-type="1"><?php _e('Import', 'embm'); ?></a>
+                    </p>
+                    <p>
+                        <a class="button-primary embm-untappd--import" data-type="1"><?php _e('Import Selected Beer(s)', 'embm'); ?></a>
                     </p>
                     <p class="description">
-                        (<?php
+                        <?php
                             printf(
                                 __('Use the %s and %s/%s keys to select multiple beers.', 'embm'),
                                 '<code>shift</code>',
                                 '<code>ctrl</code>',
                                 '<code>command</code>'
                             );
-                        ?>)
+                        ?>
                     </p>
                     </form>
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Import all beers', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import All Beers', 'embm'); ?></th>
                 <td>
                     <p>
                         <a class="button-primary embm-untappd--import" data-type="3">
-                            <?php echo __('Import All', 'embm') . ' (' . count($beer_list) . ')'; ?>
+                            <?php echo __('Import All Beers', 'embm').' ('.count($beer_list).')'; ?>
                         </a>
                     </p>
-                    <p class="description">(<?php _e('If you have a lot of beers, this could take a while.', 'embm'); ?>)</p>
+                    <p class="description"><?php _e('If you have a lot of beers, this could take a while.', 'embm'); ?></p>
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Import single beer by ID', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import Beer By ID', 'embm'); ?></th>
                 <td>
-                    <p><?php _e('Import beers that are not accessible in the features above.', 'embm'); ?></p>
                     <p>
                         <input
                             id="embm-untappd-beer-id"
@@ -131,18 +132,21 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
                             type="number"
                             placeholder="<?php _e('Untappd Beer ID', 'embm'); ?>"
                         />
-                        <a class="button-primary embm-untappd--import" data-type="2"><?php _e('Import', 'embm'); ?></a>
+                        <a class="button-primary embm-untappd--import" data-type="2"><?php _e('Import Beer', 'embm'); ?></a>
                         <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
-                    <p class="description">(<?php _e('You can only import beers that your brewery account owns.', 'embm'); ?>)</p>
+                    <p class="description">
+                        <?php _e('Import beers from your brewery account that are not accessible in the features above.', 'embm'); ?>
+                    </p>
                 </td>
             </tr>
             <tr>
                 <th scope="row"><?php _e('Refresh Untappd Data', 'embm'); ?></th>
                 <td>
-                    <p><?php _e('Update the data from Untappd used in the above features.', 'embm'); ?></p>
                     <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
-                    <p class="description">(<?php _e('This is automatically done weekly.', 'embm'); ?>)</p>
+                    <p class="description">
+                        <?php _e('Update the data from Untappd used in the above features. This is automatically done weekly.', 'embm'); ?>
+                    </p>
                 </td>
             </tr>
         </tbody>

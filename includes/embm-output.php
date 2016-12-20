@@ -28,9 +28,8 @@ require EMBM_PLUGIN_DIR.'includes/output/embm-output-filters.php';
 /**
  * Generate HTML output for a single beer entry
  *
- * @param int  $beer_id     WP post ID for single beer
- * @param bool $showprofile True/false value to show beer profile
- * @param bool $showextras  True/false value to show beer extras
+ * @param int   $beer_id WP post ID for single beer
+ * @param array $options Extra display variables
  *
  * @return string/html
  */
@@ -232,37 +231,37 @@ function EMBM_Output_profile($beer_id)
     if ($abv != '0%') {
         $output .= '<div class="abv"><span class="label">';
         $output .= __('ABV', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'abv').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$abv.'</span></div>'."\n";
     }
     // Display IBU
     if ($ibu != '0') {
         $output .= '<div class="ibu"><span class="label">';
         $output .= __('IBU', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'ibu').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$ibu.'</span></div>'."\n";
     }
     // Display Malts
     if ($malts != '') {
         $output .= '<div class="malts"><span class="label">';
         $output .= __('Malts', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'malts').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$malts.'</span></div>'."\n";
     }
     // Display Hops
     if ($hops != '') {
         $output .= '<div class="hops"><span class="label">';
         $output .= __('Hops', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'hops').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$hops.'</span></div>'."\n";
     }
     // Display Additions
     if ($adds != '') {
         $output .= '<div class="other"><span class="label">';
         $output .= __('Other', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'adds').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$adds.'</span></div>'."\n";
     }
     // Display Yeast
     if ($yeast != '') {
         $output .= '<div class="yeast"><span class="label">';
         $output .= __('Yeast', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'yeast').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$yeast.'</span></div>'."\n";
     }
 
     // End profile output
@@ -311,19 +310,19 @@ function EMBM_Output_extras($beer_id)
     if ($bnum != '#') {
         $output .= '<div class="beer_num"><span class="label">';
         $output .= __('Beer Number', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'beer_num').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$bnum.'</span></div>'."\n";
     }
     // Display availability
     if ($avail != '') {
         $output .= '<div class="avail"><span class="label">';
         $output .= __('Availability', 'embm').':';
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'avail').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$avail.'</span></div>'."\n";
     }
     // Display notes
     if ($notes != '') {
         $output .= '<div class="notes"><span class="label">';
         $output .= __('Additional Notes', 'embm');
-        $output .= '</span><span class="value">'.EMBM_Core_Beer_attr($beer_id, 'notes').'</span></div>'."\n";
+        $output .= '</span><span class="value">'.$notes.'</span></div>'."\n";
     }
 
     // End extras output
@@ -454,7 +453,8 @@ function EMBM_Output_Rating_styles()
 /**
  * Generate reviews HTML for a given beer
  *
- * @param int $beer_id WP post ID for beer entry
+ * @param int $beer_id      WP post ID for beer entry
+ * @param int $review_count Number of reviews to show (default: null)
  *
  * @return string/html
  */
@@ -502,8 +502,11 @@ function EMBM_Output_reviews($beer_id, $review_count = null)
         $output .= EMBM_Output_Review_content($reviews[$ix]);
     }
 
+    // Get star styles
+    $styles = EMBM_Output_Rating_styles();
+
     // End HTML content
-    $output .= EMBM_Output_Rating_styles();
+    $output .= $styles;
     $output .= '</div>'."\n";
 
     // Return HTML output

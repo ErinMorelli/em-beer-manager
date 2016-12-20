@@ -260,6 +260,8 @@ function EMBM_Core_Beer_attr($post_id, $attr)
         return $b_attr . '%';
     case 'beer_num':
         return '#' . $b_attr;
+    case 'notes':
+        return html_entity_decode($b_attr);
     case 'untappd':
         return 'https://untappd.com/beer/' . $b_attr;
     case 'untappd_data':

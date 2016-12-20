@@ -65,11 +65,15 @@ jQuery(document).ready(function ($) {
                 $(rows[2]).hide();
                 if (!index) {
                     $(rows[1]).hide();
+                    $(rows[3]).hide();
+                    $(rows[4]).hide();
                 }
             } else {
                 $(rows[2]).show();
                 if (!index) {
                     $(rows[1]).show();
+                    $(rows[3]).show();
+                    $(rows[4]).show();
                 }
             }
         });

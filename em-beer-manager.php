@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: https://www.erinmorelli.com/projects/em-beer-manager
  * Description: Catalog and display your beers with WordPress. Integrates very simply with Untappd for individual beer checkins. Great for everyone from home brewers to professional breweries!
- * Version: 2.2.0
+ * Version: 3.0.0
  * Author: Erin Morelli
  * Author URI: https://www.erinmorelli.com/
  * License: GPLv2 or later
@@ -50,7 +50,7 @@ if (!defined('PLUGINDIR')) {
 function EMBM_Plugin_load()
 {
     // Set current version
-    $embm_curr_version = '2.2.0';
+    $embm_curr_version = '3.0.0';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {
@@ -94,7 +94,10 @@ function EMBM_Plugin_load()
     load_plugin_textdomain('embm', false, plugin_basename(dirname(__FILE__)).'/languages');
 
     // Do any upgrades
-    EMBM_Plugin_upgrade();
+    if (!function_exists('EMBM_Upgrade_check')) {
+        include_once EMBM_PLUGIN_DIR.'includes/embm-upgrades.php';
+        EMBM_Upgrade_check();
+    }
 }
 
 // Initial plugin load
@@ -111,12 +114,16 @@ function EMBM_Plugin_activate()
     // Set default settings options
     $defaults = array(
         'embm_untappd_check'            => '',
-        'embm_untappd_icons'            => '1',
+        'embm_untappd_icons'            => '2',
         'embm_untappd_rating_format'    => '3',
         'embm_untappd_rating_color'     => '#FFCC00',
         'embm_untappd_rating_opacity'   => '25',
         'embm_css_url'                  => '',
-        'embm_group_slug'               => 'group'
+        'embm_group_slug'               => 'group',
+        'embm_reviews_count'            => '5',
+        'embm_reviews_count_group'      => '5',
+        'embm_reviews_count_style'      => '5',
+        'embm_reviews_count_single'     => '5'
     );
     update_option('embm_options', $defaults);
 
@@ -317,103 +324,6 @@ function EMBM_Plugin_styles()
 
 // Enqueue plugin styles
 add_action('wp_enqueue_scripts', 'EMBM_Plugin_styles');
-
-
-/**
- * Perform any database upgrades
- *
- * @return void
- */
-function EMBM_Plugin_upgrade()
-{
-    // Get upgrade status from DB
-    $upgrade = get_option('embm_db_upgrade');
-
-    // Stop if we've done this before
-    if ($upgrade == 2) {
-        return;
-    }
-
-    // Get global WP database reference
-    global $wpdb;
-
-    // Get current EMBM version
-    $curr_version = floatval(get_option('embm_version'));
-
-    // Do version 1.7.0 upgrade
-    if ($curr_version >= 1.7) {
-
-        // Check for old DB content
-        delete_option('embm_comment_change');
-
-        // Update DB data format for upgrade
-        if ($upgrade == 'true') {
-            update_option('embm_db_upgrade', true);
-        } elseif (!$upgrade) {
-            update_option('embm_db_upgrade', false);
-        }
-
-        // Get styles loaded option
-        $loaded = get_option('embm_styles_loaded');
-
-        // Update DB data format for styles
-        if ($loaded == 'true') {
-            update_option('embm_styles_loaded', true);
-        } elseif (!$loaded) {
-            update_option('embm_styles_loaded', false);
-        }
-
-        if (!$upgrade) {
-            // Taxonomies to update
-            $tax_names = ['style', 'beer'];
-
-            // Rename taxonomies
-            foreach ($tax_names as $tax_name) {
-                // Set new tax name
-                $new_tax_name = 'embm_' . $tax_name;
-
-                // Update column names
-                $wpdb->query(
-                    "
-                    UPDATE $wpdb->term_taxonomy
-                    SET taxonomy = '$new_tax_name'
-                    WHERE taxonomy = '$tax_name'
-                    "
-                );
-            }
-
-            // Save upgrade status to DB
-            update_option('embm_db_upgrade', true);
-        }
-    }
-
-    // Do version 2.2.0 upgrade
-    if (($curr_version >= 2.2) && ($upgrade && $upgrade != 2)) {
-        // List of attributes to update
-        $attrs = [
-            'malts', 'hops', 'adds', 'yeast', 'ibu', 'abv',
-            'beer_num', 'avail', 'notes', 'untappd', 'untappd_data'
-        ];
-
-        // Update each attribute
-        foreach ($attrs as $attr) {
-            // New attribute name
-            $new_attr = 'embm_' . $attr;
-
-            // Update column names
-            $wpdb->query(
-                "
-                UPDATE $wpdb->postmeta
-                SET meta_key = '$new_attr'
-                WHERE meta_key = '$attr'
-                "
-            );
-
-            // Save upgrade status to DB
-            update_option('embm_db_upgrade', 2);
-        }
-    }
-}
 
 
 /**

@@ -58,7 +58,7 @@ function EMBM_Admin_Metabox_Extras_content()
     // Set custom post data values
     $b_num = isset($beer_entry['embm_beer_num']) ? esc_attr($beer_entry['embm_beer_num'][0]) : '';
     $b_avail = isset($beer_entry['embm_avail']) ? esc_attr($beer_entry['embm_avail'][0]) : '';
-    $b_notes = isset($beer_entry['embm_notes']) ? esc_attr($beer_entry['embm_notes'][0]) : '';
+    $b_notes = isset($beer_entry['embm_notes']) ? esc_html($beer_entry['embm_notes'][0]) : '';
 
     // Setup nonce field for options
     wp_nonce_field('embm_extras_save', '_embm_extras_save_nonce');
@@ -132,7 +132,7 @@ function EMBM_Admin_Metabox_Extras_save($post_id)
         update_post_meta($post_id, 'embm_avail', esc_attr($_POST['embm_avail']));
     }
     if (isset($_POST['embm_notes'])) {
-        update_post_meta($post_id, 'embm_notes', esc_attr($_POST['embm_notes']));
+        update_post_meta($post_id, 'embm_notes', esc_html($_POST['embm_notes']));
     }
 }
 
