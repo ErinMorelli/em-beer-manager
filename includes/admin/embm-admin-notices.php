@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Notices
  */
 
-
 // Map of notices
 $GLOBALS['EMBM_NOTICE_MAP'] = array(
     'styles-reset' => array(
@@ -65,7 +64,6 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
     )
 );
 
-
 /**
  * Displays admin notices based on GET params
  *
@@ -73,6 +71,8 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
  */
 function EMBM_Admin_Notices_show()
 {
+    $notice_map = $GLOBALS['EMBM_NOTICE_MAP'];
+
     // Keep track of notices to show
     $notices = array();
 
@@ -82,9 +82,11 @@ function EMBM_Admin_Notices_show()
         preg_match('/^embm-([a-z\-]+)$/', $notice_name, $notice_match);
 
         // Add notice to the list
-        if ($notice_match) {
-            $notice = $GLOBALS['EMBM_NOTICE_MAP'][$notice_match[1]][$notice_type];
-            array_push($notices, $notice);
+        if ($notice_match && array_key_exists($notice_match[1], $notice_map)) {
+            $notice_type_map = $notice_map[$notice_match[1]];
+            if (array_key_exists($notice_type, $notice_type_map)) {
+                array_push($notices, $notice_type_map[$notice_type]);
+            }
         }
     }
 

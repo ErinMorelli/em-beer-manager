@@ -19,7 +19,6 @@
  * @package EMBM\Admin
  */
 
-
 // Include additional Admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-actions.php';
@@ -27,7 +26,6 @@ require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-settings.php';
 
 // Set global admin page object
 global $embm_admin_page;
-
 
 /**
  * Loads admin CSS and JS
@@ -72,7 +70,6 @@ function EMBM_Admin_styles()
 // Loads styles in WP admin
 add_action('admin_enqueue_scripts', 'EMBM_Admin_styles');
 
-
 /**
  * Add custom columns to EMBM post listing
  *
@@ -115,7 +112,6 @@ function EMBM_Admin_columns($cols)
 
 // Load custom columns
 add_filter('manage_embm_beer_posts_columns', 'EMBM_Admin_columns');
-
 
 /**
  * Defines custom admin column values
@@ -185,7 +181,6 @@ function EMBM_Admin_Columns_values($column, $post_id)
 // Load custom column values
 add_action('manage_embm_beer_posts_custom_column', 'EMBM_Admin_Columns_values', 10, 2);
 
-
 /**
  * Make custom columns sortable
  *
@@ -205,7 +200,6 @@ function EMBM_Admin_Columns_sortable()
 
 // Load sortable columns
 add_filter('manage_edit-embm_beer_sortable_columns', 'EMBM_Admin_Columns_sortable');
-
 
 /**
  * Sorts the custom sortable columns based on their data
@@ -253,7 +247,6 @@ function EMBM_Admin_Columns_orderby($vars)
     return $vars;
 }
 
-
 /**
  * Load custom sortable columns
  *
@@ -266,7 +259,6 @@ function EMBM_Admin_Columns_load()
 
 // Only load custom columns in the admin.
 add_action('load-edit.php', 'EMBM_Admin_Columns_load');
-
 
 /**
  * Add custom contextual help menu to admin

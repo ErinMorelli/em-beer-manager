@@ -165,6 +165,11 @@
     float: none;
     margin-top: 0;
 }
+@media screen and (max-width: 782px) {
+    .embm-settings--page .embm-settings--untappd-icon {
+        margin: 5px 0 10px;
+    }
+}
 
 
 /**
@@ -258,7 +263,11 @@
 
 /* Untappd */
 .embm-metabox--untappd-empty {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
     margin-top: 40px;
+
 }
 .embm-metabox--untappd-id {
     width: 100%;

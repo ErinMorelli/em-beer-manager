@@ -32,7 +32,6 @@ $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
     'user'          => 'embm_untappd_user_info'
 );
 
-
 /**
  * Makes a request to Untappd API and intercept any errors.
  *
@@ -71,7 +70,6 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
     }
 }
 
-
 /**
  * Retrieves Untappd brewery ID from the WP DB or website.
  *
@@ -103,7 +101,6 @@ function EMBM_Admin_Untappd_id($untappd_url)
     return $brewery_id;
 }
 
-
 /**
  * Retrieves Untappd user data from either the WP cache or API.
  *
@@ -128,7 +125,6 @@ function EMBM_Admin_Untappd_user($api_root)
 
     return $user;
 }
-
 
 /**
  * Retrieves Untappd brewery data from either the WP cache or API.
@@ -156,7 +152,6 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
     return $brewery;
 }
 
-
 /**
  * Retrieves Untappd brewery check-in data from either the WP cache or API.
  *
@@ -182,7 +177,6 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 
     return $checkins;
 }
-
 
 /**
  * Retrieves Untappd brewery beer data from either the WP cache or API.
@@ -219,7 +213,6 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 
     return $beer_list;
 }
-
 
 /**
  * Retrieves Untappd beer data from the API.
@@ -290,7 +283,6 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     return $beer_data;
 }
 
-
 /**
  * Flushes the cached labs data
  *
@@ -310,7 +302,6 @@ function EMBM_Admin_Untappd_flush($key = null)
         }
     }
 }
-
 
 /**
  * Search for a given Untappd beer ID in an array of beers.
@@ -333,7 +324,6 @@ function EMBM_Admin_Untappd_find($beer_id, $beer_list)
     // Return null if not found
     return null;
 }
-
 
 /**
  * Insert post from Untappd
@@ -403,7 +393,6 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     // Add post image
     EMBM_Admin_Untappd_Import_image($post_id, $beer);
 }
-
 
 /**
  * Upload and set beer featured image

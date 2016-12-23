@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Metabox\Untappd
  */
 
-
 /**
  * Add the Untappd metabox to the Beer post type
  *
@@ -40,7 +39,6 @@ function EMBM_Admin_Metabox_untappd()
 
 // Add to beer post editor
 add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_untappd');
-
 
 /**
  * Outputs Untappd metabox content
@@ -124,7 +122,7 @@ function EMBM_Admin_Metabox_Untappd_content()
             max="15"
             value="'.$review_count.'"
         />', 15
-    ); 
+    );
 
     // Setup nonce field for options
     wp_nonce_field('embm_untappd_save', '_embm_untappd_save_nonce');
@@ -169,7 +167,7 @@ function EMBM_Admin_Metabox_Untappd_content()
         </div>
     </div>
     <div class="embm-metabox__right">
-    <?php if (null !== $token) : ?>
+    <?php if (null !== $token && $untappd_id !== '') : ?>
         <div class="embm-metabox--untappd-checkboxes">
             <p>
                 <strong><?php printf('Override Display Settings', 'embm'); ?></strong>
@@ -215,6 +213,10 @@ function EMBM_Admin_Metabox_Untappd_content()
                 <?php _e('This is automatically done every 6 hours.', 'embm'); ?>
             </p>
         </div>
+    <?php elseif ($untappd_id == '') : ?>
+        <p class="embm-metabox--untappd-empty">
+            <?php _e('Set a valid Untappd Beer ID to access additional display options.', 'embm'); ?>
+        </p>
     <?php else : ?>
         <p class="embm-metabox--untappd-empty">
             <?php
@@ -233,7 +235,6 @@ function EMBM_Admin_Metabox_Untappd_content()
 </div>
 <?php
 }
-
 
 /**
  * Save the options from the Untappd metabox
@@ -282,8 +283,13 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
             update_post_meta($post_id, 'embm_untappd', $beer_id);
 
             // Get beer data from Untappd API
-            if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '') {
-                EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id);
+            if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
+                EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
+            }
+
+            // Remove beer data if the ID is unset
+            if ($beer_id == '') {
+                delete_post_meta($post_id, 'embm_untappd_data');
             }
         }
     }

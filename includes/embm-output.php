@@ -153,6 +153,7 @@ function EMBM_Output_beer($beer_id, $options)
 function EMBM_Output_untappd($beer_id)
 {
     $options = get_option('embm_options');
+    $output = '';
 
     // Retrieve Untappd settings
     $use_untappd = null;
@@ -357,6 +358,18 @@ function EMBM_Output_rating($beer_id)
 
     // Get rating data
     $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
+
+    // Bail if we don't have any data
+    if (!$untappd_data || $untappd_data == '') {
+        return null;
+    }
+
+    // Make sure the data is well-formatted
+    if (!property_exists($untappd_data, 'rating_score') || !property_exists($untappd_data, 'rating_count')) {
+        return null;
+    }
+
+    // Set score and count
     $rating_score = $untappd_data->rating_score;
     $rating_count = number_format($untappd_data->rating_count);
 
@@ -475,18 +488,30 @@ function EMBM_Output_reviews($beer_id, $review_count = null)
 
     // Get review data
     $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
-    $review_data = property_exists($untappd_data, 'checkins') ? $untappd_data->checkins : null;
-    $reviews = null;
+    $untappd_url = EMBM_Core_Beer_attr($beer_id, 'untappd');
+    error_log($untappd_url);
 
-    // Get review items
-    if (!is_null($review_data) && property_exists($review_data, 'items')) {
-        $reviews = $review_data->items;
-    }
-
-    // Bail if we don't have any reviews
-    if (is_null($reviews)) {
+    // Bail if we don't have any data
+    if (!$untappd_data || $untappd_data == '') {
         return null;
     }
+
+    // Make sure the data is well-formatted
+    if (!property_exists($untappd_data, 'checkins')) {
+        return null;
+    }
+
+    // Set review data
+    $review_data = $untappd_data->checkins;
+    $reviews = null;
+
+    // Bail if we don't have any reviews
+    if (is_null($review_data) && !property_exists($review_data, 'items')) {
+        return null;
+    }
+
+    // Get review items
+    $reviews = $review_data->items;
 
     // Get review global review count, if-needed
     if (is_null($review_count)) {
@@ -498,8 +523,18 @@ function EMBM_Output_reviews($beer_id, $review_count = null)
     $output .= '<h3 class="embm-beer--reviews-title">'.__('Recent Checkins', 'embm').'</h3>'."\n";
 
     // Iterate over reviews
-    foreach (range(0, ($review_count-1)) as $ix) {
-        $output .= EMBM_Output_Review_content($reviews[$ix]);
+    if (count($reviews) > 0) {
+        foreach (range(0, ($review_count-1)) as $ix) {
+            $output .= EMBM_Output_Review_content($reviews[$ix]);
+        }
+        $output .= '<p class="embm-beer--reviews-more">';
+        $output .= '<a href="'.$untappd_url.'" target="_blank">';
+        $output .= __('View More on Untappd', 'embm');
+        $output .= '</a></p>';
+    } else {
+        $output .= '<p class="embm-beer--reviews-empty">';
+        $output .= __('This beer has no checkins.', 'embm');
+        $output .= '</p>';
     }
 
     // Get star styles
