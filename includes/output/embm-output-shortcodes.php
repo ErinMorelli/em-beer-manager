@@ -19,7 +19,6 @@
  * @package EMBM\Output\Shortcodes
  */
 
-
 /**
  * Loads the [beer] single beer display shortcode
  *
@@ -32,12 +31,12 @@ function EMBM_Output_Shortcodes_beer($atts)
     // Extract shortcode attributes
     $args = shortcode_atts(
         array(
-            'id'            => 0,
-            'show_profile'  => 'true',
-            'show_extras'   => 'true',
-            'show_rating'   => 'true',
-            'show_reviews'  => 'true',
-            'review_count'  => 5
+            'id'                => 0,
+            'show_profile'      => 'true',
+            'show_extras'       => 'true',
+            'show_rating'       => 'true',
+            'show_checkins'     => 'true',
+            'checkins_count'    => 5
         ),
         $atts,
         'beer'
@@ -50,7 +49,6 @@ function EMBM_Output_Shortcodes_beer($atts)
 // Load single beer shortcode
 add_shortcode('beer', 'EMBM_Output_Shortcodes_beer');
 
-
 /**
  * Displays the single beer shortcode content
  *
@@ -61,7 +59,7 @@ add_shortcode('beer', 'EMBM_Output_Shortcodes_beer');
  */
 function EMBM_Output_Shortcodes_Beer_display($post_id, $input=array())
 {
-    // Set default attribut values
+    // Set default attribute values
     $attrs = array(
         'profile'       => array(
             'key'       => 'show_profile',
@@ -79,37 +77,23 @@ function EMBM_Output_Shortcodes_Beer_display($post_id, $input=array())
             'type'      => 'bool'
         ),
         'reviews'       => array(
-            'key'       => 'show_reviews',
+            'key'       => 'show_checkins',
             'default'   => true,
             'type'      => 'bool'
         ),
-        'review_count'  => array(
-            'key'       => 'review_count',
+        'reviews_count'  => array(
+            'key'       => 'checkins_count',
             'default'   => 5,
             'type'      => 'int'
         )
     );
 
     // Set up values to pass on, remove bad values
-    $args = array('id' => $post_id);
-    foreach ($attrs as $attr => $value) {
-        // Populate args and fall back to defaults when needed
-        if (!array_key_exists($value['key'], $input)) {
-            $args[$attr] = $value['default'];
-        } else {
-            $args[$attr] = $input[$value['key']];
-        }
-
-        // Check for bools
-        if ($value['type'] == 'bool') {
-            $args[$attr] = $args[$attr] != 'true' ? false : true;
-        }
-    }
+    $args = EMBM_Output_Shortcodes_normalize($attrs, $input, $post_id);
 
     // Return formatted beer content
     return EMBM_Output_Shortcodes_Beer_load($args);
 }
-
 
 /**
  * Loads the single beer shortcode display
@@ -154,7 +138,6 @@ function EMBM_Output_Shortcodes_Beer_load($beer)
     return $output;
 }
 
-
 /**
  * Loads the [beer-list] shortcode
  *
@@ -172,8 +155,6 @@ function EMBM_Output_Shortcodes_list($atts)
                 'show_profile'      => 'true',
                 'show_extras'       => 'true',
                 'show_rating'       => 'true',
-                'show_reviews'      => 'true',
-                'review_count'      => 5,
                 'style'             => '',
                 'group'             => '',
                 'beers_per_page'    => -1,
@@ -222,16 +203,6 @@ function EMBM_Output_Shortcodes_List_display($input=array())
             'default'   => true,
             'type'      => 'bool'
         ),
-        'reviews'       => array(
-            'key'       => 'show_reviews',
-            'default'   => true,
-            'type'      => 'bool'
-        ),
-        'review_count'  => array(
-            'key'       => 'review_count',
-            'default'   => 5,
-            'type'      => 'int'
-        ),
         'style'     => array(
             'key'       => 'style',
             'default'   => '',
@@ -270,20 +241,7 @@ function EMBM_Output_Shortcodes_List_display($input=array())
     );
 
     // Set up values to pass on, remove bad values
-    $args = array();
-    foreach ($attrs as $attr => $value) {
-        // Populate args and fall back to defaults when needed
-        if (!array_key_exists($value['key'], $input)) {
-            $args[$attr] = $value['default'];
-        } else {
-            $args[$attr] = $input[$value['key']];
-        }
-
-        // Check for bools
-        if ($value['type'] == 'bool') {
-            $args[$attr] = $args[$attr] != 'true' ? false : true;
-        }
-    }
+    $args = EMBM_Output_Shortcodes_normalize($attrs, $input);
 
     // Return formatted beer list content
     return EMBM_Output_Shortcodes_List_load($args);
@@ -411,4 +369,42 @@ function EMBM_Output_Shortcodes_List_load($beers)
 
     // Return HTML content
     return $output;
+}
+
+/**
+ * Normalizes shortcode input
+ *
+ * @param array $attrs   List of shortcode attributes defaults
+ * @param array $input   List of submitted shortcode attributes
+ * @param int   $post_id WP post ID (default: null)
+ *
+ * @return array
+ */
+function EMBM_Output_Shortcodes_normalize($attrs, $input, $post_id = null)
+{
+    // Set up array
+    $args = array();
+
+    // Set post ID, if there
+    if (!is_null($post_id)) {
+        $args['id'] = $post_id;
+    }
+
+    // Set up values to pass on, remove bad values
+    foreach ($attrs as $attr => $value) {
+        // Populate args and fall back to defaults when needed
+        if (!array_key_exists($value['key'], $input)) {
+            $args[$attr] = $value['default'];
+        } else {
+            $args[$attr] = $input[$value['key']];
+        }
+
+        // Check for bools
+        if ($value['type'] == 'bool') {
+            $args[$attr] = $args[$attr] != 'true' ? false : true;
+        }
+    }
+
+    // Return normalized values
+    return $args;
 }

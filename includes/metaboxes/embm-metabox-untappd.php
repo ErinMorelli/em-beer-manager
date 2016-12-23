@@ -64,7 +64,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
     $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
     $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
-    $review_count = isset($beer_entry['embm_review_count']) ? esc_attr($beer_entry['embm_review_count'][0]) : '5';
+    $reviews_count = isset($beer_entry['embm_reviews_count']) ? esc_attr($beer_entry['embm_reviews_count'][0]) : '5';
 
     // Brewery account status
     $is_brewery = false;
@@ -110,17 +110,17 @@ function EMBM_Admin_Metabox_Untappd_content()
     // Get ratings formats
     $rating_formats = EMBM_Core_Beer_ratings();
 
-    // Set review_count input
-    $review_count_input = sprintf(
+    // Set reviews_count input
+    $reviews_count_input = sprintf(
         __('Show %s checkins (max. %d)', 'embm'),
         '<input
-            id="embm_review_count"
-            name="embm_review_count"
+            id="embm_reviews_count"
+            name="embm_reviews_count"
             class="small-text"
             type="number"
             min="1"
             max="15"
-            value="'.$review_count.'"
+            value="'.$reviews_count.'"
         />', 15
     );
 
@@ -196,7 +196,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                     <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', 'embm'); ?></label>
                 </p>
                 <p class="embm-metabox--untappd-review-count">
-                    <label for="embm_reviews_count_style"><?php echo $review_count_input; ?></label>
+                    <label for="embm_reviews_count_style"><?php echo $reviews_count_input; ?></label>
                 </p>
             </div>
         </div>
@@ -270,8 +270,8 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
     if (isset($_POST['embm_show_reviews'])) {
         update_post_meta($post_id, 'embm_show_reviews', esc_attr($_POST['embm_show_reviews']));
     }
-    if (isset($_POST['embm_review_count'])) {
-        update_post_meta($post_id, 'embm_review_count', esc_attr($_POST['embm_review_count']));
+    if (isset($_POST['embm_reviews_count'])) {
+        update_post_meta($post_id, 'embm_reviews_count', esc_attr($_POST['embm_reviews_count']));
     }
     if (isset($_POST['embm_untappd'])) {
         $beer_id = esc_attr($_POST['embm_untappd']);

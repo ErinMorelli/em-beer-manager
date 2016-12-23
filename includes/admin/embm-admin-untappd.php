@@ -215,7 +215,7 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 }
 
 /**
- * Retrieves Untappd beer data from the API.
+ * Retrieves Untappd beer data from the API or DB
  *
  * @param string $api_root A templated string for the Untappd API root URL
  * @param int    $beer_id  Untappd beer ID
@@ -260,9 +260,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
 
     // Get fresh beer data from API
     if ($refresh) {
-        $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
-        $beer_res = EMBM_Admin_Untappd_request($beer_url);
-        $beer = $beer_res->response->beer;
+        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
         // Remove unneeded data
         unset($beer->similar);
@@ -281,6 +279,23 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     }
 
     return $beer_data;
+}
+
+/**
+ * Retrieves Untappd beer data from the API.
+ *
+ * @param string $api_root A templated string for the Untappd API root URL
+ * @param int    $beer_id  Untappd beer ID
+ *
+ * @return object Object of the beer's data
+ */
+function EMBM_Admin_Untappd_Beer_get($api_root, $beer_id)
+{
+    $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
+    $beer_res = EMBM_Admin_Untappd_request($beer_url);
+    $beer = $beer_res->response->beer;
+
+    return $beer;
 }
 
 /**
@@ -326,6 +341,35 @@ function EMBM_Admin_Untappd_find($beer_id, $beer_list)
 }
 
 /**
+ * Search for a given Untappd beer ID in DB
+ *
+ * @param int   $beer_id   Untappd beer ID
+ *
+ * @return int WP Post ID of beer
+ */
+function EMBM_Admin_Untappd_exists($beer_id)
+{
+    // Get global WP database reference
+    global $wpdb;
+
+    // Remove individual beer Untappd data
+    return $wpdb->get_var(
+        $wpdb->prepare(
+            "
+            SELECT
+                post_id
+            FROM
+                $wpdb->postmeta
+            WHERE
+                meta_key = 'embm_untappd' &&
+                meta_value = %s
+            ",
+            $beer_id
+        )
+    );
+}
+
+/**
  * Insert post from Untappd
  *
  * @param array $beer       Untappd beer data
@@ -349,7 +393,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     // Set beer slug
     $beer_slug = sanitize_title($beer->beer_name);
 
-    // Set up args for duplicate check
+    // Set up duplicate check args
     $dup_args = array(
         'name'           => $beer_slug,
         'post_type'      => 'embm_beer',
@@ -357,16 +401,26 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
         'posts_per_page' => 1
     );
 
-    // Run post query
-    $beer_exists = get_posts($dup_args);
-
-    // If we found a beer, exit
-    if ($beer_exists) {
+    // Check for duplicate (#2)
+    $duplicate = get_posts($dup_args);
+    if ($duplicate) {
         return;
     }
 
     // Set post publish date from Untappd created date
     $beer_date = date('Y-m-d H:i:s', strtotime($beer->created_at));
+
+    // Remove unneeded data
+    unset($beer->similar);
+    unset($beer->friends);
+    unset($beer->media);
+    unset($beer->vintages);
+
+    // Set up data for storage
+    $beer_data = array(
+        'beer'      => $beer,
+        'cached'    => time()
+    );
 
     // Set up post array
     $new_beer_post = array(
@@ -381,9 +435,11 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
             'embm_style'    => $beer->beer_style
         ),
         'meta_input'    => array(
-            'abv'       => $beer->beer_abv,
-            'ibu'       => $beer->beer_ibu,
-            'untappd'   => $beer->bid
+            'embm_abv'              => $beer->beer_abv,
+            'embm_ibu'              => $beer->beer_ibu,
+            'embm_untappd'          => $beer->bid,
+            'embm_untappd_data'     => $beer_data,
+            'embm_reviews_count'    => 5
         )
     );
 
@@ -391,7 +447,9 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     $post_id = wp_insert_post($new_beer_post, true);
 
     // Add post image
-    EMBM_Admin_Untappd_Import_image($post_id, $beer);
+    if (property_exists($beer, 'beer_label_hd')) {
+        EMBM_Admin_Untappd_Import_image($post_id, $beer);
+    }
 }
 
 /**

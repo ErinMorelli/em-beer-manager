@@ -45,7 +45,7 @@ function EMBM_Output_Filters_content($content)
         $show_profile = true;
         $show_extras = true;
         $show_rating = true;
-        $show_reviews = true;
+        $show_reviews = false;
 
         // Handle single beer posts
         if (is_singular('embm_beer')) {
@@ -58,6 +58,9 @@ function EMBM_Output_Filters_content($content)
             if (isset($options['embm_rating_show_single']) && $options['embm_rating_show_single'] == '1') {
                 $show_rating = false;
             }
+
+            // Handle reviews separately
+            $show_reviews = true;
             if (isset($options['embm_reviews_show_single']) && $options['embm_reviews_show_single'] == '1') {
                 $show_reviews = false;
             }
@@ -74,9 +77,6 @@ function EMBM_Output_Filters_content($content)
             if (isset($options['embm_rating_show_style']) && $options['embm_rating_show_style'] == '1') {
                 $show_rating = false;
             }
-            if (isset($options['embm_reviews_show_style']) && $options['embm_reviews_show_style'] == '1') {
-                $show_reviews = false;
-            }
         }
 
         // Handle beer group posts
@@ -89,9 +89,6 @@ function EMBM_Output_Filters_content($content)
             }
             if (isset($options['embm_rating_show_group']) && $options['embm_rating_show_group'] == '1') {
                 $show_rating = false;
-            }
-            if (isset($options['embm_reviews_show_group']) && $options['embm_reviews_show_group'] == '1') {
-                $show_reviews = false;
             }
         }
 

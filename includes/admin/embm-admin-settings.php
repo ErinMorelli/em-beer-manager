@@ -325,7 +325,7 @@ function EMBM_Admin_Settings_Group_slug()
     echo sanitize_key($options['embm_group_slug']);
     echo '" /></p><p class="description">';
     echo sprintf(
-        __('Rename the beer group URLs with your own custom slug name. You will need to %s after updating this setting.', 'embm'),
+        __('Rename the beer group URLs with your own custom slug name. You must %s after changing this.', 'embm'),
         sprintf('<a href="options-permalink.php">%s</a>', __('refresh your permalinks', 'embm'))
     ).'</p><p class="timezone-info">';
     echo __('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
