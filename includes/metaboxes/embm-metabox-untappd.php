@@ -256,7 +256,7 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
     }
 
     // Check user permissions
-    if (!current_user_can('edit_post')) {
+    if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
