@@ -119,8 +119,8 @@ function EMBM_Admin_Untappd_user($api_root)
         $user_res = EMBM_Admin_Untappd_request($user_info_url);
         $user = $user_res->response->user;
 
-        // Store for 1 week
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user'], $user, WEEK_IN_SECONDS);
+        // Store for 24 hours (as per TOS)
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user'], $user, DAY_IN_SECONDS);
     }
 
     return $user;
@@ -145,8 +145,8 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
         $brewery_res = EMBM_Admin_Untappd_request($brewery_url);
         $brewery = $brewery_res->response->brewery;
 
-        // Store for 1 week
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery'], $brewery, WEEK_IN_SECONDS);
+        // Store for 24 hours (as per TOS)
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery'], $brewery, DAY_IN_SECONDS);
     }
 
     return $brewery;
@@ -162,6 +162,9 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
  */
 function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 {
+    // Cache data for 30 mins
+    $half_hour = 30 * MINUTE_IN_SECONDS;
+
     // Attempt to retrieve brewery checkins from cache
     $checkins = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
 
@@ -171,8 +174,8 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
         $checkins_res = EMBM_Admin_Untappd_request($checkins_url);
         $checkins = $checkins_res->response->checkins;
 
-        // Store for 1 hour
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, HOUR_IN_SECONDS);
+        // Store for half hour
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, $half_hour);
     }
 
     return $checkins;
@@ -207,8 +210,8 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
             $beer_offset += $beers->count;
         }
 
-        // Store for 1 week
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list'], $beer_list, WEEK_IN_SECONDS);
+        // Store for 24 hours (as per TOS)
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list'], $beer_list, DAY_IN_SECONDS);
     }
 
     return $beer_list;
@@ -231,7 +234,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     $beer_cache = null;
     $refresh = false;
     $now = time();
-    $six_hours = 6 * HOUR_IN_SECONDS;
+    $three_hours = 3 * HOUR_IN_SECONDS;
 
     // Attempt to retrieve beer data from cache
     $beer_data = get_post_meta($post_id, 'embm_untappd_data', true);
@@ -247,8 +250,8 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         // Get time delta
         $delta = $now - $beer_cache;
 
-        // Check for
-        if ($delta >= $six_hours) {
+        // Check for expired cache
+        if ($delta >= $three_hours) {
             $refresh = true;
         }
     }
