@@ -126,9 +126,10 @@ add_action('admin_init', 'EMBM_Admin_settings');
  *
  * @return void
  */
-function EMBM_Admin_Settings_untappd()
+function EMBM_Admin_Settings_untappd($section)
 {
     EMBM_Admin_Authorize_status();
+    echo '<a name="' . $section['id'] . '"></a>';
 }
 
 /**
@@ -245,8 +246,9 @@ function EMBM_Admin_Settings_Untappd_icons()
  *
  * @return void
  */
-function EMBM_Admin_Settings_section()
+function EMBM_Admin_Settings_section($section)
 {
+    echo '<a name="' . $section['id'] . '"></a>';
 }
 
 
@@ -324,8 +326,9 @@ function EMBM_Admin_Settings_Group_slug()
     echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="';
     echo sanitize_key($options['embm_group_slug']);
     echo '" /></p><p class="description">';
+    echo __('Rename the beer group URLs with your own custom slug name.', 'embm') . '<br />';
     echo sprintf(
-        __('Rename the beer group URLs with your own custom slug name. You must %s after changing this.', 'embm'),
+        __('You must %s after changing this.', 'embm'),
         sprintf('<a href="options-permalink.php">%s</a>', __('refresh your permalinks', 'embm'))
     ).'</p><p class="timezone-info">';
     echo __('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
@@ -550,6 +553,10 @@ function EMBM_Admin_Settings_Single_untappd()
  */
 function EMBM_Admin_Settings_page()
 {
+    // Get settings page sections
+    global $wp_settings_sections;
+    $sections = $wp_settings_sections['embm'];
+
     // Check user permissions
     if (!current_user_can('manage_options')) {
         wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
@@ -574,6 +581,20 @@ function EMBM_Admin_Settings_page()
         </ul>
 
         <div id="settings" class="embm-settings--tab-settings">
+            <div class="embm-settings--navbox">
+                <span
+                    class="dashicons dashicons-arrow-right-alt2"
+                    title="<?php _e('Collpase/Expand Panel', 'embm'); ?>"
+                    id="embm-settings--navbox-toggle">
+                </span>
+                <ul>
+                    <li><strong>Jump to:</strong></li>
+                    <li><a href="#top"><?php _e('Top', 'embm'); ?></a></li>
+                    <?php foreach ($sections as $section): ?>
+                        <li><a href="#<?php echo $section['id']; ?>"><?php echo $section['title']; ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
             <form method="post" action="options.php" class="embm-settings--form">
                 <?php
                     settings_fields('embm_options');

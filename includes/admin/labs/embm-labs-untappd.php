@@ -145,7 +145,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
                 <td>
                     <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
                     <p class="description">
-                        <?php _e('Update the data from Untappd used in the above features. This is automatically done weekly.', 'embm'); ?>
+                        <?php _e('Update the data from Untappd used in the above features. This is automatically daily.', 'embm'); ?>
                     </p>
                 </td>
             </tr>

@@ -46,9 +46,10 @@ function EMBM_Admin_styles()
         'embm-admin-script',
         EMBM_PLUGIN_URL.'assets/js/admin.js',
         array(
-          'jquery-ui-tabs',
-          'jquery-ui-slider',
-          'wp-color-picker'
+            'jquery-effects-core',
+            'jquery-ui-tabs',
+            'jquery-ui-slider',
+            'wp-color-picker'
         )
     );
 
