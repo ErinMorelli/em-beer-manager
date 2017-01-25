@@ -540,7 +540,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
 
     // Start reviews output
     $output = '<div class="embm-beer--reviews">'."\n";
-    $output .= '<h3 class="embm-beer--reviews-title">'.__('Recent Checkins', 'embm').'</h3>'."\n";
+    $output .= '<h3 class="embm-beer--reviews-title">'.__('Recent Check-ins', 'embm').'</h3>'."\n";
 
     // Check that we have reviews
     if (count($reviews) > 0) {

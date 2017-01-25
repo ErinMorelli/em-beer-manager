@@ -300,7 +300,7 @@ function EMBM_Admin_help()
                 '</strong></p><p>'.
                 __('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', 'embm').
                 '</p><p>'.
-                __('The "extras" setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.', 'embm').
+                __('The "extras" setting refers to the "Extra Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.', 'embm').
                 '</p>'
         )
     );

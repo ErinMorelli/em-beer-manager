@@ -327,20 +327,20 @@ function EMBM_Plugin_help()
             'id'        => 'embm-untappd-integration',
             'title'     => __('Untappd Integration', 'embm'),
             'content'   => '<p>'.
-                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm').
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-Ins widget, ratings, check-ins, and check-in buttons.', 'embm').
                 '</p><p>'.
-                __('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page', 'embm').
+                __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm').
                 '</p><p>'.
-                __('You can display Untappd beer ratings and recent checkins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Checkins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many reviews to show.', 'embm').
+                __('You can display Untappd beer ratings and recent check-ins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Check-ins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many check-ins to show.', 'embm').
                 '</p></p>'.
-                __('Data from Untappd for ratings and reviews is refreshed every 6 hours, or can be refreshed manually. We do not recommend doing this often as the Untappd API places a limit on how many calls can be made per hour. ', 'embm').
+                __('Data from Untappd for ratings and check-ins is refreshed every 3 hours, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', 'embm').
                 '</p>'
         ),
         'untappd_id'    => array(
             'id'        => 'embm-untappd-beer-id',
             'title'     => __('Untappd Beer ID', 'embm'),
             'content'   => '<p>'.
-                __('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
+                __('Find your Untappd Beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
                 ':</p><p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p><p>'.
                 __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
                 '</p>'
