@@ -49,6 +49,7 @@ jQuery(document).ready(function ($) {
         },
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
+        nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
         hash,
         page,
         clean_url;
@@ -96,7 +97,7 @@ jQuery(document).ready(function ($) {
         hash = url_hash.slice(1);
 
         // Add/remove active classes
-        if (hash !== '') {
+        if (hash !== '' && $('#embm-settings--tabs').find('.nav-tab-' + hash).length) {
             $('#embm-settings--tabs').find('.nav-tab').removeClass('nav-tab-active');
             $('#embm-settings--tabs').find('.nav-tab-' + hash).addClass('nav-tab-active');
         }
@@ -115,6 +116,13 @@ jQuery(document).ready(function ($) {
     // Show/hide Untappd content on page load
     if (untappd_check) {
         untappdShowHide(untappd_check.is(':checked'));
+    }
+
+    // Show/hide settings navigation on page load
+    if (nav_hidden) {
+        $('.embm-settings--navbox').css('right', '-185px');
+        $('#embm-settings--navbox-toggle').removeClass();
+        $('#embm-settings--navbox-toggle').addClass('dashicons dashicons-arrow-left-alt2');
     }
 
     // Setup jquery ui tabs
@@ -181,6 +189,21 @@ jQuery(document).ready(function ($) {
         $('#contextual-help-link').click();
     });
 
+    // Settings page nav panel toggle
+    $('#embm-settings--navbox-toggle').on('click', function (e) {
+        var icon = $(this),
+            box = icon.parent(),
+            hidden = (localStorage.embm_hide_settings_nav === 'true'),
+            right = hidden ? '0px' : '-185px',
+            arrow = hidden ? 'right' : 'left';
+
+        $(this).parent().animate({ right: right }, function() {
+            localStorage.embm_hide_settings_nav = !hidden;
+            icon.removeClass();
+            icon.addClass('dashicons dashicons-arrow-' + arrow + '-alt2');
+        });
+    });
+
     // Untappd integration checkbox
     $('#embm_untappd_check').on('change', function (e) {
         untappdShowHide(e.target.checked);
@@ -192,7 +215,7 @@ jQuery(document).ready(function ($) {
     // Activate opacity slider
     $('#embm-settings--rating-opacity--slider').slider({
         min: 0,
-        max: 100,
+        max: 50,
         step: 1,
         value: parseFloat($('#embm_untappd_rating_opacity').val()),
         slide: function (event, ui) {

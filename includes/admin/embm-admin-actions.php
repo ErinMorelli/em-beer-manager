@@ -19,10 +19,8 @@
  * @package EMBM\Admin\Actions
  */
 
-
 // Define AJAX Nonce
 define('EMBM_AJAX_NONCE', '_embm_ajax_request_nonce');
-
 
 /**
  * Reset Untappt beer styles
@@ -52,7 +50,6 @@ function EMBM_Admin_Actions_Styles_reset()
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-styles-reset', 'EMBM_Admin_Actions_Styles_reset');
 
-
 /**
  * Deauthorize the current user from Untappd
  *
@@ -72,7 +69,6 @@ function EMBM_Admin_Actions_Untappd_deauthorize()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-deauthorize', 'EMBM_Admin_Actions_Untappd_deauthorize');
-
 
 /**
  * Authorize the current user with Untappd
@@ -104,7 +100,6 @@ function EMBM_Admin_Actions_Untappd_authorize()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-authorize', 'EMBM_Admin_Actions_Untappd_authorize');
-
 
 /**
  * Reauthorize the current user with Untappd
@@ -140,7 +135,6 @@ function EMBM_Admin_Actions_Untappd_reauthorize()
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-reauthorize', 'EMBM_Admin_Actions_Untappd_reauthorize');
 
-
 /**
  * Flush the Untappd cache
  *
@@ -160,7 +154,6 @@ function EMBM_Admin_Actions_Untappd_flush()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-flush', 'EMBM_Admin_Actions_Untappd_flush');
-
 
 /**
  * Remove Untappd cached data to force refesh
@@ -186,7 +179,6 @@ function EMBM_Admin_Actions_Untappd_Flush_beer()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-flush-beer', 'EMBM_Admin_Actions_Untappd_Flush_beer');
-
 
 /**
  * Import beers from Untappd to WP
@@ -227,13 +219,14 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Iteratively add beers
         foreach ($beer_ids as $beer_id) {
-            // Locate beer in cached array
-            $beer = EMBM_Admin_Untappd_find($beer_id, $beer_list);
-
-            // Skip beer if not found
-            if (is_null($beer)) {
+            // Check for duplicate
+            $exists = EMBM_Admin_Untappd_exists($beer_id);
+            if (!is_null($exists)) {
                 continue;
             }
+
+            // Locate beer in cached array
+            $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
             // Run import
             EMBM_Admin_Untappd_import($beer, $brewery_id);
@@ -250,8 +243,14 @@ function EMBM_Admin_Actions_Untappd_import()
             wp_die();
         }
 
+        // Check for duplicate
+        $exists = EMBM_Admin_Untappd_exists($beer_id);
+        if (!is_null($exists)) {
+            continue;
+        }
+
         // Get beer from API
-        $beer = EMBM_Admin_Untappd_beer($api_root, $beer_id);
+        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
         // Run import with brewery check
         EMBM_Admin_Untappd_import($beer, $brewery_id, true);
@@ -264,8 +263,17 @@ function EMBM_Admin_Actions_Untappd_import()
     case 3:
         // Iteratively add beers
         foreach ($beer_list as $item) {
+            // Check for duplicate
+            $exists = EMBM_Admin_Untappd_exists($item->beer->bid);
+            if (!is_null($exists)) {
+                continue;
+            }
+
+            // Get beer from API
+            $beer = EMBM_Admin_Untappd_Beer_get($api_root, $item->beer->bid);
+
             // Run import
-            EMBM_Admin_Untappd_import($item->beer, $brewery_id);
+            EMBM_Admin_Untappd_import($beer, $brewery_id);
         }
         break;
 

@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Metabox\Untappd
  */
 
-
 /**
  * Add the Untappd metabox to the Beer post type
  *
@@ -40,7 +39,6 @@ function EMBM_Admin_Metabox_untappd()
 
 // Add to beer post editor
 add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_untappd');
-
 
 /**
  * Outputs Untappd metabox content
@@ -66,7 +64,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
     $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
     $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
-    $review_count = isset($beer_entry['embm_review_count']) ? esc_attr($beer_entry['embm_review_count'][0]) : '5';
+    $reviews_count = isset($beer_entry['embm_reviews_count']) ? esc_attr($beer_entry['embm_reviews_count'][0]) : '5';
 
     // Brewery account status
     $is_brewery = false;
@@ -112,19 +110,19 @@ function EMBM_Admin_Metabox_Untappd_content()
     // Get ratings formats
     $rating_formats = EMBM_Core_Beer_ratings();
 
-    // Set review_count input
-    $review_count_input = sprintf(
+    // Set reviews_count input
+    $reviews_count_input = sprintf(
         __('Show %s checkins (max. %d)', 'embm'),
         '<input
-            id="embm_review_count"
-            name="embm_review_count"
+            id="embm_reviews_count"
+            name="embm_reviews_count"
             class="small-text"
             type="number"
             min="1"
             max="15"
-            value="'.$review_count.'"
+            value="'.$reviews_count.'"
         />', 15
-    ); 
+    );
 
     // Setup nonce field for options
     wp_nonce_field('embm_untappd_save', '_embm_untappd_save_nonce');
@@ -169,7 +167,7 @@ function EMBM_Admin_Metabox_Untappd_content()
         </div>
     </div>
     <div class="embm-metabox__right">
-    <?php if (null !== $token) : ?>
+    <?php if (null !== $token && $untappd_id !== '') : ?>
         <div class="embm-metabox--untappd-checkboxes">
             <p>
                 <strong><?php printf('Override Display Settings', 'embm'); ?></strong>
@@ -198,7 +196,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                     <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', 'embm'); ?></label>
                 </p>
                 <p class="embm-metabox--untappd-review-count">
-                    <label for="embm_reviews_count_style"><?php echo $review_count_input; ?></label>
+                    <label for="embm_reviews_count_style"><?php echo $reviews_count_input; ?></label>
                 </p>
             </div>
         </div>
@@ -212,9 +210,13 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </a>
             </p>
             <p class="description">
-                <?php _e('This is automatically done every 6 hours.', 'embm'); ?>
+                <?php printf(__('This is automatically done every %d hours.', 'embm'), 3); ?>
             </p>
         </div>
+    <?php elseif ($untappd_id == '') : ?>
+        <p class="embm-metabox--untappd-empty">
+            <?php _e('Set a valid Untappd Beer ID to access additional display options.', 'embm'); ?>
+        </p>
     <?php else : ?>
         <p class="embm-metabox--untappd-empty">
             <?php
@@ -233,7 +235,6 @@ function EMBM_Admin_Metabox_Untappd_content()
 </div>
 <?php
 }
-
 
 /**
  * Save the options from the Untappd metabox
@@ -255,7 +256,7 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
     }
 
     // Check user permissions
-    if (!current_user_can('edit_post')) {
+    if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
@@ -269,8 +270,8 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
     if (isset($_POST['embm_show_reviews'])) {
         update_post_meta($post_id, 'embm_show_reviews', esc_attr($_POST['embm_show_reviews']));
     }
-    if (isset($_POST['embm_review_count'])) {
-        update_post_meta($post_id, 'embm_review_count', esc_attr($_POST['embm_review_count']));
+    if (isset($_POST['embm_reviews_count'])) {
+        update_post_meta($post_id, 'embm_reviews_count', esc_attr($_POST['embm_reviews_count']));
     }
     if (isset($_POST['embm_untappd'])) {
         $beer_id = esc_attr($_POST['embm_untappd']);
@@ -282,8 +283,13 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
             update_post_meta($post_id, 'embm_untappd', $beer_id);
 
             // Get beer data from Untappd API
-            if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '') {
-                EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id);
+            if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
+                EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
+            }
+
+            // Remove beer data if the ID is unset
+            if ($beer_id == '') {
+                delete_post_meta($post_id, 'embm_untappd_data');
             }
         }
     }

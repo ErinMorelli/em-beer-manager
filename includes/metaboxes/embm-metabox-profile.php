@@ -125,12 +125,12 @@ function EMBM_Admin_Metabox_Profile_save($post_id)
     }
 
     // Validate nonce
-    if (!isset($_POST['embm_profile_save_nonce']) || !wp_verify_nonce($_POST['embm_profile_save_nonce'], 'embm_profile_save')) {
+    if (!isset($_POST['_embm_profile_save_nonce']) || !wp_verify_nonce($_POST['_embm_profile_save_nonce'], 'embm_profile_save')) {
         return;
     }
 
     // Check user permissions
-    if (!current_user_can('edit_post')) {
+    if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 

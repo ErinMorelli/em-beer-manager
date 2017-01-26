@@ -22,7 +22,6 @@
 // Set authorization url
 define('EMBM_UNTAPPD_AUTH_URL', 'https://wp.erinmorelli.com/embm/untappd');
 
-
 /**
  * Deauthorize user
  *
@@ -43,20 +42,28 @@ function EMBM_Admin_Authorize_deauthorize()
     // Remove individual beer Untappd data
     $wpdb->query(
         "
-        DELETE
-        FROM
+        UPDATE
             $wpdb->postmeta
+        SET
+            meta_value = NULL
+        WHERE
+            meta_key = 'embm_untappd_data'
+        "
+    );
+    $wpdb->query(
+        "
+        UPDATE
+            $wpdb->postmeta
+        SET
+            meta_value = '1'
         WHERE
             meta_key IN (
-                'embm_untappd_data',
                 'embm_show_rating',
-                'embm_show_reviews',
-                'embm_review_count'
+                'embm_show_reviews'
             )
         "
     );
 }
-
 
 /**
  * Retrieves a user's Untappd token
@@ -77,7 +84,6 @@ function EMBM_Admin_Authorize_token()
     return $token;
 }
 
-
 /**
  *
  */
@@ -96,14 +102,14 @@ function EMBM_Admin_Authorize_status()
         return;
     }
 
+    // Set API Root
+    $api_root = EMBM_UNTAPPD_API_URL.$token;
+
     // Get Untappd user info
-    $user = EMBM_Admin_Untappd_user(EMBM_UNTAPPD_API_URL.$token);
+    $user = EMBM_Admin_Untappd_user($api_root);
 
     // Get brewery status
     $is_brewery = ($user->account_type == 'brewery');
-
-    // Set API Root
-    $api_root = EMBM_UNTAPPD_API_URL.$token;
 
 ?>
     <div class="embm-settings--status">
@@ -122,7 +128,6 @@ function EMBM_Admin_Authorize_status()
     </div>
 <?php
 }
-
 
 // Handle token return
 if (isset($_GET['embm-untappd-token'])) {

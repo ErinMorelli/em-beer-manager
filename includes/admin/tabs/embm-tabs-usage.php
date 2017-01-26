@@ -34,7 +34,7 @@
 <h3 class="embm-settings--subhead"><?php _e('Template tag', 'embm'); ?></h3>
 
 <blockquote>
-    <code><?php echo htmlentities('<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
+    <code><?php echo htmlentities('<?php echo EMBM_Output_Shortcodes_Beer_display( $beer_id, $args ); ?>'); ?></code></p>
     <p>
         <?php
             printf(
@@ -48,9 +48,12 @@
     <p>
         <pre class="embm-settings--code">
 <?php echo htmlentities(
-    "<?php echo EMBM_Output_Beer_display( 123, array(\n".
-    "    'show_profile'  => false,\n".
-    "    'show_extras'   => true\n".
+    "<?php echo EMBM_Output_Shortcodes_Beer_display( 123, array(\n".
+    "    'show_profile'     => false,\n".
+    "    'show_extras'      => true,\n".
+    "    'show_rating'      => false,\n".
+    "    'show_checkins'    => true,\n".
+    "    'checkins_count'   => 10\n".
     ") ); ?>"
 ); ?>
         </pre>
@@ -81,7 +84,28 @@
             <td><code><strong>show_extras</strong></code></td>
             <td><code>true, false</code></td>
             <td><code>true</code></td>
-            <td><?php _e('Displays or hides the "More Beer Information" section', 'embm'); ?></td>
+            <td><?php _e('Displays or hides the "Extra Beer Information" section', 'embm'); ?></td>
+        </tr>
+        <tr>
+            <td><code><strong>show_rating</strong></code></td>
+            <td><code>true, false</code></td>
+            <td><code>true</code></td>
+            <td><?php _e('Displays or hides the Untappd beer rating', 'embm'); ?></td>
+        </tr>
+        <tr>
+            <td><code><strong>show_checkins</strong></code></td>
+            <td><code>true, false</code></td>
+            <td><code>true</code></td>
+            <td><?php _e('Displays or hides the Untappd check-ins section', 'embm'); ?></td>
+        </tr>
+        <tr>
+            <td><code><strong>checkins_count</strong></code></td>
+            <td><?php _e('A number', 'embm'); ?><br /> e.g. <code>10</code></td>
+            <td><code>5</code></td>
+            <td><?php printf(
+                __('The number of recent Untappd check-ins to display. Limit is %s.', 'embm'),
+                '<code>15</code>'
+            ); ?></td>
         </tr>
     </tbody>
 </table>
@@ -101,7 +125,7 @@
 <h3 class="embm-settings--subhead"><?php _e('Template tag', 'embm'); ?></h3>
 
 <blockquote>
-    <code><?php echo htmlentities('<?php echo EMBM_Output_List_display( $args ); ?>'); ?></code></p>
+    <code><?php echo htmlentities('<?php echo EEMBM_Output_Shortcodes_List_display( $args ); ?>'); ?></code></p>
     <p>
         <?php
             printf(
@@ -114,8 +138,9 @@
     <p>
         <pre class="embm-settings--code">
 <?php echo htmlentities(
-    "<?php echo EMBM_Output_List_display( array(\n".
+    "<?php echo EMBM_Output_Shortcodes_List_display( array(\n".
     "    'show_extras'       => false,\n".
+    "    'show_rating'       => true,\n".
     "    'beers_per_page'    => 3,\n".
     "    'orderby'           => 'name',\n".
     "    'order'             => 'ASC'\n".
@@ -149,7 +174,13 @@
             <td><code><strong>show_extras</strong></code></td>
             <td><code>true, false</code></td>
             <td><code>true</code></td>
-            <td><?php _e('Displays or hides the "More Beer Information" section for each listing', 'embm'); ?></td>
+            <td><?php _e('Displays or hides the "Extra Beer Information" section for each listing', 'embm'); ?></td>
+        </tr>
+        <tr>
+            <td><code><strong>show_rating</strong></code></td>
+            <td><code>true, false</code></td>
+            <td><code>true</code></td>
+            <td><?php _e('Displays or hides the Untappd beer rating', 'embm'); ?></td>
         </tr>
         <tr>
             <td><code><strong>style</strong></code></td>

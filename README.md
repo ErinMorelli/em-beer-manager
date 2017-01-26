@@ -47,8 +47,6 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * Display Untappd rates & reviews for beers
 
 
-*****
-
 
 ### Installation ###
 

@@ -19,15 +19,12 @@
  * @package EMBM\Admin\Settings
  */
 
-
 // Import additional admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-notices.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-authorize.php';
 
-
 // Set global admin page object
 global $embm_admin_page;
-
 
 /**
  * Add EMBM settings page to the WP menu
@@ -65,52 +62,84 @@ function EMBM_Admin_settings()
     // Register new settings options
     register_setting('embm_options', 'embm_options');
 
+    // Get Untappd logged in status
+    $logged_in = !is_null(EMBM_Admin_Authorize_token());
+
     // Untappd Settings
     add_settings_section('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_untappd', 'embm');
     add_settings_field('embm_untappd_integration', __('Site-wide Integration', 'embm'), 'EMBM_Admin_Settings_Untappd_integration', 'embm', 'embm_untappd_settings');
     add_settings_field('embm_untappd_icons', __('Icon Set', 'embm'), 'EMBM_Admin_Settings_Untappd_icons', 'embm', 'embm_untappd_settings');
-    add_settings_field('embm_untappd_rating_format', __('Rating Display Format', 'embm'), 'EMBM_Admin_Settings_Untappd_rating', 'embm', 'embm_untappd_settings');
-    add_settings_field('embm_untappd_rating_color', __('Rating Star Color', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_color', 'embm', 'embm_untappd_settings');
-    add_settings_field('embm_untappd_rating_opacity', __('Rating Star Empty Opacity', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_opacity', 'embm', 'embm_untappd_settings');
+    if ($logged_in) {
+        add_settings_field('embm_untappd_rating_format', __('Rating Display Format', 'embm'), 'EMBM_Admin_Settings_Untappd_rating', 'embm', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_rating_color', __('Rating Star Color', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_color', 'embm', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_rating_opacity', __('Rating Star Empty Opacity', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_opacity', 'embm', 'embm_untappd_settings');
+    } else {
+        add_settings_field('embm_untappd_logged_out', '', 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_untappd_settings');
+    }
 
     // Global settings
     add_settings_section('embm_global_settings', __('Global Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
     add_settings_field('embm_css_url', __('Custom Stylesheet (URL)', 'embm'), 'EMBM_Admin_Settings_Global_css', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
     add_settings_field('embm_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Global_display', 'embm', 'embm_global_settings');
-    add_settings_field('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Global_untappd', 'embm', 'embm_global_settings');
+    if ($logged_in) {
+        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Global_untappd', 'embm', 'embm_global_settings');
+    } else {
+        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_global_settings');
+    }
 
     // Group Tax Settings
     add_settings_section('embm_group_settings', __('Beer Group Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
     add_settings_field('embm_group_slug', __('Custom Taxonomy Slug', 'embm'), 'EMBM_Admin_Settings_Group_slug', 'embm', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
     add_settings_field('embm_group_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Group_display', 'embm', 'embm_group_settings');
-    add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Group_untappd', 'embm', 'embm_group_settings');
+    if ($logged_in) {
+        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Group_untappd', 'embm', 'embm_group_settings');
+    } else {
+        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_group_settings');
+    }
 
     // Style Tax Settings
     add_settings_section('embm_style_settings', __('Beer Style Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
     add_settings_field('embm_style_rest', __('Restore Styles', 'embm'), 'EMBM_Admin_Settings_Style_reset', 'embm', 'embm_style_settings');
     add_settings_field('embm_style_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Style_display', 'embm', 'embm_style_settings');
-    add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Style_untappd', 'embm', 'embm_style_settings');
+    if ($logged_in) {
+        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Style_untappd', 'embm', 'embm_style_settings');
+    } else {
+        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_style_settings');
+    }
 
     // Single Beer Settings
     add_settings_section('embm_single_settings', __('Single Beer Page Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
     add_settings_field('embm_comments_toggle', __('Comments', 'embm'), 'EMBM_Admin_Settings_Single_comments', 'embm', 'embm_single_settings');
     add_settings_field('embm_single_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Single_display', 'embm', 'embm_single_settings');
-    add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Single_untappd', 'embm', 'embm_single_settings');
-
+    if ($logged_in) {
+        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Single_untappd', 'embm', 'embm_single_settings');
+    } else {
+        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_single_settings');
+    }
 }
 
 // Load admin settings
 add_action('admin_init', 'EMBM_Admin_settings');
-
 
 /**
  * Output for Untappd admin settings section
  *
  * @return void
  */
-function EMBM_Admin_Settings_untappd()
+function EMBM_Admin_Settings_untappd($section)
 {
     EMBM_Admin_Authorize_status();
+    echo '<a name="' . $section['id'] . '"></a>';
+}
+
+/**
+ * Output for Untappd admin settings section
+ *
+ * @return void
+ */
+function EMBM_Admin_Settings_Untappd_login()
+{
+    echo '<p class="description">'.__('Log in to Untappd to access additional display options.', 'embm').'</p>';
 }
 
 /**
@@ -217,8 +246,9 @@ function EMBM_Admin_Settings_Untappd_icons()
  *
  * @return void
  */
-function EMBM_Admin_Settings_section()
+function EMBM_Admin_Settings_section($section)
 {
+    echo '<a name="' . $section['id'] . '"></a>';
 }
 
 
@@ -231,7 +261,7 @@ function EMBM_Admin_Settings_Global_css()
 {
     $options = get_option('embm_options');
 
-    
+
     echo '<p><input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" /></p>';
     echo '<p class="description">';
     echo __('Enter a full URL that points to a stylesheet file to override default EM Beer Manager styles.', 'embm');
@@ -266,7 +296,6 @@ function EMBM_Admin_Settings_Global_display()
     echo '<a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
 }
 
-
 /**
  * Outputs global Untappd display options
  *
@@ -283,28 +312,7 @@ function EMBM_Admin_Settings_Global_untappd()
 
     echo '<p><input name="embm_options[embm_rating_show]" type="checkbox" id="embm_rating_show" value="1"'.checked('1', $view_rating, false).' /> ';
     echo '<label for="embm_rating_show">'.__('Globally hide Untappd rating', 'embm').'</label>';
-
-    $view_reviews = null;
-    if (isset($options['embm_reviews_show'])) {
-        $view_reviews = $options['embm_reviews_show'];
-    }
-
-    echo '<p><input name="embm_options[embm_reviews_show]" type="checkbox" id="embm_reviews_show" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show">'.__('Globally hide Untappd checkins', 'embm').'</label>';
-
-    $reviews_count = 5;
-    if (isset($options['embm_reviews_count'])) {
-        $reviews_count = $options['embm_reviews_count'];
-    }
-
-    echo '<p class="embm-settings--review-count"><label for="embm_reviews_count">'.__('Show', 'embm');
-    echo '<input id="embm_reviews_count" name="embm_options[embm_reviews_count]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
-    echo '</label></p>';
-
-    echo '<p class="description">('.__('These settings may be overridden for individual beers.', 'embm').')</p>';
 }
-
 
 /**
  * Outputs custom group slug option
@@ -318,8 +326,9 @@ function EMBM_Admin_Settings_Group_slug()
     echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="';
     echo sanitize_key($options['embm_group_slug']);
     echo '" /></p><p class="description">';
+    echo __('Rename the beer group URLs with your own custom slug name.', 'embm') . '<br />';
     echo sprintf(
-        __('Rename the beer group URLs with your own custom slug name. You will need to %s after updating this setting.', 'embm'),
+        __('You must %s after changing this.', 'embm'),
         sprintf('<a href="options-permalink.php">%s</a>', __('refresh your permalinks', 'embm'))
     ).'</p><p class="timezone-info">';
     echo __('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
@@ -367,26 +376,6 @@ function EMBM_Admin_Settings_Group_untappd()
 
     echo '<p><input name="embm_options[embm_rating_show_group]" type="checkbox" id="embm_rating_show_group" value="1"'.checked('1', $view_rating, false).' /> ';
     echo '<label for="embm_rating_show_group">'.__('Hide Untappd rating in groups', 'embm').'</label>';
-
-    $view_reviews = null;
-    if (isset($options['embm_reviews_show_group'])) {
-        $view_reviews = $options['embm_reviews_show_group'];
-    }
-
-    echo '<p><input name="embm_options[embm_reviews_show_group]" type="checkbox" id="embm_reviews_show_group" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_group">'.__('Hide Untappd checkins in groups', 'embm').'</label>';
-
-    $reviews_count = 5;
-    if (isset($options['embm_reviews_count_group'])) {
-        $reviews_count = $options['embm_reviews_count_group'];
-    }
-
-    echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_group">'.__('Show', 'embm');
-    echo '<input id="embm_reviews_count_group" name="embm_options[embm_reviews_count_group]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
-    echo '</label></p>';
-
-    echo '<p class="description">('.__('These settings may be overridden for individual beers.', 'embm').')</p>';
 }
 
 /**
@@ -474,26 +463,6 @@ function EMBM_Admin_Settings_Style_untappd()
 
     echo '<p><input name="embm_options[embm_rating_show_style]" type="checkbox" id="embm_rating_show_style" value="1"'.checked('1', $view_rating, false).' /> ';
     echo '<label for="embm_rating_show_style">'.__('Hide Untappd rating on styles pages', 'embm').'</label>';
-
-    $view_reviews = null;
-    if (isset($options['embm_reviews_show_style'])) {
-        $view_reviews = $options['embm_reviews_show_style'];
-    }
-
-    echo '<p><input name="embm_options[embm_reviews_show_style]" type="checkbox" id="embm_reviews_show_style" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_style">'.__('Hide Untappd checkins on styles pages', 'embm').'</label>';
-
-    $reviews_count = 5;
-    if (isset($options['embm_reviews_count_style'])) {
-        $reviews_count = $options['embm_reviews_count_style'];
-    }
-
-    echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_style">'.__('Show', 'embm');
-    echo '<input id="embm_reviews_count_style" name="embm_options[embm_reviews_count_style]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
-    echo '</label></p>';
-
-    echo '<p class="description">('.__('These settings may be overridden for individual beers.', 'embm').')</p>';
 }
 
 /**
@@ -574,7 +543,7 @@ function EMBM_Admin_Settings_Single_untappd()
     echo sprintf(__('checkins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 
-    echo '<p class="description">('.__('These settings may be overridden for individual beers.', 'embm').')</p>';
+    echo '<p class="description">('.__('This setting may be overridden for individual beers.', 'embm').')</p>';
 }
 
 /**
@@ -584,6 +553,10 @@ function EMBM_Admin_Settings_Single_untappd()
  */
 function EMBM_Admin_Settings_page()
 {
+    // Get settings page sections
+    global $wp_settings_sections;
+    $sections = $wp_settings_sections['embm'];
+
     // Check user permissions
     if (!current_user_can('manage_options')) {
         wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
@@ -608,6 +581,20 @@ function EMBM_Admin_Settings_page()
         </ul>
 
         <div id="settings" class="embm-settings--tab-settings">
+            <div class="embm-settings--navbox">
+                <span
+                    class="dashicons dashicons-arrow-right-alt2"
+                    title="<?php _e('Collpase/Expand Panel', 'embm'); ?>"
+                    id="embm-settings--navbox-toggle">
+                </span>
+                <ul>
+                    <li><strong>Jump to:</strong></li>
+                    <li><a href="#top"><?php _e('Top', 'embm'); ?></a></li>
+                    <?php foreach ($sections as $section): ?>
+                        <li><a href="#<?php echo $section['id']; ?>"><?php echo $section['title']; ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
             <form method="post" action="options.php" class="embm-settings--form">
                 <?php
                     settings_fields('embm_options');

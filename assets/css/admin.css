@@ -80,6 +80,33 @@
     color: #000;
     margin-bottom: -1px;
 }
+.embm-settings--page .embm-settings--tab-settings {
+    position: relative;
+}
+.embm-settings--page .embm-settings--tab-settings .embm-settings--navbox {
+    position: fixed;
+    top: 132px;
+    right: 0;
+    background: #e5e5e5;
+    padding: 8px 20px 10px 25px;
+    border: 1px solid #ccc;
+}
+.embm-settings--page .embm-settings--tab-settings .embm-settings--navbox .dashicons {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    height: 100%;
+}
+.embm-settings--page .embm-settings--tab-settings .embm-settings--navbox .dashicons::before {
+    position: relative;
+    top: 50%;
+}
+.embm-settings--page .embm-settings--tab-settings .embm-settings--navbox a {
+    color: #555;
+}
 .embm-settings--page .embm-settings--table tbody td {
     height: 40px;
 }
@@ -164,6 +191,11 @@
 .embm-settings--spinner {
     float: none;
     margin-top: 0;
+}
+@media screen and (max-width: 782px) {
+    .embm-settings--page .embm-settings--untappd-icon {
+        margin: 5px 0 10px;
+    }
 }
 
 
@@ -258,7 +290,11 @@
 
 /* Untappd */
 .embm-metabox--untappd-empty {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
     margin-top: 40px;
+
 }
 .embm-metabox--untappd-id {
     width: 100%;

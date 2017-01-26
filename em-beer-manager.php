@@ -32,7 +32,6 @@
  * @package EMBM\Plugin
  */
 
-
 // Define plugin file paths
 define('EMBM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EMBM_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -40,7 +39,6 @@ define('EMBM_PLUGIN_URL', plugin_dir_url(__FILE__));
 if (!defined('PLUGINDIR')) {
     define('PLUGINDIR', 'wp-content/plugins');
 }
-
 
 /**
  * Loads EMBM plugin files
@@ -103,7 +101,6 @@ function EMBM_Plugin_load()
 // Initial plugin load
 add_action('plugins_loaded', 'EMBM_Plugin_load', 10);
 
-
 /**
  * Plugin activation setup
  *
@@ -120,9 +117,6 @@ function EMBM_Plugin_activate()
         'embm_untappd_rating_opacity'   => '25',
         'embm_css_url'                  => '',
         'embm_group_slug'               => 'group',
-        'embm_reviews_count'            => '5',
-        'embm_reviews_count_group'      => '5',
-        'embm_reviews_count_style'      => '5',
         'embm_reviews_count_single'     => '5'
     );
     update_option('embm_options', $defaults);
@@ -144,7 +138,6 @@ function EMBM_Plugin_activate()
 // Set activation hook
 register_activation_hook(__FILE__, 'EMBM_Plugin_activate');
 
-
 /**
  * Plugin deactivation setup
  *
@@ -158,7 +151,6 @@ function EMBM_Plugin_deactivate()
 
 // Set deactivation hook
 register_deactivation_hook(__FILE__, 'EMBM_Plugin_deactivate');
-
 
 /**
  * Plugin uninstallation setup
@@ -261,7 +253,6 @@ function EMBM_Plugin_uninstall()
 // Set uninstall hook
 register_uninstall_hook(__FILE__, 'EMBM_Plugin_uninstall');
 
-
 /**
  * Add plugin listing action link
  *
@@ -282,7 +273,6 @@ function EMBM_Plugin_links($links)
 
 // Set plugin links filter
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'EMBM_Plugin_links');
-
 
 /**
  * Load plugin output CSS stylesheet
@@ -325,7 +315,6 @@ function EMBM_Plugin_styles()
 // Enqueue plugin styles
 add_action('wp_enqueue_scripts', 'EMBM_Plugin_styles');
 
-
 /**
  * Returns array of default plugin contextual help
  *
@@ -338,16 +327,20 @@ function EMBM_Plugin_help()
             'id'        => 'embm-untappd-integration',
             'title'     => __('Untappd Integration', 'embm'),
             'content'   => '<p>'.
-                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including per-beer check-in buttons and the Recent Check-Ins widget.', 'embm').
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-Ins widget, ratings, check-ins, and check-in buttons.', 'embm').
                 '</p><p>'.
-                __('You can disable the Untappd check-in button for an individual beer by simply leaving the setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page', 'embm').
+                __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm').
+                '</p><p>'.
+                __('You can display Untappd beer ratings and recent check-ins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Check-ins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many check-ins to show.', 'embm').
+                '</p></p>'.
+                __('Data from Untappd for ratings and check-ins is refreshed every 3 hours, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', 'embm').
                 '</p>'
         ),
         'untappd_id'    => array(
             'id'        => 'embm-untappd-beer-id',
             'title'     => __('Untappd Beer ID', 'embm'),
             'content'   => '<p>'.
-                __('Find your Untappd beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
+                __('Find your Untappd Beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
                 ':</p><p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p><p>'.
                 __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
                 '</p>'

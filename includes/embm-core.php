@@ -19,7 +19,6 @@
  * @package EMBM\Core
  */
 
-
 /**
  * Loads the custom EMBM post type
  *
@@ -85,7 +84,6 @@ add_action('init', 'EMBM_Core_beer');
 // Add thumbnail support to custom post type
 add_theme_support('post-thumbnails', array('embm_beer'));
 
-
 /**
  * Add custom metaboxes to post type
  *
@@ -107,7 +105,6 @@ function EMBM_Core_Beer_metaboxes()
         }
     }
 }
-
 
 /**
  * Determine comment open/closed status
@@ -136,7 +133,6 @@ function EMBM_Core_Comments_status($open, $post_id)
     return $open;
 }
 
-
 /**
  * Set comments template
  *
@@ -158,7 +154,6 @@ function EMBM_Core_Comments_template()
         return EMBM_PLUGIN_DIR.'includes/templates/embm-template-comments.php';
     }
 }
-
 
 /**
  * Toggles comments as enabled/disabled
@@ -194,7 +189,6 @@ function EMBM_Core_Comments_toggle()
 }
 
 add_action('init', 'EMBM_Core_Comments_toggle');
-
 
 /**
  * Add custom contextual help
@@ -237,7 +231,6 @@ add_action('load-post.php', 'EMBM_Core_Meta_help');
 add_action('load-post-new.php', 'EMBM_Core_Meta_help');
 add_action('load-edit.php', 'EMBM_Core_Meta_help');
 
-
 /**
  * Retrieves and formats beer custom post meta data
  *
@@ -265,16 +258,21 @@ function EMBM_Core_Beer_attr($post_id, $attr)
     case 'untappd':
         return 'https://untappd.com/beer/' . $b_attr;
     case 'untappd_data':
-        if ($b_attr && array_key_exists('beer', $b_attr)) {
-            return $b_attr['beer'];
-        } else {
+        $token = EMBM_Admin_Authorize_token();
+        $beer_id = get_post_meta($post_id, 'embm_untappd', true);
+        if (null == $token || $beer_id == '') {
             return null;
         }
+        $api_root = EMBM_UNTAPPD_API_URL.$token;
+        $beer_data = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
+        if (array_key_exists('beer', $beer_data)) {
+            return $beer_data['beer'];
+        }
+        return null;
     default:
         return $b_attr;
     }
 }
-
 
 /**
  * Get an array of ratings format options
@@ -306,7 +304,6 @@ function EMBM_Core_Beer_ratings()
     );
 }
 
-
 /**
  * Retrieves beer style name
  *
@@ -324,7 +321,6 @@ function EMBM_Core_Beer_style($post_id)
         return $type->name;
     }
 }
-
 
 /**
  * Loads the custom EMBM styles taxonomy
@@ -378,7 +374,6 @@ function EMBM_Core_styles()
 // Loads the custom Styles taxonomy
 add_action('init', 'EMBM_Core_styles', 0);
 
-
 /**
  * Populates the styles taxonomy with terms from Beer Advocate
  *
@@ -407,7 +402,6 @@ function EMBM_Core_Styles_populate()
     // Store the fact that styles were loaded
     update_option('embm_styles_loaded', true);
 }
-
 
 /**
  * Loads the custom EMBM group taxonomy
@@ -466,7 +460,6 @@ function EMBM_Core_group()
 // Loads the custom Group taxonomy
 add_action('init', 'EMBM_Core_group', 0);
 
-
 /**
  * Register custom beer fields with WP API
  *
@@ -504,7 +497,6 @@ function EMBM_Core_Beer_api()
 
 // Load additional WP API fields
 add_action('rest_api_init', 'EMBM_Core_Beer_api');
-
 
 /**
  * Handle GET requests for additional beer fields
@@ -580,7 +572,6 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
         return $untappd_array;
     }
 }
-
 
 /**
  * Handle PUT/POST requests for additional beer fields

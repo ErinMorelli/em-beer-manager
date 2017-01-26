@@ -19,11 +19,9 @@
  * @package EMBM\Output
  */
 
-
 // Load other modules
 require EMBM_PLUGIN_DIR.'includes/output/embm-output-shortcodes.php';
 require EMBM_PLUGIN_DIR.'includes/output/embm-output-filters.php';
-
 
 /**
  * Generate HTML output for a single beer entry
@@ -105,17 +103,28 @@ function EMBM_Output_beer($beer_id, $options)
         $output .= '</a>';
     }
 
+    // Show rating
+    if (isset($options['rating']) && $options['rating']) {
+        $rating = EMBM_Output_rating($beer_id);
+        if ($rating != null) {
+            $output .= $rating;
+        }
+    }
+
     // End beer description
     $output .= EMBM_Output_untappd($beer_id);
     $output .= '</div>'."\n";
 
     // Beer meta
-    if ($options['profile'] || $options['extras']) {
+    if (
+        (isset($options['profile']) && $options['profile']) ||
+        (isset($options['extras']) && $options['extras'])
+    ){
         // Begin beer meta output
         $output .= '<div class="embm-beer--meta">'."\n";
 
         // Display beer profile
-        if ($options['profile']) {
+        if (isset($options['profile']) && $options['profile']) {
             $profile = EMBM_Output_profile($beer_id);
             if ($profile != null) {
                 $output .= $profile;
@@ -123,7 +132,7 @@ function EMBM_Output_beer($beer_id, $options)
         }
 
         // Display beer extras
-        if ($options['extras']) {
+        if (isset($options['extras']) && $options['extras']) {
             $extras = EMBM_Output_extras($beer_id);
             if ($extras != null) {
                 $output .= $extras;
@@ -134,6 +143,14 @@ function EMBM_Output_beer($beer_id, $options)
         $output .= '</div>'."\n";
     } else {
         $output .= '<div class="embm-beer--clear"></div>'."\n";
+    }
+
+    // Display reviews
+    if (isset($options['reviews']) && $options['reviews']) {
+        $reviews = EMBM_Output_reviews($beer_id, $options['reviews_count']);
+        if ($reviews != null) {
+            $output .= $reviews;
+        }
     }
 
     // End single beer
@@ -153,6 +170,7 @@ function EMBM_Output_beer($beer_id, $options)
 function EMBM_Output_untappd($beer_id)
 {
     $options = get_option('embm_options');
+    $output = '';
 
     // Retrieve Untappd settings
     $use_untappd = null;
@@ -168,6 +186,11 @@ function EMBM_Output_untappd($beer_id)
     // Get raw Untappd value from DB
     $untap = get_post_meta($beer_id, 'embm_untappd', true);
 
+    // Bail if we don't have an ID
+    if (!$untap || $untap == '') {
+        return null;
+    }
+
     // Set up translatable title text
     $untap_title = __('Check in on Untappd', 'embm');
 
@@ -178,12 +201,10 @@ function EMBM_Output_untappd($beer_id)
     $untap_img = EMBM_PLUGIN_URL.'assets/img/checkin-button-'.$untap_icon.'.png';
 
     // If an Untappd value is set for this beer, display the link
-    if ($untap != '') {
-        $output = '<div class="embm-beer--untappd">';
-        $output .= '<a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="'.$untap_title.'">';
-        $output .= '<img src="'.$untap_img.'" alt="'.$untap_title.'" border="0" />';
-        $output .= '</a></div>';
-    }
+    $output = '<div class="embm-beer--untappd">';
+    $output .= '<a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="'.$untap_title.'">';
+    $output .= '<img src="'.$untap_img.'" alt="'.$untap_title.'" border="0" />';
+    $output .= '</a></div>';
 
     // Return HTML content
     return $output;
@@ -357,6 +378,18 @@ function EMBM_Output_rating($beer_id)
 
     // Get rating data
     $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
+
+    // Bail if we don't have any data
+    if (!$untappd_data || $untappd_data == '') {
+        return null;
+    }
+
+    // Make sure the data is well-formatted
+    if (!property_exists($untappd_data, 'rating_score') || !property_exists($untappd_data, 'rating_count')) {
+        return null;
+    }
+
+    // Set score and count
     $rating_score = $untappd_data->rating_score;
     $rating_count = number_format($untappd_data->rating_count);
 
@@ -453,12 +486,12 @@ function EMBM_Output_Rating_styles()
 /**
  * Generate reviews HTML for a given beer
  *
- * @param int $beer_id      WP post ID for beer entry
- * @param int $review_count Number of reviews to show (default: null)
+ * @param int $beer_id       WP post ID for beer entry
+ * @param int $reviews_count Number of reviews to show (default: null)
  *
  * @return string/html
  */
-function EMBM_Output_reviews($beer_id, $review_count = null)
+function EMBM_Output_reviews($beer_id, $reviews_count = null)
 {
     $options = get_option('embm_options');
 
@@ -475,32 +508,77 @@ function EMBM_Output_reviews($beer_id, $review_count = null)
 
     // Get review data
     $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
-    $review_data = property_exists($untappd_data, 'checkins') ? $untappd_data->checkins : null;
-    $reviews = null;
+    $untappd_url = EMBM_Core_Beer_attr($beer_id, 'untappd');
 
-    // Get review items
-    if (!is_null($review_data) && property_exists($review_data, 'items')) {
-        $reviews = $review_data->items;
-    }
-
-    // Bail if we don't have any reviews
-    if (is_null($reviews)) {
+    // Bail if we don't have any data
+    if (!$untappd_data || $untappd_data == '') {
         return null;
     }
 
-    // Get review global review count, if-needed
-    if (is_null($review_count)) {
-        $review_count = $options['embm_reviews_count'];
+    // Make sure the data is well-formatted
+    if (!property_exists($untappd_data, 'checkins')) {
+        return null;
+    }
+
+    // Set review data
+    $review_data = $untappd_data->checkins;
+    $reviews = null;
+
+    // Bail if we don't have any reviews
+    if (is_null($review_data) && !property_exists($review_data, 'items')) {
+        return null;
+    }
+
+    // Get review items
+    $reviews = $review_data->items;
+
+    // Get review count
+    if (is_null($reviews_count)) {
+        $reviews_count = $options['embm_reviews_count_single'];
+        $local_count = EMBM_Core_Beer_attr($beer_id, 'reviews_count');
+        if ($local_count !== $reviews_count) {
+            $reviews_count = $local_count;
+        }
     }
 
     // Start reviews output
     $output = '<div class="embm-beer--reviews">'."\n";
-    $output .= '<h3 class="embm-beer--reviews-title">'.__('Recent Checkins', 'embm').'</h3>'."\n";
+    $output .= '<h4 class="embm-beer--reviews-title">'.__('Recent Check-ins', 'embm').'</h4>'."\n";
 
-    // Iterate over reviews
-    foreach (range(0, ($review_count-1)) as $ix) {
-        $output .= EMBM_Output_Review_content($reviews[$ix]);
+    // Check that we have reviews
+    if (count($reviews) > 0) {
+        // Iterate over reviews
+        foreach (range(0, ($reviews_count-1)) as $ix) {
+            if (array_key_exists($ix, $reviews)) {
+                $output .= EMBM_Output_Review_content($reviews[$ix]);
+            }
+        }
+    } else {
+        // Friendly text for when there are no reviews
+        $output .= '<p class="embm-beer--reviews-empty">';
+        $output .= __('This beer has no checkins.', 'embm');
+        $output .= '</p>';
     }
+
+    // Add footer
+    $output .= '<div class="embm-beer--reviews-footer">';
+
+    // Add 'more' link
+    if (count($reviews) > 0) {
+        $more_text = __('View More', 'embm');
+        $output .= '<div class="embm-beer--reviews-more">';
+        $output .= '<a href="'.$untappd_url.'" target="_blank" title="' . $more_text . '">';
+        $output .= '<span>' . $more_text . '</span>';
+        $output .= '<span class="dashicons dashicons-arrow-right-alt"></span>';
+        $output .= '</a></div>';
+    }
+
+    // Add Untappd credit
+    $credit_text = __('Powered by Untappd', 'embm');
+    $output .= '<div class="embm-beer--reviews-credit">';
+    $output .= '<a href="https://untappd.com" target="_blank" rel="nofollow" title="' . $credit_text . '">';
+    $output .= '<img src="' . EMBM_PLUGIN_URL .'/assets/img/ut-credit.png" alt="' . $credit_text . '" border="0" />';
+    $output .= '</a></div></div>';
 
     // Get star styles
     $styles = EMBM_Output_Rating_styles();
@@ -586,8 +664,9 @@ function EMBM_Output_Review_content($review)
     $output .= '<span class="embm-beer--review-date">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
     $output .= date('j M y', $datestamp).'</a></span>';
-    $output .= '<span class="embm-beer--review-source">';
-    $output .= '<a href="'.$source->app_website.'" target="_blank">'.$source->app_name.'</a>';
+    $output .= '<span class="embm-beer--review-link">';
+    $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
+    $output .= __('View Full Check-in', 'embm').'</a>';
     $output .= '</span></div>';
 
     // End main content
