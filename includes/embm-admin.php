@@ -280,11 +280,10 @@ function EMBM_Admin_help()
     // Get default help data
     $default_help = EMBM_Plugin_help();
 
-    // Untappd Integration help tab
+    // Add Untappd tabs
     $screen->add_help_tab($default_help['untappd']);
-
-    // Untappd Beer ID help
     $screen->add_help_tab($default_help['untappd_id']);
+    $screen->add_help_tab($default_help['untappd_limit']);
 
     // Settings FAQ help tab
     $screen->add_help_tab(

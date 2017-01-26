@@ -29,7 +29,8 @@ $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
     'beer_list'     => 'embm_untappd_beer_list',
     'brewery'       => 'embm_untappd_brewery_info',
     'checkins'      => 'embm_untappd_brewery_checkins',
-    'user'          => 'embm_untappd_user_info'
+    'user'          => 'embm_untappd_user_info',
+    'save_errors'   => 'embm_untappd_save_errors'
 );
 
 /**
@@ -42,6 +43,13 @@ $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
  */
 function EMBM_Admin_Untappd_request($request_url, $decode = true)
 {
+    // Set up response object
+    $response = array(
+        'success'   => false,
+        'limit'     => false,
+        'data'      => null
+    );
+
     // Force PHP to throw an exception on warnings
     set_error_handler(
         function ($errno, $errstr, $errfile, $errline, array $errcontext) {
@@ -50,24 +58,78 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
     );
 
     try {
-        // Make GET request to API
         error_log($request_url);
-        $response = file_get_contents($request_url);
+        // Make GET request to API
+        $data = file_get_contents($request_url);
+
+        // Set response
+        $response['success'] = true;
+        $response['data'] = $decode ? json_decode($data) : $data;
     } catch (Exception $e) {
-        // Return to EMBM settings page to show error & exit
-        wp_redirect(get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, '')));
-        exit;
-    }
+        // Get headers
+        $headers = EMBM_Admin_Untappd_Request_headers($http_response_header);
 
-    // Reset error handler
-    restore_error_handler();
+        // Set up response
+        $response['data'] = $headers;
 
-    // Return response
-    if ($decode) {
-        return json_decode($response);
-    } else {
+        // Check for rate-limit
+        if (isset($headers['X-Ratelimit-Remaining']) && $headers['X-Ratelimit-Remaining'] <= 1) {
+            $response['limit'] = true;
+        }
+    } finally {
+        // Reset error handler
+        restore_error_handler();
+
+        // Return result
         return $response;
     }
+}
+
+/**
+ * Parses response header in to a formatted array
+ *
+ * @param array $headers Raw response header object
+ *
+ * @return array Formatted header values
+ */
+function EMBM_Admin_Untappd_Request_headers($headers)
+{
+    $head = array();
+    foreach ($headers as $k => $v) {
+        $t = explode(':', $v, 2);
+        if (isset($t[1])) {
+            $head[trim($t[0])] = trim($t[1]);
+        } else {
+            $head[] = $v;
+            if (preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out)) {
+                $head['reponse_code'] = intval($out[1]);
+            }
+        }
+    }
+    return $head;
+}
+
+/**
+ * Returns a ratelimit reached response
+ *
+ * @return string Rate limit error message
+ */
+function EMBM_Admin_Untappd_ratelimit()
+{
+    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', 'embm');
+}
+
+/**
+ * Retreives transient cache time remaining
+ *
+ * @param string $cache_name Name of cache object
+ *
+ * @return string Timestamp of remaining time
+ */
+function EMBM_Admin_Untappd_timeout($cache_name)
+{
+    $transient = '_transient_timeout_' . $cache_name;
+    return get_option($transient);
 }
 
 /**
@@ -88,10 +150,15 @@ function EMBM_Admin_Untappd_id($untappd_url)
         $rss_regex = '/<p class="rss"><a href="\/rss\/brewery\/(\d+)">/';
 
         // Get brewery page contents
-        $brewery_page = EMBM_Admin_Untappd_request($untappd_url, false);
+        $res = EMBM_Admin_Untappd_request($untappd_url, false);
+
+        // Handle any errors
+        if (!$res['success']) {
+            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+        }
 
         // Look for ID
-        preg_match($rss_regex, $brewery_page, $matches);
+        preg_match($rss_regex, $res['data'], $matches);
 
         // Store ID
         $brewery_id = $matches[1];
@@ -112,14 +179,20 @@ function EMBM_Admin_Untappd_user($api_root)
 {
     // Attempt to retrieve user info from cache
     $user = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user']);
+    $user_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['user']);
 
     // Get user info if it's not cached
     if (false === $user) {
         $user_info_url = sprintf($api_root, 'user/info');
-        $user_res = EMBM_Admin_Untappd_request($user_info_url);
-        $user = $user_res->response->user;
+        $res = EMBM_Admin_Untappd_request($user_info_url);
+
+        // Handle any errors
+        if (!$res['success']) {
+            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+        }
 
         // Store for 24 hours (as per TOS)
+        $user = $res['data']->response->user;
         set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user'], $user, DAY_IN_SECONDS);
     }
 
@@ -138,14 +211,20 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
 {
     // Attempt to retrieve brewery info from cache
     $brewery = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery']);
+    $brewery_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery']);
 
     // Get brewery info if it's not cached
     if (false === $brewery) {
         $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
-        $brewery_res = EMBM_Admin_Untappd_request($brewery_url);
-        $brewery = $brewery_res->response->brewery;
+        $res = EMBM_Admin_Untappd_request($brewery_url);
+
+        // Handle any errors
+        if (!$res['success']) {
+            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+        }
 
         // Store for 24 hours (as per TOS)
+        $brewery = $res['data']->response->brewery;
         set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery'], $brewery, DAY_IN_SECONDS);
     }
 
@@ -167,15 +246,21 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 
     // Attempt to retrieve brewery checkins from cache
     $checkins = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
+    $checkins_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
 
     // Get brewery checkins if it's not cached
     if (false === $checkins) {
         $checkins_url = sprintf($api_root, 'brewery/checkins/'.$brewery_id);
-        $checkins_res = EMBM_Admin_Untappd_request($checkins_url);
-        $checkins = $checkins_res->response->checkins;
+        $res = EMBM_Admin_Untappd_request($checkins_url);
 
-        // Store for 15 mins
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, $cache_time);
+        // Handle any errors
+        if (!$res['success']) {
+            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+        }
+
+        // Store for 24 hours (as per TOS)
+        $checkins = $res['data']->response->checkins;
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, DAY_IN_SECONDS);
     }
 
     return $checkins;
@@ -193,6 +278,7 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 {
     // Attempt to retrieve beer list from cache
     $beer_list = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list']);
+    $beer_list_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list']);
 
     // Get beer list if it's not cached
     if (false === $beer_list) {
@@ -203,9 +289,14 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 
         while (count($beer_list) < $beer_count) {
             $beers_url = sprintf($beers_root, $beer_offset);
-            $beers_res = EMBM_Admin_Untappd_request($beers_url);
-            $beers = $beers_res->response->beers;
+            $res = EMBM_Admin_Untappd_request($beers_url);
 
+            // Handle any errors
+            if (!$res['success']) {
+                return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            }
+
+            $beers = $res['data']->response->beers;
             $beer_list = array_merge($beer_list, $beers->items);
             $beer_offset += $beers->count;
         }
@@ -263,17 +354,22 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
 
     // Get fresh beer data from API
     if ($refresh) {
-        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
+        $beer_res = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
+
+        // If there was a problem, return the cached data
+        if (is_null($beer_res) || !property_exists($beer_res, 'bid')) {
+            return $beer;
+        }
 
         // Remove unneeded data
-        unset($beer->similar);
-        unset($beer->friends);
-        unset($beer->media);
-        unset($beer->vintages);
+        unset($beer_res->similar);
+        unset($beer_res->friends);
+        unset($beer_res->media);
+        unset($beer_res->vintages);
 
         // Set up data for storage
         $beer_data = array(
-            'beer'      => $beer,
+            'beer'      => $beer_res,
             'cached'    => $now
         );
 
@@ -295,10 +391,14 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
 function EMBM_Admin_Untappd_Beer_get($api_root, $beer_id)
 {
     $beer_url = sprintf($api_root, 'beer/info/'.$beer_id);
-    $beer_res = EMBM_Admin_Untappd_request($beer_url);
-    $beer = $beer_res->response->beer;
+    $res = EMBM_Admin_Untappd_request($beer_url);
 
-    return $beer;
+    // Handle any errors
+    if (!$res['success']) {
+        return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+    }
+
+    return $res['data']->response->beer;
 }
 
 /**

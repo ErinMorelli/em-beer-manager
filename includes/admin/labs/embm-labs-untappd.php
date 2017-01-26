@@ -39,7 +39,7 @@ function EMBM_Admin_Labs_Import_error()
 
 
 // Show status
-EMBM_Admin_Authorize_status();
+$shown = EMBM_Admin_Authorize_status();
 
 // Get token
 $token = EMBM_Admin_Authorize_token();
@@ -54,6 +54,14 @@ $api_root = EMBM_UNTAPPD_API_URL.$token;
 
 // Get Untappd user info
 $user = EMBM_Admin_Untappd_user($api_root);
+
+// Check for error
+if (is_null($user) || is_string($user)) {
+    if ($shown) {
+        EMBM_Admin_Notices_ratelimit($user);
+    }
+    return;
+}
 
 // Check for brewery account
 if ($user->account_type != 'brewery') {

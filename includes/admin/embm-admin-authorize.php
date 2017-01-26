@@ -108,8 +108,13 @@ function EMBM_Admin_Authorize_status()
     // Get Untappd user info
     $user = EMBM_Admin_Untappd_user($api_root);
 
-    // Get brewery status
-    $is_brewery = ($user->account_type == 'brewery');
+    // Check for error
+    if (is_null($user) || is_string($user)) {
+        EMBM_Admin_Notices_ratelimit($user);
+        return false;
+    } else {
+        // Get brewery status
+        $is_brewery = ($user->account_type == 'brewery');
 
 ?>
     <div class="embm-settings--status">
@@ -127,6 +132,8 @@ function EMBM_Admin_Authorize_status()
         </p>
     </div>
 <?php
+        return true;
+    }
 }
 
 // Handle token return

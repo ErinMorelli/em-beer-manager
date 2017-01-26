@@ -213,11 +213,10 @@ function EMBM_Core_Meta_help()
     // Get default help data
     $default_help = EMBM_Plugin_help();
 
-    // Untappd Integration help tab
+    // Add Untappd tabs
     $screen->add_help_tab($default_help['untappd']);
-
-    // Untappd Beer ID help
     $screen->add_help_tab($default_help['untappd_id']);
+    $screen->add_help_tab($default_help['untappd_limit']);
 
     // Help sidebar
     $screen->set_help_sidebar(
@@ -264,9 +263,11 @@ function EMBM_Core_Beer_attr($post_id, $attr)
             return null;
         }
         $api_root = EMBM_UNTAPPD_API_URL.$token;
-        $beer_data = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
-        if (array_key_exists('beer', $beer_data)) {
-            return $beer_data['beer'];
+        $res = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
+        if (!is_null($res) && array_key_exists('beer', $res)) {
+            return $res['beer'];
+        } else if (is_string($res)) {
+            return $res;
         }
         return null;
     default:

@@ -345,6 +345,21 @@ function EMBM_Plugin_help()
                 __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
                 '</p>'
         ),
+        'untappd_limit' => array (
+            'id'        => 'embm-untappd-api-ratelimit',
+            'title'     => __('API Rate-Limit', 'embm'),
+            'content'   => '<p>'.sprintf(
+                    __('From the %s', 'embm').':',
+                    sprintf(
+                        '<a href="https://untappd.com/api/docs" target="_blank">%s</a>',
+                        __('Untappd API documentation', 'embm')
+                    )
+                ).'</p><p><blockquote><em>"'.
+                __('All API applications are rate-limited to protect aganist abuse and keep the platform healthly. The default limit for API access is 100 calls per hour per key.', 'embm').'"</em></blockquote></p><p>'.
+                __('If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.', 'embm').'</p><p>'.
+                __('In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.', 'embm').
+                '</p>'
+        ),
         'sidebar'       => '<p><strong>' . __('For more information', 'embm') . ':</strong></p>' .
             '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
             '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'

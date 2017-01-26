@@ -53,6 +53,9 @@
 .widefat .column-untappd {
     width: 80px;
 }
+.rl-warning {
+    max-width: 700px;
+}
 
 
 /**

@@ -44,7 +44,7 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '1' => array(
             'type'      => 'error',
             'title'     => __('ERROR', 'embm') . ':',
-            'message'   => __('There was a problem! You may have reached your API token\'s rate limit for the hour. Try again later.', 'embm')
+            'message'   => __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
         ),
         '2' => array(
             'type'      => 'error',
@@ -59,7 +59,15 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '4' => array(
             'type'      => 'error',
             'title'     => __('ERROR', 'embm') . ':',
-            'message'   => __('There was a problem during the import! Try again later.', 'embm')
+            'message'   => __('There was a problem during the import! Please try again later.', 'embm')
+        ),
+    ),
+    'save-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => __('ERROR', 'embm') . ':',
+            'message'   => __('There was a problem saving your beer\'s Untappd data!', 'embm').' '.
+                __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
         )
     )
 );
@@ -102,4 +110,17 @@ function EMBM_Admin_Notices_show()
         </div>
     <?php
     endforeach;
+}
+
+
+function EMBM_Admin_Notices_ratelimit($msg)
+{
+    // Set fallback message
+    if (is_null($msg)) {
+        $msg = __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm');
+    }
+
+    // Display notice
+    echo '<div class="notice notice-warning inline rl-warning"><p>' . $msg;
+    echo '<a data-help="embm-untappd-api-ratelimit" class="embm-settings--help">?</a></p></div>';
 }

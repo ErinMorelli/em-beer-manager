@@ -70,38 +70,45 @@ function EMBM_Admin_Metabox_Untappd_content()
     $is_brewery = false;
     $api_root = '';
     $beer_found = false;
+    $show_api_error = (is_null($untappd_data) || is_string($untappd_data));
 
     // Get token
     $token = EMBM_Admin_Authorize_token();
 
     // Make sure we're authorized
-    if (null !== $token) {
+    if (null !== $token && !$show_api_error) {
         // Set API Root
         $api_root = EMBM_UNTAPPD_API_URL.$token;
 
         // Get Untappd user info
         $user = EMBM_Admin_Untappd_user($api_root);
+        $show_api_error = (is_null($user) || is_string($user));
 
         // Check for brewery account
-        if ($user->account_type == 'brewery') {
+        if ($user->account_type == 'brewery' && !$show_api_error) {
             $is_brewery = true;
 
             // Get Untappd brewery ID
             $brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
+            $show_api_error = (is_null($brewery_id) || is_string($brewery_id));
 
             // Get Untappd brewery info from API
-            $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+            if (!$show_api_error) {
+                $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+                $show_api_error = (is_null($brewery) || is_string($brewery));
 
-            // Make sure brewery is claimed by authorized user
-            if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
-                $is_brewery = false;
-            } else {
-                // Get all the Untappd beers for the brewery
-                $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
+                // Make sure brewery is claimed by authorized user
+                if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
+                    $is_brewery = false;
+                } elseif (!$show_api_error) {
+                    // Get all the Untappd beers for the brewery
+                    $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
+                    $show_api_error = (is_null($brewery) || is_string($brewery));
 
-                // Look for beer in list
-                if ($untappd_id !== '') {
-                    $beer_found = !is_null(EMBM_Admin_Untappd_find($untappd_id, $beer_list));
+                    // Look for beer in list
+                    if ($untappd_id !== '' && !$show_api_error) {
+                        $beer_found = !is_null(EMBM_Admin_Untappd_find($untappd_id, $beer_list));
+                    }
                 }
             }
         }
@@ -140,7 +147,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                     id="embm_untappd"
                     data-value="<?php echo $untappd_id; ?>"
                     value="<?php echo $untappd_id; ?>"
-                <?php if ($is_brewery && $beer_found) : ?>
+                <?php if ($is_brewery && $beer_found && !$show_api_error) : ?>
                     readonly
                 <?php endif; ?>
                 />
@@ -148,7 +155,7 @@ function EMBM_Admin_Metabox_Untappd_content()
             </p>
         </div>
         <div class="embm-metabox__field embm-metabox--untappd-select">
-            <?php if ($is_brewery) : ?>
+            <?php if ($is_brewery && !$show_api_error) : ?>
                 <p>
                     <label for="untappd_id_select"><strong><?php _e('Brewery Beer', 'embm'); ?></strong></label><br />
                     <select id="untappd_id_select" name="untappd_id_select">
@@ -167,7 +174,7 @@ function EMBM_Admin_Metabox_Untappd_content()
         </div>
     </div>
     <div class="embm-metabox__right">
-    <?php if (null !== $token && $untappd_id !== '') : ?>
+    <?php if (null !== $token && $untappd_id !== '' && !$show_api_error) : ?>
         <div class="embm-metabox--untappd-checkboxes">
             <p>
                 <strong><?php printf('Override Display Settings', 'embm'); ?></strong>
@@ -213,6 +220,8 @@ function EMBM_Admin_Metabox_Untappd_content()
                 <?php printf(__('This is automatically done every %d hours.', 'embm'), 3); ?>
             </p>
         </div>
+    <?php elseif ($show_api_error) : ?>
+        <?php EMBM_Admin_Notices_ratelimit(null); ?>
     <?php elseif ($untappd_id == '') : ?>
         <p class="embm-metabox--untappd-empty">
             <?php _e('Set a valid Untappd Beer ID to access additional display options.', 'embm'); ?>
@@ -284,7 +293,17 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
 
             // Get beer data from Untappd API
             if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
-                EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
+                $res = EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
+                if (is_null($res) || is_string($res)) {
+                    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+                    if (is_array($errors) && !array_key_exists('1', $errors)) {
+                        array_push($errors, '1');
+                    } else {
+                        $errors = array('1');
+                    }
+                    set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors'], $errors, HOUR_IN_SECONDS);
+                    return;
+                }
             }
 
             // Remove beer data if the ID is unset
@@ -297,3 +316,41 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
 
 // Save untappd box inputs
 add_action('save_post', 'EMBM_Admin_Metabox_Untappd_save');
+
+/**
+ *
+ */
+function EMBM_Admin_Metabox_Untappd_errors()
+{
+    // Get list of errors
+    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    if (!$errors) {
+        return;
+    }
+
+    // Iterate over errors
+    foreach ($errors as $error) {
+        if (!array_key_exists($error, $GLOBALS['EMBM_NOTICE_MAP']['save-error'])) {
+            continue;
+        }
+
+        // Get notice content
+        $notice = $GLOBALS['EMBM_NOTICE_MAP']['save-error'][$error];
+
+    ?>
+        <div class="<?php echo $notice['type']; ?> notice embm-notice">
+            <p>
+                <span class="embm-notice--title"><?php echo $notice['title']; ?></span>
+                <span class="embm-notice--message"><?php echo $notice['message'];?></span>
+            </p>
+            <button type="button" class="notice-dismiss"></button>
+        </div>
+    <?php
+    }
+
+    // Remove the errors from cache
+    delete_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+}
+
+// Add to admin notices
+add_action('admin_notices', 'EMBM_Admin_Metabox_Untappd_errors');
