@@ -104,7 +104,7 @@ function EMBM_Output_beer($beer_id, $options)
     }
 
     // Show rating
-    if ($options['rating']) {
+    if (isset($options['rating']) && $options['rating']) {
         $rating = EMBM_Output_rating($beer_id);
         if ($rating != null) {
             $output .= $rating;
@@ -116,12 +116,15 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= '</div>'."\n";
 
     // Beer meta
-    if ($options['profile'] || $options['extras']) {
+    if (
+        (isset($options['profile']) && $options['profile']) ||
+        (isset($options['extras']) && $options['extras'])
+    ){
         // Begin beer meta output
         $output .= '<div class="embm-beer--meta">'."\n";
 
         // Display beer profile
-        if ($options['profile']) {
+        if (isset($options['profile']) && $options['profile']) {
             $profile = EMBM_Output_profile($beer_id);
             if ($profile != null) {
                 $output .= $profile;
@@ -129,7 +132,7 @@ function EMBM_Output_beer($beer_id, $options)
         }
 
         // Display beer extras
-        if ($options['extras']) {
+        if (isset($options['extras']) && $options['extras']) {
             $extras = EMBM_Output_extras($beer_id);
             if ($extras != null) {
                 $output .= $extras;
@@ -143,7 +146,7 @@ function EMBM_Output_beer($beer_id, $options)
     }
 
     // Display reviews
-    if ($options['reviews']) {
+    if (isset($options['reviews']) && $options['reviews']) {
         $reviews = EMBM_Output_reviews($beer_id, $options['reviews_count']);
         if ($reviews != null) {
             $output .= $reviews;
@@ -540,7 +543,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
 
     // Start reviews output
     $output = '<div class="embm-beer--reviews">'."\n";
-    $output .= '<h3 class="embm-beer--reviews-title">'.__('Recent Check-ins', 'embm').'</h3>'."\n";
+    $output .= '<h4 class="embm-beer--reviews-title">'.__('Recent Check-ins', 'embm').'</h4>'."\n";
 
     // Check that we have reviews
     if (count($reviews) > 0) {
@@ -550,18 +553,32 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
                 $output .= EMBM_Output_Review_content($reviews[$ix]);
             }
         }
-
-        // Add 'more' link
-        $output .= '<p class="embm-beer--reviews-more">';
-        $output .= '<a href="'.$untappd_url.'" target="_blank">';
-        $output .= __('View More on Untappd', 'embm');
-        $output .= '</a></p>';
     } else {
         // Friendly text for when there are no reviews
         $output .= '<p class="embm-beer--reviews-empty">';
         $output .= __('This beer has no checkins.', 'embm');
         $output .= '</p>';
     }
+
+    // Add footer
+    $output .= '<div class="embm-beer--reviews-footer">';
+
+    // Add 'more' link
+    if (count($reviews) > 0) {
+        $more_text = __('View More', 'embm');
+        $output .= '<div class="embm-beer--reviews-more">';
+        $output .= '<a href="'.$untappd_url.'" target="_blank" title="' . $more_text . '">';
+        $output .= '<span>' . $more_text . '</span>';
+        $output .= '<span class="dashicons dashicons-arrow-right-alt"></span>';
+        $output .= '</a></div>';
+    }
+
+    // Add Untappd credit
+    $credit_text = __('Powered by Untappd', 'embm');
+    $output .= '<div class="embm-beer--reviews-credit">';
+    $output .= '<a href="https://untappd.com" target="_blank" rel="nofollow" title="' . $credit_text . '">';
+    $output .= '<img src="' . EMBM_PLUGIN_URL .'/assets/img/ut-credit.png" alt="' . $credit_text . '" border="0" />';
+    $output .= '</a></div></div>';
 
     // Get star styles
     $styles = EMBM_Output_Rating_styles();
@@ -647,8 +664,9 @@ function EMBM_Output_Review_content($review)
     $output .= '<span class="embm-beer--review-date">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
     $output .= date('j M y', $datestamp).'</a></span>';
-    $output .= '<span class="embm-beer--review-source">';
-    $output .= '<a href="'.$source->app_website.'" target="_blank">'.$source->app_name.'</a>';
+    $output .= '<span class="embm-beer--review-link">';
+    $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
+    $output .= __('View Full Check-in', 'embm').'</a>';
     $output .= '</span></div>';
 
     // End main content

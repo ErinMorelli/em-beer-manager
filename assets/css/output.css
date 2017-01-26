@@ -31,6 +31,7 @@
 .embm-beer--header > a,
 .embm-beer .embm-beer--header > a {
     border: 0;
+    box-shadow: none;
     text-decoration: none;
 }
 .embm-beer--header > a > .embm-beer--header-title,
@@ -38,6 +39,7 @@
 .embm-beer .embm-beer--header > .embm-beer--header-title,
 .embm-beer .embm-beer--header > a > .embm-beer--header-title {
     border: 0;
+    box-shadow: none;
     display: inline-block;
     margin: 0;
     text-decoration: none;
@@ -50,6 +52,7 @@
 }
 .embm-beer .embm-beer--header-style > a {
     border: 0;
+    box-shadow: none;
     color: #888;
     text-decoration: none;
 }
@@ -94,19 +97,19 @@
     padding: 0 0 20px;
 }
 .embm-beer .embm-beer--description > .embm-beer--untappd > a {
-    border-width: 0;
+    border: 0;
     box-shadow: none;
     display: inline-block;
     text-decoration: none;
 }
 .embm-beer .embm-beer--meta {
-    background: #eee;
-    border: 1px solid #ddd;
+    background: #EEE;
+    border: 1px solid #DDD;
     clear: both;
     color: #000;
     display: block;
     padding: 15px 20px;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 .embm-beer .embm-beer--meta > .embm-beer--meta-profile {
     padding-bottom: 10px;
@@ -127,8 +130,16 @@
     font-weight: bold;
     padding: 10px 0 3px;
 }
-.embm-beer .embm-beer--review:not(:last-of-type) {
+.embm-beer .embm-beer--reviews .embm-beer--reviews-title {
+    padding-bottom: 0;
     margin-bottom: 25px;
+}
+.embm-beer .embm-beer--review {
+    border-bottom: 1px solid #EEE;
+    padding-bottom: 15px;
+}
+.embm-beer .embm-beer--review:not(:last-of-type) {
+    margin-bottom: 20px;
 }
 .embm-beer .embm-beer--review::after {
     clear: both;
@@ -196,8 +207,49 @@
 .embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-date a {
     color: #999;
 }
-.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-source a {
+.embm-beer .embm-beer--review .embm-beer--review-meta .embm-beer--review-link a {
     color: #C60;
+}
+.embm-beer .embm-beer--reviews-footer {
+    position: relative;
+}
+.embm-beer .embm-beer--reviews-footer a {
+    border: 0;
+    box-shadow: none;
+    text-decoration: none;
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more {
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more a {
+    background-color: #FC0;
+    border-radius: 4px;
+    bottom: 5px;
+    box-sizing: border-box;
+    color: #FFF;
+    display: inline-block;
+    font-size: 0.9em;
+    height: 30px;
+    line-height: 20px;
+    padding: 5px 10px;
+    position: relative;
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more a .dashicons {
+    font-size: 0.9em;
+    line-height: 20px;
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-credit {
+    position: absolute;
+    right: 0;
+    top: -3px;
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-credit a {
+    display: inline-block;
+    opacity: .5;
+    width: 100px;
+}
+.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-credit a > img {
+    width: 100%;
+    height: 100%;
 }
 .embm-beer--list .nav-below {
     text-align: right;

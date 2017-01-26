@@ -117,7 +117,7 @@ jQuery(document).ready(function ($) {
     if (untappd_check) {
         untappdShowHide(untappd_check.is(':checked'));
     }
-    
+
     // Show/hide settings navigation on page load
     if (nav_hidden) {
         $('.embm-settings--navbox').css('right', '-185px');
@@ -196,7 +196,7 @@ jQuery(document).ready(function ($) {
             hidden = (localStorage.embm_hide_settings_nav === 'true'),
             right = hidden ? '0px' : '-185px',
             arrow = hidden ? 'right' : 'left';
-        
+
         $(this).parent().animate({ right: right }, function() {
             localStorage.embm_hide_settings_nav = !hidden;
             icon.removeClass();
@@ -215,7 +215,7 @@ jQuery(document).ready(function ($) {
     // Activate opacity slider
     $('#embm-settings--rating-opacity--slider').slider({
         min: 0,
-        max: 100,
+        max: 50,
         step: 1,
         value: parseFloat($('#embm_untappd_rating_opacity').val()),
         slide: function (event, ui) {

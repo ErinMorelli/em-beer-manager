@@ -162,8 +162,8 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
  */
 function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 {
-    // Cache data for 30 mins
-    $half_hour = 30 * MINUTE_IN_SECONDS;
+    // Cache data for 15 mins
+    $cache_time = 15 * MINUTE_IN_SECONDS;
 
     // Attempt to retrieve brewery checkins from cache
     $checkins = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
@@ -174,8 +174,8 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
         $checkins_res = EMBM_Admin_Untappd_request($checkins_url);
         $checkins = $checkins_res->response->checkins;
 
-        // Store for half hour
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, $half_hour);
+        // Store for 15 mins
+        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $checkins, $cache_time);
     }
 
     return $checkins;

@@ -148,7 +148,7 @@ function EMBM_Output_Shortcodes_Beer_load($beer)
 function EMBM_Output_Shortcodes_list($atts)
 {
     // Load shortcode content
-    return EMBM_Output_List_display(
+    return EMBM_Output_Shortcodes_List_display(
         shortcode_atts(
             array(
                 'exclude'           => '',
