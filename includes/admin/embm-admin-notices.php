@@ -112,8 +112,14 @@ function EMBM_Admin_Notices_show()
     endforeach;
 }
 
-
-function EMBM_Admin_Notices_ratelimit($msg)
+/**
+ * Displays a notice about API rate-limit
+ *
+ * @param string $msg Message to display. Default = null
+ *
+ * @return void
+ */
+function EMBM_Admin_Notices_ratelimit($msg = null)
 {
     // Set fallback message
     if (is_null($msg)) {

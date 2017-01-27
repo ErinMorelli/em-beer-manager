@@ -348,7 +348,8 @@ function EMBM_Plugin_help()
         'untappd_limit' => array (
             'id'        => 'embm-untappd-api-ratelimit',
             'title'     => __('API Rate-Limit', 'embm'),
-            'content'   => '<p>'.sprintf(
+            'content'   => '<p>'.
+                sprintf(
                     __('From the %s', 'embm').':',
                     sprintf(
                         '<a href="https://untappd.com/api/docs" target="_blank">%s</a>',

@@ -235,7 +235,6 @@
 }
 .embm-settings--tab-labs .emphasis {
     font-weight: 600;
-    text-decoration: underline;
     text-transform: uppercase;
 }
 .embm-settings--tab-labs .labs-section {
@@ -321,6 +320,11 @@
 }
 .embm-metabox--untappd-flush {
     max-width: calc(60% - 40px);
+}
+.embm-metabox--untappd-flush .dashicons {
+    line-height: 26px;
+    color: #FFB900;
+    cursor: help;
 }
 @media only screen and (max-width: 960px) {
     .embm-metabox--untappd .embm-metabox--untappd-checkboxes,

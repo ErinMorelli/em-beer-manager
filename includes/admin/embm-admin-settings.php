@@ -124,6 +124,8 @@ add_action('admin_init', 'EMBM_Admin_settings');
 /**
  * Output for Untappd admin settings section
  *
+ * @param array $section WP settings section data
+ *
  * @return void
  */
 function EMBM_Admin_Settings_untappd($section)
@@ -243,6 +245,8 @@ function EMBM_Admin_Settings_Untappd_icons()
 
 /**
  * Output for admin settings sections
+ *
+ * @param array $section WP settings section data
  *
  * @return void
  */

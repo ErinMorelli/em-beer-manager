@@ -25,7 +25,7 @@
     tb_remove,
     embm_settings
 */
-/*jslint
+/*jsint
     browser: true
     unparam: true
 */
@@ -192,12 +192,11 @@ jQuery(document).ready(function ($) {
     // Settings page nav panel toggle
     $('#embm-settings--navbox-toggle').on('click', function (e) {
         var icon = $(this),
-            box = icon.parent(),
             hidden = (localStorage.embm_hide_settings_nav === 'true'),
             right = hidden ? '0px' : '-185px',
             arrow = hidden ? 'right' : 'left';
 
-        $(this).parent().animate({ right: right }, function() {
+        $(this).parent().animate({ right: right }, function () {
             localStorage.embm_hide_settings_nav = !hidden;
             icon.removeClass();
             icon.addClass('dashicons dashicons-arrow-' + arrow + '-alt2');
@@ -310,8 +309,15 @@ jQuery(document).ready(function ($) {
         ajax_params.api_root = api_root;
 
         // Make AJAX request
-        $.post(ajaxurl, ajax_params, function () {
+        $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
+
+            // Show error for bad response
+            if (typeof response === 'string') {
+                $(e.target).parent().append(
+                    '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
+                );
+            }
         });
     });
 

@@ -80,6 +80,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 
         // Untappd Integration help tab
         $screen->add_help_tab($default_help['untappd']);
+        $screen->add_help_tab($default_help['untappd_limit']);
 
         // Untappd Integration help
         $screen->add_help_tab(
@@ -115,7 +116,10 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             array(
                 'title'     => '',
                 'items'     => 3,
-                'brewery'   => ''
+                'brewery'   => '',
+                'rating'    => '1',
+                'comment'   => '1',
+                'venue'   => '1'
             )
         );
 
@@ -123,6 +127,9 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         $title = $instance['title'];
         $items = $instance['items'];
         $brewery = $instance['brewery'];
+        $rating = $instance['rating'];
+        $comment = $instance['comment'];
+        $venue = $instance['venue'];
 
         // Get brewery ID from Labs
         $brewery_id = get_option('embm_untappd_brewery_id');
@@ -161,12 +168,43 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 name="<?php echo $this->get_field_name('items'); ?>"
                 type="number"
                 min="1"
-                max="25"
+                max="15"
                 step="1"
                 style="width:50px;"
                 value="<?php echo $items; ?>"
+            /><br />
+            <small><?php printf(__('(max. %d)', 'embm'), 15); ?></small>
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('rating'); ?>"><?php _e('Show check-in ratings', 'embm'); ?>:</label>
+            <input
+                id="<?php echo $this->get_field_id('rating'); ?>"
+                name="<?php echo $this->get_field_name('rating'); ?>"
+                type="checkbox"
+                value="1"'
+                <?php checked('1', $rating); ?>
             />
-            <small><?php printf(__('(max. %d)', 'embm'), 25); ?></small>
+
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('comment'); ?>"><?php _e('Show check-in comments', 'embm'); ?>:</label>
+            <input
+                id="<?php echo $this->get_field_id('comment'); ?>"
+                name="<?php echo $this->get_field_name('comment'); ?>"
+                type="checkbox"
+                value="1"'
+                <?php checked('1', $comment); ?>
+            />
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('venue'); ?>"><?php _e('Show check-in venue', 'embm'); ?>:</label>
+            <input
+                id="<?php echo $this->get_field_id('venue'); ?>"
+                name="<?php echo $this->get_field_name('venue'); ?>"
+                type="checkbox"
+                value="1"'
+                <?php checked('1', $venue); ?>
+            />
         </p>
 <?php
     }
@@ -186,6 +224,9 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         $instance['title'] = $new_instance['title'];
         $instance['items'] = $new_instance['items'];
         $instance['brewery'] = $new_instance['brewery'];
+        $instance['rating'] = $new_instance['rating'];
+        $instance['comment'] = $new_instance['comment'];
+        $instance['venue'] = $new_instance['venue'];
 
         return $instance;
     }
@@ -207,6 +248,9 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         $title = apply_filters('widget_title', $instance['title']);
         $items = apply_filters('widget_items', $instance['items']);
         $brewery = apply_filters('widget_brewery', $instance['brewery']);
+        $rating = apply_filters('widget_rating', $instance['rating']);
+        $comment = apply_filters('widget_comment', $instance['comment']);
+        $venue = apply_filters('widget_venue', $instance['venue']);
 
         // Output pre-widget content
         echo $before_widget;
@@ -216,7 +260,10 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             array(
                 'title'     => $title,
                 'items'     => $items,
-                'brewery'   => $brewery
+                'brewery'   => $brewery,
+                'rating'    => $rating,
+                'comment'   => $comment,
+                'venue'   => $venue
             )
         );
 
@@ -224,7 +271,6 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         echo $after_widget;
     }
 }
-
 
 /**
  * Set up and register Untappd widget
@@ -259,7 +305,6 @@ function EMBM_Widget_Untappd_Recent_register()
 // Load the widget
 add_action('widgets_init', 'EMBM_Widget_Untappd_Recent_register');
 
-
 /**
  * Generate HTML content of Untappd Recent Check-ins widget
  *
@@ -271,7 +316,6 @@ function EMBM_Widget_Untappd_Recent_display($beers)
 {
     // Set widget options
     $title = $beers['title'];
-    $count = $beers['items'];
     $brewery_id = $beers['brewery'];
 
     // Initialize output string
@@ -297,14 +341,16 @@ function EMBM_Widget_Untappd_Recent_display($beers)
     // Get token
     $token = EMBM_Admin_Authorize_token();
 
-    // Make sure we're authorized
-    if (null !== $token) {
-        // Get API content
-        $output .= EMBM_Widget_Untappd_Recent_Display_api($token, $brewery_id, $count);
-    } else {
-        // Fall back to XML output
-        $output .= EMBM_Widget_Untappd_Recent_Display_xml($brewery_id, $count);
-    }
+    // // Make sure we're authorized
+    // if (null !== $token) {
+    //     // Get API content
+    //     $output .= EMBM_Widget_Untappd_Recent_Display_api($token, $brewery_id, $count);
+    // } else {
+
+    // Fall back to XML output
+    $output .= EMBM_Widget_Untappd_Recent_Display_xml($beers);
+
+    // }
 
     // End check-in list
     $output .= '</ul>'."\n";
@@ -312,7 +358,6 @@ function EMBM_Widget_Untappd_Recent_display($beers)
     // Return HTML content
     return $output;
 }
-
 
 /**
  * Generate HTML content of Untappd Recent Check-ins widget from the API
@@ -373,23 +418,30 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $brewery, $count)
     return $output;
 }
 
-
 /**
  * Generate HTML content of Untappd Recent Check-ins widget from XML
  *
- * @param int $brewery_id Untappd brewery ID
- * @param int $count      The number of checkins to display
+ * @param array $beers Untappd widget options
  *
  * @return string/html
  */
-function EMBM_Widget_Untappd_Recent_Display_xml($brewery_id, $count)
+function EMBM_Widget_Untappd_Recent_Display_xml($beers)
 {
-    // Set Untappd brewery rss URL
-    $feed_url = 'https://untappd.com/rss/brewery/'.$brewery_id;
+    // Get widget options
+    $count = $beers['items'];
+    $brewery_id = $beers['brewery'];
+    $show_rating = ($beers['rating'] == '1');
+    $show_comment = ($beers['comment'] == '1');
+    $show_venue = ($beers['venue'] == '1');
 
-    // Extract Untappd xml feed data
-    $content = file_get_contents($feed_url);
-    $x = new SimpleXmlElement($content);
+    // Get XML content
+    $xml = EMBM_Admin_Untappd_Checkins_xml($brewery_id);
+
+    // Check for errors
+    if (!is_object($xml)) {
+        $error = __('There was a problem retrieving Untappd check-ins. Please try again later.', 'embm');
+        return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
+    }
 
     // Start output
     $output = '';
@@ -397,24 +449,82 @@ function EMBM_Widget_Untappd_Recent_Display_xml($brewery_id, $count)
     // Iterate over XML output
     foreach (range(0, $count-1) as $i) {
         // Get checkin
-        $entry = $x->channel->item[$i];
+        $entry = $xml->channel->item[$i];
 
         // Start check-in entry
-        $output .= '<li class="embm-untappd-list-item">';
-        $output .= $entry->title."\n";
-        $output .= '<a class="embm-checkin-date" href="'.$entry->link.'" title="'.$entry->title.'">';
+        $output .= '<li class="embm-untappd-list--item">';
+
+        // Set up title regex
+        $title_regex = '/^(.*) is drinking a (?(?=.* at .*$)((.*) at (.*)$)|((.*)$))/i';
+
+        // Parse title
+        if (preg_match($title_regex, $entry->title, $title)) {
+            // Get data
+            $user = $title[1];
+            $beer = (array_key_exists(6, $title) && !preg_match('/^\s+$/', $title[6])) ? $title[6] : $title[3];
+            $venue = (array_key_exists(4, $title) && !preg_match('/^\s+$/', $title[4])) ? $title[4] : null;
+
+            // Set output
+            $title_output = '<span class="embm-untappd-list--item-title">';
+            $title_output .= '<strong>'.$user.'</strong> ';
+            $title_output .= __('is drinking a', 'embm');
+            $title_output .= ' <strong>'.$beer.'</strong>';
+            $title_output .= '</span>';
+
+            // Set optional location
+            if ($venue && !is_null($venue)) {
+                $venue_output = '<span class="embm-untappd-list--item-venue">'.$venue.'</span>';
+            }
+        }
+
+        // Parse description
+        if (property_exists($entry, 'description') && is_object($entry->description)) {
+            if (preg_match('/^(.*)\((\d(\.\d{1,2})?)\/5 stars\)$/i', $entry->description[0], $description)) {
+                // Get rating
+                if (array_key_exists(2, $description)) {
+                    $rating_output = '<span class="embm-untappd-list--item-rating embm-beer--rating-stars">';
+                    $rating_output .= EMBM_Output_Rating_stars(floatval($description[2]));
+                    $rating_output .= '</span>';
+                }
+                if (array_key_exists(1, $description) && !preg_match('/^\s+$/', $description[1])) {
+                    $comment_output = '<span class="embm-untappd-list--item-comment">'.$description[1].'</span>';
+                }
+            }
+        }
+
+        // Put it all together
+        if (isset($title_output)) {
+            $output .= $title_output;
+        }
+        if (isset($rating_output) && $show_rating) {
+            $output .= $rating_output;
+        }
+        if (isset($comment_output) && $show_comment) {
+            $output .= $comment_output;
+        }
+        if (isset($venue_output) && $show_venue) {
+            $output .= $venue_output;
+        }
 
         // Output formatted date
+        $output .= '<span class="embm-untappd-list--item-meta">';
+        $output .= '<a class="embm-untappd-list--item-date" href="'.$entry->link.'" target="_blank">';
         $output .= EMBM_Widget_Untappd_Recent_Display_date($entry->pubDate);
+        $output .= '</a>';
+        $output .= '<a class="embm-untappd-list--item-link" href="'.$entry->link.'" target="_blank">';
+        $output .= '<span>'.__('View Full Check-in', 'embm').'</span>';
+        $output .= '</a>';
 
         // End check-in entry
-        $output .= '</a></li>'."\n";
+        $output .= '</li>'."\n";
     }
+
+    // Get star styles
+    $output .= EMBM_Output_Rating_styles();
 
     // Return HTML output
     return $output;
 }
-
 
 /**
  * Display data using WP settings
@@ -438,6 +548,5 @@ function EMBM_Widget_Untappd_Recent_Display_date($date)
     );
 
     // Output formatted date
-    return date('g:i A - j M y', $new_date);
+    return date('j M y', $new_date);
 }
-

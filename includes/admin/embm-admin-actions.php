@@ -195,14 +195,30 @@ function EMBM_Admin_Actions_Untappd_import()
     $brewery_id = intval($_POST['brewery_id']);
     $api_root = $_POST['api_root'];
 
+    // Set up response
+    $response = array(
+        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'labs'))
+    );
+
     // Get Untappd brewery info from API
     $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+
+    // Check for error
+    if (is_null($brewery) || is_string($brewery)) {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+        wp_send_json($response);
+        return;
+    }
 
     // Get all the Untappd beers for the brewery
     $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
 
-    // Setup return URL
-    $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'labs'));
+    // Check for error
+    if (is_null($beer_list) || is_string($beer_list)) {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+        wp_send_json($response);
+        return;
+    }
 
     // Handle import types
     switch ($import_type) {
@@ -228,6 +244,12 @@ function EMBM_Admin_Actions_Untappd_import()
             // Locate beer in cached array
             $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
+            // Check for error
+            if (is_null($beer) || is_string($beer)) {
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+                break;
+            }
+
             // Run import
             EMBM_Admin_Untappd_import($beer, $brewery_id);
         }
@@ -252,11 +274,17 @@ function EMBM_Admin_Actions_Untappd_import()
         // Get beer from API
         $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
+        // Check for error
+        if (is_null($beer) || is_string($beer)) {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+            break;
+        }
+
         // Run import with brewery check
         EMBM_Admin_Untappd_import($beer, $brewery_id, true);
 
         // Setup return URL
-        $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'labs'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'labs'));
         break;
 
     // Import all beers
@@ -272,6 +300,12 @@ function EMBM_Admin_Actions_Untappd_import()
             // Get beer from API
             $beer = EMBM_Admin_Untappd_Beer_get($api_root, $item->beer->bid);
 
+            // Check for error
+            if (is_null($beer) || is_string($beer)) {
+                $$response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+                break;
+            }
+
             // Run import
             EMBM_Admin_Untappd_import($beer, $brewery_id);
         }
@@ -280,13 +314,8 @@ function EMBM_Admin_Actions_Untappd_import()
     // Fallback
     default:
         // Setup return URL
-        $redirect = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'labs'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'labs'));
     }
-
-    // Set up response
-    $response = array(
-        'redirect' => $redirect
-    );
 
     // Send response
     wp_send_json($response);

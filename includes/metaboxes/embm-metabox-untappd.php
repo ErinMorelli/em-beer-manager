@@ -70,7 +70,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $is_brewery = false;
     $api_root = '';
     $beer_found = false;
-    $show_api_error = (is_null($untappd_data) || is_string($untappd_data));
+    $show_api_error = (!is_object($untappd_data));
 
     // Get token
     $token = EMBM_Admin_Authorize_token();
@@ -90,10 +90,9 @@ function EMBM_Admin_Metabox_Untappd_content()
 
             // Get Untappd brewery ID
             $brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
-            $show_api_error = (is_null($brewery_id) || is_string($brewery_id));
 
             // Get Untappd brewery info from API
-            if (!$show_api_error) {
+            if ($brewery_id && !$show_api_error) {
                 $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
                 $show_api_error = (is_null($brewery) || is_string($brewery));
 
@@ -318,7 +317,9 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
 add_action('save_post', 'EMBM_Admin_Metabox_Untappd_save');
 
 /**
+ * Displays any metabox save errors in the admin
  *
+ * @return void
  */
 function EMBM_Admin_Metabox_Untappd_errors()
 {

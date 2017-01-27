@@ -171,6 +171,9 @@
     height: 100%;
     width: 100%;
 }
+.embm-beer .embm-beer--review .embm-beer--review-content {
+    max-width: calc(100% - 70px);
+}
 .embm-beer .embm-beer--review .embm-beer--review-author {
     font-size: 100%;
     margin: 0 0 8px;
@@ -187,6 +190,10 @@
 }
 .embm-beer .embm-beer--review .embm-beer--review-comment {
     margin-bottom: 8px;
+    -webkit-hyphens: manual;
+    -moz-hyphens: manual;
+    -ms-hyphens: manual;
+    hyphens: manual;
 }
 .embm-beer .embm-beer--review .embm-beer--review-meta {
     font-size: 0.8em;
@@ -217,8 +224,6 @@
     border: 0;
     box-shadow: none;
     text-decoration: none;
-}
-.embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more {
 }
 .embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more a {
     background-color: #FC0;

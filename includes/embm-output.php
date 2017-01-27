@@ -116,10 +116,9 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= '</div>'."\n";
 
     // Beer meta
-    if (
-        (isset($options['profile']) && $options['profile']) ||
-        (isset($options['extras']) && $options['extras'])
-    ){
+    if ((isset($options['profile']) && $options['profile'])
+        || (isset($options['extras']) && $options['extras'])
+    ) {
         // Begin beer meta output
         $output .= '<div class="embm-beer--meta">'."\n";
 
@@ -380,7 +379,7 @@ function EMBM_Output_rating($beer_id)
     $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
 
     // Bail if we don't have any data
-    if (!$untappd_data || $untappd_data == '') {
+    if (!$untappd_data || $untappd_data == '' || !is_object($untappd_data)) {
         return null;
     }
 
@@ -511,7 +510,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     $untappd_url = EMBM_Core_Beer_attr($beer_id, 'untappd');
 
     // Bail if we don't have any data
-    if (!$untappd_data || $untappd_data == '') {
+    if (!$untappd_data || $untappd_data == '' || !is_object($untappd_data)) {
         return null;
     }
 

@@ -29,6 +29,7 @@ $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
     'beer_list'     => 'embm_untappd_beer_list',
     'brewery'       => 'embm_untappd_brewery_info',
     'checkins'      => 'embm_untappd_brewery_checkins',
+    'xml_checkins'  => 'embm_untappd_brewery_xml_checkins',
     'user'          => 'embm_untappd_user_info',
     'save_errors'   => 'embm_untappd_save_errors'
 );
@@ -76,13 +77,13 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
         if (isset($headers['X-Ratelimit-Remaining']) && $headers['X-Ratelimit-Remaining'] <= 1) {
             $response['limit'] = true;
         }
-    } finally {
-        // Reset error handler
-        restore_error_handler();
-
-        // Return result
-        return $response;
     }
+
+    // Reset error handler
+    restore_error_handler();
+
+    // Return result
+    return $response;
 }
 
 /**
@@ -101,7 +102,7 @@ function EMBM_Admin_Untappd_Request_headers($headers)
             $head[trim($t[0])] = trim($t[1]);
         } else {
             $head[] = $v;
-            if (preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out)) {
+            if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out)) {
                 $head['reponse_code'] = intval($out[1]);
             }
         }
@@ -154,7 +155,7 @@ function EMBM_Admin_Untappd_id($untappd_url)
 
         // Handle any errors
         if (!$res['success']) {
-            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            return null;
         }
 
         // Look for ID
@@ -267,6 +268,51 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 }
 
 /**
+ * Retrieves and parses Untappd brewery check-in data from either the WP cache or XML.
+ *
+ * @param int $brewery_id Untappd brewery ID
+ *
+ * @return object Parse XML object
+ */
+function EMBM_Admin_Untappd_Checkins_xml($brewery_id)
+{
+    // Get XML content
+    $content = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['xml_checkins']);
+
+    // Get checkins info if it's not cached
+    if (false === $content) {
+        // Set Untappd brewery rss URL
+        $feed_url = 'https://untappd.com/rss/brewery/'.$brewery_id;
+
+        // Extract Untappd xml feed data
+        $content = file_get_contents($feed_url);
+    }
+
+    // Force PHP to throw an exception on warnings
+    set_error_handler(
+        function ($errno, $errstr, $errfile, $errline, array $errcontext) {
+            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        }
+    );
+
+    try {
+        // Parse XML
+        $x = new SimpleXmlElement($content);
+    } catch (Exception $e) {
+        return null;
+    }
+
+    // Reset error handler
+    restore_error_handler();
+
+    // Save as transient for 24 hours (per TOS)
+    set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['xml_checkins'], $content, DAY_IN_SECONDS);
+
+    // Return result
+    return $x;
+}
+
+/**
  * Retrieves Untappd brewery beer data from either the WP cache or API.
  *
  * @param string $api_root A templated string for the Untappd API root URL
@@ -331,7 +377,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     $beer_data = get_post_meta($post_id, 'embm_untappd_data', true);
 
     // Check for data
-    if ($beer_data) {
+    if ($beer_data && is_array($beer_data)) {
         $beer = $beer_data['beer'];
         $beer_cache = $beer_data['cached'];
     }
@@ -348,7 +394,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     }
 
     // Check for beer data
-    if (is_null($beer) || false == $beer) {
+    if (!is_object($beer) || false == $beer) {
         $refresh = true;
     }
 
@@ -446,7 +492,7 @@ function EMBM_Admin_Untappd_find($beer_id, $beer_list)
 /**
  * Search for a given Untappd beer ID in DB
  *
- * @param int   $beer_id   Untappd beer ID
+ * @param int $beer_id Untappd beer ID
  *
  * @return int WP Post ID of beer
  */

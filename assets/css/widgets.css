@@ -56,17 +56,81 @@ ul.embm-untappd-list {
 ul.embm-untappd-list li {
     list-style: none;
 }
-ul.embm-untappd-list li.embm-untappd-list-item {
+ul.embm-untappd-list li.embm-untappd-list--item {
     font-size: 0.9em;
     line-height: 1.5em;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #EEE;
+    margin-bottom: 8px;
 }
-li.embm-untappd-list-item a.embm-checkin-date {
-    color: #aaa;
+li.embm-untappd-list--item .embm-untappd-list--item-title {
+    margin-bottom: 3px;
     display: block;
-    font-size: 0.8em;
-    text-decoration: none;
 }
-li.embm-untappd-list-item a.embm-checkin-date:hover {
+li.embm-untappd-list--item .embm-untappd-list--item-title > strong {
+    color: #C60;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-venue {
+    display: block;
+    margin-bottom: 3px;
+    color: #999;
+    font-size: 0.9em;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-venue::before {
+    content: "\f230";
+    font-family: dashicons;
+    color: #CCC;
+    padding-right: 5px;
+    font-style: normal;
+    display: inline-block;
+    font-size: 1em;
+    position: relative;
+    top: 1px;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-meta {
+    font-size: 0.8em;
+
+}
+li.embm-untappd-list--item .embm-untappd-list--item-meta a {
+    text-decoration: none;
+    border: 0;
+    box-shadow: none;
+}
+li.embm-untappd-list--item a.embm-untappd-list--item-date {
+    color: #aaa;
+}
+li.embm-untappd-list--item a.embm-untappd-list--item-date:hover {
     text-decoration: underline;
+}
+li.embm-untappd-list--item a.embm-untappd-list--item-date::after {
+    content: '-';
+    color: #999;
+    display: inline-block;
+    padding: 0 5px;
+}
+li.embm-untappd-list--item a.embm-untappd-list--item-link {
+    color: #C60;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-rating {
+    display: block;
+    height: 20px;
+    margin-bottom: 8px;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-rating > svg {
+    display: block;
+    float: left;
+    height: 20px;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-comment {
+    margin-bottom: 3px;
+    display: block;
+    font-style: italic;
+}
+li.embm-untappd-list--item .embm-untappd-list--item-comment::before {
+    content: '\f122';
+    font-family: dashicons;
+    color: #CCC;
+    padding-right: 5px;
+    font-style: normal;
+    display: inline-block;
 }

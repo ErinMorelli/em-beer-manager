@@ -23,13 +23,25 @@
 /**
  * Displays an unauthorized error message
  *
+ * @param bool $token Whether to show token message or not
+ *
  * @return void
  */
-function EMBM_Admin_Labs_Import_error()
+function EMBM_Admin_Labs_Import_error($token = false)
 {
+
+    if ($token) {
 ?>
-    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
-    <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
+        <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
+        <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
+<?php
+    } else {
+?>
+        <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
+        <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
+<?php
+    }
+?>
     <p>
         <button class="embm-labs--reauthorize button-secondary"><?php _e('Re-authorize with Untappd', 'embm'); ?></button><br />
         <small><em><?php _e('You will need to log out of the Untappd.com website before re-authorizing.', 'embm'); ?></em></small>
@@ -37,6 +49,21 @@ function EMBM_Admin_Labs_Import_error()
 <?php
 }
 
+/**
+ * Displays a API rate-limiting error message based on response
+ *
+ * @param any $res Untappd API response
+ *
+ * @return boolean Whether or not an error was shown
+ */
+function EMBM_Admin_Labs_Api_error($res)
+{
+    if (is_null($res) || is_string($res)) {
+        EMBM_Admin_Notices_ratelimit($res);
+        return true;
+    }
+    return false;
+}
 
 // Show status
 $shown = EMBM_Admin_Authorize_status();
@@ -46,6 +73,7 @@ $token = EMBM_Admin_Authorize_token();
 
 // Make sure we're authorized
 if (null == $token) {
+    EMBM_Admin_Labs_Import_error(true);
     return;
 }
 
@@ -71,9 +99,16 @@ if ($user->account_type != 'brewery') {
 
 // Get Untappd brewery ID
 $brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
+if (!$brewery_id) {
+    EMBM_Admin_Labs_Import_error();
+    return;
+}
 
 // Get Untappd brewery info from API
 $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
+if (EMBM_Admin_Labs_Api_error($brewery)) {
+    return;
+}
 
 // Make sure brewery is claimed by authorized user
 if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $user->uid) {
@@ -83,7 +118,9 @@ if (!$brewery->claimed_status->is_claimed || $brewery->claimed_status->uid != $u
 
 // Get all the Untappd beers for the brewery
 $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
-
+if (EMBM_Admin_Labs_Api_error($beer_list)) {
+    return;
+}
 
 // Display import options
 ?>
@@ -153,7 +190,7 @@ $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
                 <td>
                     <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
                     <p class="description">
-                        <?php _e('Update the data from Untappd used in the above features. This is automatically daily.', 'embm'); ?>
+                        <?php _e('Update the data from Untappd used in the above features. This is automatically done daily.', 'embm'); ?>
                     </p>
                 </td>
             </tr>
