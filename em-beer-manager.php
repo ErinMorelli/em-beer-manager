@@ -356,7 +356,7 @@ function EMBM_Plugin_help()
                         __('Untappd API documentation', 'embm')
                     )
                 ).'</p><p><blockquote><em>"'.
-                __('All API applications are rate-limited to protect aganist abuse and keep the platform healthly. The default limit for API access is 100 calls per hour per key.', 'embm').'"</em></blockquote></p><p>'.
+                __('All API applications are rate-limited to protect against abuse and keep the platform healthy. The default limit for API access is 100 calls per hour per key.', 'embm').'"</em></blockquote></p><p>'.
                 __('If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.', 'embm').'</p><p>'.
                 __('In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.', 'embm').
                 '</p>'

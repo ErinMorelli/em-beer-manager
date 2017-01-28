@@ -125,7 +125,7 @@
 <h3 class="embm-settings--subhead"><?php _e('Template tag', 'embm'); ?></h3>
 
 <blockquote>
-    <code><?php echo htmlentities('<?php echo EEMBM_Output_Shortcodes_List_display( $args ); ?>'); ?></code></p>
+    <code><?php echo htmlentities('<?php echo EMBM_Output_Shortcodes_List_display( $args ); ?>'); ?></code></p>
     <p>
         <?php
             printf(

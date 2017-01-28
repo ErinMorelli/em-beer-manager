@@ -555,7 +555,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     } else {
         // Friendly text for when there are no reviews
         $output .= '<p class="embm-beer--reviews-empty">';
-        $output .= __('This beer has no checkins.', 'embm');
+        $output .= __('This beer has no check-ins yet!', 'embm');
         $output .= '</p>';
     }
 

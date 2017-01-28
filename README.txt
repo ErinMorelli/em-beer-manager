@@ -3,12 +3,12 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
-Tested up to: 4.7.1
+Tested up to: 4.7.2
 Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manage your beers with WordPress. Integrates simply with Untappd beer checkins. Great for everyone from home brewers to professional breweries!
+Manage your beers with WordPress. Integrates simply with Untappd beer checki-ns. Great for everyone from home brewers to professional breweries!
 
 
 == Description ==
@@ -19,7 +19,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
-* Simple beer check-in integration with Untappd
+* Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
@@ -38,13 +38,16 @@ These will display a single beer entry given it's ID number (found in "Beers" ad
 
 * __Template tag__:
 
-    `<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>`
+    `<?php echo EMBM_Output_Shortcodes_Beer_display( $beer_id, $args ); ?>`
 
     Where `$beer_id` is required and `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-        <?php echo EMBM_Output_Beer_display( 123, array(
-            'show_profile' => false,
-            'show_extras' => true
+        <?php echo EMBM_Output_Shortcodes_Beer_display( 123, array(
+            'show_profile'   => false,
+            'show_extras'    => true,
+            'show_rating'    => false,
+            'show_checkins'  => true,
+            'checkins_count' => 10
         ) ); ?>
 
 * __Options__:
@@ -58,6 +61,18 @@ These will display a single beer entry given it's ID number (found in "Beers" ad
     * __show_extras => `"true, false"`__ (Default = `true`)
 
         *Displays or hides the "More Beer Information" section*
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
+
+    * __show_checkins => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd check-ins section*
+
+    * __checkins_count => `"number"`__ (Default = `5`, limit is `15`)
+
+        *The number of recent Untappd check-ins to display*
 
 
 
@@ -71,15 +86,16 @@ These will display a formatted listing of all beers.
 
 * __Template tag__:
 
-    `<?php echo EMBM_Output_List_display( $args ); ?>`
+    `<?php echo EMBM_Output_Shortcodes_List_display( $args ); ?>`
 
     Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-        <?php echo EMBM_Output_List_display( array(
-            'show_extras' => false,
+        <?php echo EMBM_Output_Shortcodes_List_display( array(
+            'show_extras'    => false,
+            'show_rating'    => true,
             'beers_per_page' => 3,
-            'orderby' => 'name',
-            'order' => 'ASC'
+            'orderby'        => 'name',
+            'order'          => 'ASC'
         ) ); ?>
 
 * __Options__:
@@ -93,6 +109,10 @@ These will display a formatted listing of all beers.
     * __show_extras => `"true, false"`__ (Default = `true`)
 
         *Displays or hides the "More Beer Information" section*
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
 
     * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
 
@@ -136,6 +156,17 @@ These will display a formatted listing of all beers.
 
 == Frequently Asked Questions ==
 
+= Why am I seeing a "rate-limit" error? =
+
+From the [Untappd API documentation](https://untappd.com/api/docs):
+
+    "All API applications are rate-limited to protect against abuse and keep the platform healthy. The default limit for API access is 100 calls per hour per key."
+
+If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.
+
+In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.
+
+
 = What is the 'Labs' section and how risky is it to use? =
 
 New in v2.1.0 is the EM Beer Manager 'Labs'. This is a section where we plan to introduce new and experimental features for users to test. We do test all of the lab features before making them available, but cannot guarantee that there won't be any issues or bugs when using them, since they are still being worked on. If you experience any issues while using a Labs feature, please contact [labs@wp.erinmorelli.com](mailto:labs@wp.erinmorelli.com).
@@ -149,6 +180,8 @@ Beers can be accessed using `/wp-json/wp/v2/embm_beers` or individually at `/wp-
 Styles can be accessed using `/wp-json/wp/v2/embm_styles` or individually at `/wp-json/wp/v2/embm_styles/<style_id>`.
 
 Groups can be accessed using `/wp-json/wp/v2/embm_groups` or individually at `/wp-json/wp/v2/embm_groups/<group_id>`.
+
+Additionally, beer profile, extras, and Untappd information is available via the API and is able to be updated via POST/PUT calls.
 
 
 = I accidentally deleted some of the pre-loaded styles, how do I get them back? =
@@ -208,14 +241,13 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Screenshots ==
 
-1. The "Beer" management screen
-2. Beer profile information
-3. Extra Beer information
-4. Special groups taxonomy
-5. Pre-populated styles taxonomy
-6. Single beer front-end display (with all options enabled)
+1. The beer post type list page
+2. Extra beer post metaboxes
+3. Pre-populated styles taxonomy
+4. Plugin settings page
+5. Single beer page display
+6. Beer list widget options & display
 7. Untappd check-in widget options & display
-8. Beer List widget options & display
 
 
 == Changelog ==
@@ -225,8 +257,8 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * [Labs] Fixed ID importing, which was throwing an incorrect error
 * Moved Untappd authentication out of Labs, available to all users, not just breweries
 * Associate an existing beer with an Untappd beer
-* Updated Untappd Check-Ins widget to work with Untappd API
-* Display Untappd rates & reviews for beers
+* Updated Untappd Check-ins widget to work with Untappd API
+* Display Untappd ratings & check-ins for individual beers
 
 = 2.1.6 =
 * Fixing WP REST API compatibility issue after 4.6.1 upgrade

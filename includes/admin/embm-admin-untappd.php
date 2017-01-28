@@ -349,7 +349,6 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 
     // Check if we should attempt a reload (every 15 mins)
     $reload = EMBM_Admin_Untappd_reload('beer_list', 15 * MINUTE_IN_SECONDS);
-    error_log('beers: '.$reload);
 
     // Get beer list if it's not cached
     if (false === $beer_list || $reload) {
@@ -395,7 +394,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     $cache_name = 'embm_untappd_data';
     $beer = null;
     $beer_cache = null;
-    $refresh = false;
+    $reload = false;
     $expired = false;
     $now = time();
     $cache_time = 15 * MINUTE_IN_SECONDS;
@@ -416,7 +415,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         $delta = $now - $beer_cache;
 
         // Check for expired cache
-        $refresh = ($delta >= $cache_time);
+        $reload = ($delta >= $cache_time);
 
         // If cache is over a day, remove it (as per TOS)
         $delete = ($delta >= $store_time);
@@ -428,7 +427,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     }
 
     // Get fresh beer data from API
-    if ($refresh) {
+    if ($refresh || $reload) {
         $beer_res = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
         // If there was a problem, return the cached data

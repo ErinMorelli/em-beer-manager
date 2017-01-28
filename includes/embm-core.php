@@ -473,26 +473,35 @@ function EMBM_Core_Beer_api()
         return;
     }
 
-    // Set API field options
-    $field_options = array(
-        'get_callback'    => 'EMBM_Core_Beer_Api_get',
-        'update_callback' => 'EMBM_Core_Beer_Api_update',
-        'schema'          => null,
-    );
+    // Set callback functions
+    $get_callback = 'EMBM_Core_Beer_Api_get';
+    $update_callback = 'EMBM_Core_Beer_Api_update';
 
     // Register profile API field
-    register_rest_field('embm_beer', 'profile', $field_options);
+    register_rest_field('embm_beer', 'embm_profile', array(
+        'get_callback'    => $get_callback,
+        'update_callback' => $update_callback,
+        'schema'          => EMBM_Core_Beer_Api_schema('profile')
+    ));
 
     // Register extras API field
-    register_rest_field('embm_beer', 'extras', $field_options);
+    register_rest_field('embm_beer', 'embm_extras', array(
+        'get_callback'    => $get_callback,
+        'update_callback' => $update_callback,
+        'schema'          => EMBM_Core_Beer_Api_schema('extras')
+    ));
 
     // Retrieve Untappd settings
     $ut_option = get_option('embm_options');
 
     // Check if Untappd is disabled
-    if (isset($ut_option['embm_untappd_check'])) {
+    if (!isset($ut_option['embm_untappd_check']) || $ut_option['embm_untappd_check'] == '') {
         // Register Untappd URL API field
-        register_rest_field('embm_beer', 'untappd', $field_options);
+        register_rest_field('embm_beer', 'embm_untappd', array(
+            'get_callback'    => $get_callback,
+            'update_callback' => $update_callback,
+            'schema'          => EMBM_Core_Beer_Api_schema('untappd')
+        ));
     }
 }
 
@@ -514,7 +523,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     $beer_id = $object['id'];
 
     // Return beer profile data
-    if ($field_name == 'profile') {
+    if ($field_name == 'embm_profile') {
         // Set up return array
         $profile_array = array(
             'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
@@ -536,7 +545,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     }
 
     // Return beer extras data
-    if ($field_name == 'extras') {
+    if ($field_name == 'embm_extras') {
         // Set up return array
         $extras_array = array(
             'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
@@ -554,7 +563,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     }
 
     // Return beer Untappd information
-    if ($field_name == 'untappd') {
+    if ($field_name == 'embm_untappd') {
         // Get Untappd id
         $raw_id = intval(get_post_meta($beer_id, 'embm_untappd', true));
 
@@ -563,11 +572,6 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
 
         // Set Untappd id
         $untappd_array['id'] = ($raw_id == 0) ? null : $raw_id;
-
-        // Set Untappd link
-        if ($raw_id != 0) {
-            $untappd_array['link'] = EMBM_Core_Beer_attr($beer_id, 'untappd');
-        }
 
         // Return formatted info
         return $untappd_array;
@@ -594,7 +598,7 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     $beer_id = $object->ID;
 
     // Return beer profile data
-    if ($field_name == 'profile') {
+    if ($field_name == 'embm_profile') {
         // Save input
         if (isset($value['malts']) && is_string($value['malts'])) {
             update_post_meta($beer_id, 'embm_malts', esc_attr($value['malts']));
@@ -611,13 +615,13 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
         if (isset($value['ibu']) && is_int($value['ibu'])) {
             update_post_meta($beer_id, 'embm_ibu', esc_attr($value['ibu']));
         }
-        if (isset($value['abv']) && is_float($value['abv'])) {
+        if (isset($value['abv']) && (is_float($value['abv']) || is_int($value['abv']))) {
             update_post_meta($beer_id, 'embm_abv', esc_attr($value['abv']));
         }
     }
 
     // Return beer extras data
-    if ($field_name == 'extras') {
+    if ($field_name == 'embm_extras') {
         // Save input
         if (isset($value['beer_number']) && is_int($value['beer_number'])) {
             update_post_meta($beer_id, 'embm_beer_num', esc_attr($value['beer_number']));
@@ -631,12 +635,117 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     }
 
     // Return beer Untappd information
-    if ($field_name == 'untappd') {
+    if ($field_name == 'embm_untappd') {
         // Save input
         if (isset($value['id']) && is_int($value['id'])) {
-            update_post_meta($beer_id, 'embm_untappd', esc_attr($value['id']));
+            // Get old id
+            $new_id = esc_attr($value['id']);
+            $old_id = get_post_meta($post_id, 'embm_untappd', true);
+
+            // Skip if this is not a new ID
+            if ($beer_id !== $old_id) {
+                // Save new ID
+                update_post_meta($beer_id, 'embm_untappd', $new_id);
+
+                // Get token
+                $token = EMBM_Admin_Authorize_token();
+
+                // Make sure we're authorized
+                if (null !== $token) {
+                    // Set API Root
+                    $api_root = EMBM_UNTAPPD_API_URL.$token;
+
+                    // Update cached data
+                    EMBM_Admin_Untappd_beer($api_root, $new_id, $beer_id, true);
+                }
+            }
         }
     }
+}
+
+/**
+ * Get JSON schema data for a given API field
+ *
+ * @param string $field_name Name of field
+ *
+ * @return array JSON schema data
+ */
+function EMBM_Core_Beer_Api_schema($field_name)
+{
+    // Return beer profile data schema
+    if ($field_name == 'profile') {
+        return array(
+            'type'          => 'object',
+            'description'   => esc_html__('The beer profile information for the object.', 'embm'),
+            'context'       => array('view', 'edit'),
+            'items'         => array(
+                'malts'     => array(
+                    'description'   => esc_html__('The beer malt data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'hops'      => array(
+                    'description'   => esc_html__('The beer hops data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'additions' => array(
+                    'description'   => esc_html__('The beer additions/spices data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'yeast'     => array(
+                    'description'   => esc_html__('The beer yeast data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'ibu'       => array(
+                    'description'   => esc_html__('The beer IBU measurement for the object.', 'embm'),
+                    'type'          => 'integer'
+                ),
+                'abv'       => array(
+                    'description'   => esc_html__('The beer ABV percentage for the object.', 'embm'),
+                    'type'          => 'number'
+                )
+            )
+        );
+    }
+
+    // Return beer extras data schema
+    if ($field_name == 'extras') {
+        return array(
+            'type'          => 'object',
+            'description'   => esc_html__('The beer extras information for the object.', 'embm'),
+            'context'       => array('view', 'edit'),
+            'items'         => array(
+                'availability'  => array(
+                    'description'   => esc_html__('The beer availability data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'notes'         => array(
+                    'description'   => esc_html__('The beer additional notes/food parings data for the object.', 'embm'),
+                    'type'          => 'string'
+                ),
+                'beer_number'   => array(
+                    'description'   => esc_html__('The beer number for the object.', 'embm'),
+                    'type'          => 'integer'
+                )
+            )
+        );
+    }
+
+    // Return beer extras data schema
+    if ($field_name == 'untappd') {
+        return array(
+            'type'          => 'object',
+            'description'   => esc_html__('The Untappd information for the object.', 'embm'),
+            'context'       => array('view', 'edit'),
+            'items'         => array(
+                'id'    => array(
+                    'description'   => esc_html__('The Untappd ID for the object.', 'embm'),
+                    'type'          => 'integer'
+                )
+            )
+        );
+    }
+
+    return null;
 }
 
 /**

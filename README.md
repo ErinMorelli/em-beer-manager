@@ -2,7 +2,7 @@
 
 *by Erin Morelli*
 
-Manage your beers with WordPress. Integrates simply with Untappd beer checkins. Great for everyone from home brewers to professional breweries!
+Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
 
 
 ## Overview ###
@@ -13,7 +13,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * A customizable "group" taxonomy for categorizing and grouping your beers
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
-* Simple beer checkin integration with Untappd
+* Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
@@ -43,8 +43,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 * [Labs] Fixed ID importing, which was throwing an incorrect error
 * Moved Untappd authentication out of Labs, available to all users, not just breweries
 * Associate an existing beer with an Untappd beer
-* Updated Untappd Check-Ins widget to work with Untappd API
-* Display Untappd rates & reviews for beers
+* Updated Untappd Check-ins widget to work with Untappd API
+* Display Untappd ratings & check-ins for individual beers
 
 
 
@@ -73,13 +73,16 @@ These will display a single beer entry given it's ID number (found in "Beers" ad
 
 * __Template tag:__
 
-    `<?php echo EMBM_Output_Beer_display( $beer_id, $args ); ?>`
+    `<?php echo EMBM_Output_Shortcodes_Beer_display( $beer_id, $args ); ?>`
 
     Where `$beer_id` is required and `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-        <?php echo EMBM_Output_Beer_display( 123, array(
-            'show_profile' => false,
-            'show_extras' => true
+        <?php echo EMBM_Output_Shortcodes_Beer_display( 123, array(
+            'show_profile'   => false,
+            'show_extras'    => true,
+            'show_rating'    => false,
+            'show_checkins'  => true,
+            'checkins_count' => 10
         ) ); ?>
 
 * __Options__:
@@ -93,6 +96,18 @@ These will display a single beer entry given it's ID number (found in "Beers" ad
     * __show_extras => `"true, false"`__ (Default = `true`)
 
         *Displays or hides the "More Beer Information" section*
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
+
+    * __show_checkins => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd check-ins section*
+
+    * __checkins_count => `"number"`__ (Default = `5`, limit is `15`)
+
+        *The number of recent Untappd check-ins to display*
 
 
 ### List All Beers ###
@@ -105,15 +120,16 @@ These will display a formatted listing of all beers.
 
 * __Template tag:__
 
-    `<?php echo EMBM_Output_List_display( $args ); ?>`
+    `<?php echo EMBM_Output_Shortcodes_List_display( $args ); ?>`
 
     Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
 
-        <?php echo EMBM_Output_List_display( array(
-            'show_extras' => false,
+        <?php echo EMBM_Output_Shortcodes_List_display( array(
+            'show_extras'    => false,
+            'show_rating'    => true,
             'beers_per_page' => 3,
-            'orderby' => 'name',
-            'order' => 'ASC'
+            'orderby'        => 'name',
+            'order'          => 'ASC'
         ) ); ?>
 
 * __Options__:
@@ -127,6 +143,10 @@ These will display a formatted listing of all beers.
     * __show_extras => `"true, false"`__ (Default = `true`)
 
         *Displays or hides the "More Beer Information" section*
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
 
     * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
 

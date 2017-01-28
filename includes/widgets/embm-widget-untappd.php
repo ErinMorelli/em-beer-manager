@@ -393,12 +393,11 @@ add_action('widgets_init', 'EMBM_Widget_Untappd_Recent_register');
 /**
  * Generate HTML content of Untappd Recent Check-ins widget
  *
- * @param array $beers     Widget options
- * @param bool  $force_xml Whether or not to force XML output
+ * @param array $beers Widget options
  *
  * @return string/html
  */
-function EMBM_Widget_Untappd_Recent_display($beers, $force_xml = false)
+function EMBM_Widget_Untappd_Recent_display($beers)
 {
     // Set widget options
     $title = $beers['title'];
@@ -430,7 +429,7 @@ function EMBM_Widget_Untappd_Recent_display($beers, $force_xml = false)
     $token = EMBM_Admin_Authorize_token();
 
     // Display widget content from Untappd
-    if (null !== $token && !$force_xml) {
+    if (null !== $token) {
         // Get API content
         $output .= EMBM_Widget_Untappd_Recent_Display_api($token, $beers);
     } else {
@@ -499,7 +498,7 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $beers)
     // Check for errors
     if (!is_object($checkins)) {
         // Force XML output as fall back
-        return EMBM_Widget_Untappd_Recent_display($beers, true);
+        return EMBM_Widget_Untappd_Recent_Display_xml($beers, true);
     }
 
     /// Start output
