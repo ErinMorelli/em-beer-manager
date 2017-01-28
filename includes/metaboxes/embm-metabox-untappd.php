@@ -216,7 +216,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </a>
             </p>
             <p class="description">
-                <?php printf(__('This is automatically done every %d hours.', 'embm'), 3); ?>
+                <?php _e('This is automatically done daily.', 'embm'); ?>
             </p>
         </div>
     <?php elseif ($show_api_error) : ?>

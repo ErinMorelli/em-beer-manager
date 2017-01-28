@@ -47,7 +47,7 @@ $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true)
             <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/ut-credit.png" alt="<?php _e('Powered by Untappd', 'embm'); ?>" border="0" />
         </a>
     </p>
-    <p><?php _e('All Untappd logo graphics are the sole property of <strong>Untappd LLC.</strong>', 'embm'); ?></p>
+    <p><?php printf(__('All Untappd logo graphics are the sole property of %s', 'embm'), '<strong>Untappd LLC.</strong>'); ?></p>
     <!-- Admin menu beer icon from SimpleIcon.com-->
     <p>
         <?php printf(

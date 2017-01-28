@@ -327,13 +327,13 @@ function EMBM_Plugin_help()
             'id'        => 'embm-untappd-integration',
             'title'     => __('Untappd Integration', 'embm'),
             'content'   => '<p>'.
-                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-Ins widget, ratings, check-ins, and check-in buttons.', 'embm').
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-ins widget, ratings, check-ins, and check-in buttons.', 'embm').
                 '</p><p>'.
                 __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm').
                 '</p><p>'.
                 __('You can display Untappd beer ratings and recent check-ins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Check-ins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many check-ins to show.', 'embm').
                 '</p></p>'.
-                __('Data from Untappd for ratings and check-ins is refreshed every 3 hours, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', 'embm').
+                __('Data from Untappd for ratings and check-ins is refreshed automatically, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', 'embm').
                 '</p>'
         ),
         'untappd_id'    => array(

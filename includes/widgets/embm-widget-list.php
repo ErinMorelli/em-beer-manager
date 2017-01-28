@@ -94,7 +94,7 @@ class EMBM_Widget_List extends WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length', 'embm'); ?>: </label>
-            <input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small><?php _e(' Characters', 'embm'); ?></small>
+            <input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small>&nbsp;<?php _e('Characters', 'embm'); ?></small>
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style', 'embm'); ?>: </label>
