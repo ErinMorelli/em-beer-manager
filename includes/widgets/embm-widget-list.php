@@ -19,7 +19,6 @@
  * @package EMBM\Widget\List
  */
 
-
 /**
  * Add Beer List widget
  */
@@ -33,11 +32,11 @@ class EMBM_Widget_List extends WP_Widget
     public function __construct()
     {
         $widget_options = array(
-            'classname'     => 'beer_list_widget',
+            'classname'     => 'embm_beer_list_widget',
             'description'   => __('Displays a list of beers', 'embm')
         );
         parent::__construct(
-            'beer_list_widget',
+            'embm_beer_list_widget',
             __('Beer List', 'embm'),
             $widget_options
         );
@@ -75,7 +74,8 @@ class EMBM_Widget_List extends WP_Widget
         $style = $instance['style'];
         $group = $instance['group'];
 
-        ?>
+?>
+    <div class="embm-beer-list-widget">
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
             <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
@@ -114,7 +114,8 @@ class EMBM_Widget_List extends WP_Widget
                 <?php endforeach; ?>
             </select>
         </p>
-        <?php
+    </div>
+<?php
     }
 
     /**
@@ -129,13 +130,13 @@ class EMBM_Widget_List extends WP_Widget
     {
         $instance = $old_instance;
 
-        $instance['title'] = $new_instance['title'];
-        $instance['exclude'] = $new_instance['exclude'];
-        $instance['count'] = $new_instance['count'];
-        $instance['summary'] = $new_instance['summary'];
-        $instance['sum_length'] = $new_instance['sum_length'];
-        $instance['style'] = $new_instance['style'];
-        $instance['group'] = $new_instance['group'];
+        $instance['title'] = isset($new_instance['title']) ? $new_instance['title'] : $old_instance['title'];
+        $instance['exclude'] = isset($new_instance['exclude']) ? $new_instance['exclude'] : $old_instance['exclude'];
+        $instance['count'] = isset($new_instance['count']) ? $new_instance['count'] : $old_instance['count'];
+        $instance['summary'] = isset($new_instance['summary']) ? '1' : '';
+        $instance['sum_length'] = isset($new_instance['sum_length']) ? $new_instance['sum_length'] : $old_instance['sum_length'];
+        $instance['style'] = isset($new_instance['style']) ? $new_instance['style'] : $old_instance['style'];
+        $instance['group'] = isset($new_instance['group']) ? $new_instance['group'] : $old_instance['group'];
 
         return $instance;
     }
@@ -153,28 +154,19 @@ class EMBM_Widget_List extends WP_Widget
         // Extract arguments
         extract($args);
 
-        // Set widget options
-        $title = apply_filters('widget_title', $instance['title']);
-        $exclude = apply_filters('widget_exclude', $instance['exclude']);
-        $count = apply_filters('widget_count', $instance['count']);
-        $summary = apply_filters('widget_summary', $instance['summary']);
-        $sum_length = apply_filters('widget_sum_length', $instance['sum_length']);
-        $style = apply_filters('widget_style', $instance['style']);
-        $group = apply_filters('widget_group', $instance['group']);
-
         // Output pre-widget content
         echo $before_widget;
 
         // Output widget content
         echo EMBM_Widget_List_display(
             array(
-                'title'         => $title,
-                'exclude'       => $exclude,
-                'count'         => $count,
-                'summary'       => $summary,
-                'sum_length'    => $sum_length,
-                'style'         => $style,
-                'group'         => $group
+                'title'         => apply_filters('widget_title', $instance['title']),
+                'exclude'       => apply_filters('widget_exclude', $instance['exclude']),
+                'count'         => apply_filters('widget_count', $instance['count']),
+                'summary'       => apply_filters('widget_summary', $instance['summary']),
+                'sum_length'    => apply_filters('widget_sum_length', $instance['sum_length']),
+                'style'         => apply_filters('widget_style', $instance['style']),
+                'group'         => apply_filters('widget_group', $instance['group'])
             )
         );
 
@@ -185,7 +177,6 @@ class EMBM_Widget_List extends WP_Widget
 
 // Load the widget
 add_action('widgets_init', create_function('', 'return register_widget("EMBM_Widget_List");'));
-
 
 /**
  * Generate HTML content of Beer List widget

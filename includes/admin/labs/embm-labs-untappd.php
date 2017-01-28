@@ -19,29 +19,16 @@
  * @package EMBM\Admin\Labs\UntappdImport
  */
 
-
 /**
  * Displays an unauthorized error message
  *
- * @param bool $token Whether to show token message or not
- *
  * @return void
  */
-function EMBM_Admin_Labs_Import_error($token = false)
+function EMBM_Admin_Labs_Import_error()
 {
-
-    if ($token) {
 ?>
-        <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
-        <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
-<?php
-    } else {
-?>
-        <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
-        <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
-<?php
-    }
-?>
+    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
+    <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
     <p>
         <button class="embm-labs--reauthorize button-secondary"><?php _e('Re-authorize with Untappd', 'embm'); ?></button><br />
         <small><em><?php _e('You will need to log out of the Untappd.com website before re-authorizing.', 'embm'); ?></em></small>
@@ -73,7 +60,7 @@ $token = EMBM_Admin_Authorize_token();
 
 // Make sure we're authorized
 if (null == $token) {
-    EMBM_Admin_Labs_Import_error(true);
+    EMBM_Admin_Labs_Import_error();
     return;
 }
 

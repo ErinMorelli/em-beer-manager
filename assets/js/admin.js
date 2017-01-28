@@ -321,6 +321,37 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    /* ---- UNTAPPD WIDGET ---- */
+
+    // Handle beer cache flush requests
+    $('.embm-untappd-widget .embm-untappd-widget--refresh-button a').on('click', function (e) {
+        e.preventDefault();
+
+        var api_root = $(this).data('api-root'),
+            widget = $(this).closest('.embm-untappd-widget'),
+            brewery_id = widget.find('.embm-untappd-widget--brewery input').val();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-flush-checkins';
+        ajax_params.brewery_id = brewery_id;
+        ajax_params.api_root = api_root;
+
+        // Make AJAX request
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+
+            // Show error for bad response
+            if (response.xml === null || response.api === null) {
+                var error = '<p class="notice notice-' + response.error.type + '" style="font-size:12px;background:#fafafa;">';
+                error += '<strong>' + response.error.title + '</strong> ' + response.error.message + '</p>';
+                widget.append(error);
+            }
+        });
+    });
+
     /* ---- LABS ---- */
 
     // Redirect to flush Untappd cache

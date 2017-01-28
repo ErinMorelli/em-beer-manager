@@ -352,7 +352,6 @@ function EMBM_Output_extras($beer_id)
     return $output;
 }
 
-
 /**
  * Generate star HTML for a given beer
  *
@@ -410,7 +409,6 @@ function EMBM_Output_rating($beer_id)
     return $output;
 }
 
-
 /**
  * Generate star HTML for a given rating
  *
@@ -454,7 +452,6 @@ function EMBM_Output_Rating_stars($rating_score)
     return $stars;
 }
 
-
 /**
  * Generate star CSS
  *
@@ -480,7 +477,6 @@ function EMBM_Output_Rating_styles()
     // Return CSS content
     return $styles;
 }
-
 
 /**
  * Generate reviews HTML for a given beer
@@ -590,7 +586,6 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     return $output;
 }
 
-
 /**
  * Generate review HTML for a given review
  *
@@ -603,9 +598,6 @@ function EMBM_Output_Review_content($review)
     // Get review parts
     $user = $review->user;
     $venue = $review->venue;
-    $media = $review->media;
-    $toasts = $review->toasts;
-    $source = $review->source;
 
     // Check in user URL
     $user_url = 'https://untappd.com/user/'.$user->user_name;
@@ -622,13 +614,14 @@ function EMBM_Output_Review_content($review)
     // Author name
     $output .= '<h4 class="embm-beer--review-author">';
     $output .= '<a href="'.$user_url.'" target="_blank">';
-    $output .= $user->first_name.' '.$user->last_name;
+    $output .= sprintf('%s %s', $user->first_name, $user->last_name);
     $output .= '</a></h4>';
 
     // Review stars
     if ($review->rating_score) {
         $output .= '<div class="embm-beer--rating-stars" title="'.$review->rating_score.'">';
-        $output .= EMBM_Output_Rating_stars($review->rating_score).'</div>';
+        $output .= EMBM_Output_Rating_stars($review->rating_score);
+        $output .= '</div>';
     }
 
     // Review comment
@@ -636,52 +629,60 @@ function EMBM_Output_Review_content($review)
         $output .= '<div class="embm-beer--review-comment">'.$review->checkin_comment.'</div>';
     }
 
-    // Review images
-    if ($media->count > 0) {
-        $output .= '';
-    }
-
-    // Review toasts
-    if ($toasts->count > 0) {
-        $output .= '';
-    }
-
-    // Format review time
-    $offset = get_option('gmt_offset');
-    $created_at = strtotime($review->created_at);
-    $datestamp = mktime(
-        date('H', $created_at) + $offset,
-        date('i', $created_at),
-        0,
-        date('n', $created_at),
-        date('j', $created_at),
-        date('y', $created_at)
-    );
-
     // Start review meta
     $output .= '<div class="embm-beer--review-meta">';
 
     // Show review date
     $output .= '<span class="embm-beer--review-date">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
-    $output .= date('j M y', $datestamp).'</a></span>';
+    $output .= EMBM_Output_Review_date($review->created_at);
+    $output .= '</a></span>';
 
     // Show review location
     if (is_object($venue) && property_exists($venue, 'venue_id')) {
         $output .= '<span class="embm-beer--review-venue">';
         $output .= '<a href="https://untappd.com/venue/'.$venue->venue_id.'" target="_blank">';
-        $output .= $venue->venue_name.'</a></span>';
+        $output .= $venue->venue_name;
+        $output .= '</a></span>';
     }
 
     // Show review link
     $output .= '<span class="embm-beer--review-link">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
-    $output .= __('View Full Check-in', 'embm').'</a>';
-    $output .= '</span>';
+    $output .= __('View Full Check-in', 'embm');
+    $output .= '</a></span>';
 
-    // End main content
-    $output .= '</div></div></div>'."\n";
+    // End review meta and content
+    $output .= '</div></div>';
+
+    // End review
+    $output .= '</div>'."\n";
 
     // Return HTML output
     return $output;
+}
+
+/**
+ * Display data using WP settings
+ *
+ * @param string $date The date to display
+ *
+ * @return string
+ */
+function EMBM_Output_Review_date($date)
+{
+    // Display date using WP timezone setting
+    $offset = get_option('gmt_offset');
+    $post_date = strtotime($date);
+    $new_date = mktime(
+        date('H', $post_date) + $offset,
+        date('i', $post_date),
+        0,
+        date('n', $post_date),
+        date('j', $post_date),
+        date('y', $post_date)
+    );
+
+    // Output formatted date
+    return date('j M y', $new_date);
 }

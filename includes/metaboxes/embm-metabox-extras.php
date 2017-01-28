@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Metabox\Extras
  */
 
-
 /**
  * Add the Beer Information metabox to the Beer post type
  *
@@ -29,7 +28,7 @@ function EMBM_Admin_Metabox_extras()
 {
     // Add More Beer Information metabox to main content
     add_meta_box(
-        'beer-info',
+        'embm_beer_extras',
         __('Extra Beer Information', 'embm'),
         'EMBM_Admin_Metabox_Extras_content',
         'embm_beer',
@@ -40,7 +39,6 @@ function EMBM_Admin_Metabox_extras()
 
 // Add to beer post editor
 add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_extras');
-
 
 /**
  * Outputs More Beer Information metabox content
@@ -98,7 +96,6 @@ function EMBM_Admin_Metabox_Extras_content()
 </div>
 <?php
 }
-
 
 /**
  * Save the options from the More Beer Information metabox

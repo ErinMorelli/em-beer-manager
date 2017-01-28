@@ -20,7 +20,6 @@
  */
 ?>
 
-
 <h2><?php _e('Single Beer Display', 'embm'); ?></h2>
 
 <p><?php _e('These will display a single beer entry given it\'s ID number.', 'embm'); ?></p>

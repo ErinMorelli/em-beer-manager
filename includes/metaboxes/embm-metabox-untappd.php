@@ -28,7 +28,7 @@ function EMBM_Admin_Metabox_untappd()
 {
     // Add Untappd metabox to main content
     add_meta_box(
-        'beer-untappd',
+        'embm_beer_untappd',
         __('Untappd', 'embm'),
         'EMBM_Admin_Metabox_Untappd_content',
         'embm_beer',

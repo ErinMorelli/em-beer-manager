@@ -38,11 +38,11 @@ function EMBM_Admin_menu()
 
     // Setup admin page
     $embm_admin_page = add_options_page(
-        __('EM Beer Manager Settings', 'embm'), // Page title
-        __('EM Beer Manager', 'embm'),          // Menu title
-        'manage_options',                       // Capability
-        'embm-settings',                        // Menu slug
-        'EMBM_Admin_Settings_page'              // Function
+        __('EM Beer Manager Settings', 'embm'),
+        __('EM Beer Manager', 'embm'),
+        'manage_options',
+        'embm-settings',
+        'EMBM_Admin_Settings_page'
     );
 
     // Add contextual help
@@ -254,7 +254,6 @@ function EMBM_Admin_Settings_section($section)
 {
     echo '<a name="' . $section['id'] . '"></a>';
 }
-
 
 /**
  * Outputs custom stylesheet URL input
@@ -535,7 +534,7 @@ function EMBM_Admin_Settings_Single_untappd()
     }
 
     echo '<p><input name="embm_options[embm_reviews_show_single]" type="checkbox" id="embm_reviews_show_single" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd checkins on single beer pages', 'embm').'</label>';
+    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd check-ins on single beer pages', 'embm').'</label>';
 
     $reviews_count = 5;
     if (isset($options['embm_reviews_count_single'])) {
@@ -544,7 +543,7 @@ function EMBM_Admin_Settings_Single_untappd()
 
     echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_single">'.__('Show', 'embm');
     echo '<input id="embm_reviews_count_single" name="embm_options[embm_reviews_count_single]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('checkins (max. %d)', 'embm'), 15);
+    echo sprintf(__('check-ins (max. %d)', 'embm'), 15);
     echo '</label></p>';
 
     echo '<p class="description">('.__('This setting may be overridden for individual beers.', 'embm').')</p>';

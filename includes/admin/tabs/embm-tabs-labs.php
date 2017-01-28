@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Tabs\Labs
  */
 
-
 // Problem email subject
 $email_subj = '[EM Beer Manager] Issue Report';
 

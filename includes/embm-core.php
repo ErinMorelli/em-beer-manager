@@ -478,18 +478,26 @@ function EMBM_Core_Beer_api()
     $update_callback = 'EMBM_Core_Beer_Api_update';
 
     // Register profile API field
-    register_rest_field('embm_beer', 'embm_profile', array(
-        'get_callback'    => $get_callback,
-        'update_callback' => $update_callback,
-        'schema'          => EMBM_Core_Beer_Api_schema('profile')
-    ));
+    register_rest_field(
+        'embm_beer',
+        'embm_profile',
+        array(
+            'get_callback'    => $get_callback,
+            'update_callback' => $update_callback,
+            'schema'          => EMBM_Core_Beer_Api_schema('profile')
+        )
+    );
 
     // Register extras API field
-    register_rest_field('embm_beer', 'embm_extras', array(
-        'get_callback'    => $get_callback,
-        'update_callback' => $update_callback,
-        'schema'          => EMBM_Core_Beer_Api_schema('extras')
-    ));
+    register_rest_field(
+        'embm_beer',
+        'embm_extras',
+        array(
+            'get_callback'    => $get_callback,
+            'update_callback' => $update_callback,
+            'schema'          => EMBM_Core_Beer_Api_schema('extras')
+        )
+    );
 
     // Retrieve Untappd settings
     $ut_option = get_option('embm_options');
@@ -497,11 +505,15 @@ function EMBM_Core_Beer_api()
     // Check if Untappd is disabled
     if (!isset($ut_option['embm_untappd_check']) || $ut_option['embm_untappd_check'] == '') {
         // Register Untappd URL API field
-        register_rest_field('embm_beer', 'embm_untappd', array(
-            'get_callback'    => $get_callback,
-            'update_callback' => $update_callback,
-            'schema'          => EMBM_Core_Beer_Api_schema('untappd')
-        ));
+        register_rest_field(
+            'embm_beer',
+            'embm_untappd',
+            array(
+                'get_callback'    => $get_callback,
+                'update_callback' => $update_callback,
+                'schema'          => EMBM_Core_Beer_Api_schema('untappd')
+            )
+        );
     }
 }
 
@@ -524,57 +536,43 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
 
     // Return beer profile data
     if ($field_name == 'embm_profile') {
-        // Set up return array
-        $profile_array = array(
-            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
-            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
-            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
-            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast')
-        );
-
-        // Get int vals
+        // Get ABV and IBU as int/float
         $abv = floatval(get_post_meta($beer_id, 'embm_abv', true));
         $ibu = intval(EMBM_Core_Beer_attr($beer_id, 'ibu'));
 
-        // Set int vals
-        $profile_array['abv'] = ($abv == 0) ? null : $abv;
-        $profile_array['ibu'] = ($ibu == 0) ? null : $ibu;
-
         // Return formatted info
-        return $profile_array;
+        return array(
+            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
+            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
+            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
+            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast'),
+            'abv'       => ($abv == 0) ? null : $abv,
+            'ibu'       => ($ibu == 0) ? null : $ibu
+        );
     }
 
     // Return beer extras data
     if ($field_name == 'embm_extras') {
-        // Set up return array
-        $extras_array = array(
-            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
-            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes')
-        );
-
-        // Get int vals
+        // Get Beer Number as int
         $beer_num = intval(get_post_meta($beer_id, 'embm_beer_num', true));
 
-        // Set int fals
-        $extras_array['beer_number'] = ($beer_num == 0) ? null : $beer_num;
-
         // Return formatted array
-        return $extras_array;
+        return array(
+            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
+            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes'),
+            'beer_number'   => ($beer_num == 0) ? null : $beer_num
+        );
     }
 
     // Return beer Untappd information
     if ($field_name == 'embm_untappd') {
-        // Get Untappd id
-        $raw_id = intval(get_post_meta($beer_id, 'embm_untappd', true));
+        // Get Untappd ID as int
+        $untappd_id = intval(get_post_meta($beer_id, 'embm_untappd', true));
 
-        // Set up array
-        $untappd_array = array();
-
-        // Set Untappd id
-        $untappd_array['id'] = ($raw_id == 0) ? null : $raw_id;
-
-        // Return formatted info
-        return $untappd_array;
+        // Return formatted array
+        return array (
+            'id' => ($untappd_id == 0) ? null : $untappd_id
+        );
     }
 }
 
@@ -770,7 +768,7 @@ function EMBM_Core_errors()
         // Get notice content
         $notice = $GLOBALS['EMBM_NOTICE_MAP']['save-error'][$error];
 
-    ?>
+?>
         <div class="<?php echo $notice['type']; ?> notice embm-notice">
             <p>
                 <span class="embm-notice--title"><?php echo $notice['title']; ?></span>
@@ -778,7 +776,7 @@ function EMBM_Core_errors()
             </p>
             <button type="button" class="notice-dismiss"></button>
         </div>
-    <?php
+<?php
     }
 
     // Remove the errors from cache

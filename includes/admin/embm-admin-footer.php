@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Footer
  */
 
-
 // Get official plugin data
 $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true);
 

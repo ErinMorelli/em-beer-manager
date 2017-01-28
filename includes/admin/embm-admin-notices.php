@@ -76,6 +76,12 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'title'     => __('ERROR', 'embm') . ':',
             'message'   => __('There was a problem retrieving check-in data from Untappd!', 'embm').' '.
                 __('Please try again later.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'error',
+            'title'     => __('ERROR', 'embm') . ':',
+            'message'   => __('There was a problem refreshing check-in data from Untappd!', 'embm').' '.
+                __('Please try again later.', 'embm')
         )
     )
 );

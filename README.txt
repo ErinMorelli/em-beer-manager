@@ -8,7 +8,7 @@ Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manage your beers with WordPress. Integrates simply with Untappd beer checki-ns. Great for everyone from home brewers to professional breweries!
+Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
 
 
 == Description ==
@@ -224,12 +224,12 @@ Example: `[beer-list show_profile="false" show_extras="false"]`
 
 The `show_profile` setting refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.
 
-The `show_extras` setting refers to the "More Beer Information" content stored for each beer, excluding the Untappd check-in button, which is handled separately.
+The `show_extras` setting refers to the "Extra Beer Information" content stored for each beer. This includes Beer Number, Availability, and Additional Notes.
 
 
-= Why isn't the Untappd checkin button hidden when I set `show_extras` to false? =
+= Why isn't the Untappd check-in button hidden when I set `show_extras` to false? =
 
-The Untappd checkin integration is handled separately from the `show_extras` setting. To hide the button for a single beer, make sure the "Untappd Check-in URL" box is empty - a square Untappd check-in icon will appear on the "Beers" admin page next to the beers where the button is active. You can also completely disable the Untappd options through the "EM Beer Manager" settings page.
+The Untappd check-in integration is handled separately from the `show_extras` setting. To hide the button for a single beer, make sure the "Untappd Check-in URL" box is empty - a square Untappd check-in icon will appear on the "Beers" admin page next to the beers where the button is active. You can also completely disable the Untappd options through the "EM Beer Manager" settings page.
 
 
 = My beer, style, or group pages are not displaying or are showing a 404 error =
@@ -253,12 +253,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 == Changelog ==
 
 = 3.0.0 =
-* [Labs] Import access to all of a brewery's Untappd beers, instead of just 15
-* [Labs] Fixed ID importing, which was throwing an incorrect error
+* [NEW] Display Untappd ratings & check-ins for individual beers
+* [NEW] Associate an existing beer with an Untappd beer
+* [LABS] Import access to all of a brewery's Untappd beers, instead of just 15
+* [LABS] Fixed ID importing, which was throwing an incorrect error
 * Moved Untappd authentication out of Labs, available to all users, not just breweries
-* Associate an existing beer with an Untappd beer
 * Updated Untappd Check-ins widget to work with Untappd API
-* Display Untappd ratings & check-ins for individual beers
 
 = 2.1.6 =
 * Fixing WP REST API compatibility issue after 4.6.1 upgrade
@@ -273,7 +273,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * Updated translation POT
 * Updated Untappd graphics to reflect the company's branding, as per their documentation
 * Beers imported from Untappd will now have their published date set by their Untappd creation date
-* The Untappd check-in widget'd brewery ID will now auto-populate with your brewery's ID if you've authenticated with Labs
+* The Untappd check-in widget's brewery ID will now auto-populate with your brewery's ID if you've authenticated with Labs
 * Pre-populated styles will now be populated from Untappd instead of BeerAdvocate
 * Fixed 'undefined function' error
 
@@ -283,7 +283,7 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * Added new Norwegian (nb_NO) language translation - *thanks to __Lars Kvisle__!*
 
 = 2.1.1 =
-* Added PUT/POST support for beer metadata via the Wordpress API
+* Added PUT/POST support for beer metadata via the WordPress API
 * Further improvements to the 'Import from Untappd' Labs feature
 
 = 2.1.0 =
@@ -373,6 +373,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.0.0 =
+Fixes a number of lingering small bugs. Adds a number of new Untappd integration features.
 
 = 2.1.3 =
 Fixed 'undefined function' error bug

@@ -37,7 +37,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 
         // Base widget options
         $widget_options = array(
-            'classname'     => 'recent_untappd_widget',
+            'classname'     => 'embm_recent_untappd_widget',
             'description'   => __('Displays a list of recent Untappd brewery check-ins', 'embm')
         );
 
@@ -46,7 +46,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 
         // Call parent construct
         parent::__construct(
-            'recent_untappd_widget',
+            'embm_recent_untappd_widget',
             __('Recent Untappd Check-ins', 'embm'),
             $widget_options
         );
@@ -147,6 +147,15 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             $brewery = $brewery_id;
         }
 
+        // Get token
+        $token = EMBM_Admin_Authorize_token();
+        $api_root = null;
+
+        // Check for token
+        if (null !== $token) {
+            $api_root = EMBM_UNTAPPD_API_URL.$token;
+        }
+
         // Get any errors
         foreach ($this->widget_errors as $error) {
             if (!array_key_exists($error, $GLOBALS['EMBM_NOTICE_MAP']['widget-error'])) {
@@ -165,8 +174,9 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             );
         }
 
-    ?>
-        <p>
+?>
+    <div class="embm-untappd-widget">
+        <p class="embm-untappd-widget--title">
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
             <input
                 id="<?php echo $this->get_field_id('title'); ?>"
@@ -176,7 +186,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="<?php echo $title; ?>"
             />
         </p>
-        <p>
+        <p class="embm-untappd-widget--brewery">
             <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID', 'embm'); ?>&nbsp;</label>
             <input
                 id="<?php echo $this->get_field_id('brewery'); ?>"
@@ -187,7 +197,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <a data-help="embm-untappd-brewery-id" class="embm-settings--help">?</a>
         </p>
-        <p>
+        <p class="embm-untappd-widget--count">
             <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show', 'embm'); ?>:&nbsp;</label>
             <input
                 id="<?php echo $this->get_field_id('items'); ?>"
@@ -201,7 +211,8 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             /><br />
             <small><em>(<?php printf(__('Max. %d', 'embm'), 15); ?></em>)</small>
         </p>
-        <p>
+        <hr />
+        <p class="embm-untappd-widget--rating">
             <input
                 id="<?php echo $this->get_field_id('rating'); ?>"
                 name="<?php echo $this->get_field_name('rating'); ?>"
@@ -211,7 +222,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <label for="<?php echo $this->get_field_id('rating'); ?>"><?php _e('Show check-in ratings', 'embm'); ?></label>
         </p>
-        <p>
+        <p class="embm-untappd-widget--comment">
             <input
                 id="<?php echo $this->get_field_id('comment'); ?>"
                 name="<?php echo $this->get_field_name('comment'); ?>"
@@ -221,7 +232,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <label for="<?php echo $this->get_field_id('comment'); ?>"><?php _e('Show check-in comments', 'embm'); ?></label>
         </p>
-        <p>
+        <p class="embm-untappd-widget--venue">
             <input
                 id="<?php echo $this->get_field_id('venue'); ?>"
                 name="<?php echo $this->get_field_name('venue'); ?>"
@@ -231,7 +242,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <label for="<?php echo $this->get_field_id('venue'); ?>"><?php _e('Show check-in venue', 'embm'); ?></label>
         </p>
-        <p style="margin-bottom:0;">
+        <p class="embm-untappd-widget--thumb" style="margin-bottom:0;">
             <input
                 id="<?php echo $this->get_field_id('thumb'); ?>"
                 name="<?php echo $this->get_field_name('thumb'); ?>"
@@ -241,10 +252,10 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <label for="<?php echo $this->get_field_id('thumb'); ?>"><?php _e('Show check-in avatar', 'embm'); ?></label>
         </p>
-        <p style="line-height:1;margin-top:0;padding-left:22px;">
+        <p class="embm-untappd-widget--thumb-note" style="line-height:1;margin-top:0;padding-left:22px;">
             <small><em>(<?php _e('Only shows default generic avatar when not authenticated with Untappd.', 'embm'); ?>)</em></small>
         </p>
-        <p>
+        <p class="embm-untappd-widget--more">
             <input
                 id="<?php echo $this->get_field_id('more'); ?>"
                 name="<?php echo $this->get_field_name('more'); ?>"
@@ -254,7 +265,18 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
             <label for="<?php echo $this->get_field_id('more'); ?>"><?php _e('Show "View More" link', 'embm'); ?></label>
         </p>
+        <hr />
+        <p class="embm-untappd-widget--refresh" style="margin-bottom:5px;">
+            <strong><?php _e('Refresh Untappd Check-in Data', 'embm'); ?></strong>
+        </p>
+        <p class="embm-untappd-widget--refresh-button" style="margin-top:0;margin-bottom:4px;">
+            <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>"><?php _e('Flush Cache', 'embm'); ?></a>
+        </p>
+        <p class="embm-untappd-widget--refresh-note" style="margin-top:0;">
+            <small><em><?php _e('This is automatically done daily.', 'embm'); ?></em></small>
+        </p>
         <?php echo $errors; ?>
+    </div>
 <?php
     }
 
@@ -314,7 +336,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             }
 
             // Log any errors
-            if ($has_error && !array_key_exists('1', $this->widget_errors)) {
+            if ($has_errors && !array_key_exists('1', $this->widget_errors)) {
                 array_push($this->widget_errors, '1');
             }
         }
@@ -475,7 +497,7 @@ function EMBM_Widget_Untappd_Recent_display($beers)
  * Generate HTML content of Untappd Recent Check-ins widget from the API
  *
  * @param string $token Untappd API token
- * @param int    $beers Widget options
+ * @param array  $beers Widget options
  *
  * @return string/html
  */
@@ -487,10 +509,6 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $beers)
     // Get widget options
     $count = intval($beers['items']);
     $brewery_id = $beers['brewery'];
-    $show_rating = ($beers['rating'] == '1');
-    $show_comment = ($beers['comment'] == '1');
-    $show_venue = ($beers['venue'] == '1');
-    $show_thumb = ($beers['thumb'] == '1');
 
     // Get checkins
     $checkins = EMBM_Admin_Untappd_checkins($api_root, $brewery_id);
@@ -501,104 +519,71 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $beers)
         return EMBM_Widget_Untappd_Recent_Display_xml($beers, true);
     }
 
-    /// Start output
+    // Start output
     $output = '';
+
+    // Make sure we have check-ins to show
+    if (!$checkins->count || $checkins->count < 1) {
+        $error = __('This brewery has no recent check-ins!', 'embm');
+        return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
+    }
 
     // Iterate over XML output
     foreach (range(0, $count-1) as $i) {
-        // Reset outputs
-        $title_output = null;
-        $venue_output = null;
-        $comment_output = null;
-        $rating_output = null;
-
         // Get checkin
         $checkin = $checkins->items[$i];
         $user = $checkin->user;
         $beer = $checkin->beer;
         $venue = $checkin->venue;
 
-        // Set link format
-        $link_format = '<a class="embm-untappd-list--item-link" href="%s" target="_blank">%s</a>';
-
         // Set user & checkin links
         $user_link = 'https://untappd.com/user/'.$user->user_name;
         $checkin_link = $user_link.'/'.$checkin->checkin_id;
 
-        // Start check-in entry
-        $output .= '<li class="embm-untappd-list--item">';
+        // Set up new entry content
+        $entry = array(
+            'user'      => array(
+                'link'  => $user_link,
+                'name'  => sprintf('%s %s', $user->first_name, $user->last_name)
+            ),
+            'beer'      => array(
+                'link'  => sprintf('https://untappd.com/beer/%s', $beer->bid),
+                'name'  => $beer->beer_name
+            ),
+            'venue'     => array(
+                'link'  => null,
+                'name'  => null
+            ),
+            'avatar'    => null,
+            'link'      => $checkin_link,
+            'rating'    => null,
+            'comment'   => null,
+            'date'      => $checkin->created_at
+        );
 
-        // Set title output
-        $title_output = '<span class="embm-untappd-list--item-title">';
-        $title_output .= sprintf($link_format, $user_link, $user->first_name.' '.$user->last_name);
-        $title_output .= ' '.__('is drinking a', 'embm').' ';
-        $title_output .= sprintf($link_format, 'https://untappd.com/beer/'.$beer->bid, $beer->beer_name);
-        $title_output .= '</span>';
-
-        // Set optional location
+        // Set venue
         if ($venue && is_object($venue) && property_exists($venue, 'venue_id')) {
-            $venue_output = '<span class="embm-untappd-list--item-venue">';
-            $venue_output .= sprintf($link_format, 'https://untappd.com/venue/'.$venue->venue_id, $venue->venue_name);
-            $venue_output .= '</span>';
+            $entry['venue']['link'] = sprintf('https://untappd.com/venue/%s', $venue->venue_id);
+            $entry['venue']['name'] = $venue->venue_name;
         }
 
-        // Set description
+        // Set comment
         if (property_exists($checkin, 'checkin_comment') && $checkin->checkin_comment != '') {
-            $comment_output = '<span class="embm-untappd-list--item-comment">'.$checkin->checkin_comment.'</span>';
+            $entry['comment'] = $checkin->checkin_comment;
         }
 
         // Set rating
         if (property_exists($checkin, 'rating_score') && $checkin->rating_score != 0) {
-            $rating_output = '<span class="embm-untappd-list--item-rating embm-beer--rating-stars" title="'.$checkin->rating_score.'">';
-            $rating_output .= EMBM_Output_Rating_stars(floatval($checkin->rating_score));
-            $rating_output .= '</span>';
+            $entry['rating'] = $checkin->rating_score;
         }
 
-        // Show thumbnail
-        if ($show_thumb) {
-            $avatar_url = 'https://i1.wp.com/untappd.akamaized.net/site/assets/images/default_avatar_v2.jpg';
-            if (property_exists($user, 'user_avatar') && $user->user_avatar != '') {
-                $avatar_url = $user->user_avatar;
-            }
-            $output .= '<span class="embm-untappd-list--item-thumb">';
-            $output .= sprintf('<img src="%s" border="0" alt="%s">', $avatar_url, $user->user_name);
-            $output .= '</span>';
+        // Set thumbnail
+        if (property_exists($user, 'user_avatar') && $user->user_avatar != '') {
+            $entry['avatar'] = $user->user_avatar;
         }
 
-        // Start content
-        $content_class = $show_thumb ? ' embm-untappd-list--item-content__thumb' : '';
-        $output .= '<span class="embm-untappd-list--item-content'.$content_class.'">';
-
-        // Put it all together
-        if (isset($title_output)) {
-            $output .= $title_output;
-        }
-        if (isset($rating_output) && $show_rating) {
-            $output .= $rating_output;
-        }
-        if (isset($comment_output) && $show_comment) {
-            $output .= $comment_output;
-        }
-
-        // Output formatted date
-        $output .= '<span class="embm-untappd-list--item-meta">';
-        $output .= '<span class="embm-untappd-list--item-date">';
-        $output .= sprintf($link_format, $checkin_link, EMBM_Widget_Untappd_Recent_Display_date($checkin->created_at));
-        $output .= '</a></span>';
-
-        // Optional venue output
-        if (isset($venue_output) && $show_venue) {
-            $output .= $venue_output;
-        }
-
-        // Out put link to full check-in
-        $output .= sprintf($link_format, $checkin_link, __('View Full Check-in', 'embm'));
-
-        // End meta & content
-        $output .= '</span></span>';
-
-        // End check-in entry
-        $output .= '</li>'."\n";
+        // Get entry content
+        $output .= EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry);
     }
 
     // Return HTML output
@@ -608,7 +593,7 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $beers)
 /**
  * Generate HTML content of Untappd Recent Check-ins widget from XML
  *
- * @param array $beers Untappd widget options
+ * @param array $beers Widget options
  *
  * @return string/html
  */
@@ -617,13 +602,6 @@ function EMBM_Widget_Untappd_Recent_Display_xml($beers)
     // Get widget options
     $count = intval($beers['items']);
     $brewery_id = $beers['brewery'];
-    $show_rating = ($beers['rating'] == '1');
-    $show_comment = ($beers['comment'] == '1');
-    $show_venue = ($beers['venue'] == '1');
-    $show_thumb = ($beers['thumb'] == '1');
-
-    // Set default avatar URL
-    $avatar_url = 'https://i1.wp.com/untappd.akamaized.net/site/assets/images/default_avatar_v2.jpg';
 
     // Get XML content
     $xml = EMBM_Admin_Untappd_Checkins_xml($brewery_id);
@@ -637,96 +615,65 @@ function EMBM_Widget_Untappd_Recent_Display_xml($beers)
     // Start output
     $output = '';
 
+    // Make sure we have check-ins to show
+    if (!$xml->channel->item->count() || $xml->channel->item->count() < 1) {
+        $error = __('This brewery has no recent check-ins!', 'embm');
+        return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
+    }
+
     // Iterate over XML output
     foreach (range(0, $count-1) as $i) {
         // Get checkin
-        $entry = $xml->channel->item[$i];
+        $item = $xml->channel->item[$i];
 
-        // Start check-in entry
-        $output .= '<li class="embm-untappd-list--item">';
+        // Set up new entry content
+        $entry = array(
+            'user'      => array(
+                'link'  => (string) $item->link,
+                'name'  => null
+            ),
+            'beer'      => array(
+                'link'  => (string) $item->link,
+                'name'  => null
+            ),
+            'venue'     => array(
+                'link'  => (string) $item->link,
+                'name'  => null
+            ),
+            'avatar'    => null,
+            'link'      => (string) $item->link,
+            'rating'    => null,
+            'comment'   => null,
+            'date'      => (string) $item->pubDate
+        );
 
         // Set up title regex
-        $title_regex = '/^(.*) is drinking a (?(?=.* at .*$)((.*) at (.*)$)|((.*)$))/i';
-
-        // Set up check-in link
-        $link = '<a class="embm-untappd-list--item-link" href="'.$entry->link.'" target="_blank">';
+        $title_regex = '/^(.*) is drinking a[n]? (?(?=.* at .*$)((.*) at (.*)$)|((.*)$))/i';
 
         // Parse title
-        if (preg_match($title_regex, $entry->title, $title)) {
-            // Get data
-            $user = $title[1];
-            $beer = (array_key_exists(6, $title) && !preg_match('/^\s+$/', $title[6])) ? $title[6] : $title[3];
-            $venue = (array_key_exists(4, $title) && !preg_match('/^\s+$/', $title[4])) ? $title[4] : null;
-
-            // Set output
-            $title_output = '<span class="embm-untappd-list--item-title">';
-            $title_output .= $link.$user.'</a> ';
-            $title_output .= __('is drinking a', 'embm');
-            $title_output .= ' '.$link.$beer.'</a>';
-            $title_output .= '</span>';
-
-            // Set optional location
-            if ($venue && !is_null($venue)) {
-                $venue_output = '<span class="embm-untappd-list--item-venue">'.$link.$venue.'</a></span>';
-            }
+        if (preg_match($title_regex, (string) $item->title, $title)) {
+            // Set data
+            $entry['user']['name'] = $title[1];
+            $entry['beer']['name'] = (array_key_exists(6, $title) && !preg_match('/^\s+$/', $title[6])) ? $title[6] : $title[3];
+            $entry['venue']['name'] = (array_key_exists(4, $title) && !preg_match('/^\s+$/', $title[4])) ? $title[4] : null;
         }
 
         // Parse description
-        if (property_exists($entry, 'description') && is_object($entry->description)) {
-            if (preg_match('/^(.*)\((\d(\.\d{1,2})?)\/5 stars\)$/i', $entry->description[0], $description)) {
+        if (property_exists($item, 'description') && is_object($item->description)) {
+            if (preg_match('/^(.*)\((\d(\.\d{1,2})?)\/5 stars\)$/i', (string) $item->description[0], $description)) {
                 // Get rating
                 if (array_key_exists(2, $description)) {
-                    $rating_output = '<span class="embm-untappd-list--item-rating embm-beer--rating-stars" title="'.$description[2].'">';
-                    $rating_output .= EMBM_Output_Rating_stars(floatval($description[2]));
-                    $rating_output .= '</span>';
+                    $entry['rating'] = $description[2];
                 }
+                // Get comment
                 if (array_key_exists(1, $description) && !preg_match('/^\s+$/', $description[1])) {
-                    $comment_output = '<span class="embm-untappd-list--item-comment">'.$description[1].'</span>';
+                    $entry['comment'] = $description[1];
                 }
             }
         }
 
-        // Show thumbnail
-        if ($show_thumb) {
-            $output .= '<span class="embm-untappd-list--item-thumb">';
-            $output .= sprintf('<img src="%s" border="0" alt="%s">', $avatar_url, $user);
-            $output .= '</span>';
-        }
-
-        // Start content
-        $content_class = $show_thumb ? ' embm-untappd-list--item-content__thumb' : '';
-        $output .= '<span class="embm-untappd-list--item-content'.$content_class.'">';
-
-        // Put the rest together
-        if (isset($title_output)) {
-            $output .= $title_output;
-        }
-        if (isset($rating_output) && $show_rating) {
-            $output .= $rating_output;
-        }
-        if (isset($comment_output) && $show_comment) {
-            $output .= $comment_output;
-        }
-
-        // Output formatted date
-        $output .= '<span class="embm-untappd-list--item-meta">';
-        $output .= '<span class="embm-untappd-list--item-date">';
-        $output .= $link.EMBM_Widget_Untappd_Recent_Display_date($entry->pubDate);
-        $output .= '</a></span>';
-
-        // Optional venue output
-        if (isset($venue_output) && $show_venue) {
-            $output .= $venue_output;
-        }
-
-        // Out put link to full check-in
-        $output .= $link.__('View Full Check-in', 'embm').'</a>';
-
-        // End meta & content
-        $output .= '</span></span>';
-
-        // End check-in entry
-        $output .= '</li>'."\n";
+        // Get entry content
+        $output .= EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry);
     }
 
     // Return HTML output
@@ -734,26 +681,93 @@ function EMBM_Widget_Untappd_Recent_Display_xml($beers)
 }
 
 /**
- * Display data using WP settings
+ * Generate HTML content for a given XML or API entry
  *
- * @param string $date The date to display
+ * @param array $beers Widget options
+ * @param array $entry Beer entry values
  *
- * @return string
+ * @return string/html
  */
-function EMBM_Widget_Untappd_Recent_Display_date($date)
+function EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry)
 {
-    // Display date using WP timezone setting
-    $offset = get_option('gmt_offset');
-    $post_date = strtotime($date);
-    $new_date = mktime(
-        date('H', $post_date) + $offset,
-        date('i', $post_date),
-        0,
-        date('n', $post_date),
-        date('j', $post_date),
-        date('y', $post_date)
-    );
+    // Get widget options
+    $show_rating = ($beers['rating'] == '1');
+    $show_comment = ($beers['comment'] == '1');
+    $show_venue = ($beers['venue'] == '1');
+    $show_thumb = ($beers['thumb'] == '1');
 
-    // Output formatted date
-    return date('j M y', $new_date);
+    // Set default avatar URL
+    $default_avatar_url = 'https://i1.wp.com/untappd.akamaized.net/site/assets/images/default_avatar_v2.jpg';
+
+    // Set link format
+    $link_format = '<a class="embm-untappd-list--item-link" href="%s" target="_blank">%s</a>';
+
+    // Start check-in entry
+    $output = '<li class="embm-untappd-list--item">';
+
+    // Show thumbnail
+    if ($show_thumb) {
+        // Set avatar URL
+        $avatar_url = !is_null($entry['avatar']) ? $entry['avatar'] : $default_avatar_url;
+
+        // Display avatar
+        $output .= '<span class="embm-untappd-list--item-thumb">';
+        $output .= sprintf('<img src="%s" border="0" alt="%s">', $avatar_url, $entry['user']['name']);
+        $output .= '</span>';
+    }
+
+    // Start entry content
+    $content_class = $show_thumb ? ' embm-untappd-list--item-content__thumb' : '';
+    $output .= '<span class="embm-untappd-list--item-content'.$content_class.'">';
+
+    // See if we need to use 'a' or 'an'
+    $determiner = preg_match('/^[aeiou]/i', $entry['beer']['name']) ? __('an', 'embm') : __('a', 'embm');
+
+    // Entry title
+    $output .= '<span class="embm-untappd-list--item-title">';
+    $output .= sprintf($link_format, $entry['user']['link'], $entry['user']['name']);
+    $output .= ' '.sprintf(__('is drinking %s', 'embm'), $determiner).' ';
+    $output .= sprintf($link_format, $entry['beer']['link'], $entry['beer']['name']);
+    $output .= '</span>';
+
+    // Entry rating
+    if ($show_rating && !is_null($entry['rating'])) {
+        $output .= sprintf(
+            '<span class="embm-untappd-list--item-rating embm-beer--rating-stars" title="%s">%s</span>',
+            $entry['rating'],
+            EMBM_Output_Rating_stars(floatval($entry['rating']))
+        );
+    }
+
+    // Entry comment
+    if ($show_comment && !is_null($entry['comment'])) {
+        $output .= sprintf('<span class="embm-untappd-list--item-comment">%s</span>', $entry['comment']);
+    }
+
+    // Start entry meta
+    $output .= '<span class="embm-untappd-list--item-meta">';
+
+    // Output formatted entry date
+    $output .= '<span class="embm-untappd-list--item-date">';
+    $output .= sprintf($link_format, $entry['link'], EMBM_Output_Review_date($entry['date']));
+    $output .= '</span>';
+
+    // Entry venue
+    if ($show_venue && !is_null($entry['venue']['name'])) {
+        $output .= '<span class="embm-untappd-list--item-venue">';
+        $output .= sprintf($link_format, $entry['venue']['link'], $entry['venue']['name']);
+        $output .= '</span>';
+    }
+
+    // Link to full check-in entry
+    $output .= sprintf($link_format, $entry['link'], __('View Full Check-in', 'embm'));
+
+    // End meta & content
+    $output .= '</span></span>';
+
+    // End check-in entry
+    $output .= '</li>'."\n";
+
+    // Return HTML output
+    return $output;
 }

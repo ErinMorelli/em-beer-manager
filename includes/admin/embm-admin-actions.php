@@ -23,7 +23,7 @@
 define('EMBM_AJAX_NONCE', '_embm_ajax_request_nonce');
 
 /**
- * Reset Untappt beer styles
+ * Reset Untappd beer styles
  *
  * @return void
  */
@@ -156,7 +156,7 @@ function EMBM_Admin_Actions_Untappd_flush()
 add_action('wp_ajax_embm-untappd-flush', 'EMBM_Admin_Actions_Untappd_flush');
 
 /**
- * Remove Untappd cached data to force refesh
+ * Remove Untappd cached data to force refresh
  *
  * @return void
  */
@@ -170,7 +170,7 @@ function EMBM_Admin_Actions_Untappd_Flush_beer()
     $beer_id = intval($_POST['beer_id']);
     $api_root = $_POST['api_root'];
 
-    // Refresh untappd data
+    // Refresh Untappd data
     $beer = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, true);
 
     // Send response
@@ -179,6 +179,43 @@ function EMBM_Admin_Actions_Untappd_Flush_beer()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-flush-beer', 'EMBM_Admin_Actions_Untappd_Flush_beer');
+
+/**
+ * Remove Untappd cached check-in data to force refresh
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Untappd_Flush_checkins()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $brewery_id = intval($_POST['brewery_id']);
+    $api_root = $_POST['api_root'];
+
+    // Set up response
+    $response = array(
+        'xml'   => null,
+        'api'   => null,
+        'error' => $GLOBALS['EMBM_NOTICE_MAP']['widget-error']['2']
+    );
+
+    // Refresh XML data
+    $response['xml'] = EMBM_Admin_Untappd_Checkins_xml($brewery_id, true);
+
+    // Check for api_root
+    if (null !== $api_root && $api_root !== '') {
+        // Update data from API
+        $response['api'] = EMBM_Admin_Untappd_checkins($api_root, $brewery_id, true);
+    }
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add flush beer action to AJAX
+add_action('wp_ajax_embm-untappd-flush-checkins', 'EMBM_Admin_Actions_Untappd_Flush_checkins');
 
 /**
  * Import beers from Untappd to WP

@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Metabox\Profile
  */
 
-
 /**
  * Add the Beer Profile metabox to the Beer post type
  *
@@ -29,7 +28,7 @@ function EMBM_Admin_Metabox_profile()
 {
     // Add Beer Profile metabox to sidebar
     add_meta_box(
-        'beer-specs',
+        'embm_beer_profile',
         __('Beer Profile', 'embm'),
         'EMBM_Admin_Metabox_Profile_content',
         'embm_beer',
@@ -40,7 +39,6 @@ function EMBM_Admin_Metabox_profile()
 
 // Add to beer post editor
 add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_profile');
-
 
 /**
  * Outputs Beer Profile metabox content
@@ -108,7 +106,6 @@ function EMBM_Admin_Metabox_Profile_content()
 </div>
 <?php
 }
-
 
 /**
  * Save the options from the Beer Profile metabox

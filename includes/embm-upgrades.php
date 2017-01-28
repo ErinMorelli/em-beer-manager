@@ -19,7 +19,6 @@
  * @package EMBM\Admin\Upgrades
  */
 
-
 // Set current upgrade version
 define('EMBM_LEGACY_VERSION', '1.7.0');
 
@@ -28,7 +27,6 @@ $GLOBALS['EMBM_UPGRADE_MAP'] = array(
     '1.7.0' => 'EMBM_Upgrade_v170',
     '3.0.0' => 'EMBM_Upgrade_v300'
 );
-
 
 /**
  * Perform v3.0.0 upgrades
@@ -102,6 +100,25 @@ function EMBM_Upgrade_v300()
             UPDATE $wpdb->postmeta
             SET meta_key = '$new_attr'
             WHERE meta_key = '$attr'
+            "
+        );
+    }
+
+    // List of widgets to update
+    $widgets = ['beer_list', 'recent_untappd'];
+
+    // Update each widget name
+    foreach ($widgets as $widget) {
+        // Set widget names
+        $old_widget = 'widget_'.$widget.'_widget';
+        $new_widget = 'widget_embm_'.$widget.'_widget';
+
+        // Update column names
+        $wpdb->query(
+            "
+            UPDATE $wpdb->options
+            SET option_name = '$new_widget'
+            WHERE option_name = '$old_widget'
             "
         );
     }

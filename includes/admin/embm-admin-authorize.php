@@ -19,7 +19,7 @@
  * @package EMBM\Admin\Authorize
  */
 
-// Set authorization url
+// Set authorization URL
 define('EMBM_UNTAPPD_AUTH_URL', 'https://wp.erinmorelli.com/embm/untappd');
 
 /**

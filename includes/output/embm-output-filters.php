@@ -19,7 +19,6 @@
  * @package EMBM\Output\Filters
  */
 
-
 /**
  * Adds extra HTML content to beer posts
  *
@@ -178,7 +177,6 @@ function EMBM_Output_Filters_content($content)
 // Load custom content filter
 add_filter('the_content', 'EMBM_Output_Filters_content', -1);
 
-
 /**
  * Adds custom EMBM class to EMBM pages
  *
@@ -196,7 +194,6 @@ function EMBM_Output_Filters_classes($classes)
 
 // Load custom body class filter
 add_filter('body_class', 'EMBM_Output_Filters_classes');
-
 
 /**
  * Adds the beer style to the beer post title HTML output
