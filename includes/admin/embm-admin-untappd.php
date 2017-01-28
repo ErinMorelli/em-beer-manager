@@ -59,7 +59,6 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
     );
 
     try {
-        error_log($request_url);
         // Make GET request to API
         $data = file_get_contents($request_url);
 
@@ -121,16 +120,31 @@ function EMBM_Admin_Untappd_ratelimit()
 }
 
 /**
- * Retreives transient cache time remaining
+ * Determines if a cached Untappd object needs reloading
  *
  * @param string $cache_name Name of cache object
+ * @param int    $timeout    Timeout period in MS
  *
- * @return string Timestamp of remaining time
+ * @return bool Whether or not cache has timed out
  */
-function EMBM_Admin_Untappd_timeout($cache_name)
+function EMBM_Admin_Untappd_reload($cache_name, $timeout)
 {
-    $transient = '_transient_timeout_' . $cache_name;
-    return get_option($transient);
+    // Check cache name
+    if (!array_key_exists($cache_name, $GLOBALS['EMBM_UNTAPPD_CACHE'])) {
+        return false;
+    }
+
+    // Get current timeout
+    $transient_name = '_transient_timeout_' . $GLOBALS['EMBM_UNTAPPD_CACHE'][$cache_name];
+    $transient_timeout = get_option($transient_name);
+
+    // Return if this has already expired
+    if (!$transient_timeout) {
+        return true;
+    }
+
+    // Check for expiration
+    return ((time() - $transient_timeout) >= $timeout);
 }
 
 /**
@@ -180,10 +194,12 @@ function EMBM_Admin_Untappd_user($api_root)
 {
     // Attempt to retrieve user info from cache
     $user = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user']);
-    $user_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['user']);
+
+    // Check if we should attempt a reload (every hour)
+    $reload = EMBM_Admin_Untappd_reload('user', HOUR_IN_SECONDS);
 
     // Get user info if it's not cached
-    if (false === $user) {
+    if (false === $user || $reload) {
         $user_info_url = sprintf($api_root, 'user/info');
         $res = EMBM_Admin_Untappd_request($user_info_url);
 
@@ -212,10 +228,12 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
 {
     // Attempt to retrieve brewery info from cache
     $brewery = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery']);
-    $brewery_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery']);
+
+    // Check if we should attempt a reload (every hour)
+    $reload = EMBM_Admin_Untappd_reload('brewery', HOUR_IN_SECONDS);
 
     // Get brewery info if it's not cached
-    if (false === $brewery) {
+    if (false === $brewery || $reload) {
         $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
         $res = EMBM_Admin_Untappd_request($brewery_url);
 
@@ -237,20 +255,20 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
  *
  * @param string $api_root   A templated string for the Untappd API root URL
  * @param int    $brewery_id Untappd brewery ID
+ * @param bool   $refresh    Forces a refresh of check-in data (Default: false)
  *
  * @return array Array of brewery check-ins from Untappd
  */
-function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
+function EMBM_Admin_Untappd_checkins($api_root, $brewery_id, $refresh = false)
 {
-    // Cache data for 15 mins
-    $cache_time = 15 * MINUTE_IN_SECONDS;
-
     // Attempt to retrieve brewery checkins from cache
     $checkins = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
-    $checkins_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins']);
+
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Untappd_reload('checkins', 15 * MINUTE_IN_SECONDS);
 
     // Get brewery checkins if it's not cached
-    if (false === $checkins) {
+    if (false == $checkins || $refresh || $reload) {
         $checkins_url = sprintf($api_root, 'brewery/checkins/'.$brewery_id);
         $res = EMBM_Admin_Untappd_request($checkins_url);
 
@@ -270,17 +288,21 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id)
 /**
  * Retrieves and parses Untappd brewery check-in data from either the WP cache or XML.
  *
- * @param int $brewery_id Untappd brewery ID
+ * @param int  $brewery_id Untappd brewery ID
+ * @param bool $refresh    Forces a refresh of check-in data (Default: false)
  *
  * @return object Parse XML object
  */
-function EMBM_Admin_Untappd_Checkins_xml($brewery_id)
+function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
 {
     // Get XML content
     $content = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['xml_checkins']);
 
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Untappd_reload('xml_checkins', 15 * MINUTE_IN_SECONDS);
+
     // Get checkins info if it's not cached
-    if (false === $content) {
+    if (false === $content || $refresh || $reload) {
         // Set Untappd brewery rss URL
         $feed_url = 'https://untappd.com/rss/brewery/'.$brewery_id;
 
@@ -324,10 +346,13 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 {
     // Attempt to retrieve beer list from cache
     $beer_list = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list']);
-    $beer_list_timeout = EMBM_Admin_Untappd_timeout($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list']);
+
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Untappd_reload('beer_list', 15 * MINUTE_IN_SECONDS);
+    error_log('beers: '.$reload);
 
     // Get beer list if it's not cached
-    if (false === $beer_list) {
+    if (false === $beer_list || $reload) {
         $beer_list = [];
         $beer_offset = 0;
         $beer_count = $brewery->beer_count;
@@ -367,14 +392,17 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false)
 {
     // Set vars
+    $cache_name = 'embm_untappd_data';
     $beer = null;
     $beer_cache = null;
     $refresh = false;
+    $expired = false;
     $now = time();
-    $three_hours = 3 * HOUR_IN_SECONDS;
+    $cache_time = 15 * MINUTE_IN_SECONDS;
+    $store_time = DAY_IN_SECONDS;
 
     // Attempt to retrieve beer data from cache
-    $beer_data = get_post_meta($post_id, 'embm_untappd_data', true);
+    $beer_data = get_post_meta($post_id, $cache_name, true);
 
     // Check for data
     if ($beer_data && is_array($beer_data)) {
@@ -383,14 +411,15 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
     }
 
     // Check cached time
-    if (!is_null($beer_cache)) {
+    if (isset($beer_cache) && !is_null($beer_cache)) {
         // Get time delta
         $delta = $now - $beer_cache;
 
         // Check for expired cache
-        if ($delta >= $three_hours) {
-            $refresh = true;
-        }
+        $refresh = ($delta >= $cache_time);
+
+        // If cache is over a day, remove it (as per TOS)
+        $delete = ($delta >= $store_time);
     }
 
     // Check for beer data
@@ -404,6 +433,12 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
 
         // If there was a problem, return the cached data
         if (is_null($beer_res) || !property_exists($beer_res, 'bid')) {
+            // Remove data if it has expired (as per TOS)
+            if ($delete) {
+                delete_post_meta($post_id, $cache_name);
+            }
+
+            // Return cached data
             return $beer;
         }
 
@@ -420,7 +455,10 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         );
 
         // Store for 6 hours
-        update_post_meta($post_id, 'embm_untappd_data', $beer_data);
+        update_post_meta($post_id, $cache_name, $beer_data);
+    } elseif ($delete) {
+        // Remove data if it has expired (as per TOS)
+        delete_post_meta($post_id, $cache_name);
     }
 
     return $beer_data;

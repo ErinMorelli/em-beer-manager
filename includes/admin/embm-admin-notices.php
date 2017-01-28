@@ -69,6 +69,14 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'message'   => __('There was a problem saving your beer\'s Untappd data!', 'embm').' '.
                 __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
         )
+    ),
+    'widget-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => __('ERROR', 'embm') . ':',
+            'message'   => __('There was a problem retrieving check-in data from Untappd!', 'embm').' '.
+                __('Please try again later.', 'embm')
+        )
     )
 );
 

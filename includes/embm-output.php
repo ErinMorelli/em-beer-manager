@@ -658,18 +658,29 @@ function EMBM_Output_Review_content($review)
         date('y', $created_at)
     );
 
-    // Review meta
+    // Start review meta
     $output .= '<div class="embm-beer--review-meta">';
+
+    // Show review date
     $output .= '<span class="embm-beer--review-date">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
     $output .= date('j M y', $datestamp).'</a></span>';
+
+    // Show review location
+    if (is_object($venue) && property_exists($venue, 'venue_id')) {
+        $output .= '<span class="embm-beer--review-venue">';
+        $output .= '<a href="https://untappd.com/venue/'.$venue->venue_id.'" target="_blank">';
+        $output .= $venue->venue_name.'</a></span>';
+    }
+
+    // Show review link
     $output .= '<span class="embm-beer--review-link">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
     $output .= __('View Full Check-in', 'embm').'</a>';
-    $output .= '</span></div>';
+    $output .= '</span>';
 
     // End main content
-    $output .= '</div></div>'."\n";
+    $output .= '</div></div></div>'."\n";
 
     // Return HTML output
     return $output;

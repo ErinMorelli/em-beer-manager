@@ -25,7 +25,7 @@
     tb_remove,
     embm_settings
 */
-/*jsint
+/*jslint
     browser: true
     unparam: true
 */

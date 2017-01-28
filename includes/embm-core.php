@@ -638,3 +638,43 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
         }
     }
 }
+
+/**
+ * Displays any plugin-related errors to the user
+ *
+ * @return void
+ */
+function EMBM_Core_errors()
+{
+    // Get list of errors
+    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    if (!$errors) {
+        return;
+    }
+
+    // Iterate over errors
+    foreach ($errors as $error) {
+        if (!array_key_exists($error, $GLOBALS['EMBM_NOTICE_MAP']['save-error'])) {
+            continue;
+        }
+
+        // Get notice content
+        $notice = $GLOBALS['EMBM_NOTICE_MAP']['save-error'][$error];
+
+    ?>
+        <div class="<?php echo $notice['type']; ?> notice embm-notice">
+            <p>
+                <span class="embm-notice--title"><?php echo $notice['title']; ?></span>
+                <span class="embm-notice--message"><?php echo $notice['message'];?></span>
+            </p>
+            <button type="button" class="notice-dismiss"></button>
+        </div>
+    <?php
+    }
+
+    // Remove the errors from cache
+    delete_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+}
+
+// Add to admin notices
+add_action('admin_notices', 'EMBM_Core_errors');
