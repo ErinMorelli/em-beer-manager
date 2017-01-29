@@ -25,7 +25,7 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '1' => array(
             'type'      => 'updated',
             'title'     => __('Success!', 'embm'),
-            'message'   => __('Your beer styles have been restored.', 'embm'),
+            'message'   => __('Your beer styles have been restored.', 'embm')
         )
     ),
     'import-success' => array(
@@ -38,7 +38,7 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'type'      => 'updated',
             'title'     => __('Success!', 'embm'),
             'message'   => __('Your beers have been imported from Untappd.', 'embm')
-        ),
+        )
     ),
     'import-error' => array(
         '1' => array(
@@ -61,6 +61,11 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'title'     => __('ERROR', 'embm') . ':',
             'message'   => __('There was a problem during the import! Please try again later.', 'embm')
         ),
+        '5' => array(
+            'type'      => 'warning',
+            'title'     => __('WARNING', 'embm') . ':',
+            'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'embm')
+        )
     ),
     'save-error' => array(
         '1' => array(

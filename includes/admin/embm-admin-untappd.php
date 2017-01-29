@@ -586,9 +586,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     if ($check) {
         // Compare beer's brewery ID to user's brewery ID
         if ($beer->brewery->brewery_id != intval($brewery_id)) {
-            // Return to EMBM settings page to show error & exit
-            wp_redirect(get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs'));
-            exit;
+            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs');
         }
     }
 
@@ -606,7 +604,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     // Check for duplicate (#2)
     $duplicate = get_posts($dup_args);
     if ($duplicate) {
-        return;
+        return null;
     }
 
     // Set post publish date from Untappd created date
@@ -649,9 +647,9 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     $post_id = wp_insert_post($new_beer_post, true);
 
     // Add post image
-    if (property_exists($beer, 'beer_label_hd')) {
-        EMBM_Admin_Untappd_Import_image($post_id, $beer);
-    }
+    EMBM_Admin_Untappd_Import_image($post_id, $beer);
+
+    return null;
 }
 
 /**
@@ -685,6 +683,11 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
         return;
     }
 
+    // Check for beer image
+    if (!property_exists($beer, 'beer_label_hd') || $beer->beer_label_hd == '') {
+        return;
+    }
+
     // Get WP upload dir info
     $upload_dir = wp_upload_dir();
 
@@ -695,8 +698,8 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
     // Set file save path
     $filename = $upload_dir['path'] . '/' . $beer->beer_slug . '.' . $img_type;
 
-    // Save image from URL
-    file_put_contents($filename, EMBM_Admin_Untappd_request($beer->beer_label_hd, false));
+    // Save image data to file
+    file_put_contents($filename, file_get_contents($beer->beer_label_hd));
 
     // Check the type of file
     $filetype = wp_check_filetype(basename($filename), null);
