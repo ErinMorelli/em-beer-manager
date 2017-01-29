@@ -37,8 +37,12 @@ $email_subj = '[EM Beer Manager] Issue Report';
 
 <hr />
 
-<h2><?php _e('Import from Untappd', 'embm'); ?></h2>
-
 <?php
 
-require_once EMBM_PLUGIN_DIR.'includes/admin/labs/embm-labs-untappd.php';
+// Load Untappd labs page
+if (!EMBM_Core_Beer_disabled()) {
+    echo '<h2>'.__('Import from Untappd', 'embm').'</h2>';
+    require_once EMBM_PLUGIN_DIR.'includes/admin/labs/embm-labs-untappd.php';
+} else {
+    echo '<h2>'.__('No Labs features are available right now!', 'embm').'</h2>';
+}

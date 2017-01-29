@@ -60,7 +60,8 @@ function EMBM_Admin_styles()
         array(
               'ajax_nonce'          => $ajax_nonce,
               'plugin_url'          => EMBM_PLUGIN_URL,
-              'options'             => get_option('embm_options')
+              'options'             => get_option('embm_options'),
+              'error'               => __('There was a problem with your request! Please try again later.', 'embm')
         )
     );
 }
@@ -90,14 +91,8 @@ function EMBM_Admin_columns($cols)
         'avail'                 => __('Availability', 'embm')
     );
 
-    // Get Untappd options from DB
-    $ut_option = get_option('embm_options');
-
-    // Check if we should use Untappd
-    $use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
-
     // Add Untappd column, if enabled
-    if ($use_untappd != '1') {
+    if (!EMBM_Core_Beer_disabled()) {
         $cols['untappd'] = __('Untappd', 'embm');
     }
 

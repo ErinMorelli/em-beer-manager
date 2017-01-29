@@ -19,7 +19,6 @@
  * EM Beer Manager widget styles
  */
 
-
 /**
  * Style EM Beer Manager beer list widget
  */
@@ -44,7 +43,6 @@ li.embm-beer-list-widget-item .embm-read-more {
     font-weight: normal;
     padding-left: 3px;
 }
-
 
 /**
  * Style EM Beer Manager recent Untappd check-ins widget
@@ -151,6 +149,7 @@ li.embm-untappd-list--item .embm-untappd-list--item-rating > svg {
     display: block;
     float: left;
     height: 15px;
+    width: 16px;
 }
 li.embm-untappd-list--item .embm-untappd-list--item-comment {
     margin-bottom: 5px;
@@ -192,7 +191,7 @@ li.embm-untappd-list--item .embm-untappd-list--item-comment::before {
     box-sizing: border-box;
     color: #FFF;
     display: inline-block;
-    font-size: 1vw;
+    font-size: 13px;
     height: 30px;
     line-height: 20px;
     padding: 5px 8px 5px 10px;
@@ -200,8 +199,8 @@ li.embm-untappd-list--item .embm-untappd-list--item-comment::before {
     width: 110px;
 }
 .embm-untappd-list .embm-untappd-list--footer .embm-untappd-list--more a .dashicons {
-    font-size: 1vw;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 21px;
 }
 .embm-untappd-list .embm-untappd-list--footer .embm-untappd-list--credit {
     box-sizing: border-box;

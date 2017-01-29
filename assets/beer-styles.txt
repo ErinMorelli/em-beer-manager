@@ -1,15 +1,14 @@
 Altbier
-American Wild Ale
 Applewine
 Australian Sparkling Ale
 Barleywine - American
 Barleywine - English
+Barleywine - Other
 Belgian Dubbel
 Belgian Quad
 Belgian Strong Dark Ale
-Belgian Strong Pale Ale
+Belgian Strong Golden Ale
 Belgian Tripel
-Berliner Weisse
 Bière de Champagne / Bière Brut
 Bière de Garde
 Black & Tan
@@ -24,13 +23,12 @@ Brown Ale - Imperial / Double
 Brown Ale - Other
 Burton Ale
 California Common
-Chile Beer
 Cider
 Cream Ale
 Cyser
 Dampfbier
 Dark Ale
-Doppelbock 
+Doppelbock
 Dunkelweizen
 Eisbock
 English Bitter
@@ -38,20 +36,16 @@ English Mild Ale
 Extra Special / Strong Bitter
 Faro
 Festbier
-Flanders Oud Bruin
-Flanders Red Ale
 Fruit Beer
 Ginger Beer
 Gluten-Free
 Golden Ale
-Gose
+Grisette
 Gruit / Ancient Herbed Ale
 Grätzer / Grodziskie
-Gueuze
 Happoshu
 Hefeweizen
 Hefeweizen Light / Leicht
-Herbed / Spiced Beer
 IPA - American
 IPA - Belgian
 IPA - Black / Cascadian Dark Ale
@@ -59,20 +53,18 @@ IPA - English
 IPA - Imperial / Double
 IPA - Imperial / Double Black
 IPA - International
+IPA - Red
 IPA - Session / India Session Ale
 IPA - Triple
 IPA - White
 Kellerbier / Zwickelbier
 Kombucha
-Kristallweizen 
+Kristallweizen
 Kvass
 Kölsch
-Lager -  Vienna / Amber
 Lager - Amber
 Lager - American Amber / Red
 Lager - American Light
-Lager - Black
-Lager - Czech Dark
 Lager - Dark
 Lager - Dortmunder / Export
 Lager - Dunkel Munich
@@ -84,11 +76,16 @@ Lager - IPL (India Pale Lager)
 Lager - Japanese Rice
 Lager - North American Adjunct
 Lager - Pale
+Lager - Red
+Lager - Vienna
 Lager - Winter
-Lambic
+Lambic - Framboise
+Lambic - Fruit
+Lambic - Kriek
+Lambic - Other
 Maibock/Helles Bock
 Malt Beer
-Malt Liquor 
+Malt Liquor
 Mead
 Melomel
 Mumme
@@ -116,27 +113,38 @@ Porter - Imperial / Double
 Porter - Other
 Pumpkin / Yam Beer
 Pyment
-Radler
 Rauchbier
 Red Ale - American Amber / Red
 Red Ale - Imperial / Double
 Red Ale - Irish
+Red Ale - Other
 Roggenbier
 Root Beer
-Rye Beer / Rye IPA
+Rye Beer
+Rye IPA
 Sahti
 Saison / Farmhouse Ale
 Schwarzbier
 Scotch Ale / Wee Heavy
 Scottish Ale
 Scottish Export Ale
+Shandy / Radler
 Smoked Beer
-Sour Ale
+Sour - Ale
+Sour - American Wild Ale
+Sour - Berliner Weisse
+Sour - Farmhouse IPA
+Sour - Flanders Oud Bruin
+Sour - Flanders Red Ale
+Sour - Gose
+Sour - Gueuze
 Specialty Grain
+Spiced / Herbed Beer
 Stout - American
 Stout - American Imperial / Double
 Stout - Foreign / Export
 Stout - Imperial / Double
+Stout - Imperial Milk / Sweet
 Stout - Imperial Oatmeal
 Stout - Irish Dry
 Stout - Milk / Sweet

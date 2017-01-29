@@ -171,14 +171,8 @@ function EMBM_Output_untappd($beer_id)
     $options = get_option('embm_options');
     $output = '';
 
-    // Retrieve Untappd settings
-    $use_untappd = null;
-    if (isset($options['embm_untappd_check'])) {
-        $use_untappd = $options['embm_untappd_check'];
-    }
-
     // Don't show if Untappd is disabled
-    if ($use_untappd == '1') {
+    if (EMBM_Core_Beer_disabled()) {
         return null;
     }
 

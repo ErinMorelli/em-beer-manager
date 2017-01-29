@@ -327,7 +327,7 @@ function EMBM_Plugin_help()
             'id'        => 'embm-untappd-integration',
             'title'     => __('Untappd Integration', 'embm'),
             'content'   => '<p>'.
-                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-ins widget, ratings, check-ins, and check-in buttons.', 'embm').
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-ins widget, ratings, check-ins, check-in buttons, and any Untappd-related Labs features.', 'embm').
                 '</p><p>'.
                 __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm').
                 '</p><p>'.

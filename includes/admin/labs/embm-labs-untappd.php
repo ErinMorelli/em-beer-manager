@@ -54,6 +54,9 @@ function EMBM_Admin_Labs_Api_error($res)
 
 // Show status
 $shown = EMBM_Admin_Authorize_status();
+if ($shown === 1) {
+    return;
+}
 
 // Get token
 $token = EMBM_Admin_Authorize_token();
@@ -72,7 +75,7 @@ $user = EMBM_Admin_Untappd_user($api_root);
 
 // Check for error
 if (is_null($user) || is_string($user)) {
-    if ($shown) {
+    if ($shown === 2) {
         EMBM_Admin_Notices_ratelimit($user);
     }
     return;

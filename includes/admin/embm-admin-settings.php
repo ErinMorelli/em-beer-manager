@@ -60,7 +60,7 @@ add_action('admin_menu', 'EMBM_Admin_menu');
 function EMBM_Admin_settings()
 {
     // Register new settings options
-    register_setting('embm_options', 'embm_options');
+    register_setting('embm_options', 'embm_options', 'EMBM_Admin_sanitize');
 
     // Get Untappd logged in status
     $logged_in = !is_null(EMBM_Admin_Authorize_token());
@@ -120,6 +120,43 @@ function EMBM_Admin_settings()
 
 // Load admin settings
 add_action('admin_init', 'EMBM_Admin_settings');
+
+/**
+ * Sanitize each setting field as needed
+ *
+ * @param array $input Contains all settings fields as array keys
+ */
+function EMBM_Admin_sanitize($input)
+{
+    // Get new check-in count
+    $new_count = $input['embm_reviews_count_single'];
+
+    // Get previously save options
+    $options = get_option('embm_options');
+    $old_count = $options['embm_reviews_count_single'];
+
+    // Check if we need to update counts
+    if ($new_count !== $old_count) {
+        // Get global WordPress DB object
+        global $wpdb;
+
+        // Update post metadata where needed
+        $wpdb->query(
+            "
+            UPDATE
+                $wpdb->postmeta
+            SET
+                meta_value = '$new_count'
+            WHERE
+                meta_key = 'embm_reviews_count' &&
+                meta_value = '$old_count'
+            "
+        );
+    }
+
+    // Return new input
+    return $input;
+}
 
 /**
  * Output for Untappd admin settings section

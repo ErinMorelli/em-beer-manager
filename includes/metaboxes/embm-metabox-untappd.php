@@ -26,6 +26,11 @@
  */
 function EMBM_Admin_Metabox_untappd()
 {
+    // Don't load box if Untappd integration is disabled
+    if (EMBM_Core_Beer_disabled()) {
+        return;
+    }
+
     // Add Untappd metabox to main content
     add_meta_box(
         'embm_beer_untappd',
@@ -47,12 +52,6 @@ add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_untappd');
  */
 function EMBM_Admin_Metabox_Untappd_content()
 {
-    // Don't load box if Untappd integration is disabled
-    $ut_option = get_option('embm_options');
-    if (isset($ut_option['embm_untappd_check']) && $ut_option['embm_untappd_check'] == '1') {
-        return;
-    }
-
     // Get global post object
     global $post;
 
@@ -70,7 +69,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $is_brewery = false;
     $api_root = '';
     $beer_found = false;
-    $show_api_error = (!is_object($untappd_data));
+    $show_api_error = (null !== $untappd_data && !is_object($untappd_data));
 
     // Get token
     $token = EMBM_Admin_Authorize_token();
@@ -219,7 +218,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                 <?php _e('This is automatically done daily.', 'embm'); ?>
             </p>
         </div>
-    <?php elseif ($show_api_error) : ?>
+    <?php elseif ($show_api_error && null !== $token) : ?>
         <?php EMBM_Admin_Notices_ratelimit(null); ?>
     <?php elseif ($untappd_id == '') : ?>
         <p class="embm-metabox--untappd-empty">

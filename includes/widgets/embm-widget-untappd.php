@@ -308,7 +308,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         }
 
         // Check if we need to refresh cached data
-        if ($old_instance['brewery'] !== $new_instance['brewery']) {
+        if (!isset($old_instance['brewery']) || $old_instance['brewery'] !== $instance['brewery']) {
             $has_errors = false;
 
             // Refresh XML data
@@ -386,14 +386,8 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
  */
 function EMBM_Widget_Untappd_Recent_register()
 {
-    // Get EMBM settings
-    $ut_option = get_option('embm_options');
-
-    // Get Untappd global settings
-    $use_untappd = isset($ut_option['embm_untappd_check']) ? $ut_option['embm_untappd_check'] : null;
-
     // If Untappd is disabled, exit
-    if ($use_untappd == '1') {
+    if (EMBM_Core_Beer_disabled()) {
         return;
     }
 

@@ -99,7 +99,7 @@ function EMBM_Admin_Authorize_status()
         <button class="embm-labs--authorize button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
     </p>
 <?php
-        return;
+        return 1;
     }
 
     // Set API Root
@@ -111,7 +111,7 @@ function EMBM_Admin_Authorize_status()
     // Check for error
     if (is_null($user) || is_string($user)) {
         EMBM_Admin_Notices_ratelimit($user);
-        return false;
+        return 0;
     } else {
         // Get brewery status
         $is_brewery = ($user->account_type == 'brewery');
@@ -132,7 +132,7 @@ function EMBM_Admin_Authorize_status()
         </p>
     </div>
 <?php
-        return true;
+        return 2;
     }
 }
 

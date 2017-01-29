@@ -231,6 +231,17 @@ add_action('load-post-new.php', 'EMBM_Core_Meta_help');
 add_action('load-edit.php', 'EMBM_Core_Meta_help');
 
 /**
+ * Determines whether or not Untappd integration is disabled.
+ *
+ * @return bool
+ */
+function EMBM_Core_Beer_disabled()
+{
+    $ut_option = get_option('embm_options');
+    return (isset($ut_option['embm_untappd_check']) && $ut_option['embm_untappd_check'] == '1');
+}
+
+/**
  * Retrieves and formats beer custom post meta data
  *
  * @param int    $post_id WP post ID
@@ -255,15 +266,26 @@ function EMBM_Core_Beer_attr($post_id, $attr)
     case 'notes':
         return html_entity_decode($b_attr);
     case 'untappd':
-        return 'https://untappd.com/beer/' . $b_attr;
+        return EMBM_Core_Beer_disabled() ? null : 'https://untappd.com/beer/' . $b_attr;
     case 'untappd_data':
+        if (EMBM_Core_Beer_disabled()) {
+            return null;
+        }
+
+        // Get token
         $token = EMBM_Admin_Authorize_token();
+
+        // Get beer ID
         $beer_id = get_post_meta($post_id, 'embm_untappd', true);
         if (null == $token || $beer_id == '') {
             return null;
         }
+
+        // Get beer data
         $api_root = EMBM_UNTAPPD_API_URL.$token;
         $res = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
+
+        // Return data
         if (!is_null($res) && array_key_exists('beer', $res)) {
             return $res['beer'];
         } else if (is_string($res)) {
@@ -503,7 +525,7 @@ function EMBM_Core_Beer_api()
     $ut_option = get_option('embm_options');
 
     // Check if Untappd is disabled
-    if (!isset($ut_option['embm_untappd_check']) || $ut_option['embm_untappd_check'] == '') {
+    if (!EMBM_Core_Beer_disabled()) {
         // Register Untappd URL API field
         register_rest_field(
             'embm_beer',

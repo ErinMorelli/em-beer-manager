@@ -82,6 +82,7 @@
     display: block;
     float: left;
     height: 20px;
+    width: 22px;
 }
 .embm-beer .embm-beer--rating-stars polygon {
     stroke-width: 15px;
@@ -267,7 +268,7 @@
     box-sizing: border-box;
     color: #FFF;
     display: inline-block;
-    font-size: 1vw;
+    font-size: 13px;
     height: 30px;
     line-height: 20px;
     padding: 5px 8px 5px 10px;
@@ -275,8 +276,8 @@
     width: 110px;
 }
 .embm-beer .embm-beer--reviews-footer .embm-beer--reviews-more a .dashicons {
-    font-size: 1vw;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 21px;
 }
 .embm-beer .embm-beer--reviews-footer .embm-beer--reviews-credit {
     box-sizing: border-box;

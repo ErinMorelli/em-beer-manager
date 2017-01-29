@@ -447,7 +447,7 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         $beer_res = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
         // If there was a problem, return the cached data
-        if (is_null($beer_res) || !property_exists($beer_res, 'bid')) {
+        if (!is_object($beer_res) || !property_exists($beer_res, 'bid')) {
             // Remove data if it has expired (as per TOS)
             if ($expired) {
                 delete_post_meta($post_id, $cache_name);

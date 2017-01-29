@@ -47,12 +47,24 @@ jQuery(document).ready(function ($) {
                 window.location.reload();
             }
         },
+        ajax_error = function(spinner) {
+            spinner.removeClass();
+            spinner.addClass('dashicons dashicons-warning');
+            spinner.prop('title', embm_settings.error);
+        },
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
         nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
         hash,
         page,
         clean_url;
+
+    // Detect Internet Explorer
+    function isInternetExplorer() {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf('MSIE ');
+        return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./i));
+    }
 
     // Show/hide Untappd content
     function untappdShowHide(checked) {
@@ -193,7 +205,8 @@ jQuery(document).ready(function ($) {
     $('#embm-settings--navbox-toggle').on('click', function (e) {
         var icon = $(this),
             hidden = (localStorage.embm_hide_settings_nav === 'true'),
-            right = hidden ? '0px' : '-185px',
+            offset = isInternetExplorer() ? '-170px' : '-185px',
+            right = hidden ? '0px' : offset,
             arrow = hidden ? 'right' : 'left';
 
         $(this).parent().animate({ right: right }, function () {
@@ -282,7 +295,7 @@ jQuery(document).ready(function ($) {
     /* ---- UNTAPPD METABOX ---- */
 
     // Toggle beer selection dropdown
-    $('.embm-untappd--select select').on('change', function (e) {
+    $('.embm-metabox--untappd-select select').on('change', function (e) {
         var id_input = $('#embm_untappd'),
             is_reset = (this.value === ''),
             new_value = is_reset ? id_input.data('value') : this.value;
@@ -318,6 +331,9 @@ jQuery(document).ready(function ($) {
                     '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
                 );
             }
+        })
+        .fail(function() {
+            ajax_error(spinner);
         });
     });
 
@@ -349,6 +365,9 @@ jQuery(document).ready(function ($) {
                 error += '<strong>' + response.error.title + '</strong> ' + response.error.message + '</p>';
                 widget.append(error);
             }
+        })
+        .fail(function() {
+            ajax_error(spinner);
         });
     });
 
@@ -368,6 +387,9 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
+        })
+        .fail(function() {
+            ajax_error(spinner);
         });
     });
 
@@ -394,6 +416,9 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
+        })
+        .fail(function() {
+            ajax_error(spinner);
         });
     });
 });

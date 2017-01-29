@@ -170,6 +170,12 @@
     max-width: 450px;
     padding: 3px 5px 2px;
 }
+.embm-settings--page .embm-settings--tab-labs .dashicons-warning {
+    color: #FFB900;
+    cursor: help;
+    line-height: 28px;
+    margin-left: 10px;
+}
 .embm-settings-footer--credits > p {
     font-size: 10px;
     line-height: 18px;

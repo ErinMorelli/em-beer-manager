@@ -241,7 +241,7 @@ function EMBM_Admin_Actions_Untappd_import()
     $brewery = EMBM_Admin_Untappd_brewery($api_root, $brewery_id);
 
     // Check for error
-    if (is_null($brewery) || is_string($brewery)) {
+    if (!is_object($brewery)) {
         $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
         wp_send_json($response);
         return;
@@ -251,7 +251,7 @@ function EMBM_Admin_Actions_Untappd_import()
     $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
 
     // Check for error
-    if (is_null($beer_list) || is_string($beer_list)) {
+    if (!is_array($beer_list)) {
         $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
         wp_send_json($response);
         return;
@@ -282,7 +282,7 @@ function EMBM_Admin_Actions_Untappd_import()
             $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
             // Check for error
-            if (is_null($beer) || is_string($beer)) {
+            if (!is_object($beer)) {
                 $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
                 break;
             }
@@ -312,7 +312,7 @@ function EMBM_Admin_Actions_Untappd_import()
         $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
         // Check for error
-        if (is_null($beer) || is_string($beer)) {
+        if (!is_object($beer)) {
             $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
             break;
         }
@@ -338,8 +338,8 @@ function EMBM_Admin_Actions_Untappd_import()
             $beer = EMBM_Admin_Untappd_Beer_get($api_root, $item->beer->bid);
 
             // Check for error
-            if (is_null($beer) || is_string($beer)) {
-                $$response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+            if (!is_object($beer)) {
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
                 break;
             }
 
