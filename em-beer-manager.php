@@ -119,7 +119,23 @@ function EMBM_Plugin_activate()
         'embm_group_slug'               => 'group',
         'embm_reviews_count_single'     => '5'
     );
-    update_option('embm_options', $defaults);
+
+    // Get any existing options
+    $options = get_option('embm_options');
+
+    // If options exist, fill in any missing with defaults
+    if (is_array($options)) {
+        foreach ($defaults as $key => $value) {
+            if (!array_key_exists($key, $options)) {
+                $options[$key] = $value;
+            }
+        }
+    } else {
+        $options = $defaults;
+    }
+
+    // Save the updated options
+    update_option('embm_options', $options);
 
     // Load core files
     if (!function_exists('EMBM_Core_beer')) {

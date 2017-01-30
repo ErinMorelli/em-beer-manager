@@ -428,17 +428,17 @@ function EMBM_Output_Rating_stars($rating_score)
 
     if ($full_count > 0) {
         foreach (range(1, $full_count) as $full_star) {
-            $stars .= file_get_contents(EMBM_PLUGIN_URL.'assets/img/star-full.svg');
+            $stars .= file_get_contents(EMBM_PLUGIN_DIR.'assets/img/star-full.svg');
         }
     }
 
     if ($fraction) {
-        $stars .= file_get_contents(EMBM_PLUGIN_URL.'assets/img/star-'.$fraction.'.svg');
+        $stars .= file_get_contents(EMBM_PLUGIN_DIR.'assets/img/star-'.$fraction.'.svg');
     }
 
     if ($empty_count > 0) {
         foreach (range(1, $empty_count) as $empty_star) {
-            $stars .= file_get_contents(EMBM_PLUGIN_URL.'assets/img/star-empty.svg');
+            $stars .= file_get_contents(EMBM_PLUGIN_DIR.'assets/img/star-empty.svg');
         }
     }
 
