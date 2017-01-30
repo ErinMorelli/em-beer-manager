@@ -37,13 +37,10 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.0.0 - Expanded Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.0/em-beer-manager.3.0.0.zip) ###
-* [NEW] Display Untappd ratings & check-ins for individual beers
-* [NEW] Associate an existing beer with an Untappd beer
-* [LABS] Import access to all of a brewery's Untappd beers, instead of just 15
-* [LABS] Fixed ID importing, which was throwing an incorrect error
-* Moved Untappd authentication out of Labs, available to all users, not just breweries
-* Updated Untappd Check-ins widget to work with Untappd API
+### [Version 3.0.1 - Critical Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.1/em-beer-manager.3.0.1.zip) ###
+* [FIXED] Untappd ratings star color and opacity not being set after upgrade
+* [FIXED] User settings not being saved after upgrade
+* [FIXED] Untappd ratings stars displaying output error
 
 
 

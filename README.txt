@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.7.2
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,11 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 3.0.1 =
+* [FIXED] Untappd ratings star color and opacity not being set after upgrade
+* [FIXED] User settings not being saved after upgrade
+* [FIXED] Untappd ratings stars displaying output error
+
 = 3.0.0 =
 * [NEW] Display Untappd ratings & check-ins for individual beers
 * [NEW] Associate an existing beer with an Untappd beer
@@ -373,6 +378,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.0.1 =
+Critical bug fixes for 3.0.0 upgrade
 
 = 3.0.0 =
 Fixes a number of lingering small bugs. Adds a number of new Untappd integration features.
