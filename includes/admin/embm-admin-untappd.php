@@ -368,7 +368,7 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 
     // Get beer list if it's not cached
     if (false === $beer_list || $reload) {
-        $beer_list = [];
+        $beer_list = array();
         $beer_offset = 0;
         $beer_count = $brewery->beer_count;
         $beers_root = sprintf($api_root, 'brewery/beer_list/'.$brewery->brewery_id) . '&offset=%d';

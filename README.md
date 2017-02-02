@@ -37,10 +37,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.0.1 - Critical Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.1/em-beer-manager.3.0.1.zip) ###
-* [FIXED] Untappd ratings star color and opacity not being set after upgrade
-* [FIXED] User settings not being saved after upgrade
-* [FIXED] Untappd ratings stars displaying output error
+### [Version 3.0.2 - Critical Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.2/em-beer-manager.3.0.2.zip) ###
+* [FIXED] Compatibility issue with PHP versions < 5.4
 
 
 

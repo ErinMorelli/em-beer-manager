@@ -84,10 +84,18 @@ function EMBM_Upgrade_v300()
     global $wpdb;
 
     // List of attributes to update
-    $attrs = [
-        'malts', 'hops', 'adds', 'yeast', 'ibu', 'abv',
-        'beer_num', 'avail', 'notes', 'untappd'
-    ];
+    $attrs = array(
+        'malts',
+        'hops',
+        'adds',
+        'yeast',
+        'ibu',
+        'abv',
+        'beer_num',
+        'avail',
+        'notes',
+        'untappd'
+    );
 
     // Update each attribute
     foreach ($attrs as $attr) {
@@ -105,7 +113,7 @@ function EMBM_Upgrade_v300()
     }
 
     // List of widgets to update
-    $widgets = ['beer_list', 'recent_untappd'];
+    $widgets = array('beer_list', 'recent_untappd');
 
     // Update each widget name
     foreach ($widgets as $widget) {
@@ -135,7 +143,7 @@ function EMBM_Upgrade_v170()
     global $wpdb;
 
     // Taxonomies to update
-    $tax_names = ['style', 'beer'];
+    $tax_names = array('style', 'beer');
 
     // Rename taxonomies
     foreach ($tax_names as $tax_name) {

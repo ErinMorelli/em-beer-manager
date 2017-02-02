@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.7.2
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 3.0.2 =
+* [FIXED] Compatibility issue with PHP versions < 5.4
+
 = 3.0.1 =
 * [FIXED] Untappd ratings star color and opacity not being set after upgrade
 * [FIXED] User settings not being saved after upgrade
@@ -378,6 +381,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.0.2 =
+More critical bug fixes for version 3
 
 = 3.0.1 =
 Critical bug fixes for 3.0.0 upgrade

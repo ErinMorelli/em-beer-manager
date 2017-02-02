@@ -125,6 +125,8 @@ add_action('admin_init', 'EMBM_Admin_settings');
  * Sanitize each setting field as needed
  *
  * @param array $input Contains all settings fields as array keys
+ *
+ * @return array Sanitized field values
  */
 function EMBM_Admin_sanitize($input)
 {
