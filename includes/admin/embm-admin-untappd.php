@@ -65,15 +65,17 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
         $response['success'] = true;
         $response['data'] = $decode ? json_decode($data) : $data;
     } catch (Exception $e) {
-        // Get headers
-        $headers = EMBM_Admin_Untappd_Request_headers($http_response_header);
+        // Get headers, if set
+        if (isset($http_response_header)) {
+            $headers = EMBM_Admin_Untappd_Request_headers($http_response_header);
 
-        // Set up response
-        $response['data'] = $headers;
+            // Set up response
+            $response['data'] = $headers;
 
-        // Check for rate-limit
-        if (isset($headers['X-Ratelimit-Remaining']) && $headers['X-Ratelimit-Remaining'] <= 1) {
-            $response['limit'] = true;
+            // Check for rate-limit
+            if (isset($headers['X-Ratelimit-Remaining']) && $headers['X-Ratelimit-Remaining'] <= 1) {
+                $response['limit'] = true;
+            }
         }
     }
 
