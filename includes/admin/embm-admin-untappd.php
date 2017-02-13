@@ -47,67 +47,74 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
     $response = array(
         'success'   => false,
         'limit'     => false,
-        'data'      => null
+        'data'      => null,
+        'headers'   => null,
+        'errors'    => null
     );
 
-    // Force PHP to throw an exception on warnings
-    set_error_handler(
-        function ($errno, $errstr, $errfile, $errline, array $errcontext) {
-            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    // Open cURL connection
+    $ch = curl_init($request_url);
+
+    // Set up cURL options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+    // Set response header handler
+    curl_setopt(
+        $ch,
+        CURLOPT_HEADERFUNCTION,
+        function ($curl, $header) use (&$response) {
+            $len = strlen($header);
+            $header = explode(':', $header, 2);
+
+            if (count($header) < 2) {
+                return $len;
+            }
+
+            $response['headers'][strtolower(trim($header[0]))] = trim($header[1]);
+            return $len;
         }
     );
 
-    // Attempt to make GET request to API
-    try {
-        $data = file_get_contents($request_url);
+    // Make GET request to API
+    $response['data'] = curl_exec($ch);
+    $response['errors'] = curl_error($ch);
 
-        // Set response
-        $response['success'] = true;
-        $response['data'] = $decode ? json_decode($data) : $data;
-    } catch (Exception $e) {
-        // Get headers, if set
-        if (isset($http_response_header)) {
-            $headers = EMBM_Admin_Untappd_Request_headers($http_response_header);
+    // Close cURL connection
+    curl_close($ch);
 
-            // Set up response
-            $response['data'] = $headers;
+    // Check response headers for ratelimit
+    if (!is_null($response['headers'])
+        && isset($response['headers']['x-ratelimit-remaining'])
+        && intval($response['headers']['x-ratelimit-remaining']) <= 1
+    ) {
+        $response['limit'] = true;
+        return $response;
+    }
 
-            // Check for rate-limit
-            if (isset($headers['X-Ratelimit-Remaining']) && $headers['X-Ratelimit-Remaining'] <= 1) {
-                $response['limit'] = true;
-            }
+    // Check for valid response
+    if ($response['data'] === false || $response['errors'] !== '') {
+        return $response;
+    }
+
+    // Try to decode JSON (if needed)
+    if ($decode) {
+        $json_data = @json_decode($response['data']);
+
+        // Check for any JSON decoding errors
+        if (is_null($json_data) && json_last_error()) {
+            return $response;
+        } else {
+            $response['data'] = $json_data;
         }
     }
 
-    // Reset error handler
-    restore_error_handler();
+    // Set success
+    $response['success'] = true;
 
     // Return result
     return $response;
-}
-
-/**
- * Parses response header in to a formatted array
- *
- * @param array $headers Raw response header object
- *
- * @return array Formatted header values
- */
-function EMBM_Admin_Untappd_Request_headers($headers)
-{
-    $head = array();
-    foreach ($headers as $k => $v) {
-        $t = explode(':', $v, 2);
-        if (isset($t[1])) {
-            $head[trim($t[0])] = trim($t[1]);
-        } else {
-            $head[] = $v;
-            if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out)) {
-                $head['reponse_code'] = intval($out[1]);
-            }
-        }
-    }
-    return $head;
 }
 
 /**
@@ -700,8 +707,14 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
     // Set file save path
     $filename = $upload_dir['path'] . '/' . $beer->beer_slug . '.' . $img_type;
 
+    // Get image file contents
+    $img_res = EMBM_Admin_Untappd_request($beer->beer_label_hd, false);
+    if (!$img_res['success']) {
+        return;
+    }
+
     // Save image data to file
-    file_put_contents($filename, file_get_contents($beer->beer_label_hd));
+    file_put_contents($filename, $img_res['data']);
 
     // Check the type of file
     $filetype = wp_check_filetype(basename($filename), null);

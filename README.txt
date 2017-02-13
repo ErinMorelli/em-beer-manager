@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd
 Requires at least: 3.0.1
 Tested up to: 4.7.2
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,7 +164,7 @@ From the [Untappd API documentation](https://untappd.com/api/docs):
 
 If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.
 
-In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.
+In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning message when no cached data is available.
 
 
 = What is the 'Labs' section and how risky is it to use? =
@@ -251,6 +251,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 3.0.4 =
+* [FIXED] PHP compatibility issue with Untappd authentication
 
 = 3.0.3 =
 * [FIXED] Minor bugs related to logging in to Untappd
@@ -384,6 +387,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.0.4 =
+Bug fixes related to Untappd authentication
 
 = 3.0.3 =
 Minor bugs related to logging in to Untappd
