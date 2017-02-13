@@ -103,7 +103,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
         $json_data = @json_decode($response['data']);
 
         // Check for any JSON decoding errors
-        if (is_null($json_data) && json_last_error()) {
+        if ($json_data === false || is_null($json_data)) {
             return $response;
         } else {
             $response['data'] = $json_data;
