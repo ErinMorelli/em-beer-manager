@@ -22,6 +22,7 @@
 // Set constants
 define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#%s');
 define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
+define('EMBM_UNTAPPD_RSS_URL', 'https://untappd.com/rss/brewery/');
 
 // Set cache names
 $GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
@@ -321,7 +322,7 @@ function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
     // Get checkins info if it's not cached
     if (false === $xml_data || $refresh || $reload) {
         // Set Untappd brewery rss URL
-        $feed_url = 'https://untappd.com/rss/brewery/'.$brewery_id;
+        $feed_url = EMBM_UNTAPPD_RSS_URL.$brewery_id;
 
         // Extract Untappd xml feed data
         $res = EMBM_Admin_Untappd_request($feed_url, false);
@@ -737,4 +738,16 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
 
     // Set as thumbnail for beer
     set_post_thumbnail($post_id, $attach_id);
+}
+
+/**
+ * Format URLs to use HTTPS instead of HTTP
+ *
+ * @param str $url The URL to be formatted
+ *
+ * @return str Formatted URL
+ */
+function EMBM_Admin_Untappd_https($url)
+{
+    return preg_replace('/^http:/i', 'https:', $url);
 }

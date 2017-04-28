@@ -87,8 +87,11 @@ if ($user->account_type != 'brewery') {
     return;
 }
 
+// Get HTTPS user URL
+$user_url = EMBM_Admin_Untappd_https($user->untappd_url);
+
 // Get Untappd brewery ID
-$brewery_id = EMBM_Admin_Untappd_id($user->untappd_url);
+$brewery_id = EMBM_Admin_Untappd_id($user_url);
 if (!$brewery_id) {
     EMBM_Admin_Labs_Import_error();
     return;

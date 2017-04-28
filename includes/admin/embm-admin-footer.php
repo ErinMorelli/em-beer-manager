@@ -31,7 +31,11 @@ $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true)
         <?php _e('If you like this plugin, please consider donating to support future development. Thank you!', 'embm'); ?>
     </p>
     <p>
-        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=erin%40erinmorelli%2ecom&amp;lc=US&amp;item_name=EM%20Beer%20Manager&amp;item_number=embm%2dplugin%2dsupport&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted" title="<?php _e('Donate', 'embm'); ?>" target="_blank">
+        <a
+            href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=98VZ8XS4D4VBY&amp;lc=US&amp;item_name=EM%20Beer%20Manager&amp;item_number=embm%2dplugin%2dsupport&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted&amp;return=http%3A%2F%2Fwww.erinmorelli.com%2Fthanks-paypal%2F"
+            title="<?php _e('Donate', 'embm'); ?>"
+            target="_blank"
+        >
             <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="<?php _e('Donate', 'embm'); ?>" border="0" />
         </a>
     </p>

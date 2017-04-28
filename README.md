@@ -37,8 +37,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.0.4 - Critical Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.4/em-beer-manager.3.0.4.zip) ###
-* [FIXED] PHP compatibility issue with Untappd authentication
+### [Version 3.0.5 - Critical Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.5/em-beer-manager.3.0.5.zip) ###
+* [FIXED] Broken brewery account authentication for Labs
 
 
 
