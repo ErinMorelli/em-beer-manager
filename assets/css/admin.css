@@ -233,22 +233,31 @@
 
 
 /**
- * Style EM Beer Manager labs page
+ * Style EM Beer Manager settings tabs
  */
-.embm-settings--tab-labs .warning {
+.embm-settings--page .embm-nav-tab > span {
+    bottom: 2px;
+    color: #888;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: normal;
+    line-height: 14px;
+    position: relative;
+}
+.embm-settings--tab .warning {
     color: red;
     font-weight: bold;
 }
-.embm-settings--tab-labs .emphasis {
+.embm-settings--tab .emphasis {
     font-weight: 600;
     text-transform: uppercase;
 }
-.embm-settings--tab-labs .labs-section {
+.embm-settings--tab .labs-section {
     color: #23282d;
     font-size: 14px;
     font-weight: 600;
 }
-.embm-settings--tab-labs .embm-labs--import-select {
+.embm-settings--tab .embm-labs--import-select {
     margin-right: 10px;
 }
 

@@ -18,3 +18,11 @@
  *
  * @package EMBM\Admin\Labs\UTFB
  */
+
+include EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
+
+?>
+
+<p>
+    <h3>Hello, world.</h3>
+</p>
