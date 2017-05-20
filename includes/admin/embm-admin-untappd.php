@@ -596,7 +596,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     if ($check) {
         // Compare beer's brewery ID to user's brewery ID
         if ($beer->brewery->brewery_id != intval($brewery_id)) {
-            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs');
+            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#import');
         }
     }
 

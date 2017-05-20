@@ -234,7 +234,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Set up response
     $response = array(
-        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'labs'))
+        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'import'))
     );
 
     // Get Untappd brewery info from API
@@ -242,7 +242,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Check for error
     if (!is_object($brewery)) {
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'import'));
         wp_send_json($response);
         return;
     }
@@ -252,7 +252,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Check for error
     if (!is_array($beer_list)) {
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'import'));
         wp_send_json($response);
         return;
     }
@@ -286,7 +286,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
             // Check for error
             if (!is_object($beer)) {
-                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'import'));
                 break;
             }
 
@@ -301,7 +301,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for errors
         if ($has_errors) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'labs'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'import'));
         }
         break;
 
@@ -326,7 +326,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for error
         if (!is_object($beer)) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'import'));
             break;
         }
 
@@ -337,7 +337,7 @@ function EMBM_Admin_Actions_Untappd_import()
         if (!is_null($res)) {
             $response['redirect'] = $res;
         } else {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'labs'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'import'));
         }
         break;
 
@@ -359,7 +359,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
             // Check for error
             if (!is_object($beer)) {
-                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'labs'));
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'import'));
                 break;
             }
 
@@ -374,14 +374,14 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for errors
         if ($has_errors) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'labs'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'import'));
         }
         break;
 
     // Fallback
     default:
         // Setup return URL
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'labs'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'import'));
     }
 
     // Send response
@@ -390,3 +390,141 @@ function EMBM_Admin_Actions_Untappd_import()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-import', 'EMBM_Admin_Actions_Untappd_import');
+
+/**
+ * Connect to a UTFB account
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_connect()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $api_key = $_POST['api_key'];
+    $email = $_POST['email'];
+
+    // Base64-encode credentials
+    $encoded = base64_encode(sprintf('%s:%s', $email, $api_key));
+
+    // Test for validity
+    $is_valid = EMBM_Admin_Utfb_validate($encoded);
+
+    // Respond to validity
+    if ($is_valid) {
+        // Store credentials
+        update_option(
+            'embm_utfb_options',
+            array(
+                'apikey'  => $api_key,
+                'email'   => $email,
+                'encoded' => $encoded
+            )
+        );
+
+        // Set up redirect URL
+        $redirect_url = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 1, 'utfb'));
+    } else {
+        // Set up redirect URL
+        $redirect_url = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', 1, 'utfb'));
+    }
+
+    // Set up response
+    $response = array(
+        'redirect' => $redirect_url
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add UTFB connect action to AJAX
+add_action('wp_ajax_embm-utfb-connect', 'EMBM_Admin_Actions_Utfb_connect');
+
+/**
+ * Get UTFB menus for a locations
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_menus()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $authorization = $_POST['authorization'];
+    $location_id = $_POST['location_id'];
+
+    // Get menus
+    $menus = EMBM_Admin_Utfb_menus($authorization, $location_id);
+
+    // Set up response
+    $response = array(
+        'menus' => $menus
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add UTFB menus action to AJAX
+add_action('wp_ajax_embm-utfb-menus', 'EMBM_Admin_Actions_Utfb_menus');
+
+/**
+ * Get UTFB sections for a menu
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_sections()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $authorization = $_POST['authorization'];
+    $menu_id = $_POST['menu_id'];
+
+    // Get sections
+    $sections = EMBM_Admin_Utfb_sections($authorization, $menu_id);
+
+    // Set up response
+    $response = array(
+        'sections' => $sections
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add UTFB sections action to AJAX
+add_action('wp_ajax_embm-utfb-sections', 'EMBM_Admin_Actions_Utfb_sections');
+
+/**
+ * Get UTFB beers for a section
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_beers()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $authorization = $_POST['authorization'];
+    $section_id = $_POST['section_id'];
+
+    // Get beers
+    $beers = EMBM_Admin_Utfb_beers($authorization, $section_id);
+
+    // Set up response
+    $response = array(
+        'beers' => $beers
+    );
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add UTFB connect action to AJAX
+add_action('wp_ajax_embm-utfb-beers', 'EMBM_Admin_Actions_Utfb_beers');

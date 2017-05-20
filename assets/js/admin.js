@@ -371,7 +371,7 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    /* ---- LABS ---- */
+    /* ---- LABS / IMPORT ---- */
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
@@ -416,6 +416,67 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
+        })
+        .fail(function() {
+            ajax_error(spinner);
+        });
+    });
+
+    /* ---- LABS / UTFB ---- */
+
+    // Connect a UTFB account
+    $('a.embm-utfb--connect').on('click', function (e) {
+        e.preventDefault();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        ajax_params.action = 'embm-utfb-connect';
+        ajax_params.api_key = $('#embm-utfb--apikey').val();
+        ajax_params.email = $('#embm-utfb--email').val();
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        })
+        .fail(function() {
+            ajax_error(spinner);
+        });
+    });
+
+    // Disconnect a UTFB account
+    $('a.embm-utfb--disconnect').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-utfb-disconnect';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Select location
+    $('#embm-utfb-location-id').on('change', function (e) {
+        e.preventDefault();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        ajax_params.action = 'embm-utfb-menus';
+        ajax_params.authorization = $('#embm-utfb-authorization').val();
+        ajax_params.location_id = $(this).val();
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+
+            // Find menus select
+            var select = $('#embm-utfb-menu-id > option');
+
+            // Populate menus select
+            response.menus.forEach(function (menu) {
+                select.append('<option value=' + menu.id + '>' + menu.name + '</option>');
+            });
+
+            // Display menu
+            $('tr.embm-utfb-section--menu').show();
         })
         .fail(function() {
             ajax_error(spinner);

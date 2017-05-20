@@ -119,7 +119,7 @@ function EMBM_Admin_Authorize_status()
 ?>
     <div class="embm-settings--status">
         <p>
-            <?php _e('You are logged in as', 'embm'); ?>:
+            <?php _e('You are logged in to Untappd as', 'embm'); ?>:
             <a
                 href="<?php echo $user->untappd_url; ?>"
                 target="_blank"

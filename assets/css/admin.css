@@ -152,13 +152,16 @@
     margin: 5px 5px 0;
     width: 50px;
 }
-.embm-settings--page .embm-settings--status .embm-untappd--user-link {
+.embm-settings--page .embm-settings--status .embm-untappd--user-link,
+.embm-settings--page .embm-settings--status .embm-utfb--account-link {
     text-decoration: none;
 }
-.embm-settings--page .embm-settings--status .embm-untappd--user-link .dashicons::before {
+.embm-settings--page .embm-settings--status .embm-untappd--user-link .dashicons::before,
+.embm-settings--page .embm-settings--status .embm-utfb--account-link .dashicons::before {
     font-size: 18px;
 }
-.embm-settings--page .embm-settings--status .embm-untappd--deauthorize {
+.embm-settings--page .embm-settings--status .embm-untappd--deauthorize,
+.embm-settings--page .embm-settings--status .embm-utfb--disconnect {
     margin-left: 4px;
 }
 .embm-settings--page .embm-settings--code {
@@ -170,7 +173,7 @@
     max-width: 450px;
     padding: 3px 5px 2px;
 }
-.embm-settings--page .embm-settings--tab-labs .dashicons-warning {
+.embm-settings--page .dashicons-warning {
     color: #FFB900;
     cursor: help;
     line-height: 28px;
@@ -259,6 +262,16 @@
 }
 .embm-settings--tab .embm-labs--import-select {
     margin-right: 10px;
+}
+
+
+/**
+ * Style UTFB tab
+ */
+#embm-labs-utfb .embm-utfb-section--menu,
+#embm-labs-utfb .embm-utfb-section--section,
+#embm-labs-utfb .embm-utfb-section--beer {
+    display: none;
 }
 
 

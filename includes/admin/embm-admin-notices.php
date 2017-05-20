@@ -88,6 +88,20 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'message'   => __('There was a problem refreshing check-in data from Untappd!', 'embm').' '.
                 __('Please try again later.', 'embm')
         )
+    ),
+    'utfb-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => __('ERROR', 'embm') . ':',
+            'message'   => __('There was a problem connecting your Untappd for Business account! Please try again later.', 'embm')
+        )
+    ),
+    'utfb-success' => array(
+        '1' => array(
+            'type'      => 'updated',
+            'title'     => __('Success!', 'embm'),
+            'message'   => __('Your Untappd for Business account has been connected.', 'embm')
+        )
     )
 );
 

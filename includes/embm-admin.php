@@ -21,6 +21,7 @@
 
 // Include additional Admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
+require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-utfb.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-actions.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-settings.php';
 
