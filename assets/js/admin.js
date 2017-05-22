@@ -41,9 +41,11 @@ jQuery(document).ready(function ($) {
             '_nonce': embm_settings.ajax_nonce,
         },
         ajax_response = function (response) {
-            if (typeof response === 'object' && response.hasOwnProperty('redirect')) {
+            if (response && typeof response === 'object' && response.hasOwnProperty('redirect')) {
+                console.log('ONE');
                 window.location = response.redirect;
             } else {
+                console.log('TWO');
                 window.location.reload();
             }
         },
@@ -55,6 +57,7 @@ jQuery(document).ready(function ($) {
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
         nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
+        utfb_location_id = $('select.embm-utfb--dropdown').val(),
         hash,
         page,
         clean_url;
@@ -452,31 +455,94 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, ajax_response);
     });
 
-    // Select location
-    $('#embm-utfb-location-id').on('change', function (e) {
+    // Load next utfb import dropdown
+    function load_utfb_dropdown(dropdown) {
+        var resource = $(dropdown).data('action'),
+            resource_id = $(dropdown).val();
+
+        // Bail if no resource
+        if (!resource) {
+            return false;
+        }
+
+        // Check for resource ID
+        if (!resource_id) {
+            // Hide all child sections
+            $(dropdown).closest('.embm-utfb-section').nextAll('.embm-utfb-section').hide();
+            return false;
+        }
+
+        ajax_params.action = 'embm-utfb-dropdown';
+        ajax_params.resource = resource;
+        ajax_params.resource_id = resource_id;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            if (response.error) {
+                return;
+            }
+
+            // Find menus select
+            var select = $('#embm-utfb-' + resource + '-id');
+
+            // Remove existing options
+            select.children('option').each(function (idx, option) {
+                if (idx) {
+                    $(option).remove();
+                }
+            });
+
+            // Populate menus select
+            response.items.forEach(function (item) {
+                select.append('<option value=' + item.id + '>' + item.name + '</option>');
+            });
+
+            // Display menu
+            $('tr.embm-utfb-section--' + resource).show();
+        });
+    }
+
+    // Handle select dropdown changes
+    $('select.embm-utfb--dropdown').on('change', function (e) {
         e.preventDefault();
+        load_utfb_dropdown(this);
+    });
+
+    // Check for value on page load
+    if (utfb_location_id) {
+        load_utfb_dropdown($('select.embm-utfb--dropdown')[0]);
+    }
+
+    // Import UTFB objects
+    $('.embm-utfb--import').on('click', function (e) {
+        e.preventDefault();
+
+        // Get import data
+        var resources = {},
+            resource = $(this).data('resource'),
+            resource_types = ['location', 'menu', 'section', 'beer'],
+            import_all = $(this).parent().hasClass('embm-utfb-section--import-all');
 
         // Start spinner
         spinner.insertAfter($(this));
 
-        ajax_params.action = 'embm-utfb-menus';
-        ajax_params.authorization = $('#embm-utfb-authorization').val();
-        ajax_params.location_id = $(this).val();
+        // Get resource IDs
+        resource_types.forEach(function (resource_type) {
+            resources[resource_type] = $('#embm-utfb-' + resource_type + '-id').val();
+        });
+
+        // Set up ajax action
+        ajax_params.action = 'embm-utfb-import';
+        ajax_params.resource = resource;
+        ajax_params.resources = resources;
+        ajax_params.import_all = import_all;
+
+        console.log(ajax_params);
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
-
-            // Find menus select
-            var select = $('#embm-utfb-menu-id > option');
-
-            // Populate menus select
-            response.menus.forEach(function (menu) {
-                select.append('<option value=' + menu.id + '>' + menu.name + '</option>');
-            });
-
-            // Display menu
-            $('tr.embm-utfb-section--menu').show();
+            // ajax_response(response);
         })
         .fail(function() {
             ajax_error(spinner);

@@ -155,6 +155,9 @@ function EMBM_Output_beer($beer_id, $options)
     // End single beer
     $output .= '</div>'."\n";
 
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_content', $output);
+
     // Return HTML content
     return $output;
 }
@@ -198,6 +201,9 @@ function EMBM_Output_untappd($beer_id)
     $output .= '<a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="'.$untap_title.'">';
     $output .= '<img src="'.$untap_img.'" alt="'.$untap_title.'" border="0" />';
     $output .= '</a></div>';
+
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_untappd', $output);
 
     // Return HTML content
     return $output;
@@ -281,6 +287,9 @@ function EMBM_Output_profile($beer_id)
     // End profile output
     $output .= '</div>'."\n";
 
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_profile', $output);
+
     // Return HTML content
     return $output;
 }
@@ -342,6 +351,9 @@ function EMBM_Output_extras($beer_id)
     // End extras output
     $output .= '</div>'."\n";
 
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_extras', $output);
+
     // Return HTML content
     return $output;
 }
@@ -399,6 +411,9 @@ function EMBM_Output_rating($beer_id)
     $output .= EMBM_Output_Rating_styles();
     $output .= '</div>'."\n";
 
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_rating', $output);
+
     // Return HTML output
     return $output;
 }
@@ -442,6 +457,9 @@ function EMBM_Output_Rating_stars($rating_score)
         }
     }
 
+    // Add hook-able content filter
+    $stars = apply_filters('embm_beer_filter_rating_stars', $stars);
+
     // Return HTML output
     return $stars;
 }
@@ -467,6 +485,9 @@ function EMBM_Output_Rating_styles()
     $styles .= '.embm-beer--rating-stars .embm-rating-star--fraction polygon:nth-of-type(1)';
     $styles .= '{opacity:'.$star_opacity.'}';
     $styles .= '</style>';
+
+    // Add hook-able content filter
+    $styles = apply_filters('embm_beer_filter_rating_styles', $styles);
 
     // Return CSS content
     return $styles;
@@ -576,6 +597,9 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     $output .= $styles;
     $output .= '</div>'."\n";
 
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_reviews', $output);
+
     // Return HTML output
     return $output;
 }
@@ -651,6 +675,9 @@ function EMBM_Output_Review_content($review)
 
     // End review
     $output .= '</div>'."\n";
+
+    // Add hook-able content filter
+    $output = apply_filters('embm_beer_filter_review_content', $output);
 
     // Return HTML output
     return $output;

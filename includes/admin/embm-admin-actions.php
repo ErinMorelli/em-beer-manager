@@ -402,26 +402,18 @@ function EMBM_Admin_Actions_Utfb_connect()
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Get POST data
-    $api_key = $_POST['api_key'];
-    $email = $_POST['email'];
-
-    // Base64-encode credentials
-    $encoded = base64_encode(sprintf('%s:%s', $email, $api_key));
+    $credentials = array(
+        'apikey'  => $_POST['api_key'],
+        'email'   => $_POST['email']
+    );
 
     // Test for validity
-    $is_valid = EMBM_Admin_Utfb_validate($encoded);
+    $is_valid = EMBM_Admin_Utfb_validate($credentials);
 
     // Respond to validity
     if ($is_valid) {
         // Store credentials
-        update_option(
-            'embm_utfb_options',
-            array(
-                'apikey'  => $api_key,
-                'email'   => $email,
-                'encoded' => $encoded
-            )
-        );
+        update_option('embm_utfb_credentials', $credentials);
 
         // Set up redirect URL
         $redirect_url = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 1, 'utfb'));
@@ -443,25 +435,60 @@ function EMBM_Admin_Actions_Utfb_connect()
 add_action('wp_ajax_embm-utfb-connect', 'EMBM_Admin_Actions_Utfb_connect');
 
 /**
+ * Disconnect to a UTFB account
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_disconnect()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Remove connected account information
+    delete_option('embm_utfb_credentials');
+
+    // Send response
+    wp_send_json();
+}
+
+// Add UTFB connect action to AJAX
+add_action('wp_ajax_embm-utfb-disconnect', 'EMBM_Admin_Actions_Utfb_disconnect');
+
+/**
  * Get UTFB menus for a locations
  *
  * @return void
  */
-function EMBM_Admin_Actions_Utfb_menus()
+function EMBM_Admin_Actions_Utfb_dropdown()
 {
     // Check AJAX referrer
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Get POST data
-    $authorization = $_POST['authorization'];
-    $location_id = $_POST['location_id'];
+    $resource = $_POST['resource'];
+    $resource_id = $_POST['resource_id'];
 
-    // Get menus
-    $menus = EMBM_Admin_Utfb_menus($authorization, $location_id);
+    // Get credentials
+    $auth = get_option('embm_utfb_credentials');
+
+    // Get resource map
+    $resource_map = $GLOBALS['EMBM_UTFB_RESOURCE_MAP'];
+
+    // Return error if resource does not exist
+    if (!array_key_exists($resource, $resource_map)) {
+        wp_send_json_error();
+        return;
+    }
+
+    // Get correct resource function from map
+    $resource_func = $resource_map[$resource]['plural'];
+
+    // Get items from resource
+    $items = $resource_func($auth, $resource_id);
 
     // Set up response
     $response = array(
-        'menus' => $menus
+        'items' => $items
     );
 
     // Send response
@@ -469,62 +496,86 @@ function EMBM_Admin_Actions_Utfb_menus()
 }
 
 // Add UTFB menus action to AJAX
-add_action('wp_ajax_embm-utfb-menus', 'EMBM_Admin_Actions_Utfb_menus');
+add_action('wp_ajax_embm-utfb-dropdown', 'EMBM_Admin_Actions_Utfb_dropdown');
 
 /**
- * Get UTFB sections for a menu
+ * Import objects from UTFB
  *
  * @return void
  */
-function EMBM_Admin_Actions_Utfb_sections()
+function EMBM_Admin_Actions_Utfb_import()
 {
     // Check AJAX referrer
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Get POST data
-    $authorization = $_POST['authorization'];
-    $menu_id = $_POST['menu_id'];
+    $resource = $_POST['resource'];
+    $resources = $_POST['resources'];
+    $import_all = ($_POST['import_all'] == 'true') ? true : false;
+    error_log(print_r($resources,true));
 
-    // Get sections
-    $sections = EMBM_Admin_Utfb_sections($authorization, $menu_id);
+    // Get credentials
+    $auth = get_option('embm_utfb_credentials');
 
-    // Set up response
-    $response = array(
-        'sections' => $sections
-    );
+    // Get resource map
+    $resource_map = $GLOBALS['EMBM_UTFB_RESOURCE_MAP'];
 
-    // Send response
-    wp_send_json($response);
+    // Set up resource objects
+    $objects = array();
+    $should_be_plural = false;
+
+    // Get objects to import
+    foreach ($resources as $resource_name => $resource_id) {
+        // Get call type
+        $call_type = (null == $resource_id || $should_be_plural) ? 'plural' : 'single';
+
+        // Check if this is our main resource
+        if ($resource_name == $resource) {
+            $should_be_plural = true;
+        }
+
+        // Get resource function
+        $resource_func = $resource_map[$resource_name][$call_type];
+
+        // Get function params
+        $params = EMBM_Admin_Utfb_params($resource_func);
+
+        // Build params
+        foreach ($params as $param => $param_value) {
+            // Check for ID param
+            preg_match('/^(\w+)_id$/', $param, $matches);
+
+            // Set resource ID
+            if ($matches) {
+                $params[$param] = $resources[$matches[1]];
+            }
+
+            // Set auth
+            elseif ($param == 'auth') {
+                $params[$param] = $auth;
+            }
+        }
+
+        // Get resource data
+        $objects[$resource_name] = call_user_func_array($resource_func, $params);
+    }
+
+    error_log(print_r($objects,true));
+
+    // Run import
+    $res = EMBM_Admin_Utfb_import($auth, $objects);
+
+    // // Check response
+    // if (!is_null($res)) {
+    //     $has_errors = true;
+    // }
+
+/*
+    Add Menu as new category
+    Add Sections as Menu sub-category
+    Import beers within sections
+*/
 }
 
-// Add UTFB sections action to AJAX
-add_action('wp_ajax_embm-utfb-sections', 'EMBM_Admin_Actions_Utfb_sections');
-
-/**
- * Get UTFB beers for a section
- *
- * @return void
- */
-function EMBM_Admin_Actions_Utfb_beers()
-{
-    // Check AJAX referrer
-    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
-
-    // Get POST data
-    $authorization = $_POST['authorization'];
-    $section_id = $_POST['section_id'];
-
-    // Get beers
-    $beers = EMBM_Admin_Utfb_beers($authorization, $section_id);
-
-    // Set up response
-    $response = array(
-        'beers' => $beers
-    );
-
-    // Send response
-    wp_send_json($response);
-}
-
-// Add UTFB connect action to AJAX
-add_action('wp_ajax_embm-utfb-beers', 'EMBM_Admin_Actions_Utfb_beers');
+// Add UTFB menus action to AJAX
+add_action('wp_ajax_embm-utfb-import', 'EMBM_Admin_Actions_Utfb_import');

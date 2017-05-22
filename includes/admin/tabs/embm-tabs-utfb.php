@@ -24,10 +24,11 @@ include EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
 /**
  *
  */
-function EMBM_Admin_Labs_Utfb_credentials($credentials)
+function EMBM_Admin_Labs_Utfb_credentials()
 {
 ?>
     <div id="embm-labs-utfb">
+        <h3><?php _e('Connect your Untappd for Business account', 'embm'); ?>:</h3>
         <table class="form-table">
             <tbody>
                 <tr>
@@ -35,6 +36,18 @@ function EMBM_Admin_Labs_Utfb_credentials($credentials)
                     <td>
                         <p>
                             <input value="<?php echo $credentials['apikey']; ?>" id="embm-utfb--apikey" type="text">
+                        </p>
+                        <p class="description">
+                            <?php printf(
+                                    __('You can find your API key under the %s section %s.', 'embm'),
+                                    sprintf('<strong>"%s"</strong>', __('API Access Tokens', 'embm')),
+                                    sprintf(
+                                        '<a href="%s" target="_blank">%s</a>',
+                                        'https://business.untappd.com/api_tokens',
+                                        __('here', 'embm')
+                                    )
+                                );
+                            ?>
                         </p>
                     </td>
                 </tr>
@@ -60,30 +73,50 @@ function EMBM_Admin_Labs_Utfb_credentials($credentials)
 }
 
 // Check for existing UTFB credentials
-$credentials = get_option('embm_utfb_options');
-if (!$credentials){
-    EMBM_Admin_Labs_Utfb_credentials($credentials);
+$credentials = get_option('embm_utfb_credentials');
+
+// Make sure we're authorized
+if (null == $credentials) {
+    EMBM_Admin_Labs_Utfb_credentials();
     return;
 }
 
 // Get account information
 $account = EMBM_Admin_Utfb_account($credentials);
 
+// Check for error
+if (is_null($account) || is_string($account)) {
+    EMBM_Admin_Labs_Utfb_credentials();
+    return;
+}
+
+// Set account title
+$title = sprintf(
+    '%s (%s)',
+    property_exists($account, 'untappd_username') ? $account->untappd_username : '',
+    $account->role
+);
+
+// Set account URL
+if (property_exists($account, 'untappd_username')) {
+    $href = sprintf('https://untappd.com/%s', $account->untappd_username);
+} else {
+    $href = 'https://business.untappd.com';
+}
+
 // Get all locations
 $locations = EMBM_Admin_Utfb_locations($credentials);
 
 ?>
 <div id="embm-labs-utfb">
-    <input type="hidden" id="embm-utfb-authorization" value="<?php echo $credentials['encoded']; ?>" />
-
     <div class="embm-settings--status">
         <p>
             <?php _e('You are connected to Untappd for Business as', 'embm'); ?>:
             <a
-                href="https://untappd.com/<?php echo $account->untappd_username; ?>"
+                href="<?php echo $href; ?>"
                 target="_blank"
                 class="embm-utfb--account-link"
-                title="<?php echo $account->untappd_username . ' (' . $account->role . ')'; ?>"
+                title="<?php echo $title; ?>"
             ><span
                 class="dashicons dashicons-admin-users"
             ></span><strong><?php echo $account->name; ?></strong></a>
@@ -100,58 +133,111 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                         <select
                             id="embm-utfb-location-id"
                             name="embm-utfb-location-id"
-                            class="embm-labs--location-select"
+                            class="embm-utfb--dropdown"
+                            data-action="menu"
                         >
                             <option value="">-- <?php _e('Select', 'embm'); ?> --</option>
                             <?php foreach ($locations as $location) :  ?>
                                 <option value="<?php echo $location->id; ?>"><?php echo $location->name; ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
+                    <p class="description"><?php _e('Select a location to import data from.', 'embm'); ?></p>
                 </td>
             </tr>
             <tr class="embm-utfb-section embm-utfb-section--menu">
-                <th scope="row"><?php _e('Select a Menu', 'embm'); ?></th>
+                <th scope="row"><?php _e('Select or Import a Menu', 'embm'); ?></th>
                 <td>
                     <p>
                         <select
                             id="embm-utfb-menu-id"
                             name="embm-utfb-menu-id"
-                            class="embm-labs--menu-select"
+                            class="embm-utfb--dropdown"
+                            data-action="section"
                         >
                             <option value="">-- <?php _e('Select', 'embm'); ?> --</option>
                         </select>
+                        <a
+                            class="button button-primary embm-utfb--import"
+                            data-resource="menu"
+                        ><?php _e('Import Selected Menu', 'embm'); ?></a>
+                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
+                    <p class="description"><?php _e('Import all beers in the selected menu.', 'embm'); ?></p>
+                    <p class="embm-utfb-section--import-all">
+                        <button
+                            type="button"
+                            class="button button-secondary embm-utfb--import"
+                            data-resource="menu"
+                        ><?php _e('Import All Menus', 'embm'); ?><span></span></button>
+                    </p>
+                    <p class="description"><?php _e('Imports all beers in all menus for the selected location.', 'embm'); ?></p>
                 </td>
             </tr>
             <tr class="embm-utfb-section embm-utfb-section--section">
-                <th scope="row"><?php _e('Select a Section', 'embm'); ?></th>
+                <th scope="row"><?php _e('Select or Import a Section', 'embm'); ?></th>
                 <td>
                     <p>
                         <select
                             id="embm-utfb-section-id"
                             name="embm-utfb-section-id"
-                            class="embm-labs--section-select"
+                            class="embm-utfb--dropdown"
+                            data-action="beer"
                         >
                             <option value="">-- <?php _e('Select', 'embm'); ?> --</option>
                         </select>
+                        <a
+                            class="button button-primary embm-utfb--import"
+                            data-resource="section"
+                        ><?php _e('Import Selected Section', 'embm'); ?></a>
+                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
+                    <p class="description"><?php _e('Import all beers in the selected section.', 'embm'); ?></p>
+                    <p class="embm-utfb-section--import-all">
+                        <button
+                            type="button"
+                            class="button button-secondary embm-utfb--import"
+                            data-resource="section"
+                        ><?php _e('Import All Sections', 'embm'); ?><span></span></button>
+                    </p>
+                    <p class="description"><?php _e('Imports all beers in all sections for the selected menu.', 'embm'); ?></p>
                 </td>
             </tr>
             <tr class="embm-utfb-section embm-utfb-section--beer">
-                <th scope="row"><?php _e('Select a Beer', 'embm'); ?></th>
+                <th scope="row"><?php _e('Import Beer', 'embm'); ?></th>
                 <td>
                     <p>
                         <select
                             id="embm-utfb-beer-id"
                             name="embm-utfb-beer-id"
-                            class="embm-labs--beer-select"
+                            class="embm-utfb--dropdown"
                         >
                             <option value="">-- <?php _e('Select', 'embm'); ?> --</option>
                         </select>
+                        <a
+                            class="button button-primary embm-utfb--import"
+                            data-resource="beer"
+                        ><?php _e('Import Selected Beer', 'embm'); ?></a>
+                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
+                    <p class="description"><?php _e('Imports only the selected beer.', 'embm'); ?></p>
+                    <p class="embm-utfb-section--import-all">
+                        <button
+                            type="button"
+                            class="button button-secondary embm-utfb--import"
+                            data-resource="beer"
+                        ><?php _e('Import All Beers', 'embm'); ?><span></span></button>
+                    </p>
+                    <p class="description"><?php _e('Imports all beers in the selected section.', 'embm'); ?></p>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <hr />
+
+    <div class="embm-utfb-shortcodes">
+        <h3>Shortcodes</h3>
+    </div>
 </div>
