@@ -512,55 +512,88 @@ function EMBM_Admin_Actions_Utfb_import()
     $resource = $_POST['resource'];
     $resources = $_POST['resources'];
     $import_all = ($_POST['import_all'] == 'true') ? true : false;
-    error_log(print_r($resources,true));
 
     // Get credentials
     $auth = get_option('embm_utfb_credentials');
 
-    // Get resource map
-    $resource_map = $GLOBALS['EMBM_UTFB_RESOURCE_MAP'];
-
-    // Set up resource objects
+    // Set up resource tracking objects
     $objects = array();
-    $should_be_plural = false;
+    $get_all = false;
 
     // Get objects to import
     foreach ($resources as $resource_name => $resource_id) {
-        // Get call type
-        $call_type = (null == $resource_id || $should_be_plural) ? 'plural' : 'single';
+        // Skip the location
+        if ($resource_name == 'location') {
+            // Set new parent
+            $parent_name = $resource_name;
+            $parent_id = $resource_id;
 
-        // Check if this is our main resource
-        if ($resource_name == $resource) {
-            $should_be_plural = true;
+            // Move to the next resource
+            continue;
         }
 
-        // Get resource function
-        $resource_func = $resource_map[$resource_name][$call_type];
+        // Check if this is our main resource
+        $is_resource = ($resource_name == $resource);
 
-        // Get function params
-        $params = EMBM_Admin_Utfb_params($resource_func);
+        // Handle get all cases
+        if ($get_all) {
+            // Get parent objects
+            $parent_objects = $objects[$parent_name];
 
-        // Build params
-        foreach ($params as $param => $param_value) {
-            // Check for ID param
-            preg_match('/^(\w+)_id$/', $param, $matches);
+            // Set up resource objects
+            $resource_objects = array();
 
-            // Set resource ID
-            if ($matches) {
-                $params[$param] = $resources[$matches[1]];
+            // Iterate over parent objects
+            foreach ($parent_objects as $parent_object) {
+                // Get resources
+                $new_resource_objects = call_user_func_array(
+                    'EMBM_Admin_Utfb_resource',
+                    array(
+                        'auth'          => $auth,
+                        'resource_name' => $resource_name,
+                        'resource_id'   => $resource_id,
+                        'parent_id'     => $parent_object->id,
+                        'call_type'     => 'plural'
+                    )
+                );
+
+                // Add to resource array
+                $resource_objects = array_merge($resource_objects, $new_resource_objects);
             }
 
-            // Set auth
-            elseif ($param == 'auth') {
-                $params[$param] = $auth;
-            }
+            // Store resource data
+            $objects[$resource_name] = $resource_objects;
         }
 
         // Get resource data
-        $objects[$resource_name] = call_user_func_array($resource_func, $params);
+        else {
+            // Get call type
+            $call_type = ($is_resource && $import_all) ? 'plural' : 'single';
+
+            // Get resource
+            $objects[$resource_name] = call_user_func_array(
+                'EMBM_Admin_Utfb_resource',
+                array(
+                    'auth'          => $auth,
+                    'resource_name' => $resource_name,
+                    'resource_id'   => $resource_id,
+                    'parent_id'     => $parent_id,
+                    'call_type'     => $call_type
+                )
+            );
+        }
+
+        // Set new parent
+        $parent_name = $resource_name;
+        $parent_id = $resource_id;
+
+        // Set get all
+        if ($is_resource) {
+            $get_all = true;
+        }
     }
 
-    error_log(print_r($objects,true));
+    // error_log(print_r($objects,true));
 
     // Run import
     $res = EMBM_Admin_Utfb_import($auth, $objects);

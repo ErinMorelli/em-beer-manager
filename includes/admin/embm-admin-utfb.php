@@ -207,10 +207,8 @@ function EMBM_Admin_Utfb_locations($auth, $refresh = false)
  */
 function EMBM_Admin_Utfb_location($auth, $location_id, $refresh = false)
 {
-    error_log($location_id);
     // Get all locations
     $locations = EMBM_Admin_Utfb_locations($auth, $location_id, $refresh);
-    error_log($locations);
 
     // Find location
     return EMBM_Admin_Utfb_find($locations, $location_id);
@@ -383,8 +381,38 @@ function EMBM_Admin_Utfb_params($function_name, $get_optionals = false)
 /*
  *
  */
+function EMBM_Admin_Utfb_resource($auth, $resource_name, $resource_id, $parent_id, $call_type)
+{
+    // Get resource map
+    $resource_map = $GLOBALS['EMBM_UTFB_RESOURCE_MAP'];
+
+    // Get resource function
+    $resource_func = $resource_map[$resource_name][$call_type];
+
+    // Build params
+    $params = array($auth, $parent_id);
+
+    // Handle single calls
+    if ($call_type == 'single') {
+        // Add additional ID
+        array_push($params, $resource_id);
+
+        // Return result as array
+        return array(call_user_func_array($resource_func, $params));
+    } else {
+        // Return plural call
+        return call_user_func_array($resource_func, $params);
+    }
+}
+
+/*
+ *
+ */
 function EMBM_Admin_Utfb_import($auth, $objects)
 {
+    // Set error tracker
+    $has_errors = false;
+
     // Iterate over objects
     foreach ($objects as $resource => $data) {
         // Import a given type
@@ -392,17 +420,78 @@ function EMBM_Admin_Utfb_import($auth, $objects)
 
         // Import menus as categories
         case 'menu':
-            # code...
+            // Iterate over menus
+            foreach ($data as $menu) {
+                // Check if menu exists
+                $exists = term_exists($menu->name, 'embm_menu');
+
+                // Store term ID and continue
+                if ($exists) {
+                    $menu->term_id = $exists['term_id'];
+                    continue;
+                }
+
+                // Add term
+                $term = wp_insert_term(
+                    $menu->name,
+                    'embm_menu',
+                    array(
+                        'description' => $menu->description
+                    )
+                );
+
+                // Store ID
+                $menu->term_id = $term['term_id'];
+            }
             break;
 
         // Import sections as sub-categories
         case 'section':
-            # code...
+            // Iterate over sections
+            foreach ($data as $section) {
+                // Get menu from ID
+                $menu = EMBM_Admin_Utfb_find($objects['menu'], $section->menu_id);
+
+                // Check if section  exists
+                $exists = term_exists($section->name, 'embm_menu', $menu->term_id);
+
+                // Store term ID and continue
+                if ($exists) {
+                    $section->term_id = $exists['term_id'];
+                    continue;
+                }
+
+                // Add term
+                $term = wp_insert_term(
+                    $section->name,
+                    'embm_menu',
+                    array(
+                        'description' => $section->description,
+                        'parent'      => $menu->term_id
+                    )
+                );
+
+                // Store ID
+                $section->term_id = $term['term_id'];
+            }
             break;
 
         // Import beers
         case 'beer':
-            # code...
+            // Iterate over beers
+            foreach ($data as $beer) {
+                // Get section from ID
+                $section = EMBM_Admin_Utfb_find($objects['section'], $beer->section_id);
+
+                // Import beer
+                $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term_id);
+
+                // Check response
+                if (!is_null($res)) {
+                    $has_errors = true;
+                }
+                break;
+            }
             break;
 
         default:
@@ -412,4 +501,139 @@ function EMBM_Admin_Utfb_import($auth, $objects)
     }
 
     return;
+}
+
+/**
+ *
+ */
+function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
+{
+    // Set beer slug
+    $beer_slug = sanitize_title($beer->name);
+
+    // Set up duplicate check args
+    $dup_args = array(
+        'name'           => $beer_slug,
+        'post_type'      => 'embm_beer',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1
+    );
+
+    // Check for duplicate (#2)
+    $duplicate = get_posts($dup_args);
+    if ($duplicate) {
+        return null;
+    }
+
+    // Set post publish date from Untappd created date
+    $beer_date = date('Y-m-d H:i:s', strtotime($beer->created_at));
+
+    // Set up data for storage
+    $beer_data = array(
+        'beer'      => $beer,
+        'cached'    => time()
+    );
+
+    // Set up post array
+    $new_beer_post = array(
+        'post_author'   => get_current_user_id(),
+        'post_title'    => $beer->name,
+        'post_name'     => $beer_slug,
+        'post_content'  => $beer->description,
+        'post_date'     => $beer_date,
+        'post_status'   => 'publish',
+        'post_type'     => 'embm_beer',
+        'tax_input'     => array(
+            'embm_style'   => $beer->style,
+            'embm_menu'    => $section_term_id
+        ),
+        'meta_input'    => array(
+            'embm_abv'              => $beer->abv,
+            'embm_ibu'              => $beer->ibu,
+            'embm_untappd'          => $beer->untappd_id,
+            'embm_untappd_data'     => $beer_data,
+            'embm_reviews_count'    => 5
+        )
+    );
+
+    // Insert post
+    $post_id = wp_insert_post($new_beer_post, true);
+
+    // Add post image
+    EMBM_Admin_Utfb_Import_image($post_id, $beer);
+
+    return null;
+}
+
+/**
+ *
+ */
+function EMBM_Admin_Utfb_Import_image($post_id, $beer)
+{
+    // Set beer slug
+    $img_slug = sanitize_title($beer->untappd_beer_slug);
+
+    // Set up args for duplicate check
+    $dup_args = array(
+        'name'           => $img_slug,
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 1
+    );
+
+    // Run post query
+    $img_exists = get_posts($dup_args);
+
+    // Handle if we found the image
+    if ($img_exists) {
+        // Set as post image and exit
+        set_post_thumbnail($post_id, $img_exists[0]->ID);
+        return;
+    }
+
+    // Check for beer image
+    if (!property_exists($beer, 'label_image') || $beer->label_image == '') {
+        return;
+    }
+
+    // Get WP upload dir info
+    $upload_dir = wp_upload_dir();
+
+    // Get image type from URL
+    $img_parts = explode('.', $beer->label_image);
+    $img_type = end($img_parts);
+
+    // Set file save path
+    $filename = $upload_dir['path'] . '/' . $beer->untappd_beer_slug . '.' . $img_type;
+
+    // Get image file contents
+    $img_res = EMBM_Admin_Untappd_request($beer->label_image, false);
+    if (!$img_res['success']) {
+        return;
+    }
+
+    // Save image data to file
+    file_put_contents($filename, $img_res['data']);
+
+    // Check the type of file
+    $filetype = wp_check_filetype(basename($filename), null);
+
+    // Prepare an post data for attachment
+    $attachment = array(
+        'guid'           => $upload_dir['url'] . '/' . basename($filename),
+        'post_mime_type' => $filetype['type'],
+        'post_title'     => $beer->untappd_beer_slug,
+        'post_content'   => '',
+        'post_status'    => 'inherit'
+    );
+
+    // Insert the attachment
+    $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
+
+    // Generate the metadata for the attachment, and update the database record.
+    $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+    wp_update_attachment_metadata($attach_id, $attach_data);
+
+    // Set as thumbnail for beer
+    set_post_thumbnail($post_id, $attach_id);
 }
