@@ -596,7 +596,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     if ($check) {
         // Compare beer's brewery ID to user's brewery ID
         if ($beer->brewery->brewery_id != intval($brewery_id)) {
-            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#import');
+            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs');
         }
     }
 
@@ -657,7 +657,9 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     $post_id = wp_insert_post($new_beer_post, true);
 
     // Add post image
-    EMBM_Admin_Untappd_Import_image($post_id, $beer);
+    if (property_exists($beer, 'beer_label_hd')) {
+        EMBM_Admin_Untappd_Import_image($post_id, $beer->beer_label_hd, $beer->beer_slug);
+    }
 
     return null;
 }
@@ -670,10 +672,10 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
  *
  * @return void
  */
-function EMBM_Admin_Untappd_Import_image($post_id, $beer)
+function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
 {
     // Set beer slug
-    $img_slug = sanitize_title($beer->beer_slug);
+    $img_slug = sanitize_title($slug);
 
     // Set up args for duplicate check
     $dup_args = array(
@@ -694,7 +696,7 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
     }
 
     // Check for beer image
-    if (!property_exists($beer, 'beer_label_hd') || $beer->beer_label_hd == '') {
+    if (!$image_url || $image_url == '') {
         return;
     }
 
@@ -702,14 +704,14 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
     $upload_dir = wp_upload_dir();
 
     // Get image type from URL
-    $img_parts = explode('.', $beer->beer_label_hd);
+    $img_parts = explode('.', $image_url);
     $img_type = end($img_parts);
 
     // Set file save path
-    $filename = $upload_dir['path'] . '/' . $beer->beer_slug . '.' . $img_type;
+    $filename = $upload_dir['path'] . '/' . $slug . '.' . $img_type;
 
     // Get image file contents
-    $img_res = EMBM_Admin_Untappd_request($beer->beer_label_hd, false);
+    $img_res = EMBM_Admin_Untappd_request($image_url, false);
     if (!$img_res['success']) {
         return;
     }
@@ -724,7 +726,7 @@ function EMBM_Admin_Untappd_Import_image($post_id, $beer)
     $attachment = array(
         'guid'           => $upload_dir['url'] . '/' . basename($filename),
         'post_mime_type' => $filetype['type'],
-        'post_title'     => $beer->beer_slug,
+        'post_title'     => $slug,
         'post_content'   => '',
         'post_status'    => 'inherit'
     );

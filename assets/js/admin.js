@@ -537,12 +537,10 @@ jQuery(document).ready(function ($) {
         ajax_params.resources = resources;
         ajax_params.import_all = import_all;
 
-        console.log(ajax_params);
-
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
-            // ajax_response(response);
+            ajax_response(response);
         })
         .fail(function() {
             ajax_error(spinner);

@@ -331,8 +331,13 @@ function EMBM_Admin_Utfb_beer($auth, $section_id, $beer_id, $refresh = false)
     return EMBM_Admin_Utfb_find($beers, $beer_id);
 }
 
-/*
+/**
+ * Search for a given UTFB object by ID.
  *
+ * @param array $objects   Array of UTFB objects
+ * @param int   $object_id UTFB object ID
+ *
+ * @return array Array of found object data
  */
 function EMBM_Admin_Utfb_find($objects, $object_id)
 {
@@ -347,39 +352,16 @@ function EMBM_Admin_Utfb_find($objects, $object_id)
     return null;
 }
 
-/*
+/**
+ * Retrieve a UTFB resource from the API
  *
- */
-function EMBM_Admin_Utfb_params($function_name, $get_optionals = false)
-{
-    // Set up params
-    $params = array();
-
-    // Check that function exists
-    if(function_exists($function_name)) {
-        // Parse function
-        $fx = new ReflectionFunction($function_name);
-
-        // Iterate over function params
-        foreach ($fx->getParameters() as $param) {
-            // Store required params
-            if (!$param->isOptional()) {
-                $params[$param->name] = null;
-            }
-
-            // Store optional params
-            elseif ($param->isOptional() && $get_optionals) {
-                $params[$param->name] = $param->getDefaultValue();
-            }
-        }
-    }
-
-    // Return params
-    return $params;
-}
-
-/*
+ * @param array  $auth          API authentication credentials
+ * @param string $resource_name Name of UTFB resource
+ * @param int    $resource_id   UTFB ID of resource
+ * @param int    $parent_id     UTFB ID of parent resource
+ * @param string $call_type     Either 'single' or 'plural'
  *
+ * @return array Results of UTFB API call
  */
 function EMBM_Admin_Utfb_resource($auth, $resource_name, $resource_id, $parent_id, $call_type)
 {
@@ -405,16 +387,20 @@ function EMBM_Admin_Utfb_resource($auth, $resource_name, $resource_id, $parent_i
     }
 }
 
-/*
+
+/**
+ * Import resources from UTFB
  *
+ * @param array $resources Array of UTFB resources to import
+ *
+ * @return null if successful, else string of redirect URL
  */
-function EMBM_Admin_Utfb_import($auth, $objects)
+function EMBM_Admin_Utfb_import($resources)
 {
-    // Set error tracker
-    $has_errors = false;
+    $response = null;
 
     // Iterate over objects
-    foreach ($objects as $resource => $data) {
+    foreach ($resources as $resource => $data) {
         // Import a given type
         switch ($resource) {
 
@@ -478,6 +464,9 @@ function EMBM_Admin_Utfb_import($auth, $objects)
 
         // Import beers
         case 'beer':
+            // Set error tracker
+            $has_errors = false;
+
             // Iterate over beers
             foreach ($data as $beer) {
                 // Get section from ID
@@ -490,21 +479,30 @@ function EMBM_Admin_Utfb_import($auth, $objects)
                 if (!is_null($res)) {
                     $has_errors = true;
                 }
-                break;
+            }
+
+            // Check for errors
+            if ($has_errors) {
+                $response = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', 3, 'utfb'));
             }
             break;
 
+        // Fallback
         default:
-            # code...
-            break;
+            $response = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', 2, 'utfb'));
         }
     }
 
-    return;
+    return $response;
 }
 
 /**
+ * Insert post from UTFB
  *
+ * @param array $beer            UTFB beer data
+ * @param int   $section_term_id UTFB section WP taxonomy term ID
+ *
+ * @return void
  */
 function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
 {
@@ -544,8 +542,8 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
         'post_status'   => 'publish',
         'post_type'     => 'embm_beer',
         'tax_input'     => array(
-            'embm_style'   => $beer->style,
-            'embm_menu'    => $section_term_id
+            'embm_style'   => array($beer->style),
+            'embm_menu'    => array($section_term_id)
         ),
         'meta_input'    => array(
             'embm_abv'              => $beer->abv,
@@ -560,80 +558,9 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
     $post_id = wp_insert_post($new_beer_post, true);
 
     // Add post image
-    EMBM_Admin_Utfb_Import_image($post_id, $beer);
+    if (property_exists($beer, 'label_image')) {
+        EMBM_Admin_Untappd_Import_image($post_id, $beer->label_image, $beer->untappd_beer_slug);
+    }
 
     return null;
-}
-
-/**
- *
- */
-function EMBM_Admin_Utfb_Import_image($post_id, $beer)
-{
-    // Set beer slug
-    $img_slug = sanitize_title($beer->untappd_beer_slug);
-
-    // Set up args for duplicate check
-    $dup_args = array(
-        'name'           => $img_slug,
-        'post_type'      => 'attachment',
-        'post_status'    => 'inherit',
-        'posts_per_page' => 1
-    );
-
-    // Run post query
-    $img_exists = get_posts($dup_args);
-
-    // Handle if we found the image
-    if ($img_exists) {
-        // Set as post image and exit
-        set_post_thumbnail($post_id, $img_exists[0]->ID);
-        return;
-    }
-
-    // Check for beer image
-    if (!property_exists($beer, 'label_image') || $beer->label_image == '') {
-        return;
-    }
-
-    // Get WP upload dir info
-    $upload_dir = wp_upload_dir();
-
-    // Get image type from URL
-    $img_parts = explode('.', $beer->label_image);
-    $img_type = end($img_parts);
-
-    // Set file save path
-    $filename = $upload_dir['path'] . '/' . $beer->untappd_beer_slug . '.' . $img_type;
-
-    // Get image file contents
-    $img_res = EMBM_Admin_Untappd_request($beer->label_image, false);
-    if (!$img_res['success']) {
-        return;
-    }
-
-    // Save image data to file
-    file_put_contents($filename, $img_res['data']);
-
-    // Check the type of file
-    $filetype = wp_check_filetype(basename($filename), null);
-
-    // Prepare an post data for attachment
-    $attachment = array(
-        'guid'           => $upload_dir['url'] . '/' . basename($filename),
-        'post_mime_type' => $filetype['type'],
-        'post_title'     => $beer->untappd_beer_slug,
-        'post_content'   => '',
-        'post_status'    => 'inherit'
-    );
-
-    // Insert the attachment
-    $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
-
-    // Generate the metadata for the attachment, and update the database record.
-    $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
-    wp_update_attachment_metadata($attach_id, $attach_data);
-
-    // Set as thumbnail for beer
-    set_post_thumbnail($post_id, $attach_id);
 }

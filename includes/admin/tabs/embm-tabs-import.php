@@ -19,7 +19,7 @@
  * @package EMBM\Admin\Labs\Untappd
  */
 
-include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
+require EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
 
 /**
  * Displays an unauthorized error message

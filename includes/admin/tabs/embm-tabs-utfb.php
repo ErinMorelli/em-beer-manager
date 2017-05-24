@@ -19,10 +19,12 @@
  * @package EMBM\Admin\Labs\UTFB
  */
 
-include EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
+require EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
 
 /**
+ * Displays the UTFB API credentials form
  *
+ * @return void
  */
 function EMBM_Admin_Labs_Utfb_credentials()
 {
@@ -39,15 +41,14 @@ function EMBM_Admin_Labs_Utfb_credentials()
                         </p>
                         <p class="description">
                             <?php printf(
-                                    __('You can find your API key under the %s section %s.', 'embm'),
-                                    sprintf('<strong>"%s"</strong>', __('API Access Tokens', 'embm')),
-                                    sprintf(
-                                        '<a href="%s" target="_blank">%s</a>',
-                                        'https://business.untappd.com/api_tokens',
-                                        __('here', 'embm')
-                                    )
-                                );
-                            ?>
+                                __('You can find your API key under the %s section %s.', 'embm'),
+                                sprintf('<strong>"%s"</strong>', __('API Access Tokens', 'embm')),
+                                sprintf(
+                                    '<a href="%s" target="_blank">%s</a>',
+                                    'https://business.untappd.com/api_tokens',
+                                    __('here', 'embm')
+                                )
+                            ); ?>
                         </p>
                     </td>
                 </tr>

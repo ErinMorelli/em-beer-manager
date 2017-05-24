@@ -563,10 +563,7 @@ function EMBM_Admin_Actions_Utfb_import()
 
             // Store resource data
             $objects[$resource_name] = $resource_objects;
-        }
-
-        // Get resource data
-        else {
+        } else {
             // Get call type
             $call_type = ($is_resource && $import_all) ? 'plural' : 'single';
 
@@ -593,21 +590,18 @@ function EMBM_Admin_Actions_Utfb_import()
         }
     }
 
-    // error_log(print_r($objects,true));
-
     // Run import
-    $res = EMBM_Admin_Utfb_import($auth, $objects);
+    $errors = EMBM_Admin_Utfb_import($objects);
 
-    // // Check response
-    // if (!is_null($res)) {
-    //     $has_errors = true;
-    // }
+    // Check response
+    if (!is_null($errors)) {
+        $response['redirect'] = $errors;
+    } else {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 2, 'utfb'));
+    }
 
-/*
-    Add Menu as new category
-    Add Sections as Menu sub-category
-    Import beers within sections
-*/
+    // Send response
+    wp_send_json($response);
 }
 
 // Add UTFB menus action to AJAX
