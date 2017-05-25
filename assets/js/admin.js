@@ -540,7 +540,7 @@ jQuery(document).ready(function ($) {
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
-            ajax_response(response);
+            // ajax_response(response);
         })
         .fail(function() {
             ajax_error(spinner);

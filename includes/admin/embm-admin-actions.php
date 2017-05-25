@@ -591,11 +591,11 @@ function EMBM_Admin_Actions_Utfb_import()
     }
 
     // Run import
-    $errors = EMBM_Admin_Utfb_import($objects);
+    $error_code = EMBM_Admin_Utfb_import($objects);
 
     // Check response
-    if (!is_null($errors)) {
-        $response['redirect'] = $errors;
+    if ($error_code !== 0) {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', $error_code, 'utfb'));
     } else {
         $response['redirect'] = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 2, 'utfb'));
     }

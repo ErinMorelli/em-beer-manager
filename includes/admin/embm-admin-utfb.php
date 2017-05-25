@@ -19,9 +19,7 @@
  * @package EMBM\Admin\Utfb
  */
 
-// TODO: Remove when integration is complete
-include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-utfb-dummy.php';
-
+// Set constants
 define('EMBM_UTFB_RETURN_URL', 'options-general.php?page=embm-settings&embm-utfb-%s=%d#%s');
 define('EMBM_UTFB_API_URL', 'https://business.untappd.com/api/v1/%s');
 
@@ -34,7 +32,7 @@ $GLOBALS['EMBM_UTFB_CACHE'] = array(
     'items'     => 'embm_utfb_items_%s'
 );
 
-// Resource mapping
+// UTFB resource function mapping
 $GLOBALS['EMBM_UTFB_RESOURCE_MAP'] = array(
     'location' => array(
         'single' => 'EMBM_Admin_Utfb_location',
@@ -54,8 +52,14 @@ $GLOBALS['EMBM_UTFB_RESOURCE_MAP'] = array(
     )
 );
 
-/*
+/**
+ * Makes a request to UTFB API and intercept any errors.
  *
+ * @param array  $auth        API authentication credentials
+ * @param string $request_url URL for an UTFB API endpoint
+ * @param bool   $decode      Whether or not to decode JSON (default: true)
+ *
+ * @return array Decoded JSON API response or raw JSON string
  */
 function EMBM_Admin_Utfb_request($auth, $request_url, $decode = true)
 {
@@ -108,50 +112,25 @@ function EMBM_Admin_Utfb_request($auth, $request_url, $decode = true)
     return $response;
 }
 
-/*
- * TODO: Remove when integration is complete
- */
-function EMBM_Admin_Utfb_dummyrequest($request_url, $decode = true)
-{
-    // Set up response object
-    $response = array(
-        'success'   => false,
-        'data'      => null,
-        'errors'    => null
-    );
-
-    // Make GET request to API
-    $response['data'] = EMBM_Admin_Utfb_Dummy_response($request_url);
-
-    // Try to decode JSON (if needed)
-    if ($decode) {
-        $json_data = @json_decode($response['data']);
-
-        // Check for any JSON decoding errors
-        if ($json_data === false || is_null($json_data)) {
-            return $response;
-        } else {
-            $response['data'] = $json_data;
-        }
-    }
-
-    // Set success
-    $response['success'] = true;
-
-    // Return result
-    return $response;
-}
-
-/*
+/**
+ * Checks whether or not UTFB API credentials are valid
  *
+ * @param array $auth API authentication credentials
+ *
+ * @return book If the credentials provided are valid
  */
 function EMBM_Admin_Utfb_validate($auth)
 {
     return true;
 }
 
-/*
+/**
+ * Retrieves UTFB user account data from either the WP cache or API.
  *
+ * @param array $auth    API authentication credentials
+ * @param bool  $refresh Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of user account data from UTFB
  */
 function EMBM_Admin_Utfb_account($auth, $refresh = false)
 {
@@ -176,8 +155,13 @@ function EMBM_Admin_Utfb_account($auth, $refresh = false)
     return $account;
 }
 
-/*
+/**
+ * Retrieves UTFB locations from either the WP cache or API.
  *
+ * @param array $auth    API authentication credentials
+ * @param bool  $refresh Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of locations from UTFB
  */
 function EMBM_Admin_Utfb_locations($auth, $refresh = false)
 {
@@ -202,8 +186,14 @@ function EMBM_Admin_Utfb_locations($auth, $refresh = false)
     return $locations;
 }
 
-/*
+/**
+ * Retrieves a UTFB location from either the WP cache or API.
  *
+ * @param array $auth        API authentication credentials
+ * @param int   $location_id UTFB location ID
+ * @param bool  $refresh     Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of location data from UTFB
  */
 function EMBM_Admin_Utfb_location($auth, $location_id, $refresh = false)
 {
@@ -214,8 +204,14 @@ function EMBM_Admin_Utfb_location($auth, $location_id, $refresh = false)
     return EMBM_Admin_Utfb_find($locations, $location_id);
 }
 
-/*
+/**
+ * Retrieves UTFB menus from either the WP cache or API.
  *
+ * @param array $auth        API authentication credentials
+ * @param int   $location_id UTFB location ID
+ * @param bool  $refresh     Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of menus from UTFB
  */
 function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
 {
@@ -241,8 +237,15 @@ function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
     return $menus;
 }
 
-/*
+/**
+ * Retrieves a UTFB menu from either the WP cache or API.
  *
+ * @param array $auth        API authentication credentials
+ * @param int   $location_id UTFB location ID
+ * @param int   $menu_id     UTFB menu ID
+ * @param bool  $refresh     Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of menu data from UTFB
  */
 function EMBM_Admin_Utfb_menu($auth, $location_id, $menu_id, $refresh = false)
 {
@@ -253,8 +256,14 @@ function EMBM_Admin_Utfb_menu($auth, $location_id, $menu_id, $refresh = false)
     return EMBM_Admin_Utfb_find($menus, $menu_id);
 }
 
-/*
+/**
+ * Retrieves UTFB sections from either the WP cache or API.
  *
+ * @param array $auth    API authentication credentials
+ * @param int   $menu_id UTFB menu ID
+ * @param bool  $refresh Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of sections from UTFB
  */
 function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
 {
@@ -280,8 +289,15 @@ function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
     return $sections;
 }
 
-/*
+/**
+ * Retrieves a UTFB section from either the WP cache or API.
  *
+ * @param array $auth       API authentication credentials
+ * @param int   $menu_id    UTFB menu ID
+ * @param int   $section_id UTFB section ID
+ * @param bool  $refresh    Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of section data from UTFB
  */
 function EMBM_Admin_Utfb_section($auth, $menu_id, $section_id, $refresh = false)
 {
@@ -292,8 +308,14 @@ function EMBM_Admin_Utfb_section($auth, $menu_id, $section_id, $refresh = false)
     return EMBM_Admin_Utfb_find($sections, $section_id);
 }
 
-/*
+/**
+ * Retrieves UTFB beers from either the WP cache or API.
  *
+ * @param array $auth       API authentication credentials
+ * @param int   $section_id UTFB section ID
+ * @param bool  $refresh    Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of beers from UTFB
  */
 function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
 {
@@ -319,8 +341,15 @@ function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
     return $beers;
 }
 
-/*
+/**
+ * Retrieves a UTFB beer from either the WP cache or API.
  *
+ * @param array $auth       API authentication credentials
+ * @param int   $section_id UTFB section ID
+ * @param int   $beer_id    UTFB beer ID
+ * @param bool  $refresh    Forces a refresh of API data (Default: false)
+ *
+ * @return array Array of beer data from UTFB
  */
 function EMBM_Admin_Utfb_beer($auth, $section_id, $beer_id, $refresh = false)
 {
@@ -397,23 +426,23 @@ function EMBM_Admin_Utfb_resource($auth, $resource_name, $resource_id, $parent_i
  */
 function EMBM_Admin_Utfb_import($resources)
 {
-    $response = null;
+    $response = 0;
 
-    // Iterate over objects
-    foreach ($resources as $resource => $data) {
+    // Iterate over resources
+    foreach ($resources as $resource => $resource_data) {
         // Import a given type
         switch ($resource) {
 
         // Import menus as categories
         case 'menu':
             // Iterate over menus
-            foreach ($data as $menu) {
+            foreach ($resource_data as $menu) {
                 // Check if menu exists
                 $exists = term_exists($menu->name, 'embm_menu');
 
                 // Store term ID and continue
                 if ($exists) {
-                    $menu->term_id = $exists['term_id'];
+                    $menu->term = $exists;
                     continue;
                 }
 
@@ -427,23 +456,23 @@ function EMBM_Admin_Utfb_import($resources)
                 );
 
                 // Store ID
-                $menu->term_id = $term['term_id'];
+                $menu->term = $term;
             }
             break;
 
         // Import sections as sub-categories
         case 'section':
             // Iterate over sections
-            foreach ($data as $section) {
+            foreach ($resource_data as $section) {
                 // Get menu from ID
-                $menu = EMBM_Admin_Utfb_find($objects['menu'], $section->menu_id);
+                $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
 
                 // Check if section  exists
-                $exists = term_exists($section->name, 'embm_menu', $menu->term_id);
+                $exists = term_exists($section->name, 'embm_menu', $menu->term['term_id']);
 
                 // Store term ID and continue
                 if ($exists) {
-                    $section->term_id = $exists['term_id'];
+                    $section->term = $exists;
                     continue;
                 }
 
@@ -458,7 +487,7 @@ function EMBM_Admin_Utfb_import($resources)
                 );
 
                 // Store ID
-                $section->term_id = $term['term_id'];
+                $section->term = $term;
             }
             break;
 
@@ -468,12 +497,15 @@ function EMBM_Admin_Utfb_import($resources)
             $has_errors = false;
 
             // Iterate over beers
-            foreach ($data as $beer) {
+            foreach ($resource_data as $beer) {
                 // Get section from ID
-                $section = EMBM_Admin_Utfb_find($objects['section'], $beer->section_id);
+                $section = EMBM_Admin_Utfb_find($resources['section'], $beer->section_id);
+                $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
+                error_log(print_r($section,true));
+                error_log(print_r($menu,true));
 
                 // Import beer
-                $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term_id);
+                $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term, $menu->term);
 
                 // Check response
                 if (!is_null($res)) {
@@ -483,13 +515,13 @@ function EMBM_Admin_Utfb_import($resources)
 
             // Check for errors
             if ($has_errors) {
-                $response = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', 3, 'utfb'));
+                $response = 3;
             }
             break;
 
         // Fallback
         default:
-            $response = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', 2, 'utfb'));
+            $response = 2;
         }
     }
 
@@ -499,12 +531,13 @@ function EMBM_Admin_Utfb_import($resources)
 /**
  * Insert post from UTFB
  *
- * @param array $beer            UTFB beer data
- * @param int   $section_term_id UTFB section WP taxonomy term ID
+ * @param array $beer         UTFB beer data
+ * @param int   $section_term UTFB section WP taxonomy term data
+ * @param int   $menu_term    UTFB menu WP taxonomy term data
  *
  * @return void
  */
-function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
+function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
 {
     // Set beer slug
     $beer_slug = sanitize_title($beer->name);
@@ -532,6 +565,10 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
         'cached'    => time()
     );
 
+    // Find beer style
+    $style = term_exists($beer->style, 'embm_style');
+    error_log($style);
+
     // Set up post array
     $new_beer_post = array(
         'post_author'   => get_current_user_id(),
@@ -542,8 +579,13 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
         'post_status'   => 'publish',
         'post_type'     => 'embm_beer',
         'tax_input'     => array(
-            'embm_style'   => array($beer->style),
-            'embm_menu'    => array($section_term_id)
+            'embm_style'   => array(
+                $beer->style
+            ),
+            'embm_menu'    => array(
+                $menu_term['term_taxonomy_id'],
+                $section_term['term_taxonomy_id']
+            )
         ),
         'meta_input'    => array(
             'embm_abv'              => $beer->abv,
@@ -556,6 +598,7 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term_id)
 
     // Insert post
     $post_id = wp_insert_post($new_beer_post, true);
+    // error_log(print_r($new_beer_post,true));
 
     // Add post image
     if (property_exists($beer, 'label_image')) {

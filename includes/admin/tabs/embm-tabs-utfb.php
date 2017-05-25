@@ -235,10 +235,4 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
             </tr>
         </tbody>
     </table>
-
-    <hr />
-
-    <div class="embm-utfb-shortcodes">
-        <h3>Shortcodes</h3>
-    </div>
 </div>

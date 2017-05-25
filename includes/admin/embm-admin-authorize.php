@@ -85,7 +85,12 @@ function EMBM_Admin_Authorize_token()
 }
 
 /**
+ * Checks whether a user is authorized with Untappd
  *
+ * @return int Authorization status value, one of:
+ *               0 - Rate limit hit, displays error
+ *               1 - Not authorized, displays Log In button
+ *               2 - Successful authorization, displays user info
  */
 function EMBM_Admin_Authorize_status()
 {

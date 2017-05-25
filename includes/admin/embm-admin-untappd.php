@@ -667,8 +667,9 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
 /**
  * Upload and set beer featured image
  *
- * @param int    $post_id The beer post ID
- * @param object $beer    Beer object from Untappd API
+ * @param int    $post_id   The beer post ID
+ * @param string $image_url The URL of the image to upload
+ * @param string $slug      The slug name of the beer post
  *
  * @return void
  */
