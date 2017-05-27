@@ -156,7 +156,7 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= '</div>'."\n";
 
     // Add hook-able content filter
-    $output = apply_filters('embm_beer_filter_content', $output);
+    $output = apply_filters('embm_beer_filter_beer', $output);
 
     // Return HTML content
     return $output;

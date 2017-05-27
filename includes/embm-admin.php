@@ -279,6 +279,21 @@ function EMBM_Admin_help()
     $screen->add_help_tab($default_help['untappd_id']);
     $screen->add_help_tab($default_help['untappd_limit']);
 
+    // Untappd for Business help tab
+    $screen->add_help_tab(
+        array(
+            'id'      => 'embm-utfb-integration',
+            'title'   => __('Untappd for Business Integration', 'embm'),
+            'content' => '<p><strong>'.
+                __('Why is an Untappd account required in addition to an UTFB account?', 'embm').
+                '</strong></p><p>'.
+                __('Untappd for Business (UTFB) account credentials to not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is needed.', 'embm').
+                '</p><p>'.
+                __('An Untappd brewery account is not required to work with UTFB.', 'embm').
+                '</p>'
+        )
+    );
+
     // Settings FAQ help tab
     $screen->add_help_tab(
         array(

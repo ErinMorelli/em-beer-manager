@@ -42,10 +42,8 @@ jQuery(document).ready(function ($) {
         },
         ajax_response = function (response) {
             if (response && typeof response === 'object' && response.hasOwnProperty('redirect')) {
-                console.log('ONE');
                 window.location = response.redirect;
             } else {
-                console.log('TWO');
                 window.location.reload();
             }
         },
