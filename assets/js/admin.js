@@ -57,7 +57,7 @@ jQuery(document).ready(function ($) {
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
         nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
-        utfb_location_id = $('select.embm-utfb--dropdown').val(),
+        utfb_sections = $('tr.embm-utfb-section'),
         hash,
         page,
         clean_url;
@@ -455,6 +455,24 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, ajax_response);
     });
 
+    // Toggle enable/disable section items
+    function toggle_utfb_section(section, disable) {
+        var section_select = section.find('select.embm-utfb--dropdown'),
+            section_buttons = section.find('button.button');
+
+        // Enable items
+        [section_select, section_buttons].forEach(function (item) {
+            item.prop('disabled', disable ? true : false);
+            item.prop('title', disable ? embm_settings.utfb_section_notice : null);
+            item.css('cursor', disable ? 'not-allowed' : 'pointer');
+        });
+
+        // Reset selects
+        if (disable) {
+            section_select.val('');
+        }
+    }
+
     // Load next utfb import dropdown
     function load_utfb_dropdown(dropdown) {
         var resource = $(dropdown).data('action'),
@@ -467,8 +485,13 @@ jQuery(document).ready(function ($) {
 
         // Check for resource ID
         if (!resource_id) {
-            // Hide all child sections
-            $(dropdown).closest('.embm-utfb-section').nextAll('.embm-utfb-section').hide();
+            // Disable all child sections
+            $(dropdown)
+            .closest('.embm-utfb-section')
+            .nextAll('.embm-utfb-section')
+            .each(function (idx, child_section) {
+                toggle_utfb_section($(child_section), true);
+            });
             return false;
         }
 
@@ -482,7 +505,7 @@ jQuery(document).ready(function ($) {
                 return;
             }
 
-            // Find menus select
+            // Find objects for resource
             var select = $('#embm-utfb-' + resource + '-id');
 
             // Remove existing options
@@ -497,8 +520,8 @@ jQuery(document).ready(function ($) {
                 select.append('<option value=' + item.id + '>' + item.name + '</option>');
             });
 
-            // Display menu
-            $('tr.embm-utfb-section--' + resource).show();
+            // Enable items
+            toggle_utfb_section($('tr.embm-utfb-section--' + resource), false);
         });
     }
 
@@ -509,9 +532,17 @@ jQuery(document).ready(function ($) {
     });
 
     // Check for value on page load
-    if (utfb_location_id) {
-        load_utfb_dropdown($('select.embm-utfb--dropdown')[0]);
-    }
+    utfb_sections.each(function (idx, section) {
+        var select = $(section).find('select.embm-utfb--dropdown');
+
+        if (select.val() || !idx) {
+            // Load the dropdown
+            load_utfb_dropdown(select);
+        } else {
+            // Disable items
+            toggle_utfb_section($(section), true);
+        }
+    });
 
     // Import UTFB objects
     $('.embm-utfb--import').on('click', function (e) {
@@ -540,7 +571,7 @@ jQuery(document).ready(function ($) {
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
-            // ajax_response(response);
+            ajax_response(response);
         })
         .fail(function() {
             ajax_error(spinner);

@@ -567,7 +567,13 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
 
     // Find beer style
     $style = term_exists($beer->style, 'embm_style');
-    error_log($style);
+
+    // Get token
+    $token = EMBM_Admin_Authorize_token();
+
+    // Get beer data
+    $api_root = EMBM_UNTAPPD_API_URL.$token;
+    $untappd_beer_data = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
 
     // Set up post array
     $new_beer_post = array(
@@ -591,14 +597,13 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
             'embm_abv'              => $beer->abv,
             'embm_ibu'              => $beer->ibu,
             'embm_untappd'          => $beer->untappd_id,
-            'embm_untappd_data'     => $beer_data,
+            'embm_untappd_data'     => $untappd_beer_data,
             'embm_reviews_count'    => 5
         )
     );
 
     // Insert post
     $post_id = wp_insert_post($new_beer_post, true);
-    // error_log(print_r($new_beer_post,true));
 
     // Add post image
     if (property_exists($beer, 'label_image')) {

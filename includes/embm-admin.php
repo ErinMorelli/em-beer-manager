@@ -62,7 +62,8 @@ function EMBM_Admin_styles()
               'ajax_nonce'          => $ajax_nonce,
               'plugin_url'          => EMBM_PLUGIN_URL,
               'options'             => get_option('embm_options'),
-              'error'               => __('There was a problem with your request! Please try again later.', 'embm')
+              'error'               => __('There was a problem with your request! Please try again later.', 'embm'),
+              'utfb_section_notice' => __('Select an option from the dropdown in the section above to enable.', 'embm')
         )
     );
 }
