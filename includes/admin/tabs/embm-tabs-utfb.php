@@ -30,6 +30,7 @@ function EMBM_Admin_Labs_Utfb_credentials()
 {
 ?>
     <div id="embm-labs-utfb">
+        <hr />
         <h3><?php _e('Connect your Untappd for Business account', 'embm'); ?>:</h3>
         <table class="form-table">
             <tbody>
@@ -37,7 +38,8 @@ function EMBM_Admin_Labs_Utfb_credentials()
                     <th scope="row"><?php _e('API Key', 'embm'); ?></th>
                     <td>
                         <p>
-                            <input value="<?php echo $credentials['apikey']; ?>" id="embm-utfb--apikey" type="text">
+                            <input value="" id="embm-utfb--apikey" type="text">
+                            <a data-help="embm-utfb-integration" class="embm-settings--help">?</a>
                         </p>
                         <p class="description">
                             <?php printf(
@@ -55,9 +57,7 @@ function EMBM_Admin_Labs_Utfb_credentials()
                 <tr>
                     <th scope="row"><?php _e('Account Email', 'embm'); ?></th>
                     <td>
-                        <p>
-                            <input value="<?php echo $credentials['email']; ?>" id="embm-utfb--email" type="text">
-                        </p>
+                        <p><input value="" id="embm-utfb--email" type="text"></p>
                     </td>
                 </tr>
                 <tr>
@@ -76,6 +76,11 @@ function EMBM_Admin_Labs_Utfb_credentials()
 // Show status
 $shown = EMBM_Admin_Authorize_status();
 if ($shown !== 2) {
+    printf(
+        '<p class="description">%s%s</p>',
+        __('You will be asked to connect your Untappd for Business account after logging in to your Untappd account.', 'embm'),
+        '<a data-help="embm-utfb-integration" class="embm-settings--help">?</a>'
+    );
     return;
 }
 
@@ -116,6 +121,8 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
 
 ?>
 <div id="embm-labs-utfb">
+    <hr />
+
     <div class="embm-settings--status">
         <p>
             <?php _e('You are connected to Untappd for Business as', 'embm'); ?>:
@@ -148,7 +155,7 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                                 <option value="<?php echo $location->id; ?>"><?php echo $location->name; ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
+                        <a data-help="embm-utfb-integration" class="embm-settings--help">?</a>
                     </p>
                     <p class="description"><?php _e('Select a location to import data from.', 'embm'); ?></p>
                 </td>
@@ -170,7 +177,7 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                             class="button button-primary embm-utfb--import"
                             data-resource="menu"
                         ><?php _e('Import Selected Menu', 'embm'); ?></button>
-                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
+                        <a data-help="embm-utfb-integration" class="embm-settings--help">?</a>
                     </p>
                     <p class="description"><?php _e('Import all beers in the selected menu.', 'embm'); ?></p>
                     <p class="embm-utfb-section--import-all">
@@ -200,7 +207,7 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                             class="button button-primary embm-utfb--import"
                             data-resource="section"
                         ><?php _e('Import Selected Section', 'embm'); ?></button>
-                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
+                        <a data-help="embm-utfb-integration" class="embm-settings--help">?</a>
                     </p>
                     <p class="description"><?php _e('Import all beers in the selected section.', 'embm'); ?></p>
                     <p class="embm-utfb-section--import-all">
@@ -229,7 +236,7 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                             class="button button-primary embm-utfb--import"
                             data-resource="beer"
                         ><?php _e('Import Selected Beer', 'embm'); ?></button>
-                        <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
+                        <a data-help="embm-utfb-integration" class="embm-settings--help">?</a>
                     </p>
                     <p class="description"><?php _e('Imports only the selected beer.', 'embm'); ?></p>
                     <p class="embm-utfb-section--import-all">

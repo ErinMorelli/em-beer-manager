@@ -268,12 +268,6 @@
 /**
  * Style UTFB tab
  */
-#embm-labs-utfb .embm-utfb-section button:disabled,
-#embm-labs-utfb .embm-utfb-section button[disabled],
-#embm-labs-utfb .embm-utfb-section select:disabled,
-#embm-labs-utfb .embm-utfb-section select[disabled], {
-    cursor: not-allowed;
-}
 #embm-labs-utfb .embm-utfb-section--import-all {
     padding-top: 15px;
 }
@@ -365,7 +359,17 @@
         width: 100% !important;
     }
 }
-
+.embm-metabox--utfb ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.embm-metabox--utfb ul > li {
+    display: inline-block;
+}
+.embm-metabox--utfb ul > li:not(:last-child)::after {
+    content: '/';
+}
 
 /**
  * Contextual help link styles

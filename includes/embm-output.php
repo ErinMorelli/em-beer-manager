@@ -43,7 +43,7 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= '<h2 class="embm-beer--header">'."\n";
 
     // Beer title
-    if (is_page() || is_archive() || is_tax('embm_group')) {
+    if (is_page() || is_archive() || is_tax('embm_group') || is_tax('embm_menu')) {
         $output .= '<a href="'.get_permalink($beer_id).'" title="'.get_the_title($beer_id).'">';
         $output .= '<span class="embm-beer--header-title">'.get_the_title($beer_id).'</span>';
         $output .= '</a>'."\n";
@@ -97,7 +97,7 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= $filtered_content;
 
     // Set read more link
-    if ((is_tax('embm_style') || is_archive()) && !is_tax('embm_group')) {
+    if ((is_tax('embm_style') || is_archive()) && !is_tax('embm_group') && !is_tax('embm_menu')) {
         $output .= ' <a class="read-more" href="'.get_permalink($beer_id).'">';
         $output .= __('More', 'embm').'...';
         $output .= '</a>';

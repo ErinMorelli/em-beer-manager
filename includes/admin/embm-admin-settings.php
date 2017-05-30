@@ -598,13 +598,13 @@ function EMBM_Admin_Settings_page()
     // Get tabs data
     $tabs = array(
         array(
-            'id'      => 'import',
+            'id'      => 'untappd',
             'name'    => sprintf('%s <span>%s</span>', __('Untappd Import', 'embm'), __('Labs', 'embm')),
             'hide'    => EMBM_Core_Beer_disabled()
         ),
         array(
             'id'      => 'utfb',
-            'name'    => sprintf('%s <span>%s</span>', __('Untappd for Business', 'embm'), __('Labs', 'embm')),
+            'name'    => sprintf('%s <span>%s</span>', __('Untappd for Business Import', 'embm'), __('Labs', 'embm')),
             'hide'    => EMBM_Core_Beer_disabled()
         ),
         array(

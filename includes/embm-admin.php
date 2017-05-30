@@ -290,6 +290,16 @@ function EMBM_Admin_help()
                 __('Untappd for Business (UTFB) account credentials to not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is needed.', 'embm').
                 '</p><p>'.
                 __('An Untappd brewery account is not required to work with UTFB.', 'embm').
+                '</p><p><strong>'.
+                __('Where do I find my API key?', 'embm').
+                '</strong></p><p>'.
+                sprintf(
+                    __('You can find your API key under the "API Access Tokens" section %s.', 'embm'),
+                    sprintf(
+                        '<a href="https://business.untappd.com/api_tokens" target="_blank">%s</a>',
+                        __('here', 'embm')
+                    )
+                ).
                 '</p>'
         )
     );

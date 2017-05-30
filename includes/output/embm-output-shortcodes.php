@@ -161,7 +161,8 @@ function EMBM_Output_Shortcodes_list($atts)
                 'offset'            => 0,
                 'paginate'          => 'true',
                 'orderby'           => '',
-                'order'             => ''
+                'order'             => '',
+                'meta_key'          => ''
             ),
             $atts,
             'beer-list'
@@ -237,6 +238,11 @@ function EMBM_Output_Shortcodes_List_display($input=array())
             'key'       => 'order',
             'default'   => '',
             'type'      => 'string'
+        ),
+        'meta_key'  => array(
+            'key'       => 'meta_key',
+            'default'   => '',
+            'type'      => 'string'
         )
     );
 
@@ -267,6 +273,7 @@ function EMBM_Output_Shortcodes_List_load($beers)
     $usepages = $beers['use_pages'];
     $sortby = $beers['sortby'];
     $sort = strtoupper($beers['sort']);
+    $meta_key = $beers['meta_key'];
 
     // Initialize output string
     $output = '';
@@ -324,6 +331,11 @@ function EMBM_Output_Shortcodes_List_load($beers)
     // Add sort filter
     if ($sort != '') {
         $args['order'] = $sort;
+    }
+
+    // Add meta key
+    if ($meta_key != '') {
+        $args['meta_key'] = $meta_key;
     }
 
     // Get posts from WP database

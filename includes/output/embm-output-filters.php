@@ -38,7 +38,7 @@ function EMBM_Output_Filters_content($content)
     $output = '';
 
     // Enter the post loop
-    if (in_the_loop() && (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group'))) {
+    if (in_the_loop() && (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group') || is_tax('embm_menu'))) {
 
         // Set view defaults
         $show_profile = true;
@@ -186,7 +186,7 @@ add_filter('the_content', 'EMBM_Output_Filters_content', -1);
  */
 function EMBM_Output_Filters_classes($classes)
 {
-    if (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group')) {
+    if (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group') || is_tax('embm_menu')) {
         $classes[] = 'embm-beer';
     }
     return $classes;
@@ -212,7 +212,7 @@ function EMBM_Output_Filters_title($title, $id=null)
     $style = EMBM_Core_Beer_style($id);
 
     // Display beer style
-    if ($style && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
+    if ($style && (is_singular('embm_beer') || is_tax('embm_group') || is_tax('embm_menu')) && in_the_loop() && ($title == $post->post_title)) {
         // Check for the_title() call
         $is_the_title = false;
         $backtrace = debug_backtrace();

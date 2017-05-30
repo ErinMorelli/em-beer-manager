@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
                 window.location.reload();
             }
         },
-        ajax_error = function(spinner) {
+        ajax_error = function (spinner) {
             spinner.removeClass();
             spinner.addClass('dashicons dashicons-warning');
             spinner.prop('title', embm_settings.error);
@@ -62,8 +62,8 @@ jQuery(document).ready(function ($) {
 
     // Detect Internet Explorer
     function isInternetExplorer() {
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf('MSIE ');
+        var ua = window.navigator.userAgent,
+            msie = ua.indexOf('MSIE ');
         return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./i));
     }
 
@@ -332,8 +332,7 @@ jQuery(document).ready(function ($) {
                     '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
                 );
             }
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -366,8 +365,7 @@ jQuery(document).ready(function ($) {
                 error += '<strong>' + response.error.title + '</strong> ' + response.error.message + '</p>';
                 widget.append(error);
             }
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -388,8 +386,7 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -417,8 +414,7 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -440,8 +436,7 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -485,11 +480,11 @@ jQuery(document).ready(function ($) {
         if (!resource_id) {
             // Disable all child sections
             $(dropdown)
-            .closest('.embm-utfb-section')
-            .nextAll('.embm-utfb-section')
-            .each(function (idx, child_section) {
-                toggle_utfb_section($(child_section), true);
-            });
+                .closest('.embm-utfb-section')
+                .nextAll('.embm-utfb-section')
+                .each(function (idx, child_section) {
+                    toggle_utfb_section($(child_section), true);
+                });
             return false;
         }
 
@@ -570,8 +565,26 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Redirect to flush UTFB cache
+    $('a.embm-utfb--flush').on('click', function (e) {
+        e.preventDefault();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-utfb-flush';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
             ajax_error(spinner);
         });
     });

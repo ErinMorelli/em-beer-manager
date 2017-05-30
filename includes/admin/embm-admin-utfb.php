@@ -29,7 +29,7 @@ $GLOBALS['EMBM_UTFB_CACHE'] = array(
     'locations' => 'embm_utfb_locations',
     'menus'     => 'embm_utfb_menus_%s',
     'sections'  => 'embm_utfb_section_%s',
-    'items'     => 'embm_utfb_items_%s'
+    'beers'     => 'embm_utfb_beers_%s'
 );
 
 // UTFB resource function mapping
@@ -113,6 +113,41 @@ function EMBM_Admin_Utfb_request($auth, $request_url, $decode = true)
 }
 
 /**
+ * Determines if a cached UTFB object needs reloading
+ *
+ * @param string $cache_name Name of cache object
+ * @param int    $timeout    Timeout period in MS
+ * @param int    $cache_id   UTFB cache object ID (Default: null)
+ *
+ * @return bool Whether or not cache has timed out
+ */
+function EMBM_Admin_Utfb_reload($cache_name, $timeout, $cache_id = null)
+{
+    // Check cache name
+    if (!array_key_exists($cache_name, $GLOBALS['EMBM_UTFB_CACHE'])) {
+        return false;
+    }
+
+    // Get transient name
+    if (!is_null($cache_id)) {
+        $transient_name = '_transient_timeout_' . sprintf($GLOBALS['EMBM_UTFB_CACHE'][$cache_name], $cache_id);
+    } else {
+        $transient_name = '_transient_timeout_' . $GLOBALS['EMBM_UTFB_CACHE'][$cache_name];
+    }
+
+    // Get transient timeout
+    $transient_timeout = get_option($transient_name);
+
+    // Return if this has already expired
+    if (!$transient_timeout) {
+        return true;
+    }
+
+    // Check for expiration
+    return ((time() - $transient_timeout) >= $timeout);
+}
+
+/**
  * Checks whether or not UTFB API credentials are valid
  *
  * @param array $auth API authentication credentials
@@ -121,7 +156,11 @@ function EMBM_Admin_Utfb_request($auth, $request_url, $decode = true)
  */
 function EMBM_Admin_Utfb_validate($auth)
 {
-    return true;
+    // Attempt to get account data
+    $account = EMBM_Admin_Utfb_account($auth);
+
+    // Check for success
+    return !is_null($account);
 }
 
 /**
@@ -137,8 +176,11 @@ function EMBM_Admin_Utfb_account($auth, $refresh = false)
     // Attempt to retrieve account info from cache
     $account = get_transient($GLOBALS['EMBM_UTFB_CACHE']['account']);
 
+    // Check if we should attempt a reload (every hour)
+    $reload = EMBM_Admin_Utfb_reload('account', HOUR_IN_SECONDS);
+
     // Get account info if it's not cached
-    if (false === $account || $refresh) {
+    if (false === $account || $reload || $refresh) {
         $account_url = sprintf(EMBM_UTFB_API_URL, 'current_user');
         $res = EMBM_Admin_Utfb_request($auth, $account_url);
 
@@ -168,8 +210,11 @@ function EMBM_Admin_Utfb_locations($auth, $refresh = false)
     // Attempt to retrieve locations from cache
     $locations = get_transient($GLOBALS['EMBM_UTFB_CACHE']['locations']);
 
+    // Check if we should attempt a reload (every hour)
+    $reload = EMBM_Admin_Utfb_reload('locations', HOUR_IN_SECONDS);
+
     // Get locations if not cached
-    if (false === $locations || $refresh) {
+    if (false === $locations || $reload || $refresh) {
         $locations_url = sprintf(EMBM_UTFB_API_URL, 'locations');
         $res = EMBM_Admin_Utfb_request($auth, $locations_url);
 
@@ -219,8 +264,11 @@ function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
     $menus_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['menus'], $location_id);
     $menus = get_transient($menus_cache_name);
 
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Utfb_reload('menus', 15 * MINUTE_IN_SECONDS, $location_id);
+
     // Get menus if not cached
-    if (false === $menus || $refresh) {
+    if (false === $menus || $reload || $refresh) {
         $menus_url = sprintf(EMBM_UTFB_API_URL, 'locations/'.$location_id.'/menus');
         $res = EMBM_Admin_Utfb_request($auth, $menus_url);
 
@@ -271,8 +319,11 @@ function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
     $sections_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['sections'], $menu_id);
     $sections = get_transient($sections_cache_name);
 
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Utfb_reload('sections', 15 * MINUTE_IN_SECONDS, $menu_id);
+
     // Get sections if not cached
-    if (false === $sections || $refresh) {
+    if (false === $sections || $reload || $refresh) {
         $sections_url = sprintf(EMBM_UTFB_API_URL, 'menus/'.$menu_id.'/sections');
         $res = EMBM_Admin_Utfb_request($auth, $sections_url);
 
@@ -320,11 +371,14 @@ function EMBM_Admin_Utfb_section($auth, $menu_id, $section_id, $refresh = false)
 function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
 {
     // Attempt to retrieve beers from cache
-    $beers_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['sections'], $section_id);
+    $beers_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['beers'], $section_id);
     $beers = get_transient($beers_cache_name);
 
+    // Check if we should attempt a reload (every 15 mins)
+    $reload = EMBM_Admin_Utfb_reload('beers', 15 * MINUTE_IN_SECONDS, $section_id);
+
     // Get beers if not cached
-    if (false === $beers || $refresh) {
+    if (false === $beers || $reload || $refresh) {
         $beers_url = sprintf(EMBM_UTFB_API_URL, 'sections/'.$section_id.'/items');
         $res = EMBM_Admin_Utfb_request($auth, $beers_url);
 
@@ -358,6 +412,27 @@ function EMBM_Admin_Utfb_beer($auth, $section_id, $beer_id, $refresh = false)
 
     // Find beer
     return EMBM_Admin_Utfb_find($beers, $beer_id);
+}
+
+/**
+ * Retrieves a UTFB beer item from either the WP cache or API.
+ *
+ * @param array $auth    API authentication credentials
+ * @param int   $beer_id UTFB beer ID
+ *
+ * @return array Array of beer item data from UTFB
+ */
+function EMBM_Admin_Utfb_Beer_item($auth, $beer_id)
+{
+    $beer_url = sprintf(EMBM_UTFB_API_URL, 'items/'.$beer_id);
+    $res = EMBM_Admin_Utfb_request($auth, $beer_url);
+
+    // Handle any errors
+    if (!$res['success']) {
+        return null;
+    }
+
+    return $res['data']->item;
 }
 
 /**
@@ -501,8 +576,6 @@ function EMBM_Admin_Utfb_import($resources)
                 // Get section from ID
                 $section = EMBM_Admin_Utfb_find($resources['section'], $beer->section_id);
                 $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
-                error_log(print_r($section,true));
-                error_log(print_r($menu,true));
 
                 // Import beer
                 $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term, $menu->term);
@@ -594,11 +667,12 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
             )
         ),
         'meta_input'    => array(
-            'embm_abv'              => $beer->abv,
-            'embm_ibu'              => $beer->ibu,
-            'embm_untappd'          => $beer->untappd_id,
-            'embm_untappd_data'     => $untappd_beer_data,
-            'embm_reviews_count'    => 5
+            'embm_abv'              => intval($beer->abv),
+            'embm_ibu'              => intval($beer->ibu),
+            'embm_untappd'          => intval($beer->untappd_id),
+            'embm_utfb'             => intval($beer->id),
+            'embm_utfb_data'        => $beer,
+            'embm_reviews_count'    => 5,
         )
     );
 
@@ -610,5 +684,32 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
         EMBM_Admin_Untappd_Import_image($post_id, $beer->label_image, $beer->untappd_beer_slug);
     }
 
+    // Get token
+    $token = EMBM_Admin_Authorize_token();
+
+    // Get beer data
+    $api_root = EMBM_UNTAPPD_API_URL.$token;
+    EMBM_Admin_Untappd_beer($api_root, $beer->untappd_id, $post_id, true);
+
     return null;
+}
+
+/**
+ * Flushes the cached UTFB data
+ *
+ * @param string $key Optional. Name of cached item to flush.
+ *
+ * @return void
+ */
+function EMBM_Admin_Utfb_flush($key = null)
+{
+    // Check for specified key
+    if (!is_null($key)) {
+        delete_transient($GLOBALS['EMBM_UTFB_CACHE'][$key]);
+    } else {
+        // Iteratively remove items
+        foreach ($GLOBALS['EMBM_UTFB_CACHE'] as $name => $value) {
+            delete_transient($value);
+        }
+    }
 }
