@@ -237,18 +237,34 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </p>
             </div>
         </div>
-        <div class="embm-metabox--untappd-flush">
-            <p>
-                <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
-            </p>
-            <p>
-                <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
-                    <?php _e('Flush Cache', 'embm'); ?>
-                </a>
-            </p>
-            <p class="description">
-                <?php _e('This is automatically done daily.', 'embm'); ?>
-            </p>
+        <div class="embm-metabox--untappd-actions">
+            <div class="embm-metabox--untappd-flush">
+                <p>
+                    <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
+                </p>
+                <p>
+                    <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
+                        <?php _e('Flush Cache', 'embm'); ?>
+                    </a>
+                </p>
+                <p class="description">
+                    <?php _e('This is automatically done daily.', 'embm'); ?>
+                </p>
+            </div>
+            <div class="embm-metabox--untappd-sync">
+                <p>
+                    <strong><?php _e('Sync Untappd Beer Data', 'embm'); ?></strong>
+                </p>
+                <p>
+                    <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
+                        <?php _e('Sync Data', 'embm'); ?>
+                    </a>
+                </p>
+                <p class="description">
+                    <span class="warning"><?php _e('WARNING', 'embm'); ?>:</span>
+                    <?php _e('This will override any changes you have made to this beer.', 'embm'); ?>
+                </p>
+            </div>
         </div>
     <?php elseif ($show_api_error && null !== $token) : ?>
         <?php EMBM_Admin_Notices_ratelimit(null); ?>

@@ -247,7 +247,8 @@
     line-height: 14px;
     position: relative;
 }
-.embm-settings--tab .warning {
+.embm-settings--tab .warning,
+.embm-metabox--untappd .warning {
     color: red;
     font-weight: bold;
 }
@@ -337,24 +338,24 @@
     margin-left: 25px;
 }
 .embm-metabox--untappd-checkboxes,
-.embm-metabox--untappd-flush {
+.embm-metabox--untappd-actions {
     float: left;
 }
 .embm-metabox--untappd-checkboxes {
     margin-right: 40px;
     width: 40%;
 }
-.embm-metabox--untappd-flush {
+.embm-metabox--untappd-actions {
     max-width: calc(60% - 40px);
 }
-.embm-metabox--untappd-flush .dashicons {
+.embm-metabox--untappd-actions .dashicons {
     line-height: 26px;
     color: #FFB900;
     cursor: help;
 }
 @media only screen and (max-width: 960px) {
     .embm-metabox--untappd .embm-metabox--untappd-checkboxes,
-    .embm-metabox--untappd .embm-metabox--untappd-flush {
+    .embm-metabox--untappd .embm-metabox--untappd-actions {
         float: none;
         width: 100% !important;
     }

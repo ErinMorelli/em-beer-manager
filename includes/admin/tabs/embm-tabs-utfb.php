@@ -249,7 +249,7 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                     <p class="description"><?php _e('Imports all beers in the selected section.', 'embm'); ?></p>
                 </td>
             </tr>
-             <tr>
+            <tr>
                 <th scope="row"><?php _e('Refresh Untappd for Business Data', 'embm'); ?></th>
                 <td>
                     <p><a href="#" class="embm-utfb--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>

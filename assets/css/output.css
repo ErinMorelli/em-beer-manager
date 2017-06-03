@@ -56,13 +56,18 @@
     color: #888;
     text-decoration: none;
 }
-.embm-beer .embm-beer--image > .wp-post-image {
+.embm-beer .embm-beer--image a {
+    border: 0;
+    box-shadow: none;
+    text-decoration: none;
+}
+.embm-beer .embm-beer--image .wp-post-image {
     display: block;
     float: left;
     margin: 0 20px 10px 0;
     width: 150px;
 }
-.embm-beer .embm-beer--image > img {
+.embm-beer .embm-beer--image img {
     height: auto;
     width: 150px;
 }

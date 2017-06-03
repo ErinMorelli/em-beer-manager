@@ -20,7 +20,7 @@
  */
 
 // Set constants
-define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-import-%s=%d#%s');
+define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-%s-%s=%d#%s');
 define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 define('EMBM_UNTAPPD_RSS_URL', 'https://untappd.com/rss/brewery/');
 
@@ -741,6 +741,67 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
 
     // Set as thumbnail for beer
     set_post_thumbnail($post_id, $attach_id);
+}
+
+/**
+ * Update post from Untappd
+ *
+ * @param int   $post_id WP post ID
+ * @param array $beer    Untappd beer data
+ *
+ * @return void
+ */
+function EMBM_Admin_Untappd_sync($post_id, $beer)
+{
+    // Set up data for storage
+    $beer_data = array(
+        'beer'      => $beer,
+        'cached'    => time()
+    );
+
+    // Unset beer style taxonomy
+    wp_delete_object_term_relationships($post_id, 'embm_style');
+
+    // Set up post array
+    $updated_beer_post = array(
+        'ID'            => $post_id,
+        'post_title'    => $beer->beer_name,
+        'post_content'  => $beer->beer_description,
+        'tax_input'     => array(
+            'embm_style'        => $beer->beer_style
+        ),
+        'meta_input'    => array(
+            'embm_abv'          => $beer->beer_abv,
+            'embm_ibu'          => $beer->beer_ibu,
+            'embm_untappd'      => $beer->bid,
+            'embm_untappd_data' => $beer_data
+        )
+    );
+
+    // Update post
+    $success = wp_update_post($updated_beer_post);
+
+    // Check for success
+    if ($success !== 0) {
+        return 'error';
+    }
+
+    // Update post image
+    if (property_exists($beer, 'beer_label_hd')) {
+        // Get image ID
+        $image_id = get_post_thumbnail_id($post_id);
+
+        // Continue if we got an image ID
+        if (!is_null($image_id)) {
+            // Delete image
+            wp_delete_attachment($image_id, true);
+
+            // Upload more recent image
+            EMBM_Admin_Untappd_Import_image($post_id, $beer->beer_label_hd, $beer->beer_slug);
+        }
+    }
+
+    return null;
 }
 
 /**

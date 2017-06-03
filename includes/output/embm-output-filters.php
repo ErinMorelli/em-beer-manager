@@ -144,7 +144,9 @@ function EMBM_Output_Filters_content($content)
         // Show thumbnail
         if (has_post_thumbnail($post->ID)) {
             $thumb .= '<div class="embm-beer--image">'."\n";
+            $thumb .= '<a href="'.get_permalink($post->ID).'">'."\n";
             $thumb .= get_the_post_thumbnail($post->ID, 'full')."\n";
+            $thumb .= '</a>'."\n";
             $thumb .= '</div>'."\n";
         }
 
@@ -203,7 +205,7 @@ add_filter('body_class', 'EMBM_Output_Filters_classes');
  *
  * @return string/html
  */
-function EMBM_Output_Filters_title($title, $id=null)
+function EMBM_Output_Filters_title($title, $id=null, $three=null)
 {
     // Load global post object
     global $post;
@@ -223,8 +225,8 @@ function EMBM_Output_Filters_title($title, $id=null)
             }
         }
 
-        // Bail if this isn't a the_title() call
-        if (!$is_the_title) {
+        // Bail if this isn't a the_title() call or if we've already done this
+        if (!$is_the_title || did_action('embm_title_filter_applied') !== 0) {
             return $title;
         }
 
@@ -236,7 +238,11 @@ function EMBM_Output_Filters_title($title, $id=null)
         $output .= $style;
         $output .= '</a>)</span>'."\n";
 
+        // Append formatting to title
         $title .= $output;
+
+        // Mark action as done
+        do_action('embm_title_filter_applied');
     }
 
     // Return updated title
@@ -244,4 +250,4 @@ function EMBM_Output_Filters_title($title, $id=null)
 }
 
 // Load custom post title filter
-add_filter('the_title', 'EMBM_Output_Filters_title', 10, 2);
+add_filter('the_title', 'EMBM_Output_Filters_title', 10, 3);

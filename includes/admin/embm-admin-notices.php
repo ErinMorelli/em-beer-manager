@@ -71,6 +71,30 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'embm')
         )
     ),
+    'sync-success' => array(
+        '1' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beers have been updated from Untappd.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beer has been updated from Untappd.', 'embm')
+        )
+    ),
+    'sync-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => $ERROR_TITLE,
+            'message'   => __('There was a problem during the sync! Please try again later.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'warning',
+            'title'     => $WARNING_TITLE,
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
+        )
+    ),
     'save-error' => array(
         '1' => array(
             'type'      => 'error',

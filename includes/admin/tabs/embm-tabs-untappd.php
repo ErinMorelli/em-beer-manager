@@ -189,6 +189,17 @@ if (EMBM_Admin_Labs_Api_error($beer_list)) {
                     </p>
                 </td>
             </tr>
+            <tr>
+                <th scope="row"><?php _e('Sync Untappd Data', 'embm'); ?></th>
+                <td>
+                    <p><a href="#" class="embm-untappd--sync button-secondary"><?php _e('Sync Data', 'embm'); ?></a></p>
+                    <p class="description">
+                        <?php _e('Update beer data from Untappd.', 'embm'); ?><br />
+                        <span class="warning"><?php _e('WARNING', 'embm'); ?>:</span>
+                        <?php _e('This will override any changes you have made to imported beers.', 'embm'); ?>
+                    </p>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

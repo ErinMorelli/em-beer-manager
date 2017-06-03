@@ -68,7 +68,9 @@ function EMBM_Output_beer($beer_id, $options)
     if (!is_archive()) {
         if (get_the_post_thumbnail($beer_id) != '') {
             $output .= '<div class="embm-beer--image">'."\n";
+            $output .= '<a href="'.get_permalink($beer_id).'">'."\n";
             $output .= get_the_post_thumbnail($beer_id, 'full')."\n";
+            $output .= '</a>'."\n";
             $output .= '</div>'."\n";
         }
     }

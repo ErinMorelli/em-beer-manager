@@ -337,6 +337,39 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    // Handle beer sync requests
+    $('.embm-metabox--untappd-sync a').on('click', function (e) {
+        e.preventDefault();
+
+        var api_root = $(this).data('api-root');
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-sync';
+        ajax_params.sync_type = 1;
+        ajax_params.post_id = url_params.post;
+        ajax_params.api_root = api_root;
+
+        // Make AJAX request
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+
+            // Show error for bad response
+            if (typeof response === 'string') {
+                $(e.target).parent().append(
+                    '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
+                );
+            } else {
+                // Reload page
+                location.reload();
+            }
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
     /* ---- UNTAPPD WIDGET ---- */
 
     // Handle beer cache flush requests
@@ -409,6 +442,29 @@ jQuery(document).ready(function ($) {
         ajax_params.brewery_id = brewery_id;
         ajax_params.beer_ids = $('#embm-untappd-beer-ids').val();
         ajax_params.beer_id = $('#embm-untappd-beer-id').val();
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Handle sync requests
+    $('a.embm-untappd--sync').on('click', function (e) {
+        e.preventDefault();
+
+        var api_root = $('#embm-untappd-api-root').val();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-sync';
+        ajax_params.sync_type = 2;
+        ajax_params.api_root = api_root;
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {

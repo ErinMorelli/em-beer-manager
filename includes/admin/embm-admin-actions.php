@@ -234,7 +234,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Set up response
     $response = array(
-        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 2, 'untappd'))
+        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'success', 2, 'untappd'))
     );
 
     // Get Untappd brewery info from API
@@ -242,7 +242,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Check for error
     if (!is_object($brewery)) {
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'untappd'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
         wp_send_json($response);
         return;
     }
@@ -252,7 +252,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
     // Check for error
     if (!is_array($beer_list)) {
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'untappd'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
         wp_send_json($response);
         return;
     }
@@ -286,7 +286,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
             // Check for error
             if (!is_object($beer)) {
-                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'untappd'));
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
                 break;
             }
 
@@ -301,7 +301,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for errors
         if ($has_errors) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'untappd'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 5, 'untappd'));
         }
         break;
 
@@ -326,7 +326,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for error
         if (!is_object($beer)) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'untappd'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
             break;
         }
 
@@ -337,7 +337,7 @@ function EMBM_Admin_Actions_Untappd_import()
         if (!is_null($res)) {
             $response['redirect'] = $res;
         } else {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'success', 1, 'untappd'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'success', 1, 'untappd'));
         }
         break;
 
@@ -359,7 +359,7 @@ function EMBM_Admin_Actions_Untappd_import()
 
             // Check for error
             if (!is_object($beer)) {
-                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 1, 'untappd'));
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
                 break;
             }
 
@@ -374,14 +374,14 @@ function EMBM_Admin_Actions_Untappd_import()
 
         // Check for errors
         if ($has_errors) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 5, 'untappd'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 5, 'untappd'));
         }
         break;
 
     // Fallback
     default:
         // Setup return URL
-        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'error', 4, 'untappd'));
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 4, 'untappd'));
     }
 
     // Send response
@@ -390,6 +390,118 @@ function EMBM_Admin_Actions_Untappd_import()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-untappd-import', 'EMBM_Admin_Actions_Untappd_import');
+
+/**
+ * Sync beer data from Untappd to WP
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Untappd_sync()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get sync vars
+    $sync_type = intval($_POST['sync_type']);
+    $api_root = $_POST['api_root'];
+
+    // Set up response
+    $response = array(
+        'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'success', 1, 'untappd'))
+    );
+
+    // Handle sync types
+    switch ($sync_type) {
+
+    // Sync specific beer
+    case 1:
+        // Get post id
+        $post_id = $_POST['post_id'];
+
+        // Make sure we have an ID
+        if (!$post_id) {
+            wp_die();
+        }
+
+        // Get post from ID
+        $post = get_post($post_id);
+
+        // Get beer from API
+        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $post->embm_untappd);
+
+        // Check for error
+        if (!is_object($beer)) {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
+            break;
+        }
+
+        // Run import with brewery check
+        $res = EMBM_Admin_Untappd_sync($post->ID, $beer);
+
+        // Check response
+        if (!is_null($res)) {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 1, 'untappd'));
+        } else {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'success', 2, 'untappd'));
+        }
+        break;
+
+    // Sync all beers
+    case 2:
+        // Set error tracker
+        $has_errors = false;
+
+        // Get all the Untappd beers in the database
+        $beer_list = get_posts(
+            array(
+                'post_type'   => 'embm_beer',
+                'numberposts' => -1
+            )
+        );
+
+        // Iteratively add beers
+        foreach ($beer_list as $item) {
+            // Check for Untappd ID
+            if ($item->embm_untappd == '') {
+                continue;
+            }
+
+            // Get beer from API
+            $beer = EMBM_Admin_Untappd_Beer_get($api_root, $item->embm_untappd);
+
+            // Check for error
+            if (!is_object($beer)) {
+                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
+                break;
+            }
+
+            // Run import
+            $res = EMBM_Admin_Untappd_sync($item->ID, $beer);
+
+            // Check response
+            if (!is_null($res)) {
+                $has_errors = true;
+            }
+        }
+
+        // Check for errors
+        if ($has_errors) {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 2, 'untappd'));
+        }
+        break;
+
+    // Fallback
+    default:
+        // Setup return URL
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 1, 'untappd'));
+    }
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add flush beer action to AJAX
+add_action('wp_ajax_embm-untappd-sync', 'EMBM_Admin_Actions_Untappd_sync');
 
 /**
  * Connect to a UTFB account
