@@ -205,7 +205,7 @@ add_filter('body_class', 'EMBM_Output_Filters_classes');
  *
  * @return string/html
  */
-function EMBM_Output_Filters_title($title, $id=null, $three=null)
+function EMBM_Output_Filters_title($title, $id=null)
 {
     // Load global post object
     global $post;
@@ -250,4 +250,4 @@ function EMBM_Output_Filters_title($title, $id=null, $three=null)
 }
 
 // Load custom post title filter
-add_filter('the_title', 'EMBM_Output_Filters_title', 10, 3);
+add_filter('the_title', 'EMBM_Output_Filters_title', 10, 2);

@@ -628,79 +628,8 @@ function EMBM_Admin_Actions_Utfb_import()
     // Get credentials
     $auth = get_option('embm_utfb_credentials');
 
-    // Set up resource tracking objects
-    $objects = array();
-    $get_all = false;
-
-    // Get objects to import
-    foreach ($resources as $resource_name => $resource_id) {
-        // Skip the location
-        if ($resource_name == 'location') {
-            // Set new parent
-            $parent_name = $resource_name;
-            $parent_id = $resource_id;
-
-            // Move to the next resource
-            continue;
-        }
-
-        // Check if this is our main resource
-        $is_resource = ($resource_name == $resource);
-
-        // Handle get all cases
-        if ($get_all) {
-            // Get parent objects
-            $parent_objects = $objects[$parent_name];
-
-            // Set up resource objects
-            $resource_objects = array();
-
-            // Iterate over parent objects
-            foreach ($parent_objects as $parent_object) {
-                // Get resources
-                $new_resource_objects = call_user_func_array(
-                    'EMBM_Admin_Utfb_resource',
-                    array(
-                        'auth'          => $auth,
-                        'resource_name' => $resource_name,
-                        'resource_id'   => $resource_id,
-                        'parent_id'     => $parent_object->id,
-                        'call_type'     => 'plural'
-                    )
-                );
-
-                // Add to resource array
-                $resource_objects = array_merge($resource_objects, $new_resource_objects);
-            }
-
-            // Store resource data
-            $objects[$resource_name] = $resource_objects;
-        } else {
-            // Get call type
-            $call_type = ($is_resource && $import_all) ? 'plural' : 'single';
-
-            // Get resource
-            $objects[$resource_name] = call_user_func_array(
-                'EMBM_Admin_Utfb_resource',
-                array(
-                    'auth'          => $auth,
-                    'resource_name' => $resource_name,
-                    'resource_id'   => $resource_id,
-                    'parent_id'     => $parent_id,
-                    'call_type'     => $call_type
-                )
-            );
-        }
-
-        // Set new parent
-        $parent_name = $resource_name;
-        $parent_id = $resource_id;
-
-        // Set get all
-        if ($is_resource) {
-            $get_all = true;
-        }
-    }
+    // Get UTFB objects to import
+    $objects = EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all);
 
     // Run import
     $error_code = EMBM_Admin_Utfb_import($objects);
@@ -738,3 +667,41 @@ function EMBM_Admin_Actions_Utfb_flush()
 
 // Add flush beer action to AJAX
 add_action('wp_ajax_embm-utfb-flush', 'EMBM_Admin_Actions_Utfb_flush');
+
+/**
+ * Sync data from UTFB with existing beers
+ *
+ * @return void
+ */
+function EMBM_Admin_Actions_Utfb_sync()
+{
+    // Check AJAX referrer
+    check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
+
+    // Get POST data
+    $resource = $_POST['resource'];
+    $resources = $_POST['resources'];
+    $import_all = ($_POST['import_all'] == 'true') ? true : false;
+
+    // Get credentials
+    $auth = get_option('embm_utfb_credentials');
+
+    // Get UTFB objects to import
+    $objects = EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all);
+
+    // Run sync
+    $error_code = EMBM_Admin_Utfb_sync($objects);
+
+    // Check response
+    if ($error_code !== 0) {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'error', $error_code, 'utfb'));
+    } else {
+        $response['redirect'] = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 3, 'utfb'));
+    }
+
+    // Send response
+    wp_send_json($response);
+}
+
+// Add flush beer action to AJAX
+add_action('wp_ajax_embm-utfb-sync', 'EMBM_Admin_Actions_Utfb_sync');

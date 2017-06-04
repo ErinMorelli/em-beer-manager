@@ -250,6 +250,21 @@ $locations = EMBM_Admin_Utfb_locations($credentials);
                 </td>
             </tr>
             <tr>
+                <th scope="row"><?php _e('Sync Untappd for Business Data', 'embm'); ?></th>
+                <td>
+                    <p>
+                        <button
+                            type="button"
+                            class="embm-utfb--sync button-secondary"
+                        ><?php _e('Sync Data', 'embm'); ?></button>
+                    </p>
+                    <p class="description">
+                        <?php _e('Associate existing beers with your Untappd for Business menus.', 'embm'); ?><br />
+                        <?php _e('A location must be selected to use this feature.', 'embm'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
                 <th scope="row"><?php _e('Refresh Untappd for Business Data', 'embm'); ?></th>
                 <td>
                     <p><a href="#" class="embm-utfb--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>

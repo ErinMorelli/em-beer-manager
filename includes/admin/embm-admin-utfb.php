@@ -491,13 +491,101 @@ function EMBM_Admin_Utfb_resource($auth, $resource_name, $resource_id, $parent_i
     }
 }
 
+/**
+ * Retrieve UTFB resource objects from the API
+ *
+ * @param array  $auth       API authentication credentials
+ * @param array  $resources  Array of UTFB resource names and IDs
+ * @param string $resource   Name of UTFB resource to retrieve
+ * @param bool   $import_all Whether or not to import all objects the resource
+ *
+ * @return array Array of objects from UTFB API
+ */
+function EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all)
+{
+    // Set up resource tracking objects
+    $objects = array();
+    $get_all = false;
+
+    // Get objects to import
+    foreach ($resources as $resource_name => $resource_id) {
+        // Skip the location
+        if ($resource_name == 'location') {
+            // Set new parent
+            $parent_name = $resource_name;
+            $parent_id = $resource_id;
+
+            // Move to the next resource
+            continue;
+        }
+
+        // Check if this is our main resource
+        $is_resource = ($resource_name == $resource);
+
+        // Handle get all cases
+        if ($get_all) {
+            // Get parent objects
+            $parent_objects = $objects[$parent_name];
+
+            // Set up resource objects
+            $resource_objects = array();
+
+            // Iterate over parent objects
+            foreach ($parent_objects as $parent_object) {
+                // Get resources
+                $new_resource_objects = call_user_func_array(
+                    'EMBM_Admin_Utfb_resource',
+                    array(
+                        'auth'          => $auth,
+                        'resource_name' => $resource_name,
+                        'resource_id'   => $resource_id,
+                        'parent_id'     => $parent_object->id,
+                        'call_type'     => 'plural'
+                    )
+                );
+
+                // Add to resource array
+                $resource_objects = array_merge($resource_objects, $new_resource_objects);
+            }
+
+            // Store resource data
+            $objects[$resource_name] = $resource_objects;
+        } else {
+            // Get call type
+            $call_type = ($is_resource && $import_all) ? 'plural' : 'single';
+
+            // Get resource
+            $objects[$resource_name] = call_user_func_array(
+                'EMBM_Admin_Utfb_resource',
+                array(
+                    'auth'          => $auth,
+                    'resource_name' => $resource_name,
+                    'resource_id'   => $resource_id,
+                    'parent_id'     => $parent_id,
+                    'call_type'     => $call_type
+                )
+            );
+        }
+
+        // Set new parent
+        $parent_name = $resource_name;
+        $parent_id = $resource_id;
+
+        // Set get all
+        if ($is_resource) {
+            $get_all = true;
+        }
+    }
+
+    return $objects;
+}
 
 /**
  * Import resources from UTFB
  *
  * @param array $resources Array of UTFB resources to import
  *
- * @return null if successful, else string of redirect URL
+ * @return int Notice status code
  */
 function EMBM_Admin_Utfb_import($resources)
 {
@@ -692,6 +780,90 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
     EMBM_Admin_Untappd_beer($api_root, $beer->untappd_id, $post_id, true);
 
     return null;
+}
+
+/**
+ * Sync beers with UTFB data
+ *
+ * @param array $resources Array of UTFB resources to sync
+ *
+ * @return int Notice status code
+ */
+function EMBM_Admin_Utfb_sync($resources)
+{
+    // Get all WP beers
+    $beers = get_posts(
+        array(
+            'post_type'   => 'embm_beer',
+            'numberposts' => -1,
+        )
+    );
+
+    // Track errors
+    $has_errors = false;
+
+    // Iterate over beers
+    foreach ($beers as $beer) {
+        // Skip beers that don't have Untappd IDs
+        if (!$beer->embm_untappd) {
+            continue;
+        }
+
+        // Find beer in resources
+        $beer_res = null;
+        foreach ($resources['beer'] as $resource) {
+            if ($resource->untappd_id == $beer->embm_untappd) {
+                $beer_res = $resource;
+                break;
+            }
+        }
+
+        // Skip this beer if it's not in the resources
+        if (is_null($beer_res)) {
+            continue;
+        }
+
+        // Get beer menu section
+        $section = EMBM_Admin_Utfb_find($resources['section'], $beer_res->section_id);
+        if (is_null($section)) {
+            continue;
+        }
+
+        // Locate section taxonomy
+        $section_tax = term_exists($section->name, 'embm_menu');
+
+        // Get beer menu
+        $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
+        if (is_null($menu)) {
+            continue;
+        }
+
+        // Location menu taxonomy
+        $menu_tax = term_exists($menu->name, 'embm_menu');
+
+        // Update section and menu taxonomies for beer
+        $result = wp_set_post_terms(
+            $beer->ID,
+            array(
+                $menu_tax['term_taxonomy_id'],
+                $section_tax['term_taxonomy_id']
+            ),
+            'embm_menu'
+        );
+
+        // Check for errors
+        if (!$result) {
+            $has_errors = true;
+        }
+    }
+
+    // Check for failures
+    if ($has_errors) {
+        return 4;
+    }
+
+    // Return success
+    return 0;
 }
 
 /**

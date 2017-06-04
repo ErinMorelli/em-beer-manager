@@ -511,7 +511,7 @@ jQuery(document).ready(function ($) {
 
         // Enable items
         [section_select, section_buttons].forEach(function (item) {
-            item.prop('disabled', disable ? true : false);
+            item.prop('disabled', disable);
             item.prop('title', disable ? embm_settings.utfb_section_notice : null);
             item.css('cursor', disable ? 'not-allowed' : 'pointer');
         });
@@ -578,11 +578,27 @@ jQuery(document).ready(function ($) {
     $('select.embm-utfb--dropdown').on('change', function (e) {
         e.preventDefault();
         load_utfb_dropdown(this);
+
+        // If this is the location dropdown, update the sync button
+        if (this.id === 'embm-utfb-location-id') {
+            var location = $(this),
+                sync_button = $('button.embm-utfb--sync');
+
+            sync_button.prop('disabled', !location.val() ? true : false);
+            sync_button.css('cursor', !location.val() ? 'not-allowed' : 'pointer');
+        }
     });
 
     // Check for value on page load
     utfb_sections.each(function (idx, section) {
-        var select = $(section).find('select.embm-utfb--dropdown');
+        var select = $(section).find('select.embm-utfb--dropdown'),
+            sync_button = $('button.embm-utfb--sync');
+
+        // Disable sync button if no location selected
+        if (!idx && !select.val()) {
+            sync_button.prop('disabled', true);
+            sync_button.css('cursor', 'not-allowed');
+        }
 
         if (select.val() || !idx) {
             // Load the dropdown
@@ -616,6 +632,37 @@ jQuery(document).ready(function ($) {
         ajax_params.resource = resource;
         ajax_params.resources = resources;
         ajax_params.import_all = import_all;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Sync UTFB objects
+    $('button.embm-utfb--sync').on('click', function (e) {
+        e.preventDefault();
+
+        // Get import data
+        var resources = {},
+            resource_types = ['location', 'menu', 'section', 'beer'];
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Get resource IDs
+        resource_types.forEach(function (resource_type) {
+            resources[resource_type] = $('#embm-utfb-' + resource_type + '-id').val();
+        });
+
+        // Set up ajax action
+        ajax_params.action = 'embm-utfb-sync';
+        ajax_params.resource = 'menu';
+        ajax_params.resources = resources;
+        ajax_params.import_all = true;
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {

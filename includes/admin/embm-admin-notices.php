@@ -131,7 +131,12 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '3' => array(
             'type'      => 'warning',
             'title'     => $WARNING_TITLE,
-            'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'embm')
+            'message'   => __('There was a problem during the import! One or more beers were not imported. Please try again later.', 'embm')
+        ),
+        '4' => array(
+            'type'      => 'warning',
+            'title'     => $WARNING_TITLE,
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
         )
     ),
     'utfb-success' => array(
@@ -144,6 +149,11 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
             'message'   => __('Your beers have been imported from your Untappd for Business account.', 'embm')
+        ),
+        '3' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beers have been synced with your Untappd for Business account.', 'embm')
         )
     )
 );
