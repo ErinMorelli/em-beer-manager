@@ -457,6 +457,48 @@ function EMBM_Admin_Utfb_find($objects, $object_id)
 }
 
 /**
+ * Retrieves or adds a Menu taxonomy item
+ *
+ * @param object $menu   Menu data from UTFB
+ * @param object $parent Parent menu item data from UTFB
+ *
+ * @return array Array of found object data
+ */
+function EMBM_Admin_Utfb_taxonomy($menu, $parent = null)
+{
+    // Set up term data
+    $term_data = array(
+        'description' => $menu->description
+    );
+
+    // Check for parent
+    if (!is_null($parent)) {
+        // Check if tax exists or create it
+        $parent_term = EMBM_Admin_Utfb_taxonomy($parent);
+
+        // Update term data
+        $term_data['parent'] = $parent_term['term_id'];
+
+        // Check if section  exists
+        $exists = term_exists($menu->name, 'embm_menu', $parent_term['term_id']);
+    } else {
+        // Check if tax exists
+        $exists = term_exists($menu->name, 'embm_menu');
+    }
+
+    // Return if exists
+    if ($exists) {
+        return $exists;
+    }
+
+    // Add term
+    $term = wp_insert_term($menu->name, 'embm_menu', $term_data);
+
+    // Return new term
+    return $term;
+}
+
+/**
  * Retrieve a UTFB resource from the API
  *
  * @param array  $auth          API authentication credentials
@@ -589,104 +631,48 @@ function EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all)
  */
 function EMBM_Admin_Utfb_import($resources)
 {
-    $response = 0;
+    // Get import resources
+    $menus = $resources['menu'];
+    $sections = $resources['section'];
+    $beers = $resources['beer'];
 
-    // Iterate over resources
-    foreach ($resources as $resource => $resource_data) {
-        // Import a given type
-        switch ($resource) {
+    // Iterate over menus
+    foreach ($menus as $menu) {
+        // Get or add menu term
+        $menu->term = EMBM_Admin_Utfb_taxonomy($menu);
+    }
 
-        // Import menus as categories
-        case 'menu':
-            // Iterate over menus
-            foreach ($resource_data as $menu) {
-                // Check if menu exists
-                $exists = term_exists($menu->name, 'embm_menu');
+    // Iterate over sections
+    foreach ($sections as $section) {
+        // Get or add section term
+        $section->term = EMBM_Admin_Utfb_taxonomy($section, $menu);
+    }
 
-                // Store term ID and continue
-                if ($exists) {
-                    $menu->term = $exists;
-                    continue;
-                }
+    // Set error tracker
+    $has_errors = false;
 
-                // Add term
-                $term = wp_insert_term(
-                    $menu->name,
-                    'embm_menu',
-                    array(
-                        'description' => $menu->description
-                    )
-                );
+    // Iterate over beers
+    foreach ($beers as $beer) {
+        // Get section from ID
+        $section = EMBM_Admin_Utfb_find($sections, $beer->section_id);
+        $menu = EMBM_Admin_Utfb_find($menus, $section->menu_id);
 
-                // Store ID
-                $menu->term = $term;
-            }
-            break;
+        // Import beer
+        $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term, $menu->term);
 
-        // Import sections as sub-categories
-        case 'section':
-            // Iterate over sections
-            foreach ($resource_data as $section) {
-                // Get menu from ID
-                $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
-
-                // Check if section  exists
-                $exists = term_exists($section->name, 'embm_menu', $menu->term['term_id']);
-
-                // Store term ID and continue
-                if ($exists) {
-                    $section->term = $exists;
-                    continue;
-                }
-
-                // Add term
-                $term = wp_insert_term(
-                    $section->name,
-                    'embm_menu',
-                    array(
-                        'description' => $section->description,
-                        'parent'      => $menu->term_id
-                    )
-                );
-
-                // Store ID
-                $section->term = $term;
-            }
-            break;
-
-        // Import beers
-        case 'beer':
-            // Set error tracker
-            $has_errors = false;
-
-            // Iterate over beers
-            foreach ($resource_data as $beer) {
-                // Get section from ID
-                $section = EMBM_Admin_Utfb_find($resources['section'], $beer->section_id);
-                $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
-
-                // Import beer
-                $res = EMBM_Admin_Utfb_Import_beer($beer, $section->term, $menu->term);
-
-                // Check response
-                if (!is_null($res)) {
-                    $has_errors = true;
-                }
-            }
-
-            // Check for errors
-            if ($has_errors) {
-                $response = 3;
-            }
-            break;
-
-        // Fallback
-        default:
-            $response = 2;
+        // Check response
+        if (!is_null($res)) {
+            $has_errors = true;
         }
     }
 
-    return $response;
+    // Check for errors
+    if ($has_errors) {
+        return 3;
+    }
+
+    // Return success
+    return 0;
 }
 
 /**
@@ -734,7 +720,7 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
 
     // Get beer data
     $api_root = EMBM_UNTAPPD_API_URL.$token;
-    $untappd_beer_data = EMBM_Admin_Untappd_Beer_get($api_root, $beer_id);
+    $untappd_beer_data = EMBM_Admin_Untappd_Beer_get($api_root, $beer->untappd_id);
 
     // Set up post array
     $new_beer_post = array(
@@ -823,23 +809,15 @@ function EMBM_Admin_Utfb_sync($resources)
             continue;
         }
 
-        // Get beer menu section
+        // Get beer menu info
         $section = EMBM_Admin_Utfb_find($resources['section'], $beer_res->section_id);
-        if (is_null($section)) {
-            continue;
-        }
-
-        // Locate section taxonomy
-        $section_tax = term_exists($section->name, 'embm_menu');
-
-        // Get beer menu
         $menu = EMBM_Admin_Utfb_find($resources['menu'], $section->menu_id);
-        if (is_null($menu)) {
-            continue;
-        }
 
         // Location menu taxonomy
-        $menu_tax = term_exists($menu->name, 'embm_menu');
+        $menu_tax = EMBM_Admin_Utfb_taxonomy($menu);
+
+        // Locate section taxonomy
+        $section_tax = EMBM_Admin_Utfb_taxonomy($section, $menu);
 
         // Update section and menu taxonomies for beer
         $result = wp_set_post_terms(
