@@ -237,8 +237,6 @@ The Untappd check-in integration is handled separately from the `show_extras` se
 Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If you are running EM Beer Manager 1.7.1 or earlier, it may be due to your site's theme overriding the EM Beer Manager templates. We recommend updating to version 1.8.0 or higher, but you can  also edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
 
 
-
-
 == Screenshots ==
 
 1. The beer post type list page
@@ -251,6 +249,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 3.1.0 =
+* [NEW] Connect to and import beers/menus from your Untappd for Business account
+* [NEW] Sync your imported beers with changes from Untappd
+* [NEW] Beer images now link to their respective beer
+* [FIXED] Bug with how beer styles were displaying in titles
 
 = 3.0.5 =
 * [FIXED] Broken brewery account authentication for Labs
@@ -388,8 +392,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * Initial plugin release
 
 
-
 == Upgrade Notice ==
+
+= 3.1.0 =
+Adds support for Untappd for Business accounts
 
 = 3.0.5 =
 Critical bug fixes related to Untappd brewery authentication
@@ -457,10 +463,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 * Brazilian Portuguese (pt_BR) - *thanks to __Lucas Alexandre__*
-
-
-== Planned Features ==
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")

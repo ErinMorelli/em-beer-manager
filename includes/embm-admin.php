@@ -54,6 +54,11 @@ function EMBM_Admin_styles()
     // Set AJAX Nonce
     $ajax_nonce = wp_create_nonce(EMBM_AJAX_NONCE);
 
+    // Set sync confirmation text
+    $confirm = __('Are you sure you want to continue?', 'embm');
+    $sconfirm = __('WARNING: This will override any changes you have made to %s. %s', 'embm');
+    $uconfirm = __('WARNING: This will override any custom menu associations you have made. %s', 'embm');
+
     // Share EMBM settings with admin script
     wp_localize_script(
         'embm-admin-script',
@@ -63,7 +68,10 @@ function EMBM_Admin_styles()
               'plugin_url'          => EMBM_PLUGIN_URL,
               'options'             => get_option('embm_options'),
               'error'               => __('There was a problem with your request! Please try again later.', 'embm'),
-              'utfb_section_notice' => __('Select an option from the dropdown in the section above to enable.', 'embm')
+              'utfb_section_notice' => __('Select an option from the dropdown in the section above to enable.', 'embm'),
+              'sync_confirm_plural' => sprintf($sconfirm, __('your imported beers', 'embm'), $confirm),
+              'sync_confirm_single' => sprintf($sconfirm, __('this beer', 'embm'), $confirm),
+              'sync_confirm_utfb'   => sprintf($uconfirm, $confirm)
         )
     );
 }
@@ -287,9 +295,9 @@ function EMBM_Admin_help()
             'content' => '<p><strong>'.
                 __('Why is an Untappd account required in addition to an UTFB account?', 'embm').
                 '</strong></p><p>'.
-                __('Untappd for Business (UTFB) account credentials to not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is needed.', 'embm').
+                __('Untappd for Business (UTFB) account credentials do not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.', 'embm').
                 '</p><p>'.
-                __('An Untappd brewery account is not required to work with UTFB.', 'embm').
+                __('An Untappd brewery account is not required to work with UTFB. A standard user account will work.', 'embm').
                 '</p><p><strong>'.
                 __('Where do I find my API key?', 'embm').
                 '</strong></p><p>'.

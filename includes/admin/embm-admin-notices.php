@@ -153,7 +153,7 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '3' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beers have been synced with your Untappd for Business account.', 'embm')
+            'message'   => __('Your beers have been synced with your Untappd for Business menus.', 'embm')
         )
     )
 );

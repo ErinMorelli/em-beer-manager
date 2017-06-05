@@ -38,7 +38,10 @@ This plugin allows beer creators from home brewers to professional breweries to 
 ## Latest Release ##
 
 ### [Version 3.1.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.4/em-beer-manager.3.1.0.zip) ###
-* ??
+* [NEW] Connect to and import beers/menus from your Untappd for Business account
+* [NEW] Sync your imported beers with changes from Untappd
+* [NEW] Beer images now link to their respective beer
+* [FIXED] Bug with how beer styles were displaying in titles
 
 
 
@@ -186,10 +189,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 * Brazilian Portuguese (pt_BR) - *thanks to __Lucas Alexandre__*
-
-
-### Planned Features ###
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")

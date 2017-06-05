@@ -341,6 +341,12 @@ jQuery(document).ready(function ($) {
     $('.embm-metabox--untappd-sync a').on('click', function (e) {
         e.preventDefault();
 
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_single)) {
+            return;
+        }
+
+        // Get API root
         var api_root = $(this).data('api-root');
 
         // Start spinner
@@ -455,6 +461,11 @@ jQuery(document).ready(function ($) {
     // Handle sync requests
     $('a.embm-untappd--sync').on('click', function (e) {
         e.preventDefault();
+
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_plural)) {
+            return;
+        }
 
         var api_root = $('#embm-untappd-api-root').val();
 
@@ -645,6 +656,11 @@ jQuery(document).ready(function ($) {
     // Sync UTFB objects
     $('button.embm-utfb--sync').on('click', function (e) {
         e.preventDefault();
+
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_utfb)) {
+            return;
+        }
 
         // Get import data
         var resources = {},
