@@ -559,8 +559,11 @@ function EMBM_Admin_Actions_Utfb_disconnect()
     // Remove connected account information
     delete_option('embm_utfb_credentials');
 
+    // Flush caches
+    EMBM_Admin_Utfb_flush();
+
     // Send response
-    wp_send_json();
+    wp_die();
 }
 
 // Add UTFB connect action to AJAX

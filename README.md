@@ -37,7 +37,7 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.1.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.4/em-beer-manager.3.1.0.zip) ###
+### [Version 3.1.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.1.0/em-beer-manager.3.1.0.zip) ###
 * [NEW] Connect to and import beers/menus from your Untappd for Business account
 * [NEW] Sync your imported beers with changes from Untappd
 * [NEW] Beer images now link to their respective beer

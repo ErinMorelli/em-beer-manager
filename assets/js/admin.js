@@ -409,7 +409,7 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    /* ---- LABS / IMPORT ---- */
+    /* ---- LABS / UNTAPPD ---- */
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {

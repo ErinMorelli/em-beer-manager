@@ -188,7 +188,7 @@ function EMBM_Admin_Metabox_Untappd_content()
         <div class="embm-metabox__field embm-metabox--utfb">
             <?php if (null !== $utfb_data && $utfb_id !== '' && !$show_api_error) : ?>
                 <p>
-                    <strong><?php _e('Untappd for Business', 'embm'); ?></strong><br />
+                    <strong><?php _e('Untappd for Business Menus', 'embm'); ?></strong><br />
                     <ul>
                         <?php foreach ($menus as $menu): ?>
                             <li>
