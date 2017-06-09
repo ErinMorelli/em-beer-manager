@@ -158,15 +158,31 @@ These will display a formatted listing of all beers.
 
 == Frequently Asked Questions ==
 
+= Can I use content filters with EM Beer Manager? = 
+
+Yes! New in v3.1.0, you can apply content filters to different parts of EM Beer Manager's output: 
+
+* `embm_beer_filter_beer` = The full beer post content
+* `embm_beer_filter_untappd` = The Untappd check-in button
+* `embm_beer_filter_profile` = The beer profile content
+* `embm_beer_filter_extras` = The beer extras content
+* `embm_beer_filter_rating` = The full beer rating content
+* `embm_beer_filter_rating_stars` = Just the stars of the rating content
+* `embm_beer_filter_rating_styles` = CSS styles for the rating stars
+* `embm_beer_filter_reviews` = The beer reviews content
+
+
 = Why is an Untappd account required in addition to an UTFB account? =
 
 Untappd for Business (UTFB) account credentials do not work with Untappd's API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.
 
 An Untappd brewery account is not required to work with UTFB. A standard user account will work.
 
+
 = Where do I find my Untappd for Business API key? = 
 
 You can find your API key under the ["API Access Tokens"](https://business.untappd.com/api_tokens) section of your account.
+
 
 = Why am I seeing a "rate-limit" error? =
 
