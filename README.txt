@@ -1,14 +1,14 @@
 === EM Beer Manager ===
 Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
-Tags: beer, beers, brewery, untappd
+Tags: beer, beers, brewery, untappd, untappd for business
 Requires at least: 3.0.1
-Tested up to: 4.7.2
+Tested up to: 4.8.0
 Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
+Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
 
 
 == Description ==
@@ -17,13 +17,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
+* "Menu" taxonomy for creating beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Experimental] Import your brewery's beers directly from Untappd
+* [Beta] Import your brewery's beers directly from Untappd
+* [Beta] Import your beers and menus from Untappd for Business
 
 = Usage =
 Use these shortcodes to display beers in your posts or use the template tags in your theme files:
@@ -155,6 +157,16 @@ These will display a formatted listing of all beers.
 
 
 == Frequently Asked Questions ==
+
+= Why is an Untappd account required in addition to an UTFB account? =
+
+Untappd for Business (UTFB) account credentials do not work with Untappd's API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.
+
+An Untappd brewery account is not required to work with UTFB. A standard user account will work.
+
+= Where do I find my Untappd for Business API key? = 
+
+You can find your API key under the ["API Access Tokens"](https://business.untappd.com/api_tokens) section of your account.
 
 = Why am I seeing a "rate-limit" error? =
 

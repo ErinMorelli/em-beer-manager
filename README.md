@@ -2,7 +2,7 @@
 
 *by Erin Morelli*
 
-Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
+Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
 
 
 ## Overview ###
@@ -11,13 +11,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
+* "Menu" taxonomy for creating beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Experimental] Import your brewery's beers directly from Untappd
+* [Beta] Import your brewery's beers directly from Untappd
+* [Beta] Import your beers and menus from Untappd for Business
 
 
 ### Screenshots ###
