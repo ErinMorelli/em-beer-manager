@@ -21,7 +21,7 @@
 
 // Import additional admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-notices.php';
-require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-authorize.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-authorize.php';
 
 // Set global admin page object
 global $embm_admin_page;

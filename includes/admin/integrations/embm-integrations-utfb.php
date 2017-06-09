@@ -184,9 +184,9 @@ function EMBM_Admin_Utfb_account($auth, $refresh = false)
         $account_url = sprintf(EMBM_UTFB_API_URL, 'current_user');
         $res = EMBM_Admin_Utfb_request($auth, $account_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return null;
+            return (false === $account || $refresh) ? null : $account;
         }
 
         // Store for 24 hours (as per TOS)
@@ -218,9 +218,9 @@ function EMBM_Admin_Utfb_locations($auth, $refresh = false)
         $locations_url = sprintf(EMBM_UTFB_API_URL, 'locations');
         $res = EMBM_Admin_Utfb_request($auth, $locations_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return null;
+            return (false === $locations || $refresh) ? null : $locations;
         }
 
         // Store for 24 hours (as per TOS)
@@ -272,9 +272,9 @@ function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
         $menus_url = sprintf(EMBM_UTFB_API_URL, 'locations/'.$location_id.'/menus');
         $res = EMBM_Admin_Utfb_request($auth, $menus_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return null;
+            return (false === $menus || $refresh) ? null : $menus;
         }
 
         // Store for 24 hours (as per TOS)
@@ -327,9 +327,9 @@ function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
         $sections_url = sprintf(EMBM_UTFB_API_URL, 'menus/'.$menu_id.'/sections');
         $res = EMBM_Admin_Utfb_request($auth, $sections_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return null;
+            return (false === $sections || $refresh) ? null : $sections;
         }
 
         // Store for 24 hours (as per TOS)
@@ -382,9 +382,9 @@ function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
         $beers_url = sprintf(EMBM_UTFB_API_URL, 'sections/'.$section_id.'/items');
         $res = EMBM_Admin_Utfb_request($auth, $beers_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return null;
+            return (false === $beers || $refresh) ? null : $beers;
         }
 
         // Store for 24 hours (as per TOS)

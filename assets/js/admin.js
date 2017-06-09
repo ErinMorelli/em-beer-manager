@@ -543,15 +543,16 @@ jQuery(document).ready(function ($) {
             return false;
         }
 
+        // Reset all child sections
+        $(dropdown)
+            .closest('.embm-utfb-section')
+            .nextAll('.embm-utfb-section')
+            .each(function (idx, child_section) {
+                toggle_utfb_section($(child_section), true);
+            });
+
         // Check for resource ID
         if (!resource_id) {
-            // Disable all child sections
-            $(dropdown)
-                .closest('.embm-utfb-section')
-                .nextAll('.embm-utfb-section')
-                .each(function (idx, child_section) {
-                    toggle_utfb_section($(child_section), true);
-                });
             return false;
         }
 
@@ -627,7 +628,7 @@ jQuery(document).ready(function ($) {
         // Get import data
         var resources = {},
             resource = $(this).data('resource'),
-            resource_types = ['location', 'menu', 'section', 'beer'],
+            resource_types = embm_settings.utfb_resources,
             import_all = $(this).parent().hasClass('embm-utfb-section--import-all');
 
         // Start spinner

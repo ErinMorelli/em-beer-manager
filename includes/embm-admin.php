@@ -20,8 +20,8 @@
  */
 
 // Include additional Admin functions
-require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
-require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-utfb.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-untappd.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-utfb.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-actions.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-settings.php';
 
@@ -68,6 +68,7 @@ function EMBM_Admin_styles()
               'plugin_url'          => EMBM_PLUGIN_URL,
               'options'             => get_option('embm_options'),
               'error'               => __('There was a problem with your request! Please try again later.', 'embm'),
+              'utfb_resources'      => array_keys($GLOBALS['EMBM_UTFB_RESOURCE_MAP']),
               'utfb_section_notice' => __('Select an option from the dropdown in the section above to enable.', 'embm'),
               'sync_confirm_plural' => sprintf($sconfirm, __('your imported beers', 'embm'), $confirm),
               'sync_confirm_single' => sprintf($sconfirm, __('this beer', 'embm'), $confirm),

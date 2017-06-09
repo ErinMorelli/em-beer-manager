@@ -219,9 +219,15 @@ function EMBM_Admin_Untappd_user($api_root)
         $user_info_url = sprintf($api_root, 'user/info');
         $res = EMBM_Admin_Untappd_request($user_info_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            if (false !== $user) {
+                return $user;
+            } elseif ($res['limit']) {
+                return EMBM_Admin_Untappd_ratelimit();
+            } else {
+                return null;
+            }
         }
 
         // Store for 24 hours (as per TOS)
@@ -253,9 +259,15 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
         $brewery_url = sprintf($api_root, 'brewery/info/'.$brewery_id);
         $res = EMBM_Admin_Untappd_request($brewery_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            if (false !== $brewery) {
+                return $brewery;
+            } elseif ($res['limit']) {
+                return EMBM_Admin_Untappd_ratelimit();
+            } else {
+                return null;
+            }
         }
 
         // Store for 24 hours (as per TOS)
@@ -289,9 +301,15 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id, $refresh = false)
         $checkins_url = sprintf($api_root, 'brewery/checkins/'.$brewery_id);
         $res = EMBM_Admin_Untappd_request($checkins_url);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            if (false !== $checkins && !$refresh) {
+                return $checkins;
+            } elseif ($res['limit']) {
+                return EMBM_Admin_Untappd_ratelimit();
+            } else {
+                return null;
+            }
         }
 
         // Store for 24 hours (as per TOS)
@@ -327,9 +345,15 @@ function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
         // Extract Untappd xml feed data
         $res = EMBM_Admin_Untappd_request($feed_url, false);
 
-        // Handle any errors
+        // Handle any errors or return cached data
         if (!$res['success']) {
-            return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+            if (false !== $xml_data && !$refresh) {
+                return $xml_data;
+            } elseif ($res['limit']) {
+                return EMBM_Admin_Untappd_ratelimit();
+            } else {
+                return null;
+            }
         }
 
         // Set XML data to parse
@@ -387,9 +411,15 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
             $beers_url = sprintf($beers_root, $beer_offset);
             $res = EMBM_Admin_Untappd_request($beers_url);
 
-            // Handle any errors
+            // Handle any errors or return cached data
             if (!$res['success']) {
-                return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+                if (false !== $beer_list) {
+                    return $beer_list;
+                } elseif ($res['limit']) {
+                    return EMBM_Admin_Untappd_ratelimit();
+                } else {
+                    return null;
+                }
             }
 
             $beers = $res['data']->response->beers;

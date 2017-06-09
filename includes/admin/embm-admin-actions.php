@@ -601,6 +601,12 @@ function EMBM_Admin_Actions_Utfb_dropdown()
     // Get items from resource
     $items = $resource_func($auth, $resource_id);
 
+    // Check response
+    if (is_null($items)) {
+        wp_send_json_error();
+        return;
+    }
+
     // Set up response
     $response = array(
         'items' => $items

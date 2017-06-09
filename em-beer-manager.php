@@ -117,9 +117,7 @@ function EMBM_Plugin_activate()
         'embm_untappd_rating_opacity'   => '25',
         'embm_css_url'                  => '',
         'embm_group_slug'               => 'group',
-        'embm_reviews_count_single'     => '5',
-        'embm_utfb_apikey'              => '',
-        'embm_utfb_email'               => ''
+        'embm_reviews_count_single'     => '5'
     );
 
     // Get any existing options
