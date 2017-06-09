@@ -1,14 +1,14 @@
 === EM Beer Manager ===
 Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
-Tags: beer, beers, brewery, untappd
+Tags: beer, beers, brewery, untappd, untappd for business
 Requires at least: 3.0.1
-Tested up to: 4.7.2
-Stable tag: 3.0.5
+Tested up to: 4.8.0
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
+Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
 
 
 == Description ==
@@ -17,13 +17,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
+* "Menu" taxonomy for creating beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Experimental] Import your brewery's beers directly from Untappd
+* [Beta] Import your brewery's beers directly from Untappd
+* [Beta] Import your beers and menus from Untappd for Business
 
 = Usage =
 Use these shortcodes to display beers in your posts or use the template tags in your theme files:
@@ -156,6 +158,32 @@ These will display a formatted listing of all beers.
 
 == Frequently Asked Questions ==
 
+= Can I use content filters with EM Beer Manager? = 
+
+Yes! New in v3.1.0, you can apply content filters to different parts of EM Beer Manager's output: 
+
+* `embm_beer_filter_beer` = The full beer post content
+* `embm_beer_filter_untappd` = The Untappd check-in button
+* `embm_beer_filter_profile` = The beer profile content
+* `embm_beer_filter_extras` = The beer extras content
+* `embm_beer_filter_rating` = The full beer rating content
+* `embm_beer_filter_rating_stars` = Just the stars of the rating content
+* `embm_beer_filter_rating_styles` = CSS styles for the rating stars
+* `embm_beer_filter_reviews` = The beer reviews content
+
+
+= Why is an Untappd account required in addition to an UTFB account? =
+
+Untappd for Business (UTFB) account credentials do not work with Untappd's API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.
+
+An Untappd brewery account is not required to work with UTFB. A standard user account will work.
+
+
+= Where do I find my Untappd for Business API key? = 
+
+You can find your API key under the ["API Access Tokens"](https://business.untappd.com/api_tokens) section of your account.
+
+
 = Why am I seeing a "rate-limit" error? =
 
 From the [Untappd API documentation](https://untappd.com/api/docs):
@@ -237,8 +265,6 @@ The Untappd check-in integration is handled separately from the `show_extras` se
 Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicking the "Save Settings" button. If you are running EM Beer Manager 1.7.1 or earlier, it may be due to your site's theme overriding the EM Beer Manager templates. We recommend updating to version 1.8.0 or higher, but you can  also edit the templates in the plugin file to suit your needs. They're located in wp-content -> plugins -> em-beer-manager -> templates.
 
 
-
-
 == Screenshots ==
 
 1. The beer post type list page
@@ -251,6 +277,12 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 3.1.0 =
+* [NEW] Connect to and import beers/menus from your Untappd for Business account
+* [NEW] Sync your imported beers with changes from Untappd
+* [NEW] Beer images now link to their respective beer
+* [FIXED] Bug with how beer styles were displaying in titles
 
 = 3.0.5 =
 * [FIXED] Broken brewery account authentication for Labs
@@ -388,8 +420,10 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 * Initial plugin release
 
 
-
 == Upgrade Notice ==
+
+= 3.1.0 =
+Adds support for Untappd for Business accounts
 
 = 3.0.5 =
 Critical bug fixes related to Untappd brewery authentication
@@ -457,10 +491,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 * Brazilian Portuguese (pt_BR) - *thanks to __Lucas Alexandre__*
-
-
-== Planned Features ==
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")

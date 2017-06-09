@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true)
             title="<?php _e('Donate', 'embm'); ?>"
             target="_blank"
         >
-            <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="<?php _e('Donate', 'embm'); ?>" border="0" />
+            <img src="<?php echo EMBM_PLUGIN_URL; ?>assets/img/donate.png" alt="<?php _e('Donate', 'embm'); ?>" border="0" />
         </a>
     </p>
 </div>

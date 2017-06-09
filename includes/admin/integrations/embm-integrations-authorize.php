@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Authorize
+ * @package EMBM\Admin\Integrations\Authorize
  */
 
 // Set authorization URL
@@ -34,7 +34,7 @@ function EMBM_Admin_Authorize_deauthorize()
     delete_option('embm_untappd_brewery_id');
 
     // Flush cache
-    EMBM_Admin_Untappd_flush();
+    EMBM_Admin_Untappd_flush(EMBM_UNTAPPD_CACHE);
 
     // Get global WP database reference
     global $wpdb;
@@ -85,7 +85,12 @@ function EMBM_Admin_Authorize_token()
 }
 
 /**
+ * Checks whether a user is authorized with Untappd
  *
+ * @return int Authorization status value, one of:
+ *               0 - Rate limit hit, displays error
+ *               1 - Not authorized, displays Log In button
+ *               2 - Successful authorization, displays user info
  */
 function EMBM_Admin_Authorize_status()
 {
@@ -119,7 +124,7 @@ function EMBM_Admin_Authorize_status()
 ?>
     <div class="embm-settings--status">
         <p>
-            <?php _e('You are logged in as', 'embm'); ?>:
+            <?php _e('You are logged in to Untappd as', 'embm'); ?>:
             <a
                 href="<?php echo $user->untappd_url; ?>"
                 target="_blank"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ function EMBM_Core_beer()
         'public'                => true,
         'capability_type'       => 'post',
         'hierarchical'          => false,
-        'taxonomies'            => array('embm_style', 'embm_group'),
+        'taxonomies'            => array('embm_style', 'embm_group', 'embm_menu'),
         'has-archive'           => true,
         'menu_position'         => 5,
         'show_in_rest'          => true,
@@ -484,6 +484,53 @@ function EMBM_Core_group()
 add_action('init', 'EMBM_Core_group', 0);
 
 /**
+ * Loads the custom EMBM menu taxonomy
+ *
+ * @return void
+ */
+function EMBM_Core_menu()
+{
+    // Set custom taxonomy terminology
+    $labels = array(
+        'name'                          => __('Menus', 'embm'),
+        'singular_name'                 => __('Menu', 'embm'),
+        'search_items'                  => __('Search Menus', 'embm'),
+        'all_items'                     => __('All Menus', 'embm'),
+        'edit_item'                     => __('Edit Menu', 'embm'),
+        'update_item'                   => __('Update Menu', 'embm'),
+        'add_new_item'                  => __('Add New Menu', 'embm'),
+        'new_item_name'                 => __('New Menu Name', 'embm'),
+        'popular_items'                 => __('Popular Menus', 'embm'),
+        'choose_from_most_used'         => __('Choose from the most used menus', 'embm'),
+        'separate_items_with_commas'    => __('Separate menus with commas', 'embm'),
+        'add_or_remove_items'           => __('Add or remove menus', 'embm'),
+        'menu_name'                     => __('Menus', 'embm')
+    );
+
+    // Set up custom taxonomy options
+    $args = array(
+        'hierarchical'          => true,
+        'labels'                => $labels,
+        'show_ui'               => true,
+        'show_admin_column'     => true,
+        'query_var'             => true,
+        'rewrite'               => array(
+            'slug'              => 'beer/menu',
+            'with_front'        => false
+        ),
+        'show_in_rest'          => true,
+        'rest_base'             => 'embm_menus',
+        'rest_controller_class' => 'WP_REST_Terms_Controller',
+    );
+
+    // Register the group taxonomy with the EMBM custom post type
+    register_taxonomy('embm_menu', array('embm_beer'), $args);
+}
+
+// Loads the custom Group taxonomy
+add_action('init', 'EMBM_Core_menu', 0);
+
+/**
  * Register custom beer fields with WP API
  *
  * @return void
@@ -776,7 +823,7 @@ function EMBM_Core_Beer_Api_schema($field_name)
 function EMBM_Core_errors()
 {
     // Get list of errors
-    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    $errors = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
     if (!$errors) {
         return;
     }
@@ -802,7 +849,7 @@ function EMBM_Core_errors()
     }
 
     // Remove the errors from cache
-    delete_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    delete_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
 }
 
 // Add to admin notices

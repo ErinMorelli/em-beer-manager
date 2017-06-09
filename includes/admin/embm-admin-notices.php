@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,58 +19,86 @@
  * @package EMBM\Admin\Notices
  */
 
+$SUCCESS_TITLE = __('Success!', 'embm');
+$ERROR_TITLE   = __('ERROR', 'embm') . ':';
+$WARNING_TITLE = __('WARNING', 'embm') . ':';
+
 // Map of notices
 $GLOBALS['EMBM_NOTICE_MAP'] = array(
     'styles-reset' => array(
         '1' => array(
             'type'      => 'updated',
-            'title'     => __('Success!', 'embm'),
+            'title'     => $SUCCESS_TITLE,
             'message'   => __('Your beer styles have been restored.', 'embm')
         )
     ),
     'import-success' => array(
         '1' => array(
             'type'      => 'updated',
-            'title'     => __('Success!', 'embm'),
+            'title'     => $SUCCESS_TITLE,
             'message'   => __('Your beer has been imported from Untappd.', 'embm')
         ),
         '2' => array(
             'type'      => 'updated',
-            'title'     => __('Success!', 'embm'),
+            'title'     => $SUCCESS_TITLE,
             'message'   => __('Your beers have been imported from Untappd.', 'embm')
         )
     ),
     'import-error' => array(
         '1' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
         ),
         '2' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem during the import! The beer you specified was not found on Untappd.', 'embm')
         ),
         '3' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm')
         ),
         '4' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem during the import! Please try again later.', 'embm')
         ),
         '5' => array(
             'type'      => 'warning',
-            'title'     => __('WARNING', 'embm') . ':',
+            'title'     => $WARNING_TITLE,
             'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'embm')
+        )
+    ),
+    'sync-success' => array(
+        '1' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beers have been updated from Untappd.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beer has been updated from Untappd.', 'embm')
+        )
+    ),
+    'sync-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => $ERROR_TITLE,
+            'message'   => __('There was a problem during the sync! Please try again later.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'warning',
+            'title'     => $WARNING_TITLE,
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
         )
     ),
     'save-error' => array(
         '1' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem saving your beer\'s Untappd data!', 'embm').' '.
                 __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
         )
@@ -78,15 +106,54 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
     'widget-error' => array(
         '1' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem retrieving check-in data from Untappd!', 'embm').' '.
                 __('Please try again later.', 'embm')
         ),
         '2' => array(
             'type'      => 'error',
-            'title'     => __('ERROR', 'embm') . ':',
+            'title'     => $ERROR_TITLE,
             'message'   => __('There was a problem refreshing check-in data from Untappd!', 'embm').' '.
                 __('Please try again later.', 'embm')
+        )
+    ),
+    'utfb-error' => array(
+        '1' => array(
+            'type'      => 'error',
+            'title'     => $ERROR_TITLE,
+            'message'   => __('There was a problem connecting your Untappd for Business account! Please try again later.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'error',
+            'title'     => $ERROR_TITLE,
+            'message'   => __('There was a problem during the import! Please try again later.', 'embm')
+        ),
+        '3' => array(
+            'type'      => 'warning',
+            'title'     => $WARNING_TITLE,
+            'message'   => __('There was a problem during the import! One or more beers were not imported. Please try again later.', 'embm')
+        ),
+        '4' => array(
+            'type'      => 'warning',
+            'title'     => $WARNING_TITLE,
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
+        )
+    ),
+    'utfb-success' => array(
+        '1' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your Untappd for Business account has been connected.', 'embm')
+        ),
+        '2' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beers have been imported from your Untappd for Business account.', 'embm')
+        ),
+        '3' => array(
+            'type'      => 'updated',
+            'title'     => $SUCCESS_TITLE,
+            'message'   => __('Your beers have been synced with your Untappd for Business menus.', 'embm')
         )
     )
 );

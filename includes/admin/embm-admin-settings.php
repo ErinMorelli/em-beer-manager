@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 // Import additional admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-notices.php';
-require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-authorize.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-authorize.php';
 
 // Set global admin page object
 global $embm_admin_page;
@@ -595,6 +595,25 @@ function EMBM_Admin_Settings_Single_untappd()
  */
 function EMBM_Admin_Settings_page()
 {
+    // Get tabs data
+    $tabs = array(
+        array(
+            'id'      => 'untappd',
+            'name'    => sprintf('%s <span>%s</span>', __('Untappd Import', 'embm'), __('Labs', 'embm')),
+            'hide'    => EMBM_Core_Beer_disabled()
+        ),
+        array(
+            'id'      => 'utfb',
+            'name'    => sprintf('%s <span>%s</span>', __('Untappd for Business Import', 'embm'), __('Labs', 'embm')),
+            'hide'    => EMBM_Core_Beer_disabled()
+        ),
+        array(
+            'id'      => 'usage',
+            'name'    => __('Usage', 'embm'),
+            'hide'    => false
+        )
+    );
+
     // Get settings page sections
     global $wp_settings_sections;
     $sections = $wp_settings_sections['embm'];
@@ -617,9 +636,20 @@ function EMBM_Admin_Settings_page()
 
     <div id="embm-settings--tabs" class="embm-settings--tabs-wrapper">
         <ul class="nav-tab-wrapper">
-            <li><a href="#settings" class="embm-nav-tab nav-tab nav-tab-active nav-tab-settings"><?php _e('Settings', 'embm'); ?></a></li>
-            <li><a href="#labs" class="embm-nav-tab nav-tab nav-tab-labs"><?php _e('Labs', 'embm'); ?></a></li>
-            <li><a href="#usage" class="embm-nav-tab nav-tab nav-tab-usage"><?php _e('Usage', 'embm'); ?></a></li>
+            <li>
+                <a href="#settings" class="embm-nav-tab nav-tab nav-tab-active nav-tab-settings">
+                    <?php _e('Settings', 'embm'); ?>
+                </a>
+            </li>
+            <?php foreach ($tabs as $tab) : ?>
+                <?php if (!$tab['hide']) : ?>
+                    <li>
+                        <a href="#<?php echo $tab['id']; ?>" class="embm-nav-tab nav-tab nav-tab-<?php echo $tab['id']; ?>">
+                            <?php echo $tab['name']; ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </ul>
 
         <div id="settings" class="embm-settings--tab-settings">
@@ -648,13 +678,13 @@ function EMBM_Admin_Settings_page()
             </form>
         </div>
 
-        <div id="labs" class="embm-settings--tab-labs">
-            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php'; ?>
-        </div>
-
-        <div id="usage" class="embm-settings--tab-usage">
-            <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-usage.php'; ?>
-        </div>
+        <?php foreach ($tabs as $tab) : ?>
+            <?php if (!$tab['hide']) : ?>
+                <div id="<?php echo $tab['id']; ?>" class="embm-settings--tab embm-settings--tab-<?php echo $tab['id']; ?>">
+                    <?php include_once EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-'.$tab['id'].'.php'; ?>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 
     <?php include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-footer.php'; ?>

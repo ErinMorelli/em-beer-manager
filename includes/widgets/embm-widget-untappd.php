@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -393,10 +393,10 @@ function EMBM_Widget_Untappd_Recent_register()
 
     // Include Untappd functions
     if (!function_exists('EMBM_Admin_Untappd_checkins')) {
-        include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
+        include_once EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-untappd.php';
     }
     if (!function_exists('EMBM_Admin_Authorize_token')) {
-        include_once EMBM_PLUGIN_DIR.'includes/admin/embm-admin-authorize.php';
+        include_once EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-authorize.php';
     }
 
     // Register widget

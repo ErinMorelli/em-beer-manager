@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,8 @@
  */
 
 // Include additional Admin functions
-require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-untappd.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-untappd.php';
+require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-utfb.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-actions.php';
 require EMBM_PLUGIN_DIR.'includes/admin/embm-admin-settings.php';
 
@@ -53,6 +54,11 @@ function EMBM_Admin_styles()
     // Set AJAX Nonce
     $ajax_nonce = wp_create_nonce(EMBM_AJAX_NONCE);
 
+    // Set sync confirmation text
+    $confirm = __('Are you sure you want to continue?', 'embm');
+    $sconfirm = __('WARNING: This will override any changes you have made to %s. %s', 'embm');
+    $uconfirm = __('WARNING: This will override any custom menu associations you have made. %s', 'embm');
+
     // Share EMBM settings with admin script
     wp_localize_script(
         'embm-admin-script',
@@ -61,7 +67,12 @@ function EMBM_Admin_styles()
               'ajax_nonce'          => $ajax_nonce,
               'plugin_url'          => EMBM_PLUGIN_URL,
               'options'             => get_option('embm_options'),
-              'error'               => __('There was a problem with your request! Please try again later.', 'embm')
+              'error'               => __('There was a problem with your request! Please try again later.', 'embm'),
+              'utfb_resources'      => array_keys($GLOBALS['EMBM_UTFB_RESOURCE_MAP']),
+              'utfb_section_notice' => __('Select an option from the dropdown in the section above to enable.', 'embm'),
+              'sync_confirm_plural' => sprintf($sconfirm, __('your imported beers', 'embm'), $confirm),
+              'sync_confirm_single' => sprintf($sconfirm, __('this beer', 'embm'), $confirm),
+              'sync_confirm_utfb'   => sprintf($uconfirm, $confirm)
         )
     );
 }
@@ -276,6 +287,31 @@ function EMBM_Admin_help()
     $screen->add_help_tab($default_help['untappd']);
     $screen->add_help_tab($default_help['untappd_id']);
     $screen->add_help_tab($default_help['untappd_limit']);
+
+    // Untappd for Business help tab
+    $screen->add_help_tab(
+        array(
+            'id'      => 'embm-utfb-integration',
+            'title'   => __('Untappd for Business Integration', 'embm'),
+            'content' => '<p><strong>'.
+                __('Why is an Untappd account required in addition to an UTFB account?', 'embm').
+                '</strong></p><p>'.
+                __('Untappd for Business (UTFB) account credentials do not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.', 'embm').
+                '</p><p>'.
+                __('An Untappd brewery account is not required to work with UTFB. A standard user account will work.', 'embm').
+                '</p><p><strong>'.
+                __('Where do I find my API key?', 'embm').
+                '</strong></p><p>'.
+                sprintf(
+                    __('You can find your API key under the "API Access Tokens" section %s.', 'embm'),
+                    sprintf(
+                        '<a href="https://business.untappd.com/api_tokens" target="_blank">%s</a>',
+                        __('here', 'embm')
+                    )
+                ).
+                '</p>'
+        )
+    );
 
     // Settings FAQ help tab
     $screen->add_help_tab(

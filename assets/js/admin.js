@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,13 +41,13 @@ jQuery(document).ready(function ($) {
             '_nonce': embm_settings.ajax_nonce,
         },
         ajax_response = function (response) {
-            if (typeof response === 'object' && response.hasOwnProperty('redirect')) {
+            if (response && typeof response === 'object' && response.hasOwnProperty('redirect')) {
                 window.location = response.redirect;
             } else {
                 window.location.reload();
             }
         },
-        ajax_error = function(spinner) {
+        ajax_error = function (spinner) {
             spinner.removeClass();
             spinner.addClass('dashicons dashicons-warning');
             spinner.prop('title', embm_settings.error);
@@ -55,14 +55,15 @@ jQuery(document).ready(function ($) {
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
         nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
+        utfb_sections = $('tr.embm-utfb-section'),
         hash,
         page,
         clean_url;
 
     // Detect Internet Explorer
     function isInternetExplorer() {
-        var ua = window.navigator.userAgent;
-        var msie = ua.indexOf('MSIE ');
+        var ua = window.navigator.userAgent,
+            msie = ua.indexOf('MSIE ');
         return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./i));
     }
 
@@ -331,8 +332,46 @@ jQuery(document).ready(function ($) {
                     '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
                 );
             }
-        })
-        .fail(function() {
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Handle beer sync requests
+    $('.embm-metabox--untappd-sync a').on('click', function (e) {
+        e.preventDefault();
+
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_single)) {
+            return;
+        }
+
+        // Get API root
+        var api_root = $(this).data('api-root');
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-sync';
+        ajax_params.sync_type = 1;
+        ajax_params.post_id = url_params.post;
+        ajax_params.api_root = api_root;
+
+        // Make AJAX request
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+
+            // Show error for bad response
+            if (typeof response === 'string') {
+                $(e.target).parent().append(
+                    '<span class="dashicons dashicons-warning" title="' + response + '"></span>'
+                );
+            } else {
+                // Reload page
+                location.reload();
+            }
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -365,13 +404,12 @@ jQuery(document).ready(function ($) {
                 error += '<strong>' + response.error.title + '</strong> ' + response.error.message + '</p>';
                 widget.append(error);
             }
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
 
-    /* ---- LABS ---- */
+    /* ---- LABS / UNTAPPD ---- */
 
     // Redirect to flush Untappd cache
     $('a.embm-untappd--flush').on('click', function (e) {
@@ -387,8 +425,7 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
             ajax_error(spinner);
         });
     });
@@ -416,8 +453,258 @@ jQuery(document).ready(function ($) {
         $.post(ajaxurl, ajax_params, function (response) {
             spinner.remove();
             ajax_response(response);
-        })
-        .fail(function() {
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Handle sync requests
+    $('a.embm-untappd--sync').on('click', function (e) {
+        e.preventDefault();
+
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_plural)) {
+            return;
+        }
+
+        var api_root = $('#embm-untappd-api-root').val();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-untappd-sync';
+        ajax_params.sync_type = 2;
+        ajax_params.api_root = api_root;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    /* ---- LABS / UTFB ---- */
+
+    // Connect a UTFB account
+    $('a.embm-utfb--connect').on('click', function (e) {
+        e.preventDefault();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        ajax_params.action = 'embm-utfb-connect';
+        ajax_params.api_key = $('#embm-utfb--apikey').val();
+        ajax_params.email = $('#embm-utfb--email').val();
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Disconnect a UTFB account
+    $('a.embm-utfb--disconnect').on('click', function (e) {
+        e.preventDefault();
+        ajax_params.action = 'embm-utfb-disconnect';
+        $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Toggle enable/disable section items
+    function toggle_utfb_section(section, disable) {
+        var section_select = section.find('select.embm-utfb--dropdown'),
+            section_buttons = section.find('button.button');
+
+        // Enable items
+        [section_select, section_buttons].forEach(function (item) {
+            item.prop('disabled', disable);
+            item.prop('title', disable ? embm_settings.utfb_section_notice : null);
+            item.css('cursor', disable ? 'not-allowed' : 'pointer');
+        });
+
+        // Reset selects
+        if (disable) {
+            section_select.val('');
+        }
+    }
+
+    // Load next utfb import dropdown
+    function load_utfb_dropdown(dropdown) {
+        var resource = $(dropdown).data('action'),
+            resource_id = $(dropdown).val();
+
+        // Bail if no resource
+        if (!resource) {
+            return false;
+        }
+
+        // Reset all child sections
+        $(dropdown)
+            .closest('.embm-utfb-section')
+            .nextAll('.embm-utfb-section')
+            .each(function (idx, child_section) {
+                toggle_utfb_section($(child_section), true);
+            });
+
+        // Check for resource ID
+        if (!resource_id) {
+            return false;
+        }
+
+        ajax_params.action = 'embm-utfb-dropdown';
+        ajax_params.resource = resource;
+        ajax_params.resource_id = resource_id;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            if (response.error) {
+                return;
+            }
+
+            // Find objects for resource
+            var select = $('#embm-utfb-' + resource + '-id');
+
+            // Remove existing options
+            select.children('option').each(function (idx, option) {
+                if (idx) {
+                    $(option).remove();
+                }
+            });
+
+            // Populate menus select
+            response.items.forEach(function (item) {
+                select.append('<option value=' + item.id + '>' + item.name + '</option>');
+            });
+
+            // Enable items
+            toggle_utfb_section($('tr.embm-utfb-section--' + resource), false);
+        });
+    }
+
+    // Handle select dropdown changes
+    $('select.embm-utfb--dropdown').on('change', function (e) {
+        e.preventDefault();
+        load_utfb_dropdown(this);
+
+        // If this is the location dropdown, update the sync button
+        if (this.id === 'embm-utfb-location-id') {
+            var location = $(this),
+                sync_button = $('button.embm-utfb--sync');
+
+            sync_button.prop('disabled', !location.val() ? true : false);
+            sync_button.css('cursor', !location.val() ? 'not-allowed' : 'pointer');
+        }
+    });
+
+    // Check for value on page load
+    utfb_sections.each(function (idx, section) {
+        var select = $(section).find('select.embm-utfb--dropdown'),
+            sync_button = $('button.embm-utfb--sync');
+
+        // Disable sync button if no location selected
+        if (!idx && !select.val()) {
+            sync_button.prop('disabled', true);
+            sync_button.css('cursor', 'not-allowed');
+        }
+
+        if (select.val() || !idx) {
+            // Load the dropdown
+            load_utfb_dropdown(select);
+        } else {
+            // Disable items
+            toggle_utfb_section($(section), true);
+        }
+    });
+
+    // Import UTFB objects
+    $('.embm-utfb--import').on('click', function (e) {
+        e.preventDefault();
+
+        // Get import data
+        var resources = {},
+            resource = $(this).data('resource'),
+            resource_types = embm_settings.utfb_resources,
+            import_all = $(this).parent().hasClass('embm-utfb-section--import-all');
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Get resource IDs
+        resource_types.forEach(function (resource_type) {
+            resources[resource_type] = $('#embm-utfb-' + resource_type + '-id').val();
+        });
+
+        // Set up ajax action
+        ajax_params.action = 'embm-utfb-import';
+        ajax_params.resource = resource;
+        ajax_params.resources = resources;
+        ajax_params.import_all = import_all;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Sync UTFB objects
+    $('button.embm-utfb--sync').on('click', function (e) {
+        e.preventDefault();
+
+        // Check for user confirmation
+        if (!window.confirm(embm_settings.sync_confirm_utfb)) {
+            return;
+        }
+
+        // Get import data
+        var resources = {},
+            resource_types = ['location', 'menu', 'section', 'beer'];
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Get resource IDs
+        resource_types.forEach(function (resource_type) {
+            resources[resource_type] = $('#embm-utfb-' + resource_type + '-id').val();
+        });
+
+        // Set up ajax action
+        ajax_params.action = 'embm-utfb-sync';
+        ajax_params.resource = 'menu';
+        ajax_params.resources = resources;
+        ajax_params.import_all = true;
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
+            ajax_error(spinner);
+        });
+    });
+
+    // Redirect to flush UTFB cache
+    $('a.embm-utfb--flush').on('click', function (e) {
+        e.preventDefault();
+
+        // Start spinner
+        spinner.insertAfter($(this));
+
+        // Set AJAX params
+        ajax_params.action = 'embm-utfb-flush';
+
+        // Make AJAX request & reload page
+        $.post(ajaxurl, ajax_params, function (response) {
+            spinner.remove();
+            ajax_response(response);
+        }).fail(function () {
             ajax_error(spinner);
         });
     });

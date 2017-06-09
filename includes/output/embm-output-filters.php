@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ function EMBM_Output_Filters_content($content)
     $output = '';
 
     // Enter the post loop
-    if (in_the_loop() && (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group'))) {
+    if (in_the_loop() && (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group') || is_tax('embm_menu'))) {
 
         // Set view defaults
         $show_profile = true;
@@ -144,7 +144,9 @@ function EMBM_Output_Filters_content($content)
         // Show thumbnail
         if (has_post_thumbnail($post->ID)) {
             $thumb .= '<div class="embm-beer--image">'."\n";
+            $thumb .= '<a href="'.get_permalink($post->ID).'">'."\n";
             $thumb .= get_the_post_thumbnail($post->ID, 'full')."\n";
+            $thumb .= '</a>'."\n";
             $thumb .= '</div>'."\n";
         }
 
@@ -186,7 +188,7 @@ add_filter('the_content', 'EMBM_Output_Filters_content', -1);
  */
 function EMBM_Output_Filters_classes($classes)
 {
-    if (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group')) {
+    if (is_singular('embm_beer') || is_tax('embm_style') || is_tax('embm_group') || is_tax('embm_menu')) {
         $classes[] = 'embm-beer';
     }
     return $classes;
@@ -212,7 +214,7 @@ function EMBM_Output_Filters_title($title, $id=null)
     $style = EMBM_Core_Beer_style($id);
 
     // Display beer style
-    if ($style && (is_singular('embm_beer') || is_tax('embm_group') ) && in_the_loop() && ($title == $post->post_title)) {
+    if ($style && (is_singular('embm_beer') || is_tax('embm_group') || is_tax('embm_menu')) && in_the_loop() && ($title == $post->post_title)) {
         // Check for the_title() call
         $is_the_title = false;
         $backtrace = debug_backtrace();
@@ -223,8 +225,8 @@ function EMBM_Output_Filters_title($title, $id=null)
             }
         }
 
-        // Bail if this isn't a the_title() call
-        if (!$is_the_title) {
+        // Bail if this isn't a the_title() call or if we've already done this
+        if (!$is_the_title || did_action('embm_title_filter_applied') !== 0) {
             return $title;
         }
 
@@ -236,7 +238,11 @@ function EMBM_Output_Filters_title($title, $id=null)
         $output .= $style;
         $output .= '</a>)</span>'."\n";
 
+        // Append formatting to title
         $title .= $output;
+
+        // Mark action as done
+        do_action('embm_title_filter_applied');
     }
 
     // Return updated title

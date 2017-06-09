@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     $untappd_data = EMBM_Core_Beer_attr($post->ID, 'untappd_data');
 
     // Set custom post data values
+    $utfb_id = isset($beer_entry['embm_utfb']) ? esc_attr($beer_entry['embm_utfb'][0]) : '';
     $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
     $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
     $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
@@ -70,6 +71,20 @@ function EMBM_Admin_Metabox_Untappd_content()
     $api_root = '';
     $beer_found = false;
     $show_api_error = (null !== $untappd_data && !is_object($untappd_data));
+    $utfb_data = null;
+
+    // Check for UTFB account
+    if ($utfb_id !== '') {
+        $utfb_data = EMBM_Core_Beer_attr($post->ID, 'utfb_data');
+
+        // Check for matching Untappd id
+        if (property_exists($utfb_data, 'untappd_id') && $utfb_data->untappd_id == $untappd_id) {
+            $beer_found = true;
+        }
+
+        // Get the UTFB menus
+        $menus = wp_get_object_terms($post->ID, 'embm_menu', array('order' => 'DESC'));
+    }
 
     // Get token
     $token = EMBM_Admin_Authorize_token();
@@ -145,7 +160,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                     id="embm_untappd"
                     data-value="<?php echo $untappd_id; ?>"
                     value="<?php echo $untappd_id; ?>"
-                <?php if ($is_brewery && $beer_found && !$show_api_error) : ?>
+                <?php if (($is_brewery || $utfb_id !== '') && $beer_found && !$show_api_error) : ?>
                     readonly
                 <?php endif; ?>
                 />
@@ -167,6 +182,23 @@ function EMBM_Admin_Metabox_Untappd_content()
                         ><?php echo $beer->beer_name; ?></option>
                     <?php endforeach; ?>
                     </select>
+                </p>
+            <?php endif; ?>
+        </div>
+        <div class="embm-metabox__field embm-metabox--utfb">
+            <?php if (null !== $utfb_data && $utfb_id !== '' && !$show_api_error) : ?>
+                <p>
+                    <strong><?php _e('Untappd for Business Menus', 'embm'); ?></strong><br />
+                    <ul>
+                        <?php foreach ($menus as $menu): ?>
+                            <li>
+                                <a
+                                    href="<?php echo get_term_link($menu->slug, 'embm_menu'); ?>"
+                                    title="<?php echo esc_html($menu->name); ?>"
+                                ><?php echo esc_html($menu->name); ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
                 </p>
             <?php endif; ?>
         </div>
@@ -205,18 +237,34 @@ function EMBM_Admin_Metabox_Untappd_content()
                 </p>
             </div>
         </div>
-        <div class="embm-metabox--untappd-flush">
-            <p>
-                <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
-            </p>
-            <p>
-                <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
-                    <?php _e('Flush Cache', 'embm'); ?>
-                </a>
-            </p>
-            <p class="description">
-                <?php _e('This is automatically done daily.', 'embm'); ?>
-            </p>
+        <div class="embm-metabox--untappd-actions">
+            <div class="embm-metabox--untappd-flush">
+                <p>
+                    <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
+                </p>
+                <p>
+                    <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
+                        <?php _e('Flush Cache', 'embm'); ?>
+                    </a>
+                </p>
+                <p class="description">
+                    <?php _e('This is automatically done daily.', 'embm'); ?>
+                </p>
+            </div>
+            <div class="embm-metabox--untappd-sync">
+                <p>
+                    <strong><?php _e('Sync Untappd Beer Data', 'embm'); ?></strong>
+                </p>
+                <p>
+                    <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
+                        <?php _e('Sync Data', 'embm'); ?>
+                    </a>
+                </p>
+                <p class="description">
+                    <span class="warning"><?php _e('WARNING', 'embm'); ?>:</span>
+                    <?php _e('This will override any changes you have made to this beer.', 'embm'); ?>
+                </p>
+            </div>
         </div>
     <?php elseif ($show_api_error && null !== $token) : ?>
         <?php EMBM_Admin_Notices_ratelimit(null); ?>
@@ -293,13 +341,13 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
             if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
                 $res = EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
                 if (is_null($res) || is_string($res)) {
-                    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+                    $errors = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
                     if (is_array($errors) && !array_key_exists('1', $errors)) {
                         array_push($errors, '1');
                     } else {
                         $errors = array('1');
                     }
-                    set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors'], $errors, HOUR_IN_SECONDS);
+                    set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors'], $errors, HOUR_IN_SECONDS);
                     return;
                 }
             }

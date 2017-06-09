@@ -2,7 +2,7 @@
 
 *by Erin Morelli*
 
-Manage your beers with WordPress. Integrates simply with Untappd beer check-ins. Great for everyone from home brewers to professional breweries!
+Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
 
 
 ## Overview ###
@@ -11,13 +11,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
+* "Menu" taxonomy for creating beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Experimental] Import your brewery's beers directly from Untappd
+* [Beta] Import your brewery's beers directly from Untappd
+* [Beta] Import your beers and menus from Untappd for Business
 
 
 ### Screenshots ###
@@ -37,8 +39,11 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.0.5 - Critical Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.0.5/em-beer-manager.3.0.5.zip) ###
-* [FIXED] Broken brewery account authentication for Labs
+### [Version 3.1.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.1.0/em-beer-manager.3.1.0.zip) ###
+* [NEW] Connect to and import beers/menus from your Untappd for Business account
+* [NEW] Sync your imported beers with changes from Untappd
+* [NEW] Beer images now link to their respective beer
+* [FIXED] Bug with how beer styles were displaying in titles
 
 
 
@@ -186,10 +191,3 @@ I would love to be able to expand this section - let me know if you are able to 
 * Icelandic (is_IS) - *thanks to __[rodonmanes](http://bjorspjall.is)__*
 * Norwegian Bokmål (nb_NO) - *thanks to __[Lars Kvisle](http://www.lars.kvisle.no)__*
 * Brazilian Portuguese (pt_BR) - *thanks to __Lucas Alexandre__*
-
-
-### Planned Features ###
-
-* Post/Page “Add Beer” page/post editor button to auto-generate shortcode input
-* Customization for “Beer Profile” input fields (e.g. allow users to remove “Additions/Spices” or add “OG”)
-* Allow users to select additional fields to show in the beer list widget (e.g. "ABV")

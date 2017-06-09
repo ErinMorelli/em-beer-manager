@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2013-2016, Erin Morelli.
+ * Copyright (c) 2013-2017, Erin Morelli.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,8 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Labs\UntappdImport
+ * @package EMBM\Admin\Labs\Untappd
  */
+
+require EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
 
 /**
  * Displays an unauthorized error message
@@ -184,6 +186,17 @@ if (EMBM_Admin_Labs_Api_error($beer_list)) {
                     <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
                     <p class="description">
                         <?php _e('Update the data from Untappd used in the above features. This is automatically done daily.', 'embm'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?php _e('Sync Untappd Data', 'embm'); ?></th>
+                <td>
+                    <p><a href="#" class="embm-untappd--sync button-secondary"><?php _e('Sync Data', 'embm'); ?></a></p>
+                    <p class="description">
+                        <?php _e('Update beer data from Untappd.', 'embm'); ?><br />
+                        <span class="warning"><?php _e('WARNING', 'embm'); ?>:</span>
+                        <?php _e('This will override any changes you have made to imported beers.', 'embm'); ?>
                     </p>
                 </td>
             </tr>
