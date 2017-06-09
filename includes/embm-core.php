@@ -823,7 +823,7 @@ function EMBM_Core_Beer_Api_schema($field_name)
 function EMBM_Core_errors()
 {
     // Get list of errors
-    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    $errors = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
     if (!$errors) {
         return;
     }
@@ -849,7 +849,7 @@ function EMBM_Core_errors()
     }
 
     // Remove the errors from cache
-    delete_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+    delete_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
 }
 
 // Add to admin notices

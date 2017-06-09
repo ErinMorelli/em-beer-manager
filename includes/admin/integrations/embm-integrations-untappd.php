@@ -16,16 +16,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Untappd
+ * @package EMBM\Admin\Integrations\Untappd
  */
 
 // Set constants
 define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-%s-%s=%d#%s');
 define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 define('EMBM_UNTAPPD_RSS_URL', 'https://untappd.com/rss/brewery/');
+define('EMBM_UNTAPPD_CACHE', 'embm_untappd_cache');
 
 // Set cache names
-$GLOBALS['EMBM_UNTAPPD_CACHE'] = array(
+$GLOBALS[EMBM_UNTAPPD_CACHE] = array(
     'beer_list'     => 'embm_untappd_beer_list',
     'brewery'       => 'embm_untappd_brewery_info',
     'checkins'      => 'embm_untappd_brewery_checkins_%s',
@@ -131,24 +132,25 @@ function EMBM_Admin_Untappd_ratelimit()
 /**
  * Determines if a cached Untappd object needs reloading
  *
- * @param string $cache_name Name of cache object
- * @param int    $timeout    Timeout period in MS
- * @param int    $cache_id   Untappd cache object ID (Default: null)
+ * @param string $global_name Name of global hash key to check
+ * @param string $cache_name  Name of cache object
+ * @param int    $timeout     Timeout period in MS
+ * @param int    $cache_id    Untappd cache object ID (Default: null)
  *
  * @return bool Whether or not cache has timed out
  */
-function EMBM_Admin_Untappd_reload($cache_name, $timeout, $cache_id = null)
+function EMBM_Admin_Untappd_reload($global_name, $cache_name, $timeout, $cache_id = null)
 {
     // Check cache name
-    if (!array_key_exists($cache_name, $GLOBALS['EMBM_UNTAPPD_CACHE'])) {
+    if (!array_key_exists($cache_name, $GLOBALS[$global_name])) {
         return false;
     }
 
     // Get transient name
     if (!is_null($cache_id)) {
-        $transient_name = '_transient_timeout_' . sprintf($GLOBALS['EMBM_UNTAPPD_CACHE'][$cache_name], $cache_id);
+        $transient_name = '_transient_timeout_' . sprintf($GLOBALS[$global_name][$cache_name], $cache_id);
     } else {
-        $transient_name = '_transient_timeout_' . $GLOBALS['EMBM_UNTAPPD_CACHE'][$cache_name];
+        $transient_name = '_transient_timeout_' . $GLOBALS[$global_name][$cache_name];
     }
 
     // Get transient timeout
@@ -209,10 +211,10 @@ function EMBM_Admin_Untappd_id($untappd_url)
 function EMBM_Admin_Untappd_user($api_root)
 {
     // Attempt to retrieve user info from cache
-    $user = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user']);
+    $user = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['user']);
 
     // Check if we should attempt a reload (every hour)
-    $reload = EMBM_Admin_Untappd_reload('user', HOUR_IN_SECONDS);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'user', HOUR_IN_SECONDS);
 
     // Get user info if it's not cached
     if (false === $user || $reload) {
@@ -232,7 +234,7 @@ function EMBM_Admin_Untappd_user($api_root)
 
         // Store for 24 hours (as per TOS)
         $user = $res['data']->response->user;
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['user'], $user, DAY_IN_SECONDS);
+        set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['user'], $user, DAY_IN_SECONDS);
     }
 
     return $user;
@@ -249,10 +251,10 @@ function EMBM_Admin_Untappd_user($api_root)
 function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
 {
     // Attempt to retrieve brewery info from cache
-    $brewery = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery']);
+    $brewery = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['brewery']);
 
     // Check if we should attempt a reload (every hour)
-    $reload = EMBM_Admin_Untappd_reload('brewery', HOUR_IN_SECONDS);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'brewery', HOUR_IN_SECONDS);
 
     // Get brewery info if it's not cached
     if (false === $brewery || $reload) {
@@ -272,7 +274,7 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
 
         // Store for 24 hours (as per TOS)
         $brewery = $res['data']->response->brewery;
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['brewery'], $brewery, DAY_IN_SECONDS);
+        set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['brewery'], $brewery, DAY_IN_SECONDS);
     }
 
     return $brewery;
@@ -290,11 +292,11 @@ function EMBM_Admin_Untappd_brewery($api_root, $brewery_id)
 function EMBM_Admin_Untappd_checkins($api_root, $brewery_id, $refresh = false)
 {
     // Attempt to retrieve brewery check-ins from cache
-    $checkins_cache_name = sprintf($GLOBALS['EMBM_UNTAPPD_CACHE']['checkins'], $brewery_id);
+    $checkins_cache_name = sprintf($GLOBALS[EMBM_UNTAPPD_CACHE]['checkins'], $brewery_id);
     $checkins = get_transient($checkins_cache_name);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload('checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
 
     // Get brewery checkins if it's not cached
     if (false == $checkins || $refresh || $reload) {
@@ -331,11 +333,11 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id, $refresh = false)
 function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
 {
     // Get XML content
-    $xml_cache_name = sprintf($GLOBALS['EMBM_UNTAPPD_CACHE']['xml_checkins'], $brewery_id);
+    $xml_cache_name = sprintf($GLOBALS[EMBM_UNTAPPD_CACHE]['xml_checkins'], $brewery_id);
     $xml_data = get_transient($xml_cache_name);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload('xml_checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'xml_checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
 
     // Get checkins info if it's not cached
     if (false === $xml_data || $refresh || $reload) {
@@ -395,10 +397,10 @@ function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
 function EMBM_Admin_Untappd_beers($api_root, $brewery)
 {
     // Attempt to retrieve beer list from cache
-    $beer_list = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list']);
+    $beer_list = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['beer_list']);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload('beer_list', 15 * MINUTE_IN_SECONDS);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'beer_list', 15 * MINUTE_IN_SECONDS);
 
     // Get beer list if it's not cached
     if (false === $beer_list || $reload) {
@@ -428,7 +430,7 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
         }
 
         // Store for 24 hours (as per TOS)
-        set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['beer_list'], $beer_list, DAY_IN_SECONDS);
+        set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['beer_list'], $beer_list, DAY_IN_SECONDS);
     }
 
     return $beer_list;
@@ -543,19 +545,38 @@ function EMBM_Admin_Untappd_Beer_get($api_root, $beer_id)
 /**
  * Flushes the cached labs data
  *
- * @param string $key Optional. Name of cached item to flush.
+ * @param string $global_name Name of global hash key to use
+ * @param string $key         Optional. Name of cached item to flush.
  *
  * @return void
  */
-function EMBM_Admin_Untappd_flush($key = null)
+function EMBM_Admin_Untappd_flush($global_name, $key = null)
 {
     // Check for specified key
     if (!is_null($key)) {
-        delete_transient($GLOBALS['EMBM_UNTAPPD_CACHE'][$key]);
+        delete_transient($GLOBALS[$global_name][$key]);
     } else {
         // Iteratively remove items
-        foreach ($GLOBALS['EMBM_UNTAPPD_CACHE'] as $name => $value) {
-            delete_transient($value);
+        foreach ($GLOBALS[$global_name] as $name => $value) {
+            // Check for ID values
+            preg_match('/^(.*)_%s$/', $value, $transient_name);
+
+            // Remove all ID-specific transients
+            if ($transient_name) {
+                global $wpdb;
+
+                // Run DELETE query
+                $wpdb->query(
+                    "
+                    DELETE
+                    FROM $wpdb->options
+                    WHERE option_name LIKE '%$transient_name[1]%'
+                    "
+                );
+            } else {
+                // Delete transient
+                delete_transient($value);
+            }
         }
     }
 }

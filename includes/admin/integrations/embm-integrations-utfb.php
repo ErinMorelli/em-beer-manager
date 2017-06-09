@@ -16,15 +16,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Utfb
+ * @package EMBM\Admin\Integrations\Utfb
  */
 
 // Set constants
 define('EMBM_UTFB_RETURN_URL', 'options-general.php?page=embm-settings&embm-utfb-%s=%d#%s');
 define('EMBM_UTFB_API_URL', 'https://business.untappd.com/api/v1/%s');
+define('EMBM_UTFB_CACHE', 'embm_utfb_cache');
 
 // Set cache names
-$GLOBALS['EMBM_UTFB_CACHE'] = array(
+$GLOBALS[EMBM_UTFB_CACHE] = array(
     'account'   => 'embm_utfb_account',
     'locations' => 'embm_utfb_locations',
     'menus'     => 'embm_utfb_menus_%s',
@@ -113,41 +114,6 @@ function EMBM_Admin_Utfb_request($auth, $request_url, $decode = true)
 }
 
 /**
- * Determines if a cached UTFB object needs reloading
- *
- * @param string $cache_name Name of cache object
- * @param int    $timeout    Timeout period in MS
- * @param int    $cache_id   UTFB cache object ID (Default: null)
- *
- * @return bool Whether or not cache has timed out
- */
-function EMBM_Admin_Utfb_reload($cache_name, $timeout, $cache_id = null)
-{
-    // Check cache name
-    if (!array_key_exists($cache_name, $GLOBALS['EMBM_UTFB_CACHE'])) {
-        return false;
-    }
-
-    // Get transient name
-    if (!is_null($cache_id)) {
-        $transient_name = '_transient_timeout_' . sprintf($GLOBALS['EMBM_UTFB_CACHE'][$cache_name], $cache_id);
-    } else {
-        $transient_name = '_transient_timeout_' . $GLOBALS['EMBM_UTFB_CACHE'][$cache_name];
-    }
-
-    // Get transient timeout
-    $transient_timeout = get_option($transient_name);
-
-    // Return if this has already expired
-    if (!$transient_timeout) {
-        return true;
-    }
-
-    // Check for expiration
-    return ((time() - $transient_timeout) >= $timeout);
-}
-
-/**
  * Checks whether or not UTFB API credentials are valid
  *
  * @param array $auth API authentication credentials
@@ -174,10 +140,10 @@ function EMBM_Admin_Utfb_validate($auth)
 function EMBM_Admin_Utfb_account($auth, $refresh = false)
 {
     // Attempt to retrieve account info from cache
-    $account = get_transient($GLOBALS['EMBM_UTFB_CACHE']['account']);
+    $account = get_transient($GLOBALS[EMBM_UTFB_CACHE]['account']);
 
     // Check if we should attempt a reload (every hour)
-    $reload = EMBM_Admin_Utfb_reload('account', HOUR_IN_SECONDS);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UTFB_CACHE, 'account', HOUR_IN_SECONDS);
 
     // Get account info if it's not cached
     if (false === $account || $reload || $refresh) {
@@ -186,12 +152,12 @@ function EMBM_Admin_Utfb_account($auth, $refresh = false)
 
         // Handle any errors or return cached data
         if (!$res['success']) {
-            return (false === $account || $refresh) ? null : $account;
+            return (false !== $account && !$refresh) ? $account : null;
         }
 
         // Store for 24 hours (as per TOS)
         $account = $res['data']->current_user;
-        set_transient($GLOBALS['EMBM_UTFB_CACHE']['account'], $account, DAY_IN_SECONDS);
+        set_transient($GLOBALS[EMBM_UTFB_CACHE]['account'], $account, DAY_IN_SECONDS);
     }
 
     return $account;
@@ -208,10 +174,10 @@ function EMBM_Admin_Utfb_account($auth, $refresh = false)
 function EMBM_Admin_Utfb_locations($auth, $refresh = false)
 {
     // Attempt to retrieve locations from cache
-    $locations = get_transient($GLOBALS['EMBM_UTFB_CACHE']['locations']);
+    $locations = get_transient($GLOBALS[EMBM_UTFB_CACHE]['locations']);
 
     // Check if we should attempt a reload (every hour)
-    $reload = EMBM_Admin_Utfb_reload('locations', HOUR_IN_SECONDS);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UTFB_CACHE, 'locations', HOUR_IN_SECONDS);
 
     // Get locations if not cached
     if (false === $locations || $reload || $refresh) {
@@ -220,12 +186,12 @@ function EMBM_Admin_Utfb_locations($auth, $refresh = false)
 
         // Handle any errors or return cached data
         if (!$res['success']) {
-            return (false === $locations || $refresh) ? null : $locations;
+            return (false !== $locations && !$refresh) ? $locations : null;
         }
 
         // Store for 24 hours (as per TOS)
         $locations = $res['data']->locations;
-        set_transient($GLOBALS['EMBM_UTFB_CACHE']['locations'], $locations, DAY_IN_SECONDS);
+        set_transient($GLOBALS[EMBM_UTFB_CACHE]['locations'], $locations, DAY_IN_SECONDS);
     }
 
     return $locations;
@@ -261,11 +227,11 @@ function EMBM_Admin_Utfb_location($auth, $location_id, $refresh = false)
 function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
 {
     // Attempt to retrieve menu from cache
-    $menus_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['menus'], $location_id);
+    $menus_cache_name = sprintf($GLOBALS[EMBM_UTFB_CACHE]['menus'], $location_id);
     $menus = get_transient($menus_cache_name);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Utfb_reload('menus', 15 * MINUTE_IN_SECONDS, $location_id);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UTFB_CACHE, 'menus', 15 * MINUTE_IN_SECONDS, $location_id);
 
     // Get menus if not cached
     if (false === $menus || $reload || $refresh) {
@@ -274,7 +240,7 @@ function EMBM_Admin_Utfb_menus($auth, $location_id, $refresh = false)
 
         // Handle any errors or return cached data
         if (!$res['success']) {
-            return (false === $menus || $refresh) ? null : $menus;
+            return (false !== $menus && !$refresh) ? $menus : null;
         }
 
         // Store for 24 hours (as per TOS)
@@ -316,11 +282,11 @@ function EMBM_Admin_Utfb_menu($auth, $location_id, $menu_id, $refresh = false)
 function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
 {
     // Attempt to retrieve sections from cache
-    $sections_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['sections'], $menu_id);
+    $sections_cache_name = sprintf($GLOBALS[EMBM_UTFB_CACHE]['sections'], $menu_id);
     $sections = get_transient($sections_cache_name);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Utfb_reload('sections', 15 * MINUTE_IN_SECONDS, $menu_id);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UTFB_CACHE, 'sections', 15 * MINUTE_IN_SECONDS, $menu_id);
 
     // Get sections if not cached
     if (false === $sections || $reload || $refresh) {
@@ -329,7 +295,7 @@ function EMBM_Admin_Utfb_sections($auth, $menu_id, $refresh = false)
 
         // Handle any errors or return cached data
         if (!$res['success']) {
-            return (false === $sections || $refresh) ? null : $sections;
+            return (false !== $sections && !$refresh) ? $sections : null;
         }
 
         // Store for 24 hours (as per TOS)
@@ -371,11 +337,11 @@ function EMBM_Admin_Utfb_section($auth, $menu_id, $section_id, $refresh = false)
 function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
 {
     // Attempt to retrieve beers from cache
-    $beers_cache_name = sprintf($GLOBALS['EMBM_UTFB_CACHE']['beers'], $section_id);
+    $beers_cache_name = sprintf($GLOBALS[EMBM_UTFB_CACHE]['beers'], $section_id);
     $beers = get_transient($beers_cache_name);
 
     // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Utfb_reload('beers', 15 * MINUTE_IN_SECONDS, $section_id);
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UTFB_CACHE, 'beers', 15 * MINUTE_IN_SECONDS, $section_id);
 
     // Get beers if not cached
     if (false === $beers || $reload || $refresh) {
@@ -384,7 +350,7 @@ function EMBM_Admin_Utfb_beers($auth, $section_id, $refresh = false)
 
         // Handle any errors or return cached data
         if (!$res['success']) {
-            return (false === $beers || $refresh) ? null : $beers;
+            return (false !== $beers && !$refresh) ? $beers : null;
         }
 
         // Store for 24 hours (as per TOS)
@@ -697,7 +663,7 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
         'posts_per_page' => 1
     );
 
-    // Check for duplicate (#2)
+    // Check for duplicate
     $duplicate = get_posts($dup_args);
     if ($duplicate) {
         return null;
@@ -746,7 +712,6 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
             'embm_untappd'          => intval($beer->untappd_id),
             'embm_utfb'             => intval($beer->id),
             'embm_utfb_data'        => $beer,
-            'embm_reviews_count'    => 5,
         )
     );
 
@@ -842,24 +807,4 @@ function EMBM_Admin_Utfb_sync($resources)
 
     // Return success
     return 0;
-}
-
-/**
- * Flushes the cached UTFB data
- *
- * @param string $key Optional. Name of cached item to flush.
- *
- * @return void
- */
-function EMBM_Admin_Utfb_flush($key = null)
-{
-    // Check for specified key
-    if (!is_null($key)) {
-        delete_transient($GLOBALS['EMBM_UTFB_CACHE'][$key]);
-    } else {
-        // Iteratively remove items
-        foreach ($GLOBALS['EMBM_UTFB_CACHE'] as $name => $value) {
-            delete_transient($value);
-        }
-    }
 }

@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @package EMBM\Admin\Authorize
+ * @package EMBM\Admin\Integrations\Authorize
  */
 
 // Set authorization URL
@@ -34,7 +34,7 @@ function EMBM_Admin_Authorize_deauthorize()
     delete_option('embm_untappd_brewery_id');
 
     // Flush cache
-    EMBM_Admin_Untappd_flush();
+    EMBM_Admin_Untappd_flush(EMBM_UNTAPPD_CACHE);
 
     // Get global WP database reference
     global $wpdb;

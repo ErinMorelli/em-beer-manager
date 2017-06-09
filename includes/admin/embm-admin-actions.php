@@ -146,7 +146,7 @@ function EMBM_Admin_Actions_Untappd_flush()
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Flush the transient cache
-    EMBM_Admin_Untappd_flush();
+    EMBM_Admin_Untappd_flush(EMBM_UNTAPPD_CACHE);
 
     // Send response
     wp_die();
@@ -560,7 +560,7 @@ function EMBM_Admin_Actions_Utfb_disconnect()
     delete_option('embm_utfb_credentials');
 
     // Flush caches
-    EMBM_Admin_Utfb_flush();
+    EMBM_Admin_Untappd_flush(EMBM_UTFB_CACHE);
 
     // Send response
     wp_die();
@@ -668,7 +668,7 @@ function EMBM_Admin_Actions_Utfb_flush()
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Flush the UTFB cache
-    EMBM_Admin_Utfb_flush();
+    EMBM_Admin_Untappd_flush(EMBM_UTFB_CACHE);
 
     // Send response
     wp_die();

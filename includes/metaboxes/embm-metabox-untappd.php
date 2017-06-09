@@ -341,13 +341,13 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
             if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
                 $res = EMBM_Admin_Untappd_beer($_POST['embm-untappd-api-root'], $beer_id, $post_id, true);
                 if (is_null($res) || is_string($res)) {
-                    $errors = get_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors']);
+                    $errors = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors']);
                     if (is_array($errors) && !array_key_exists('1', $errors)) {
                         array_push($errors, '1');
                     } else {
                         $errors = array('1');
                     }
-                    set_transient($GLOBALS['EMBM_UNTAPPD_CACHE']['save_errors'], $errors, HOUR_IN_SECONDS);
+                    set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['save_errors'], $errors, HOUR_IN_SECONDS);
                     return;
                 }
             }
