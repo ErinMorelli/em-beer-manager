@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: EM Beer Manager\n"
-"POT-Creation-Date: 2017-07-03 20:18+0200\n"
+"POT-Creation-Date: 2017-07-03 23:20+0200\n"
 "PO-Revision-Date: 2017-07-03 20:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1074,7 +1074,7 @@ msgstr ""
 
 #: includes/embm-admin.php:324
 msgid ""
-"For each of the different displays there is the option to \"Hide extras info"
+"For each of the different displays there is the option to \"Hide profile info"
 "\" and \"Hide extras info\". Check both of these to hide the grey box."
 msgstr ""
 
