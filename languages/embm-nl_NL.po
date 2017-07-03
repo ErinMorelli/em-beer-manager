@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EM Beer Manager\n"
-"POT-Creation-Date: 2017-07-03 23:22+0200\n"
-"PO-Revision-Date: 2017-07-03 23:38+0200\n"
+"POT-Creation-Date: 2017-07-03 23:46+0200\n"
+"PO-Revision-Date: 2017-07-03 23:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -1232,6 +1232,10 @@ msgstr "Geen bieren gevonden in de Prullenbak"
 #: includes/embm-core.php:49
 msgid "Holds beer specific data"
 msgstr "Bevat specifieke biergegevens"
+
+#: includes/embm-core.php:60
+msgid "beers"
+msgstr "bieren"
 
 #: includes/embm-core.php:324 includes/embm-output.php:412
 msgid "Ratings"
