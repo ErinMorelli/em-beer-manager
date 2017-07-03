@@ -1,0 +1,1627 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: EM Beer Manager\n"
+"POT-Creation-Date: 2017-07-03 20:18+0200\n"
+"PO-Revision-Date: 2017-07-03 20:18+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: em-beer-manager.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: em-beer-manager.php:284 includes/admin/embm-admin-settings.php:641
+msgid "Settings"
+msgstr ""
+
+#: em-beer-manager.php:344
+msgid "Untappd Integration"
+msgstr ""
+
+#: em-beer-manager.php:346
+msgid ""
+"Checking the \"Disable site-wide integration\" option under the EM Beer "
+"Manager \"Untappd settings\", will completely disable all Untappd "
+"functionality, including the Recent Check-ins widget, ratings, check-ins, "
+"check-in buttons, and any Untappd-related Labs features."
+msgstr ""
+
+#: em-beer-manager.php:348
+msgid ""
+"You can disable the Untappd check-in button for an individual beer by simply "
+"leaving the \"Beer ID\" setting empty. Beers that have an active check-in "
+"button will display a square Untappd icon next to their entry on the Beers "
+"admin page."
+msgstr ""
+
+#: em-beer-manager.php:350
+msgid ""
+"You can display Untappd beer ratings and recent check-ins if you are logged "
+"in to Untappd. Ratings are shown in all beer views, including shortcodes. "
+"Check-ins are only displayed on single beer pages. This option can be "
+"disabled for specific beers. You can specify how many check-ins to show."
+msgstr ""
+
+#: em-beer-manager.php:352
+msgid ""
+"Data from Untappd for ratings and check-ins is refreshed automatically, or "
+"can be refreshed manually. We do not recommend doing this often as Untappd "
+"places a limit on how many API calls can be made per hour."
+msgstr ""
+
+#: em-beer-manager.php:357 includes/admin/tabs/embm-tabs-untappd.php:173
+#: includes/widgets/embm-widget-untappd.php:92
+msgid "Untappd Beer ID"
+msgstr ""
+
+#: em-beer-manager.php:359
+msgid ""
+"Find your Untappd Beer ID by visiting your beer's official page. The URL "
+"will be formatted like this"
+msgstr ""
+
+#: em-beer-manager.php:361
+msgid "The string of numbers at the end of the URL is your beer's ID."
+msgstr ""
+
+#: em-beer-manager.php:366
+msgid "API Rate-Limit"
+msgstr ""
+
+#: em-beer-manager.php:369
+#, php-format
+msgid "From the %s"
+msgstr ""
+
+#: em-beer-manager.php:372
+msgid "Untappd API documentation"
+msgstr ""
+
+#: em-beer-manager.php:375
+msgid ""
+"All API applications are rate-limited to protect against abuse and keep the "
+"platform healthy. The default limit for API access is 100 calls per hour per "
+"key."
+msgstr ""
+
+#: em-beer-manager.php:376
+msgid ""
+"If you see this message, it means your authenticated API session has reached "
+"this limit and any actions that require an API call will be limited until "
+"your access is reset in the next hour."
+msgstr ""
+
+#: em-beer-manager.php:377
+msgid ""
+"In most cases you should still be able to use all of the Untappd features "
+"with cached data, but rare cases may display a rate-limit warning messages "
+"when no cached data is available."
+msgstr ""
+
+#: em-beer-manager.php:380
+msgid "For more information"
+msgstr ""
+
+#: em-beer-manager.php:381
+msgid "Plugin Website"
+msgstr ""
+
+#: em-beer-manager.php:382
+msgid "Support Forums"
+msgstr ""
+
+#: includes/admin/embm-admin-footer.php:31
+msgid ""
+"If you like this plugin, please consider donating to support future "
+"development. Thank you!"
+msgstr ""
+
+#: includes/admin/embm-admin-footer.php:36
+#: includes/admin/embm-admin-footer.php:39
+msgid "Donate"
+msgstr ""
+
+#: includes/admin/embm-admin-footer.php:50 includes/embm-output.php:589
+#: includes/widgets/embm-widget-untappd.php:470
+msgid "Powered by Untappd"
+msgstr ""
+
+#: includes/admin/embm-admin-footer.php:53
+#, php-format
+msgid "All Untappd logo graphics are the sole property of %s"
+msgstr ""
+
+#: includes/admin/embm-admin-footer.php:57
+#, php-format
+msgid "Free beer icon from %s"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:22
+msgid "Success!"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:23
+msgid "ERROR"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:24
+#: includes/admin/tabs/embm-tabs-labs.php:27
+#: includes/admin/tabs/embm-tabs-untappd.php:198
+#: includes/metaboxes/embm-metabox-untappd.php:264
+msgid "WARNING"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:32
+msgid "Your beer styles have been restored."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:39
+msgid "Your beer has been imported from Untappd."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:44
+msgid "Your beers have been imported from Untappd."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:51
+#: includes/admin/embm-admin-notices.php:212
+msgid ""
+"There was a problem! You may have reached your API token's rate limit for "
+"the hour. Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:56
+msgid ""
+"There was a problem during the import! The beer you specified was not found "
+"on Untappd."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:61
+msgid ""
+"This beer does not belong to your brewery! You can only import beers that "
+"are owned by your Untappd brewery account."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:66
+#: includes/admin/embm-admin-notices.php:129
+msgid "There was a problem during the import! Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:71
+msgid ""
+"There was a problem during the import! One or more beers was not imported. "
+"Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:78
+msgid "Your beers have been updated from Untappd."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:83
+msgid "Your beer has been updated from Untappd."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:90
+msgid "There was a problem during the sync! Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:95
+#: includes/admin/embm-admin-notices.php:139
+msgid ""
+"There was a problem during the sync! One or more beers were not updated. "
+"Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:102
+msgid "There was a problem saving your beer's Untappd data!"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:103
+msgid ""
+"You may have reached your API token's rate limit for the hour. Please try "
+"again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:110
+msgid "There was a problem retrieving check-in data from Untappd!"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:111
+#: includes/admin/embm-admin-notices.php:117
+msgid "Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:116
+msgid "There was a problem refreshing check-in data from Untappd!"
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:124
+msgid ""
+"There was a problem connecting your Untappd for Business account! Please try "
+"again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:134
+msgid ""
+"There was a problem during the import! One or more beers were not imported. "
+"Please try again later."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:146
+msgid "Your Untappd for Business account has been connected."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:151
+msgid "Your beers have been imported from your Untappd for Business account."
+msgstr ""
+
+#: includes/admin/embm-admin-notices.php:156
+msgid "Your beers have been synced with your Untappd for Business menus."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:41 includes/embm-core.php:223
+msgid "EM Beer Manager Settings"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: includes/admin/embm-admin-settings.php:42
+#: includes/admin/embm-admin-settings.php:633
+msgid "EM Beer Manager"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:69
+#: includes/admin/embm-admin-settings.php:85
+#: includes/admin/embm-admin-settings.php:87
+#: includes/admin/embm-admin-settings.php:95
+#: includes/admin/embm-admin-settings.php:97
+#: includes/admin/embm-admin-settings.php:105
+#: includes/admin/embm-admin-settings.php:107
+#: includes/admin/embm-admin-settings.php:115
+#: includes/admin/embm-admin-settings.php:117
+msgid "Untappd Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:70
+msgid "Site-wide Integration"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:71
+msgid "Icon Set"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:73
+msgid "Rating Display Format"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:74
+msgid "Rating Star Color"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:75
+msgid "Rating Star Empty Opacity"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:81
+msgid "Global Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:82
+msgid "Custom Stylesheet (URL)"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:83
+#: includes/admin/embm-admin-settings.php:93
+#: includes/admin/embm-admin-settings.php:103
+#: includes/admin/embm-admin-settings.php:113
+msgid "Display Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:91
+msgid "Beer Group Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:92
+msgid "Custom Taxonomy Slug"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:101
+msgid "Beer Style Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:102
+#: includes/admin/embm-admin-settings.php:430
+msgid "Restore Styles"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:111
+msgid "Single Beer Page Settings"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:112
+msgid "Comments"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:183
+msgid "Log in to Untappd to access additional display options."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:201
+msgid "Disable site-wide integration"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:268
+msgid "Original"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:269
+msgid "Modern"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:309
+msgid ""
+"Enter a full URL that points to a stylesheet file to override default EM "
+"Beer Manager styles."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:328
+msgid "Globally hide \"profile\" info"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:337
+msgid "Globally hide \"extras\" info"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:356
+msgid "Globally hide Untappd rating"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:371
+msgid "Rename the beer group URLs with your own custom slug name."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:373
+#, php-format
+msgid "You must %s after changing this."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:374
+msgid "refresh your permalinks"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:376
+msgid "By default URLs will look like"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:394
+msgid "Hide \"profile\" info in groups"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:402
+msgid "Hide \"extras\" info in groups"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:420
+msgid "Hide Untappd rating in groups"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:431
+msgid "Restore missing or deleted beer styles from the pre-loaded list."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:439
+msgid ""
+"This will restore any missing or deleted beer styles from the pre-loaded "
+"Untappd list."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:443
+#, php-format
+msgid "Your custom or modified styles will %s be affected by this action."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:444
+msgid "NOT"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:448
+msgid "Do you wish to proceed?"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:450
+msgid "YES"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:451
+msgid "NO"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:459
+msgid "Restore EM Beer Manager Styles"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:480
+msgid "Hide \"profile\" info on styles pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:489
+msgid "Hide \"extras\" info on styles pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:507
+msgid "Hide Untappd rating on styles pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:525
+msgid "Enable comments on single beer pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:543
+msgid "Hide \"profile\" info on single beer pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:550
+msgid "Hide \"extras\" info on single beer pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:568
+msgid "Hide Untappd rating on single beer pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:576
+msgid "Hide Untappd check-ins on single beer pages"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:583
+msgid "Show"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:585
+#, php-format
+msgid "check-ins (max. %d)"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:588
+msgid "This setting may be overridden for individual beers."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:602
+msgid "Untappd Import"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:602
+#: includes/admin/embm-admin-settings.php:607
+msgid "Labs"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:607
+msgid "Untappd for Business Import"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:612
+msgid "Usage"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:623
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:659
+msgid "Collpase/Expand Panel"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:664
+msgid "Top"
+msgstr ""
+
+#: includes/admin/embm-admin-settings.php:676
+msgid "Save Changes"
+msgstr ""
+
+#: includes/admin/integrations/embm-integrations-authorize.php:104
+msgid "Log In to Authorize Untappd"
+msgstr ""
+
+#: includes/admin/integrations/embm-integrations-authorize.php:127
+msgid "You are logged in to Untappd as"
+msgstr ""
+
+#: includes/admin/integrations/embm-integrations-authorize.php:136
+msgid "Log Out"
+msgstr ""
+
+#: includes/admin/integrations/embm-integrations-untappd.php:129
+msgid ""
+"Your Untappd API rate-limit has been reached for this hour. Please try again "
+"later."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-labs.php:29
+msgid "The features on this page are experimental"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-labs.php:30
+msgid "Use at your own risk"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-labs.php:34
+msgid ""
+"If you encounter any problems when using these features, please report them "
+"to"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:32
+msgid "Sorry, Untappd importing is only supported for brewery accounts."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:33
+msgid "Please re-authorize with a brewery account to use this feature."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:35
+msgid "Re-authorize with Untappd"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:36
+msgid ""
+"You will need to log out of the Untappd.com website before re-authorizing."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:129
+msgid "Import Specific Beers"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:139
+msgid "Import Selected Beer(s)"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:144
+#, php-format
+msgid "Use the %s and %s/%s keys to select multiple beers."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:155
+#: includes/admin/tabs/embm-tabs-untappd.php:159
+#: includes/admin/tabs/embm-tabs-utfb.php:247
+msgid "Import All Beers"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:162
+msgid "If you have a lot of beers, this could take a while."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:166
+msgid "Import Beer By ID"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:175
+#: includes/admin/tabs/embm-tabs-utfb.php:224
+msgid "Import Beer"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:179
+msgid ""
+"Import beers from your brewery account that are not accessible in the "
+"features above."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:184
+msgid "Refresh Untappd Data"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:186
+#: includes/admin/tabs/embm-tabs-utfb.php:270
+#: includes/metaboxes/embm-metabox-untappd.php:247
+#: includes/widgets/embm-widget-untappd.php:273
+msgid "Flush Cache"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:188
+msgid ""
+"Update the data from Untappd used in the above features. This is "
+"automatically done daily."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:193
+msgid "Sync Untappd Data"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:195
+#: includes/admin/tabs/embm-tabs-utfb.php:259
+#: includes/metaboxes/embm-metabox-untappd.php:260
+msgid "Sync Data"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:197
+msgid "Update beer data from Untappd."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-untappd.php:199
+msgid "This will override any changes you have made to imported beers."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:23
+msgid "Single Beer Display"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:25
+msgid "These will display a single beer entry given it's ID number."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:27
+#: includes/admin/tabs/embm-tabs-usage.php:118
+msgid "Shortcode"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:33
+#: includes/admin/tabs/embm-tabs-usage.php:124
+msgid "Template tag"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:40
+#, php-format
+msgid ""
+"Where %s is required and %s is a PHP array of comma-separated %s pairs. For "
+"example"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:43
+#: includes/admin/tabs/embm-tabs-usage.php:133
+msgid "key"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:43
+#: includes/admin/tabs/embm-tabs-usage.php:133
+msgid "value"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:62
+#: includes/admin/tabs/embm-tabs-usage.php:152
+msgid "Options"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:64
+#: includes/admin/tabs/embm-tabs-usage.php:154
+msgid "For use with both the shortcode and template code."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:69
+#: includes/admin/tabs/embm-tabs-usage.php:159
+msgid "Option Name"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:70
+#: includes/admin/tabs/embm-tabs-usage.php:160
+msgid "Values"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:71
+#: includes/admin/tabs/embm-tabs-usage.php:161
+msgid "Default"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:72
+#: includes/admin/tabs/embm-tabs-usage.php:162
+msgid "Description"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:80
+msgid "Displays or hides the \"Beer Profile\" information"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:86
+msgid "Displays or hides the \"Extra Beer Information\" section"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:92
+#: includes/admin/tabs/embm-tabs-usage.php:182
+msgid "Displays or hides the Untappd beer rating"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:98
+msgid "Displays or hides the Untappd check-ins section"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:102
+#: includes/admin/tabs/embm-tabs-usage.php:204
+#: includes/admin/tabs/embm-tabs-usage.php:210
+msgid "A number"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:105
+#, php-format
+msgid "The number of recent Untappd check-ins to display. Limit is %s."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:114
+msgid "List All Beers"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:116
+msgid "These will display a formatted listing of all beers."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:131
+#, php-format
+msgid "Where %s is a PHP array of comma-separated %s pairs. For example"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:170
+msgid "Displays or hides the \"Beer Profile\" information for each listing"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:176
+msgid ""
+"Displays or hides the \"Extra Beer Information\" section for each listing"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:186
+msgid "String of style name"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:188
+msgid "Displays only beers belonging to a specific beer style"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:192
+msgid "String of group name"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:194
+msgid "Displays only beers belonging to a specific group"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:198
+msgid "Comma-separated list of beer IDs"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:200
+msgid "Hides listed beers from output"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:205
+msgid "Shows all beers"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:206
+msgid "Paginates output and displays the given number of beers per page"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:211
+msgid "Starts at the first beer"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:212
+msgid "Offsets the output of beers by given number"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:218
+msgid "Disables/enables pagination"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:225
+#, php-format
+msgid "See %s for options"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:228
+msgid "this list"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:234
+msgid "Orders beer list output by the given parameter"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-usage.php:243
+#, php-format
+msgid "Sorts beer list by %s value in ascending or descending order"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:34
+msgid "Connect your Untappd for Business account"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:38
+msgid "API Key"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:46
+#, php-format
+msgid "You can find your API key under the %s section %s."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:47
+msgid "API Access Tokens"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:51 includes/embm-admin.php:309
+msgid "here"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:58
+msgid "Account Email"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:66
+msgid "Connect Account"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:81
+msgid ""
+"You will be asked to connect your Untappd for Business account after logging "
+"in to your Untappd account."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:128
+msgid "You are connected to Untappd for Business as"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:137
+msgid "Disconnect"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:144
+msgid "Select a Location"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:153
+#: includes/admin/tabs/embm-tabs-utfb.php:173
+#: includes/admin/tabs/embm-tabs-utfb.php:203
+#: includes/admin/tabs/embm-tabs-utfb.php:232
+msgid "Select"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:160
+msgid "Select a location to import data from."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:164
+msgid "Select or Import a Menu"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:179
+msgid "Import Selected Menu"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:182
+msgid "Import all beers in the selected menu."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:188
+msgid "Import All Menus"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:190
+msgid "Imports all beers in all menus for the selected location."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:194
+msgid "Select or Import a Section"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:209
+msgid "Import Selected Section"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:212
+msgid "Import all beers in the selected section."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:218
+msgid "Import All Sections"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:220
+msgid "Imports all beers in all sections for the selected menu."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:238
+msgid "Import Selected Beer"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:241
+msgid "Imports only the selected beer."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:249
+msgid "Imports all beers in the selected section."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:253
+msgid "Sync Untappd for Business Data"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:262
+msgid "Associate existing beers with your Untappd for Business menus."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:263
+msgid "A location must be selected to use this feature."
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:268
+msgid "Refresh Untappd for Business Data"
+msgstr ""
+
+#: includes/admin/tabs/embm-tabs-utfb.php:272
+msgid ""
+"Update the data from Untappd for Business used in the above features. This "
+"is automatically done daily."
+msgstr ""
+
+#: includes/embm-admin.php:58
+msgid "Are you sure you want to continue?"
+msgstr ""
+
+#: includes/embm-admin.php:59
+#, php-format
+msgid "WARNING: This will override any changes you have made to %s. %s"
+msgstr ""
+
+#: includes/embm-admin.php:60
+#, php-format
+msgid ""
+"WARNING: This will override any custom menu associations you have made. %s"
+msgstr ""
+
+#: includes/embm-admin.php:70
+msgid "There was a problem with your request! Please try again later."
+msgstr ""
+
+#: includes/embm-admin.php:72
+msgid "Select an option from the dropdown in the section above to enable."
+msgstr ""
+
+#: includes/embm-admin.php:73
+msgid "your imported beers"
+msgstr ""
+
+#: includes/embm-admin.php:74
+msgid "this beer"
+msgstr ""
+
+#: includes/embm-admin.php:95
+msgid "ID"
+msgstr ""
+
+#: includes/embm-admin.php:96
+msgid "Beer No."
+msgstr ""
+
+#: includes/embm-admin.php:97 includes/embm-core.php:32
+msgid "Beer"
+msgstr ""
+
+#: includes/embm-admin.php:98 includes/embm-core.php:439
+msgid "Group"
+msgstr ""
+
+#: includes/embm-admin.php:99 includes/embm-core.php:358
+msgid "Style"
+msgstr ""
+
+#: includes/embm-admin.php:100 includes/embm-output.php:255
+#: includes/metaboxes/embm-metabox-profile.php:96
+msgid "ABV"
+msgstr ""
+
+#: includes/embm-admin.php:101 includes/embm-output.php:261
+#: includes/metaboxes/embm-metabox-profile.php:102
+msgid "IBU"
+msgstr ""
+
+#: includes/embm-admin.php:102 includes/embm-output.php:343
+#: includes/metaboxes/embm-metabox-extras.php:83
+msgid "Availability"
+msgstr ""
+
+#: includes/embm-admin.php:107 includes/metaboxes/embm-metabox-untappd.php:37
+msgid "Untappd"
+msgstr ""
+
+#: includes/embm-admin.php:111
+msgid "Released"
+msgstr ""
+
+#: includes/embm-admin.php:295
+msgid "Untappd for Business Integration"
+msgstr ""
+
+#: includes/embm-admin.php:297
+msgid "Why is an Untappd account required in addition to an UTFB account?"
+msgstr ""
+
+#: includes/embm-admin.php:299
+msgid ""
+"Untappd for Business (UTFB) account credentials do not work with Untappd's "
+"API. In order to link Untappd data to beers imported from UTFB, Untappd API "
+"access is also needed."
+msgstr ""
+
+#: includes/embm-admin.php:301
+msgid ""
+"An Untappd brewery account is not required to work with UTFB. A standard "
+"user account will work."
+msgstr ""
+
+#: includes/embm-admin.php:303
+msgid "Where do I find my API key?"
+msgstr ""
+
+#: includes/embm-admin.php:306
+#, php-format
+msgid "You can find your API key under the \"API Access Tokens\" section %s."
+msgstr ""
+
+#: includes/embm-admin.php:320
+msgid "Settings FAQ"
+msgstr ""
+
+#: includes/embm-admin.php:322
+msgid ""
+"I don't want to show that big grey box of information, how do I get rid of "
+"it?"
+msgstr ""
+
+#: includes/embm-admin.php:324
+msgid ""
+"For each of the different displays there is the option to \"Hide extras info"
+"\" and \"Hide extras info\". Check both of these to hide the grey box."
+msgstr ""
+
+#: includes/embm-admin.php:326
+msgid "What's the difference between \"profile\" and \"extras\"?"
+msgstr ""
+
+#: includes/embm-admin.php:328
+msgid ""
+"The \"profile\" refers to all the content in the \"Beer Profile\" "
+"information stored for each beer. This includes ABV, IBU, Hops, Malts, "
+"Additions, and Yeast."
+msgstr ""
+
+#: includes/embm-admin.php:330
+msgid ""
+"The \"extras\" setting refers to the \"Extra Beer Information\" content "
+"stored for each beer. This includes Beer Number, Availability, and "
+"Additional Notes."
+msgstr ""
+
+#: includes/embm-core.php:31 includes/embm-core.php:43
+msgid "Beers"
+msgstr ""
+
+#: includes/embm-core.php:33
+msgid "Add New"
+msgstr ""
+
+#: includes/embm-core.php:34
+msgid "Add New Beer"
+msgstr ""
+
+#: includes/embm-core.php:35
+msgid "Edit Beer"
+msgstr ""
+
+#: includes/embm-core.php:36
+msgid "New Beer"
+msgstr ""
+
+#: includes/embm-core.php:37
+msgid "All Beers"
+msgstr ""
+
+#: includes/embm-core.php:38
+msgid "View Beer"
+msgstr ""
+
+#: includes/embm-core.php:39
+msgid "Search Beers"
+msgstr ""
+
+#: includes/embm-core.php:40
+msgid "No beers found"
+msgstr ""
+
+#: includes/embm-core.php:41
+msgid "No beers found in the Trash"
+msgstr ""
+
+#: includes/embm-core.php:49
+msgid "Holds beer specific data"
+msgstr ""
+
+#: includes/embm-core.php:324 includes/embm-output.php:412
+msgid "Ratings"
+msgstr ""
+
+#: includes/embm-core.php:357 includes/embm-core.php:369
+msgid "Styles"
+msgstr ""
+
+#: includes/embm-core.php:359
+msgid "Search Styles"
+msgstr ""
+
+#: includes/embm-core.php:360 includes/widgets/embm-widget-list.php:102
+msgid "All Styles"
+msgstr ""
+
+#: includes/embm-core.php:361
+msgid "Edit Style"
+msgstr ""
+
+#: includes/embm-core.php:362
+msgid "Update Style"
+msgstr ""
+
+#: includes/embm-core.php:363
+msgid "Add New Style"
+msgstr ""
+
+#: includes/embm-core.php:364
+msgid "New Style Name"
+msgstr ""
+
+#: includes/embm-core.php:365
+msgid "Popular Styles"
+msgstr ""
+
+#: includes/embm-core.php:366
+msgid "Choose from the most used styles"
+msgstr ""
+
+#: includes/embm-core.php:367
+msgid "Separate styles with commas"
+msgstr ""
+
+#: includes/embm-core.php:368
+msgid "Add or remove styles"
+msgstr ""
+
+#: includes/embm-core.php:438 includes/embm-core.php:450
+msgid "Groups"
+msgstr ""
+
+#: includes/embm-core.php:440
+msgid "Search Groups"
+msgstr ""
+
+#: includes/embm-core.php:441 includes/widgets/embm-widget-list.php:111
+msgid "All Groups"
+msgstr ""
+
+#: includes/embm-core.php:442
+msgid "Edit Group"
+msgstr ""
+
+#: includes/embm-core.php:443
+msgid "Update Group"
+msgstr ""
+
+#: includes/embm-core.php:444
+msgid "Add New Group"
+msgstr ""
+
+#: includes/embm-core.php:445
+msgid "New Group Name"
+msgstr ""
+
+#: includes/embm-core.php:446
+msgid "Popular Groups"
+msgstr ""
+
+#: includes/embm-core.php:447
+msgid "Choose from the most used groups"
+msgstr ""
+
+#: includes/embm-core.php:448
+msgid "Separate groups with commas"
+msgstr ""
+
+#: includes/embm-core.php:449
+msgid "Add or remove groups"
+msgstr ""
+
+#: includes/embm-core.php:495 includes/embm-core.php:507
+msgid "Menus"
+msgstr ""
+
+#: includes/embm-core.php:496
+msgid "Menu"
+msgstr ""
+
+#: includes/embm-core.php:497
+msgid "Search Menus"
+msgstr ""
+
+#: includes/embm-core.php:498
+msgid "All Menus"
+msgstr ""
+
+#: includes/embm-core.php:499
+msgid "Edit Menu"
+msgstr ""
+
+#: includes/embm-core.php:500
+msgid "Update Menu"
+msgstr ""
+
+#: includes/embm-core.php:501
+msgid "Add New Menu"
+msgstr ""
+
+#: includes/embm-core.php:502
+msgid "New Menu Name"
+msgstr ""
+
+#: includes/embm-core.php:503
+msgid "Popular Menus"
+msgstr ""
+
+#: includes/embm-core.php:504
+msgid "Choose from the most used menus"
+msgstr ""
+
+#: includes/embm-core.php:505
+msgid "Separate menus with commas"
+msgstr ""
+
+#: includes/embm-core.php:506
+msgid "Add or remove menus"
+msgstr ""
+
+#: includes/embm-core.php:746
+msgid "The beer profile information for the object."
+msgstr ""
+
+#: includes/embm-core.php:750
+msgid "The beer malt data for the object."
+msgstr ""
+
+#: includes/embm-core.php:754
+msgid "The beer hops data for the object."
+msgstr ""
+
+#: includes/embm-core.php:758
+msgid "The beer additions/spices data for the object."
+msgstr ""
+
+#: includes/embm-core.php:762
+msgid "The beer yeast data for the object."
+msgstr ""
+
+#: includes/embm-core.php:766
+msgid "The beer IBU measurement for the object."
+msgstr ""
+
+#: includes/embm-core.php:770
+msgid "The beer ABV percentage for the object."
+msgstr ""
+
+#: includes/embm-core.php:781
+msgid "The beer extras information for the object."
+msgstr ""
+
+#: includes/embm-core.php:785
+msgid "The beer availability data for the object."
+msgstr ""
+
+#: includes/embm-core.php:789
+msgid "The beer additional notes/food parings data for the object."
+msgstr ""
+
+#: includes/embm-core.php:793
+msgid "The beer number for the object."
+msgstr ""
+
+#: includes/embm-core.php:804
+msgid "The Untappd information for the object."
+msgstr ""
+
+#: includes/embm-core.php:808
+msgid "The Untappd ID for the object."
+msgstr ""
+
+#: includes/embm-output.php:56 includes/output/embm-output-filters.php:237
+#, php-format
+msgid "View all %s beers"
+msgstr ""
+
+#: includes/embm-output.php:104 includes/widgets/embm-widget-list.php:257
+msgid "More"
+msgstr ""
+
+#: includes/embm-output.php:193
+msgid "Check in on Untappd"
+msgstr ""
+
+#: includes/embm-output.php:267 includes/metaboxes/embm-metabox-profile.php:71
+msgid "Malts"
+msgstr ""
+
+#: includes/embm-output.php:273 includes/metaboxes/embm-metabox-profile.php:77
+msgid "Hops"
+msgstr ""
+
+#: includes/embm-output.php:279
+msgid "Other"
+msgstr ""
+
+#: includes/embm-output.php:285 includes/metaboxes/embm-metabox-profile.php:89
+msgid "Yeast"
+msgstr ""
+
+#: includes/embm-output.php:337 includes/metaboxes/embm-metabox-extras.php:77
+msgid "Beer Number"
+msgstr ""
+
+#: includes/embm-output.php:349
+msgid "Additional Notes"
+msgstr ""
+
+#: includes/embm-output.php:558
+msgid "Recent Check-ins"
+msgstr ""
+
+#: includes/embm-output.php:571
+msgid "This beer has no check-ins yet!"
+msgstr ""
+
+#: includes/embm-output.php:580 includes/widgets/embm-widget-untappd.php:461
+msgid "View More"
+msgstr ""
+
+#: includes/embm-output.php:672 includes/widgets/embm-widget-untappd.php:757
+msgid "View Full Check-in"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-extras.php:32
+msgid "Extra Beer Information"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-extras.php:91
+msgid "Additional Notes/Food Pairings"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-profile.php:32
+msgid "Beer Profile"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-profile.php:83
+msgid "Additions/Spices"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:135
+#, php-format
+msgid "Show %s checkins (max. %d)"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:156
+msgid "Beer ID"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:173
+msgid "Brewery Beer"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:177
+msgid "Custom/Unaffiliated"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:191
+msgid "Untappd for Business Menus"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:221
+msgid "Hide Untappd rating"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:233
+msgid "Hide Untappd checkins"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:243
+msgid "Refresh Untappd Beer Data"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:251
+#: includes/widgets/embm-widget-untappd.php:276
+msgid "This is automatically done daily."
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:256
+msgid "Sync Untappd Beer Data"
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:265
+msgid "This will override any changes you have made to this beer."
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:273
+msgid "Set a valid Untappd Beer ID to access additional display options."
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:279
+#, php-format
+msgid "Log in to Untappd on the %s to access additional display options."
+msgstr ""
+
+#: includes/metaboxes/embm-metabox-untappd.php:283
+msgid "settings page"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:36
+msgid "Displays a list of beers"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:40
+msgid "Beer List"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:80
+#: includes/widgets/embm-widget-untappd.php:180
+msgid "Title"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:84
+msgid "Exclude Beers"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:85
+msgid "Comma separated IDs"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:88
+msgid "Beer Count"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:92
+msgid "Show Summary"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:96
+msgid "Summary Length"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:97
+msgid "Characters"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:100
+msgid "Show Style"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:109
+msgid "Show Group"
+msgstr ""
+
+#: includes/widgets/embm-widget-list.php:273
+msgid "No beers found."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:41
+msgid "Displays a list of recent Untappd brewery check-ins"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:50
+msgid "Recent Untappd Check-ins"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:94
+msgid ""
+"Find your Untappd brewery ID number by going to your brewery's official page"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:97
+#, php-format
+msgid ""
+"Click on the %s link in the right-hand sidebar. The link's URL will be "
+"formatted like this"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:100
+msgid "The string of numbers at the end of the URL is your brewery ID number."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:101
+msgid ""
+"If you have authenticated with Untappd in the Labs section, your brewery's "
+"ID will automatically populate the field."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:190
+msgid "Brewery ID"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:201
+msgid "Number of items to show"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:212
+#, php-format
+msgid "Max. %d"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:223
+msgid "Show check-in ratings"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:233
+msgid "Show check-in comments"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:243
+msgid "Show check-in venue"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:253
+msgid "Show check-in avatar"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:256
+msgid "Only shows default generic avatar when not authenticated with Untappd."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:266
+msgid "Show \"View More\" link"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:270
+msgid "Refresh Untappd Check-in Data"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:436
+msgid "A brewery ID number has not been set."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:521
+#: includes/widgets/embm-widget-untappd.php:614
+msgid "This brewery has no recent check-ins!"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:605
+msgid ""
+"There was a problem retrieving Untappd check-ins. Please try again later."
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:718
+msgid "an"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:718
+msgid "a"
+msgstr ""
+
+#: includes/widgets/embm-widget-untappd.php:723
+#, php-format
+msgid "is drinking %s"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.erinmorelli.com/projects/em-beer-manager"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Manage and display your beers with WordPress. Integrates simply with Untappd "
+"and Untappd for Business. Great for everyone from home brewers to "
+"professional breweries!"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Erin Morelli"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.erinmorelli.com/"
+msgstr ""
