@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EM Beer Manager\n"
-"POT-Creation-Date: 2017-07-03 23:46+0200\n"
-"PO-Revision-Date: 2017-07-03 23:48+0200\n"
+"POT-Creation-Date: 2017-07-04 07:59+0200\n"
+"PO-Revision-Date: 2017-07-04 08:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -1284,6 +1284,10 @@ msgstr "Scheid stijlen met komma’s"
 #: includes/embm-core.php:368
 msgid "Add or remove styles"
 msgstr "Stijlen toevoegen of verwijderen"
+
+#: includes/embm-core.php:380
+msgid "beers/style"
+msgstr "bieren/stijl"
 
 #: includes/embm-core.php:438 includes/embm-core.php:450
 msgid "Groups"
