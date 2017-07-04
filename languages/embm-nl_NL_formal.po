@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EM Beer Manager\n"
 "POT-Creation-Date: 2017-07-04 08:00+0200\n"
-"PO-Revision-Date: 2017-07-04 08:01+0200\n"
+"PO-Revision-Date: 2017-07-04 12:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -1092,7 +1092,7 @@ msgstr "Stijl"
 #: includes/embm-admin.php:100 includes/embm-output.php:255
 #: includes/metaboxes/embm-metabox-profile.php:96
 msgid "ABV"
-msgstr "% Vol."
+msgstr "Vol"
 
 #: includes/embm-admin.php:101 includes/embm-output.php:261
 #: includes/metaboxes/embm-metabox-profile.php:102
