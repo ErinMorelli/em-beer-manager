@@ -51,7 +51,7 @@ function EMBM_Core_beer()
         'capability_type'       => 'post',
         'hierarchical'          => false,
         'taxonomies'            => array('embm_style', 'embm_group', 'embm_menu'),
-        'has-archive'           => true,
+        'has_archive'           => true,
         'menu_position'         => 5,
         'show_in_rest'          => true,
         'rest_base'             => 'embm_beers',
