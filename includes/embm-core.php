@@ -377,7 +377,7 @@ function EMBM_Core_styles()
         'show_admin_column'     => true,
         'query_var'             => true,
         'rewrite'               => array(
-            'slug'              => 'beers/style',
+            'slug'              => __('beers/style', 'embm'),
             'with_front'        => false
         ),
         'show_in_rest'          => true,
