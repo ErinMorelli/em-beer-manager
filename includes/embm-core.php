@@ -57,7 +57,7 @@ function EMBM_Core_beer()
         'rest_base'             => 'embm_beers',
         'rest_controller_class' => 'WP_REST_Posts_Controller',
         'rewrite'               => array(
-            'slug'              => 'beers',
+            'slug'              => __('beers', 'embm'),
             'with_front'        => false,
             'feeds'             => true,
             'pages'             => true
@@ -377,7 +377,7 @@ function EMBM_Core_styles()
         'show_admin_column'     => true,
         'query_var'             => true,
         'rewrite'               => array(
-            'slug'              => 'beers/style',
+            'slug'              => __('beers/style', 'embm'),
             'with_front'        => false
         ),
         'show_in_rest'          => true,

@@ -321,7 +321,7 @@ function EMBM_Admin_help()
             'content'  => '<p><strong>'.
                 __('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm').
                 '</strong></p><p>'.
-                __('For each of the different displays there is the option to "Hide extras info" and "Hide extras info". Check both of these to hide the grey box.', 'embm').
+                __('For each of the different displays there is the option to "Hide profile info" and "Hide extras info". Check both of these to hide the grey box.', 'embm').
                 '</p><p><strong>'.
                 __('What\'s the difference between "profile" and "extras"?', 'embm').
                 '</strong></p><p>'.
