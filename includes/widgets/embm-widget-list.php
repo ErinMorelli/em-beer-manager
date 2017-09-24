@@ -32,12 +32,12 @@ class EMBM_Widget_List extends WP_Widget
     public function __construct()
     {
         $widget_options = array(
-            'classname'     => 'embm_beer_list_widget',
-            'description'   => __('Displays a list of beers', 'embm')
+            'classname'     => EMBM_WIDGET_BEER_LIST,
+            'description'   => __('Displays a list of beers', EMBM_DOMAIN)
         );
         parent::__construct(
-            'embm_beer_list_widget',
-            __('Beer List', 'embm'),
+            EMBM_WIDGET_BEER_LIST,
+            __('Beer List', EMBM_DOMAIN),
             $widget_options
         );
     }
@@ -77,39 +77,39 @@ class EMBM_Widget_List extends WP_Widget
 ?>
     <div class="embm-beer-list-widget">
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', EMBM_DOMAIN); ?>:</label><br />
             <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" style="width: 100%;" value="<?php echo $title; ?>"   />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers', 'embm'); ?>: </label><br />
-            <input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs', 'embm'); ?>, e.g. "1,2,3"</small>
+            <label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e('Exclude Beers', EMBM_DOMAIN); ?>: </label><br />
+            <input id="<?php echo $this->get_field_id('exclude'); ?>" name="<?php echo $this->get_field_name('exclude'); ?>" type="text" style="width: 100%;" value="<?php echo $exclude; ?>" /><br /><small><?php _e('Comma separated IDs', EMBM_DOMAIN); ?>, e.g. "1,2,3"</small>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Beer Count', 'embm'); ?>: </label>
+            <label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Beer Count', EMBM_DOMAIN); ?>: </label>
             <input id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="number" style="width: 25%;" value="<?php echo $count; ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary', 'embm'); ?>: </label>
+            <label for="<?php echo $this->get_field_id('summary'); ?>"><?php _e('Show Summary', EMBM_DOMAIN); ?>: </label>
             <input name="<?php echo $this->get_field_name('summary'); ?>" type="checkbox" id="<?php echo $this->get_field_id('summary'); ?>" value="1"<?php checked('1', $summary, true); ?> />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length', 'embm'); ?>: </label>
-            <input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small>&nbsp;<?php _e('Characters', 'embm'); ?></small>
+            <label for="<?php echo $this->get_field_id('sum_length'); ?>"><?php _e('Summary Length', EMBM_DOMAIN); ?>: </label>
+            <input id="<?php echo $this->get_field_id('sum_length'); ?>" name="<?php echo $this->get_field_name('sum_length'); ?>" type="text" size="3" value="<?php echo $sum_length; ?>" /><small>&nbsp;<?php _e('Characters', EMBM_DOMAIN); ?></small>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style', 'embm'); ?>: </label>
+            <label for="<?php echo $this->get_field_id('style'); ?>"><?php _e('Show Style', EMBM_DOMAIN); ?>: </label>
             <select name="<?php echo $this->get_field_name('style'); ?>" id="<?php echo $this->get_field_id('style'); ?>">
-                <option value="all" <?php selected($style, 'all', true); ?>><?php _e('All Styles', 'embm'); ?></option>
-                <?php $beer_styles = get_terms('embm_style'); foreach ($beer_styles as $beer_style) : ?>
+                <option value="all" <?php selected($style, 'all', true); ?>><?php _e('All Styles', EMBM_DOMAIN); ?></option>
+                <?php $beer_styles = get_terms(EMBM_STYLE); foreach ($beer_styles as $beer_style) : ?>
                     <option value="<?php echo $beer_style->slug; ?>" <?php echo selected($style, $beer_style->slug, false); ?>><?php echo $beer_style->name; ?></option>
                 <?php endforeach; ?>
             </select>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('group'); ?>"><?php _e('Show Group', 'embm'); ?>: </label>
+            <label for="<?php echo $this->get_field_id('group'); ?>"><?php _e('Show Group', EMBM_DOMAIN); ?>: </label>
             <select name="<?php echo $this->get_field_name('group'); ?>" id="<?php echo $this->get_field_id('group'); ?>">
-                <option value="all" <?php selected($group, 'all', true); ?>><?php _e('All Groups', 'embm'); ?></option>
-                <?php $beer_groups = get_terms('embm_group'); foreach ($beer_groups as $beer_group) : ?>
+                <option value="all" <?php selected($group, 'all', true); ?>><?php _e('All Groups', EMBM_DOMAIN); ?></option>
+                <?php $beer_groups = get_terms(EMBM_GROUP); foreach ($beer_groups as $beer_group) : ?>
                     <option value="<?php echo $beer_group->slug; ?>" <?php echo selected($group, $beer_group->slug, false); ?>><?php echo $beer_group->name; ?></option>
                 <?php endforeach; ?>
             </select>
@@ -208,7 +208,7 @@ function EMBM_Widget_List_display($beers)
 
     // Initialize query args
     $args = array(
-        'post_type' => 'embm_beer'
+        'post_type' => EMBM_BEER
     );
 
     // Add count filter
@@ -217,11 +217,11 @@ function EMBM_Widget_List_display($beers)
     }
     // Add styles filter
     if ($style != 'all') {
-        $args['embm_style'] = $style;
+        $args[EMBM_STYLE] = $style;
     }
     // Add group filter
     if ($group != 'all') {
-        $args['embm_group'] = $group;
+        $args[EMBM_GROUP] = $group;
     }
     // Add id filter
     if ($exclude) {
@@ -254,7 +254,7 @@ function EMBM_Widget_List_display($beers)
                 // Only display number of characters specified
                 $output .= substr($beer_summary, 0, $beer_sum_end).'...';
                 $output .= '<a class="embm-read-more" href="'.get_permalink($post->ID).'" title="'.get_the_title($post->ID).'">';
-                $output .= __('More', 'embm');
+                $output .= __('More', EMBM_DOMAIN);
                 $output .= '</a>';
                 $output .= '</span>';
             }
@@ -270,7 +270,7 @@ function EMBM_Widget_List_display($beers)
         $output .= '</ul>'."\n";
     } else {
         // Fall back message for when no beers are found
-        $error = __('No beers found.', 'embm');
+        $error = __('No beers found.', EMBM_DOMAIN);
         return $error;
     }
 

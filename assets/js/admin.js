@@ -54,7 +54,8 @@ jQuery(document).ready(function ($) {
         },
         spinner = $('<span class="spinner is-active embm-settings--spinner"></span>'),
         untappd_check = $('#embm_untappd_check'),
-        nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
+        settings_nav_hidden = (localStorage.embm_hide_settings_nav === 'true'),
+        usage_nav_hidden = (localStorage.embm_hide_usage_nav === 'true'),
         utfb_sections = $('tr.embm-utfb-section'),
         hash,
         page,
@@ -132,10 +133,17 @@ jQuery(document).ready(function ($) {
     }
 
     // Show/hide settings navigation on page load
-    if (nav_hidden) {
+    if (settings_nav_hidden) {
         $('.embm-settings--navbox').css('right', '-185px');
         $('#embm-settings--navbox-toggle').removeClass();
         $('#embm-settings--navbox-toggle').addClass('dashicons dashicons-arrow-left-alt2');
+    }
+
+    // Show/hide usage navigation on page load
+    if (usage_nav_hidden) {
+        $('.embm-usage--navbox').css('right', '-185px');
+        $('#embm-usage--navbox-toggle').removeClass();
+        $('#embm-usage--navbox-toggle').addClass('dashicons dashicons-arrow-left-alt2');
     }
 
     // Setup jquery ui tabs
@@ -217,6 +225,21 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    // Usage page nav panel toggle
+    $('#embm-usage--navbox-toggle').on('click', function (e) {
+        var icon = $(this),
+            hidden = (localStorage.embm_hide_usage_nav === 'true'),
+            offset = isInternetExplorer() ? '-130px' : '-145px',
+            right = hidden ? '0px' : offset,
+            arrow = hidden ? 'right' : 'left';
+
+        $(this).parent().animate({ right: right }, function () {
+            localStorage.embm_hide_usage_nav = !hidden;
+            icon.removeClass();
+            icon.addClass('dashicons dashicons-arrow-' + arrow + '-alt2');
+        });
+    });
+
     // Untappd integration checkbox
     $('#embm_untappd_check').on('change', function (e) {
         untappdShowHide(e.target.checked);
@@ -268,6 +291,22 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         ajax_params.action = 'embm-styles-reset';
         $.post(ajaxurl, ajax_params, ajax_response);
+    });
+
+    // Donation form
+    $('#embm-settings-footer--donate-select').on('change', function (e) {
+        var new_value = $(this).val(),
+            amount_input = $('#embm-settings-footer--donate-amount');
+
+        if (new_value === 'other') {
+            // amount_input.val(0);
+            amount_input.show();
+        } else {
+            amount_input.val(new_value);
+            amount_input.hide();
+        }
+
+        console.log(amount_input.val());
     });
 
     /* ---- UNTAPPD AUTHORIZATION ---- */
@@ -436,7 +475,8 @@ jQuery(document).ready(function ($) {
 
         var import_type = $(this).data('type'),
             api_root = $('#embm-untappd-api-root').val(),
-            brewery_id = $('#embm-untappd-brewery-id').val();
+            brewery_id = $('#embm-untappd-brewery-id').val(),
+            with_collabs = $('#embm-untappd--import-collabs').is(':checked');
 
         // Start spinner
         spinner.insertAfter($(this));
@@ -446,6 +486,7 @@ jQuery(document).ready(function ($) {
         ajax_params.import_type = import_type;
         ajax_params.api_root = api_root;
         ajax_params.brewery_id = brewery_id;
+        ajax_params.with_collabs = with_collabs;
         ajax_params.beer_ids = $('#embm-untappd-beer-ids').val();
         ajax_params.beer_id = $('#embm-untappd-beer-id').val();
 
@@ -458,6 +499,13 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    // Confirm delete missing checkbox
+    $('#embm-untappd--sync-delete').on('click', function (e) {
+        if ($(this).is(':checked')) {
+            return window.confirm(embm_settings.sync_confirm_rm);
+        }
+    });
+
     // Handle sync requests
     $('a.embm-untappd--sync').on('click', function (e) {
         e.preventDefault();
@@ -467,7 +515,8 @@ jQuery(document).ready(function ($) {
             return;
         }
 
-        var api_root = $('#embm-untappd-api-root').val();
+        var api_root = $('#embm-untappd-api-root').val(),
+            delete_missing = $('#embm-untappd--sync-delete').is(':checked');
 
         // Start spinner
         spinner.insertAfter($(this));
@@ -476,6 +525,7 @@ jQuery(document).ready(function ($) {
         ajax_params.action = 'embm-untappd-sync';
         ajax_params.sync_type = 2;
         ajax_params.api_root = api_root;
+        ajax_params.delete_missing = delete_missing;
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {
@@ -516,7 +566,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Toggle enable/disable section items
-    function toggle_utfb_section(section, disable) {
+    function toggleUtfbSection(section, disable) {
         var section_select = section.find('select.embm-utfb--dropdown'),
             section_buttons = section.find('button.button');
 
@@ -534,7 +584,7 @@ jQuery(document).ready(function ($) {
     }
 
     // Load next utfb import dropdown
-    function load_utfb_dropdown(dropdown) {
+    function loadUtfbDropdown(dropdown) {
         var resource = $(dropdown).data('action'),
             resource_id = $(dropdown).val();
 
@@ -548,7 +598,7 @@ jQuery(document).ready(function ($) {
             .closest('.embm-utfb-section')
             .nextAll('.embm-utfb-section')
             .each(function (idx, child_section) {
-                toggle_utfb_section($(child_section), true);
+                toggleUtfbSection($(child_section), true);
             });
 
         // Check for resource ID
@@ -582,14 +632,14 @@ jQuery(document).ready(function ($) {
             });
 
             // Enable items
-            toggle_utfb_section($('tr.embm-utfb-section--' + resource), false);
+            toggleUtfbSection($('tr.embm-utfb-section--' + resource), false);
         });
     }
 
     // Handle select dropdown changes
     $('select.embm-utfb--dropdown').on('change', function (e) {
         e.preventDefault();
-        load_utfb_dropdown(this);
+        loadUtfbDropdown(this);
 
         // If this is the location dropdown, update the sync button
         if (this.id === 'embm-utfb-location-id') {
@@ -614,10 +664,10 @@ jQuery(document).ready(function ($) {
 
         if (select.val() || !idx) {
             // Load the dropdown
-            load_utfb_dropdown(select);
+            loadUtfbDropdown(select);
         } else {
             // Disable items
-            toggle_utfb_section($(section), true);
+            toggleUtfbSection($(section), true);
         }
     });
 
@@ -654,6 +704,13 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    // Confirm delete missing checkbox
+    $('#embm-utfb--sync-delete').on('click', function (e) {
+        if ($(this).is(':checked')) {
+            return window.confirm(embm_settings.sync_confirm_utfb_rm);
+        }
+    });
+
     // Sync UTFB objects
     $('button.embm-utfb--sync').on('click', function (e) {
         e.preventDefault();
@@ -665,7 +722,8 @@ jQuery(document).ready(function ($) {
 
         // Get import data
         var resources = {},
-            resource_types = ['location', 'menu', 'section', 'beer'];
+            resource_types = ['location', 'menu', 'section', 'beer'],
+            delete_missing = $('#embm-utfb--sync-delete').is(':checked');
 
         // Start spinner
         spinner.insertAfter($(this));
@@ -680,6 +738,7 @@ jQuery(document).ready(function ($) {
         ajax_params.resource = 'menu';
         ajax_params.resources = resources;
         ajax_params.import_all = true;
+        ajax_params.delete_missing = delete_missing;
 
         // Make AJAX request & reload page
         $.post(ajaxurl, ajax_params, function (response) {

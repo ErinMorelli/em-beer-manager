@@ -29,16 +29,16 @@ function EMBM_Admin_Metabox_extras()
     // Add More Beer Information metabox to main content
     add_meta_box(
         'embm_beer_extras',
-        __('Extra Beer Information', 'embm'),
+        __('Extra Beer Information', EMBM_DOMAIN),
         'EMBM_Admin_Metabox_Extras_content',
-        'embm_beer',
+        EMBM_BEER,
         'normal',
         'core'
     );
 }
 
 // Add to beer post editor
-add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_extras');
+add_action('add_meta_boxes_'.EMBM_BEER, 'EMBM_Admin_Metabox_extras');
 
 /**
  * Outputs More Beer Information metabox content
@@ -51,12 +51,13 @@ function EMBM_Admin_Metabox_Extras_content()
     global $post;
 
     // Get current post custom data
-    $beer_entry = get_post_custom($post->ID);
+    $beer_entry = get_post_meta($post->ID, EMBM_BEER_META, true);
+    $beer_entry = (null == $beer_entry) ? array() : $beer_entry;
 
     // Set custom post data values
-    $b_num = isset($beer_entry['embm_beer_num']) ? esc_attr($beer_entry['embm_beer_num'][0]) : '';
-    $b_avail = isset($beer_entry['embm_avail']) ? esc_attr($beer_entry['embm_avail'][0]) : '';
-    $b_notes = isset($beer_entry['embm_notes']) ? esc_html($beer_entry['embm_notes'][0]) : '';
+    $b_num = array_key_exists('beer_num', $beer_entry) ? esc_attr($beer_entry['beer_num']) : '';
+    $b_avail = array_key_exists('avail', $beer_entry) ? esc_attr($beer_entry['avail']) : '';
+    $b_notes = array_key_exists('notes', $beer_entry) ? esc_html($beer_entry['notes']) : '';
 
     // Setup nonce field for options
     wp_nonce_field('embm_extras_save', '_embm_extras_save_nonce');
@@ -74,13 +75,13 @@ function EMBM_Admin_Metabox_Extras_content()
     <div class="embm-metabox__left">
         <div class="embm-metabox__field embm-metabox--extras-num">
             <p>
-                <label for="embm_beer_num"><strong><?php _e('Beer Number', 'embm'); ?></strong></label><br />
+                <label for="embm_beer_num"><strong><?php _e('Beer Number', EMBM_DOMAIN); ?></strong></label><br />
                 <input type="number" name="embm_beer_num" id="embm_beer_num" min="0000" max="9999" step="1" value="<?php echo $b_num; ?>" />
             </p>
         </div>
         <div class="embm-metabox__field embm-metabox--extras-avail">
             <p>
-                <label for="embm_avail"><strong><?php _e('Availability', 'embm'); ?></strong></label><br />
+                <label for="embm_avail"><strong><?php _e('Availability', EMBM_DOMAIN); ?></strong></label><br />
                 <input type="text" name="embm_avail" id="embm_avail" value="<?php echo $b_avail; ?>" />
             </p>
         </div>
@@ -88,7 +89,7 @@ function EMBM_Admin_Metabox_Extras_content()
     <div class="embm-metabox__right">
         <div class="embm-metabox--extras-notes">
             <p class="embm-metabox--extras-notes-title">
-                <label for="embm_notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label>
+                <label for="embm_notes"><strong><?php _e('Additional Notes/Food Pairings', EMBM_DOMAIN); ?></strong></label>
             </p>
             <?php wp_editor($b_notes, 'embm_notes', $notes_settings); ?>
         </div>
@@ -121,16 +122,20 @@ function EMBM_Admin_Metabox_Extras_save($post_id)
         return;
     }
 
-    // Save input
-    if (isset($_POST['embm_beer_num'])) {
-        update_post_meta($post_id, 'embm_beer_num', esc_attr($_POST['embm_beer_num']));
+    // Get current post meta
+    $beer_meta = get_post_meta($post_id, EMBM_BEER_META, true);
+    $beer_meta = (null == $beer_meta) ? array() : $beer_meta;
+
+    // Get list of attrs
+    $beer_attrs = array('beer_num', 'avail', 'notes');
+
+    // Save inputs
+    foreach ($beer_attrs as $beer_attr) {
+        $beer_meta[$beer_attr] = isset($_POST['embm_'.$beer_attr]) ? esc_attr($_POST['embm_'.$beer_attr]) : null;
     }
-    if (isset($_POST['embm_avail'])) {
-        update_post_meta($post_id, 'embm_avail', esc_attr($_POST['embm_avail']));
-    }
-    if (isset($_POST['embm_notes'])) {
-        update_post_meta($post_id, 'embm_notes', esc_html($_POST['embm_notes']));
-    }
+
+    // Update post meta
+    update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
 }
 
 // Save Beer meta box inputs

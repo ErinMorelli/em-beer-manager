@@ -22,6 +22,7 @@
 // Load other modules
 require EMBM_PLUGIN_DIR.'includes/output/embm-output-shortcodes.php';
 require EMBM_PLUGIN_DIR.'includes/output/embm-output-filters.php';
+require EMBM_PLUGIN_DIR.'includes/output/embm-output-menus.php';
 
 /**
  * Generate HTML output for a single beer entry
@@ -43,7 +44,7 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= '<h2 class="embm-beer--header">'."\n";
 
     // Beer title
-    if (is_page() || is_archive() || is_tax('embm_group') || is_tax('embm_menu')) {
+    if (is_page() || is_archive() || is_tax(EMBM_GROUP) || is_tax(EMBM_MENU)) {
         $output .= '<a href="'.get_permalink($beer_id).'" title="'.get_the_title($beer_id).'">';
         $output .= '<span class="embm-beer--header-title">'.get_the_title($beer_id).'</span>';
         $output .= '</a>'."\n";
@@ -53,16 +54,19 @@ function EMBM_Output_beer($beer_id, $options)
 
     // Beer style
     if (EMBM_Core_Beer_style($beer_id)) {
-        $link_title = sprintf(__('View all %s beers', 'embm'), EMBM_Core_Beer_style($beer_id));
+        $link_title = sprintf(__('View all %s beers', EMBM_DOMAIN), EMBM_Core_Beer_style($beer_id));
 
         $output .= '<span class="embm-beer--header-style">(';
-        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($beer_id), 'embm_style').'" title="'.$link_title.'">';
+        $output .= '<a href="'.get_term_link(EMBM_Core_Beer_style($beer_id), EMBM_STYLE).'" title="'.$link_title.'">';
         $output .= EMBM_Core_Beer_style($beer_id);
         $output .= '</a>)</span>'."\n";
     }
 
     // End beer header
     $output .= '</h2>'."\n";
+
+    // Check for collaboration
+    $output .= EMBM_Output_collab($beer_id);
 
     // Beer image
     if (!is_archive()) {
@@ -99,9 +103,9 @@ function EMBM_Output_beer($beer_id, $options)
     $output .= $filtered_content;
 
     // Set read more link
-    if ((is_tax('embm_style') || is_archive()) && !is_tax('embm_group') && !is_tax('embm_menu')) {
+    if ((is_tax(EMBM_STYLE) || is_archive()) && !is_tax(EMBM_GROUP) && !is_tax(EMBM_MENU)) {
         $output .= ' <a class="read-more" href="'.get_permalink($beer_id).'">';
-        $output .= __('More', 'embm').'...';
+        $output .= __('More', EMBM_DOMAIN).'...';
         $output .= '</a>';
     }
 
@@ -173,7 +177,7 @@ function EMBM_Output_beer($beer_id, $options)
  */
 function EMBM_Output_untappd($beer_id)
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
     $output = '';
 
     // Don't show if Untappd is disabled
@@ -182,7 +186,7 @@ function EMBM_Output_untappd($beer_id)
     }
 
     // Get raw Untappd value from DB
-    $untap = get_post_meta($beer_id, 'embm_untappd', true);
+    $untap = EMBM_Core_Beer_meta($beer_id, 'untappd_id');
 
     // Bail if we don't have an ID
     if (!$untap || $untap == '') {
@@ -190,7 +194,7 @@ function EMBM_Output_untappd($beer_id)
     }
 
     // Set up translatable title text
-    $untap_title = __('Check in on Untappd', 'embm');
+    $untap_title = __('Check in on Untappd', EMBM_DOMAIN);
 
     // Get icon set
     $untap_icon = $options['embm_untappd_icons'];
@@ -200,7 +204,7 @@ function EMBM_Output_untappd($beer_id)
 
     // If an Untappd value is set for this beer, display the link
     $output = '<div class="embm-beer--untappd">';
-    $output .= '<a href="'.EMBM_Core_Beer_attr($beer_id, 'untappd').'" target="_blank" title="'.$untap_title.'">';
+    $output .= '<a href="'.EMBM_Core_Beer_meta($beer_id, 'untappd_url').'" target="_blank" title="'.$untap_title.'">';
     $output .= '<img src="'.$untap_img.'" alt="'.$untap_title.'" border="0" />';
     $output .= '</a></div>';
 
@@ -220,7 +224,7 @@ function EMBM_Output_untappd($beer_id)
  */
 function EMBM_Output_profile($beer_id)
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get global profile display setting
     $hide_profile = null;
@@ -234,15 +238,15 @@ function EMBM_Output_profile($beer_id)
     }
 
     // Set up beer profile attributes
-    $abv = EMBM_Core_Beer_attr($beer_id, 'abv');
-    $ibu = EMBM_Core_Beer_attr($beer_id, 'ibu');
-    $malts = EMBM_Core_Beer_attr($beer_id, 'malts');
-    $hops = EMBM_Core_Beer_attr($beer_id, 'hops');
-    $adds = EMBM_Core_Beer_attr($beer_id, 'adds');
-    $yeast = EMBM_Core_Beer_attr($beer_id, 'yeast');
+    $abv = EMBM_Core_Beer_meta($beer_id, 'abv');
+    $ibu = EMBM_Core_Beer_meta($beer_id, 'ibu');
+    $malts = EMBM_Core_Beer_meta($beer_id, 'malts');
+    $hops = EMBM_Core_Beer_meta($beer_id, 'hops');
+    $adds = EMBM_Core_Beer_meta($beer_id, 'adds');
+    $yeast = EMBM_Core_Beer_meta($beer_id, 'yeast');
 
     // If none of the values are set, don't show the content
-    if (($abv == '0%') && ($ibu == '0') && ($malts == '') && ($hops == '') && ($adds ==' ') && ($yeast =='')) {
+    if (($abv == '') && ($ibu == '') && ($malts == '') && ($hops == '') && ($adds ==' ') && ($yeast =='')) {
         return null;
     }
 
@@ -252,37 +256,37 @@ function EMBM_Output_profile($beer_id)
     // Display ABV
     if ($abv != '0%') {
         $output .= '<div class="abv"><span class="label">';
-        $output .= __('ABV', 'embm').':';
+        $output .= __('ABV', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$abv.'</span></div>'."\n";
     }
     // Display IBU
     if ($ibu != '0') {
         $output .= '<div class="ibu"><span class="label">';
-        $output .= __('IBU', 'embm').':';
+        $output .= __('IBU', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$ibu.'</span></div>'."\n";
     }
     // Display Malts
     if ($malts != '') {
         $output .= '<div class="malts"><span class="label">';
-        $output .= __('Malts', 'embm').':';
+        $output .= __('Malts', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$malts.'</span></div>'."\n";
     }
     // Display Hops
     if ($hops != '') {
         $output .= '<div class="hops"><span class="label">';
-        $output .= __('Hops', 'embm').':';
+        $output .= __('Hops', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$hops.'</span></div>'."\n";
     }
     // Display Additions
     if ($adds != '') {
         $output .= '<div class="other"><span class="label">';
-        $output .= __('Other', 'embm').':';
+        $output .= __('Other', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$adds.'</span></div>'."\n";
     }
     // Display Yeast
     if ($yeast != '') {
         $output .= '<div class="yeast"><span class="label">';
-        $output .= __('Yeast', 'embm').':';
+        $output .= __('Yeast', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$yeast.'</span></div>'."\n";
     }
 
@@ -305,7 +309,7 @@ function EMBM_Output_profile($beer_id)
  */
 function EMBM_Output_extras($beer_id)
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get global extras display setting
     $hide_extras = null;
@@ -319,12 +323,12 @@ function EMBM_Output_extras($beer_id)
     }
 
     // Set up beer extras attributes
-    $bnum = EMBM_Core_Beer_attr($beer_id, 'beer_num');
-    $avail = EMBM_Core_Beer_attr($beer_id, 'avail');
-    $notes = EMBM_Core_Beer_attr($beer_id, 'notes');
+    $bnum = EMBM_Core_Beer_meta($beer_id, 'beer_num');
+    $avail = EMBM_Core_Beer_meta($beer_id, 'avail');
+    $notes = EMBM_Core_Beer_meta($beer_id, 'notes');
 
     // If none of the values are set, don't show the content
-    if (($bnum == '#') && ($avail == '') && ($notes == '')) {
+    if (($bnum == '') && ($avail == '') && ($notes == '')) {
         return null;
     }
 
@@ -334,19 +338,19 @@ function EMBM_Output_extras($beer_id)
     // Display beer number
     if ($bnum != '#') {
         $output .= '<div class="beer_num"><span class="label">';
-        $output .= __('Beer Number', 'embm').':';
+        $output .= __('Beer Number', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$bnum.'</span></div>'."\n";
     }
     // Display availability
     if ($avail != '') {
         $output .= '<div class="avail"><span class="label">';
-        $output .= __('Availability', 'embm').':';
+        $output .= __('Availability', EMBM_DOMAIN).':';
         $output .= '</span><span class="value">'.$avail.'</span></div>'."\n";
     }
     // Display notes
     if ($notes != '') {
         $output .= '<div class="notes"><span class="label">';
-        $output .= __('Additional Notes', 'embm');
+        $output .= __('Additional Notes', EMBM_DOMAIN);
         $output .= '</span><span class="value">'.$notes.'</span></div>'."\n";
     }
 
@@ -369,7 +373,7 @@ function EMBM_Output_extras($beer_id)
  */
 function EMBM_Output_rating($beer_id)
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get global ratings display setting
     $hide_rating = null;
@@ -383,7 +387,7 @@ function EMBM_Output_rating($beer_id)
     }
 
     // Get rating data
-    $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
+    $untappd_data = EMBM_Core_Beer_untappd($beer_id);
 
     // Bail if we don't have any data
     if (!$untappd_data || $untappd_data == '' || !is_object($untappd_data)) {
@@ -409,7 +413,7 @@ function EMBM_Output_rating($beer_id)
 
     // Generate HTML output
     $output = '<div class="embm-beer--rating">'."\n";
-    $output .= sprintf($format['form'], $stars, $rating_score, $rating_count, __('Ratings', 'embm'));
+    $output .= sprintf($format['form'], $stars, $rating_score, $rating_count, __('Ratings', EMBM_DOMAIN));
     $output .= EMBM_Output_Rating_styles();
     $output .= '</div>'."\n";
 
@@ -473,7 +477,7 @@ function EMBM_Output_Rating_stars($rating_score)
  */
 function EMBM_Output_Rating_styles()
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get styles from admin settings
     $star_color = $options['embm_untappd_rating_color'];
@@ -505,7 +509,7 @@ function EMBM_Output_Rating_styles()
  */
 function EMBM_Output_reviews($beer_id, $reviews_count = null)
 {
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get global reviews display setting
     $hide_reviews = null;
@@ -519,8 +523,8 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     }
 
     // Get review data
-    $untappd_data = EMBM_Core_Beer_attr($beer_id, 'untappd_data');
-    $untappd_url = EMBM_Core_Beer_attr($beer_id, 'untappd');
+    $untappd_data = EMBM_Core_Beer_untappd($beer_id);
+    $untappd_url = EMBM_Core_Beer_meta($beer_id, 'untappd_url');
 
     // Bail if we don't have any data
     if (!$untappd_data || $untappd_data == '' || !is_object($untappd_data)) {
@@ -547,7 +551,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     // Get review count
     if (is_null($reviews_count)) {
         $reviews_count = $options['embm_reviews_count_single'];
-        $local_count = EMBM_Core_Beer_attr($beer_id, 'reviews_count');
+        $local_count = EMBM_Core_Beer_meta($beer_id, 'reviews_count');
         if ($local_count !== $reviews_count) {
             $reviews_count = $local_count;
         }
@@ -555,7 +559,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
 
     // Start reviews output
     $output = '<div class="embm-beer--reviews">'."\n";
-    $output .= '<h4 class="embm-beer--reviews-title">'.__('Recent Check-ins', 'embm').'</h4>'."\n";
+    $output .= '<h4 class="embm-beer--reviews-title">'.__('Recent Check-ins', EMBM_DOMAIN).'</h4>'."\n";
 
     // Check that we have reviews
     if (count($reviews) > 0) {
@@ -568,7 +572,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     } else {
         // Friendly text for when there are no reviews
         $output .= '<p class="embm-beer--reviews-empty">';
-        $output .= __('This beer has no check-ins yet!', 'embm');
+        $output .= __('This beer has no check-ins yet!', EMBM_DOMAIN);
         $output .= '</p>';
     }
 
@@ -577,7 +581,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
 
     // Add 'more' link
     if (count($reviews) > 0) {
-        $more_text = __('View More', 'embm');
+        $more_text = __('View More', EMBM_DOMAIN);
         $output .= '<div class="embm-beer--reviews-more">';
         $output .= '<a href="'.$untappd_url.'" target="_blank" title="' . $more_text . '">';
         $output .= '<span>' . $more_text . '</span>';
@@ -586,7 +590,7 @@ function EMBM_Output_reviews($beer_id, $reviews_count = null)
     }
 
     // Add Untappd credit
-    $credit_text = __('Powered by Untappd', 'embm');
+    $credit_text = __('Powered by Untappd', EMBM_DOMAIN);
     $output .= '<div class="embm-beer--reviews-credit">';
     $output .= '<a href="https://untappd.com" target="_blank" rel="nofollow" title="' . $credit_text . '">';
     $output .= '<img src="' . EMBM_PLUGIN_URL .'/assets/img/ut-credit.png" alt="' . $credit_text . '" border="0" />';
@@ -669,7 +673,7 @@ function EMBM_Output_Review_content($review)
     // Show review link
     $output .= '<span class="embm-beer--review-link">';
     $output .= '<a href="'.$user_url.'/checkin/'.$review->checkin_id.'" target="_blank">';
-    $output .= __('View Full Check-in', 'embm');
+    $output .= __('View Full Check-in', EMBM_DOMAIN);
     $output .= '</a></span>';
 
     // End review meta and content
@@ -708,4 +712,75 @@ function EMBM_Output_Review_date($date)
 
     // Output formatted date
     return date('j M y', $new_date);
+}
+
+/**
+ * Generate list of beer collaborators
+ *
+ * @param int $beer_id WP post ID
+ *
+ * @return string/html
+ */
+function EMBM_Output_collab($beer_id)
+{
+    $output = '';
+
+    // Get Untappd data
+    $untappd_data = EMBM_Core_Beer_untappd($beer_id);
+
+    // Check that this is a beer with collaboration data
+    if (is_null($untappd_data) || !property_exists($untappd_data, 'collaborations_with')) {
+        return $output;
+    }
+
+    // Get Untappd brewery ID
+    $brewery_id = get_option(EMBM_UNTAPPD_BREWERY);
+
+    // Set collab data
+    $collab_data = $untappd_data->collaborations_with;
+
+    // Bail if we don't have any collaborators
+    if (is_null($collab_data) && !property_exists($collab_data, 'items')) {
+        return $output;
+    }
+
+    // Get a list of collaborators
+    $collaborators = array();
+
+    // Iterate over collaborators
+    foreach ($collab_data->items as $item) {
+        // Skip if this isn't a brewery
+        if (!property_exists($item, 'brewery')) {
+            continue;
+        }
+
+        // Get brewery data
+        $brewery = $item->brewery;
+
+        // Check if this brewery is our owned brewery
+        if ($brewery->brewery_id == $brewery_id) {
+            // Use the beer's "parent" brewery instead
+            $brewery = $untappd_data->brewery;
+        }
+
+        // Set link output
+        $link = '<a href="https://untappd.com/brewery/';
+        $link .= $brewery->brewery_id;
+        $link .= '" target="_blank" title="';
+        $link .= $brewery->brewery_name.'">';
+        $link .= $brewery->brewery_name;
+        $link .= '</a>';
+
+        // Add link to collaborator list
+        array_push($collaborators, $link);
+    }
+
+    // Display the collaboration
+    $output .= '<div class="embm-beer--collab">'."\n";
+    $output .= __('A collaboration with', EMBM_DOMAIN)."&nbsp;";
+    $output .= join(',&nbsp;', $collaborators);
+    $output .= "</div>\n";
+
+    // Return HTML
+    return $output;
 }

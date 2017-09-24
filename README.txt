@@ -3,8 +3,8 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd, untappd for business
 Requires at least: 3.0.1
-Tested up to: 4.8.0
-Stable tag: 3.1.0
+Tested up to: 4.8.2
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,15 +17,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
-* "Menu" taxonomy for creating beer menus
+* "Menu" taxonomy and shortcode for creating and displaying beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Beta] Import your brewery's beers directly from Untappd
-* [Beta] Import your beers and menus from Untappd for Business
+* [Beta] Import and sync your brewery's beers directly from Untappd
+* [Beta] Import and sync your beers and menus from Untappd for Business
 
 = Usage =
 Use these shortcodes to display beers in your posts or use the template tags in your theme files:
@@ -116,13 +116,13 @@ These will display a formatted listing of all beers.
 
         *Displays or hides the Untappd beer rating*
 
-    * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
+    * __style => `"style name"`__ (String e.g. `"india-pale-ale, pale-ale"`)
 
-        *Displays only beers belonging to a specific beer style*
+        *Displays only beers belonging to specific beer styles*
 
-    * __group => `"group name"`__ (String e.g. `"Seasonal Beers"`)
+    * __group => `"group name"`__ (String e.g. `"Seasonal, Barrel-Aged"`)
 
-        *Displays only beers belonging to a specific group*
+        *Displays only beers belonging to specific groups*
 
     * __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`)
 
@@ -149,6 +149,53 @@ These will display a formatted listing of all beers.
         *Sorts beer list by `orderby` value in ascending or descending order*
 
 
+
+__Beer Menu Display__
+
+These will display a beer menu given it's Name, Slug, or ID number.
+
+* __Shortcode__:
+
+    `[beer-menu menu={menu id}]`
+
+* __Template tag__:
+
+    `<?php echo EMBM_Output_Shortcodes_Menu_display( $args ); ?>`
+
+    Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
+
+        <?php echo EMBM_Output_Shortcodes_Menu_display(
+            'Taproom Menu',
+            array(
+                'show_rating'       => false,
+                'show_last_updated' => true,
+                'show_thumbnail'    => true,
+                'show_description'  => false,
+            )
+        ); ?>
+
+* __Options__:
+
+    For use with both the shortcode and template code.
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
+
+    * __show_last_updated => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the menu's last updated timestamp*
+
+    * __show_thumbnail => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the beer featured image thumbnails*
+
+    * __show_description => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the menu section descriptions*
+
+
+
 == Installation ==
 
 1. Unzip the `em-beer-manager.zip` file to the `/wp-content/plugins/` directory
@@ -157,6 +204,17 @@ These will display a formatted listing of all beers.
 
 
 == Frequently Asked Questions ==
+
+= What are the "Exclude from Sync" and "Delete Missing" features? =
+
+New in v3.2.0, you can enable the "Delete Missing" feature when running either an Untappd or Untappd for Business (UTFB) sync.
+
+For an Untappd sync, this means that if any beers associated with an Untappd ID are no longer found on Untappd, they will be moved to the trash. You can permanently delete these beers from the WordPress trash interface.
+
+For a UTFB sync, this means that if any menus associated with an UTFB ID are no longer found on your UTFB account, they will be PERMANENTLY deleted. This will not affect any of the beers that are associated with the menu.
+
+If you do not want the sync feature to make any changes to or delete a specific beer or menu, enable the "Exclude from Sync" checkbox, located on both the menu and beer edit pages.
+
 
 = Can I use content filters with EM Beer Manager? = 
 
@@ -199,6 +257,7 @@ In most cases you should still be able to use all of the Untappd features with c
 
 New in v2.1.0 is the EM Beer Manager 'Labs'. This is a section where we plan to introduce new and experimental features for users to test. We do test all of the lab features before making them available, but cannot guarantee that there won't be any issues or bugs when using them, since they are still being worked on. If you experience any issues while using a Labs feature, please contact [labs@wp.erinmorelli.com](mailto:labs@wp.erinmorelli.com).
 
+
 = How do I access EM Beer Manager beers, styles, and groups in the WordPress API? =
 
 Starting with v2.1.0 you can now access and update EM Beer Manager beers, styles, and groups from the [WordPress API](http://v2.wp-api.org/).
@@ -208,6 +267,8 @@ Beers can be accessed using `/wp-json/wp/v2/embm_beers` or individually at `/wp-
 Styles can be accessed using `/wp-json/wp/v2/embm_styles` or individually at `/wp-json/wp/v2/embm_styles/<style_id>`.
 
 Groups can be accessed using `/wp-json/wp/v2/embm_groups` or individually at `/wp-json/wp/v2/embm_groups/<group_id>`.
+
+Menus can be accessed using `/wp-json/wp/v2/embm_menus` or individually at `/wp-json/wp/v2/embm_menus/<menu_id>`.
 
 Additionally, beer profile, extras, and Untappd information is available via the API and is able to be updated via POST/PUT calls.
 
@@ -277,6 +338,15 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 3.2.0 =
+* [DEPRECATED] Ended support for PHP <= 5.2, please upgrade your PHP
+* [NEW] Added support for collaboration beers in the Untappd import feature
+* [NEW] Display multiple styles or groups with the `beer-list` shortcode
+* [NEW] Added `beer-menu` shortcode for displaying beer menus
+* [NEW] Added view settings for beer menu pages
+* [LABS] Added new "Delete Missing" option for Untappd and UTFB syncing
+* [FIXED] Issue with UTFB importing and syncing where beers in multiple menus were only getting associated with one menu
 
 = 3.1.0 =
 * [NEW] Connect to and import beers/menus from your Untappd for Business account
@@ -421,6 +491,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.2.0 = 
+Please back-up your database before upgrading!
 
 = 3.1.0 =
 Adds support for Untappd for Business accounts

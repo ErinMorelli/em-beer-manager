@@ -230,6 +230,7 @@ function EMBM_Admin_Actions_Untappd_import()
     // Get imported vars
     $import_type = intval($_POST['import_type']);
     $brewery_id = intval($_POST['brewery_id']);
+    $with_collabs = ($_POST['with_collabs'] == 'true') ? true : false;
     $api_root = $_POST['api_root'];
 
     // Set up response
@@ -248,7 +249,7 @@ function EMBM_Admin_Actions_Untappd_import()
     }
 
     // Get all the Untappd beers for the brewery
-    $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery);
+    $beer_list = EMBM_Admin_Untappd_beers($api_root, $brewery, $with_collabs);
 
     // Check for error
     if (!is_array($beer_list)) {
@@ -403,6 +404,7 @@ function EMBM_Admin_Actions_Untappd_sync()
 
     // Get sync vars
     $sync_type = intval($_POST['sync_type']);
+    $delete_missing = ($_POST['delete_missing'] == 'true') ? true : false;
     $api_root = $_POST['api_root'];
 
     // Set up response
@@ -426,12 +428,21 @@ function EMBM_Admin_Actions_Untappd_sync()
         // Get post from ID
         $post = get_post($post_id);
 
+        // Get Untappd ID for post
+        $post_untappd_id = EMBM_Admin_Untappd_Find_id($post);
+
+        // Return error if we didn't find an ID
+        if (is_null($post_untappd_id)) {
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 3, 'untappd'));
+            break;
+        }
+
         // Get beer from API
-        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $post->embm_untappd);
+        $beer = EMBM_Admin_Untappd_Beer_get($api_root, $post_untappd_id);
 
         // Check for error
         if (!is_object($beer)) {
-            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
+            $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 1, 'untappd'));
             break;
         }
 
@@ -454,25 +465,52 @@ function EMBM_Admin_Actions_Untappd_sync()
         // Get all the Untappd beers in the database
         $beer_list = get_posts(
             array(
-                'post_type'   => 'embm_beer',
+                'post_type'   => EMBM_BEER,
                 'numberposts' => -1
             )
         );
 
         // Iteratively add beers
         foreach ($beer_list as $item) {
-            // Check for Untappd ID
-            if ($item->embm_untappd == '') {
+            // Get beer meta
+            $beer_meta = get_post_meta($item->ID, EMBM_BEER_META, true);
+
+            // Check if we're skipping this beer
+            $skip_beer = (array_key_exists('sync_exclude', $beer_meta) && $beer_meta['sync_exclude'] == '1');
+            if ($skip_beer) {
                 continue;
             }
 
-            // Get beer from API
-            $beer = EMBM_Admin_Untappd_Beer_get($api_root, $item->embm_untappd);
+            // Get Untappd ID
+            $beer_untappd_id = array_key_exists('untappd_id', $beer_meta) ? $beer_meta['untappd_id'] : null;
 
-            // Check for error
+            // Check if there is existing Untappd data
+            $beer_meta_untappd = get_post_meta($item->ID, EMBM_BEER_META_UNTAPPD, true);
+            if ((null == $beer_meta_untappd || !is_array($beer_meta_untappd)) && null == $beer_untappd_id) {
+                continue;
+            }
+
+            // Get Untappd ID from UTFB
+            if (null == $beer_untappd_id) {
+                $beer_untappd_id = $beer_meta_untappd['beer']->bid;
+            }
+
+            // Get beer from API
+            $beer = EMBM_Admin_Untappd_Beer_get($api_root, $beer_untappd_id);
+
+            // Check Untappd response
             if (!is_object($beer)) {
-                $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
-                break;
+                // Check for rate limiting
+                if (is_string($beer) || $beer == 2) {
+                    $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 1, 'untappd'));
+                    break;
+                }
+
+                // Do deletion if we're deleting
+                if ($beer == 3 && $delete_missing) {
+                    wp_delete_post($item->ID);
+                }
+                continue;
             }
 
             // Run import
@@ -525,7 +563,7 @@ function EMBM_Admin_Actions_Utfb_connect()
     // Respond to validity
     if ($is_valid) {
         // Store credentials
-        update_option('embm_utfb_credentials', $credentials);
+        update_option(EMBM_UTFB_CREDENTIALS, $credentials);
 
         // Set up redirect URL
         $redirect_url = get_admin_url(null, sprintf(EMBM_UTFB_RETURN_URL, 'success', 1, 'utfb'));
@@ -557,10 +595,28 @@ function EMBM_Admin_Actions_Utfb_disconnect()
     check_ajax_referer(EMBM_AJAX_NONCE, '_nonce');
 
     // Remove connected account information
-    delete_option('embm_utfb_credentials');
+    delete_option(EMBM_UTFB_CREDENTIALS);
 
     // Flush caches
     EMBM_Admin_Untappd_flush(EMBM_UTFB_CACHE);
+
+    // Get global WP database reference
+    global $wpdb;
+
+    // Get meta key
+    $meta_key = EMBM_BEER_META_UTFB;
+
+    // Remove individual beer UTFB data
+    $wpdb->query(
+        "
+        UPDATE
+            $wpdb->postmeta
+        SET
+            meta_value = NULL
+        WHERE
+            meta_key = '$meta_key'
+        "
+    );
 
     // Send response
     wp_die();
@@ -584,7 +640,7 @@ function EMBM_Admin_Actions_Utfb_dropdown()
     $resource_id = $_POST['resource_id'];
 
     // Get credentials
-    $auth = get_option('embm_utfb_credentials');
+    $auth = get_option(EMBM_UTFB_CREDENTIALS);
 
     // Get resource map
     $resource_map = $GLOBALS['EMBM_UTFB_RESOURCE_MAP'];
@@ -635,7 +691,7 @@ function EMBM_Admin_Actions_Utfb_import()
     $import_all = ($_POST['import_all'] == 'true') ? true : false;
 
     // Get credentials
-    $auth = get_option('embm_utfb_credentials');
+    $auth = get_option(EMBM_UTFB_CREDENTIALS);
 
     // Get UTFB objects to import
     $objects = EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all);
@@ -691,15 +747,16 @@ function EMBM_Admin_Actions_Utfb_sync()
     $resource = $_POST['resource'];
     $resources = $_POST['resources'];
     $import_all = ($_POST['import_all'] == 'true') ? true : false;
+    $delete_missing = ($_POST['delete_missing'] == 'true') ? true : false;
 
     // Get credentials
-    $auth = get_option('embm_utfb_credentials');
+    $auth = get_option(EMBM_UTFB_CREDENTIALS);
 
     // Get UTFB objects to import
-    $objects = EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all);
+    $objects = EMBM_Admin_Utfb_resources($auth, $resources, $resource, $import_all, true);
 
     // Run sync
-    $error_code = EMBM_Admin_Utfb_sync($objects);
+    $error_code = EMBM_Admin_Utfb_sync($objects, $delete_missing);
 
     // Check response
     if ($error_code !== 0) {

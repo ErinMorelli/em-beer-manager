@@ -11,15 +11,15 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 * A custom beer "style" taxonomy for classifying your beers pre-populated with styles from Untappd
 * A customizable "group" taxonomy for categorizing and grouping your beers
-* "Menu" taxonomy for creating beer menus
+* "Menu" taxonomy and shortcode for creating and displaying beer menus
 * Shortcodes and template tags for displaying all or a select number of beers
 * Custom meta boxes to store detailed information about each beer, including ABV, IBU, and ingredients
 * Beer check-in and rating integration with Untappd
 * A "Beer List" widget for simply displaying your beers in sidebars
 * A "Recent Check-Ins" widget for displaying recent beer check-ins for your brewery on Untappd
 * Custom page display for beers and styles
-* [Beta] Import your brewery's beers directly from Untappd
-* [Beta] Import your beers and menus from Untappd for Business
+* [Beta] Import and sync your brewery's beers directly from Untappd
+* [Beta] Import and sync your beers and menus from Untappd for Business
 
 
 ### Screenshots ###
@@ -39,12 +39,14 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.1.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.1.0/em-beer-manager.3.1.0.zip) ###
-* [NEW] Connect to and import beers/menus from your Untappd for Business account
-* [NEW] Sync your imported beers with changes from Untappd
-* [NEW] Beer images now link to their respective beer
-* [FIXED] Bug with how beer styles were displaying in titles
-
+### [Version 3.2.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.2.0/em-beer-manager.3.2.0.zip) ###
+* [DEPRECATED] Ended support for PHP <= 5.2, please upgrade your PHP
+* [NEW] Added support for collaboration beers in the Untappd import feature
+* [NEW] Display multiple styles or groups with the `beer-list` shortcode
+* [NEW] Added `beer-menu` shortcode for displaying beer menus
+* [NEW] Added view settings for beer menu pages
+* [LABS] Added new "Delete Missing" option for Untappd and UTFB syncing
+* [FIXED] Issue with UTFB importing and syncing where beers in multiple menus were only getting associated with one menu
 
 
 ### Installation ###
@@ -147,13 +149,13 @@ These will display a formatted listing of all beers.
 
         *Displays or hides the Untappd beer rating*
 
-    * __style => `"style name"`__ (String e.g. `"India Pale Ale"`)
+    * __style => `"style name"`__ (String e.g. `"india-pale-ale, pale-ale"`)
 
-        *Displays only beers belonging to a specific beer style*
+        *Displays only beers belonging to specific beer styles*
 
-    * __group => `"group name"`__ (String e.g. `"Seasonal Beers"`)
+    * __group => `"group name"`__ (String e.g. `"Seasonal, Barrel-Aged"`)
 
-        *Displays only beers belonging to a specific group*
+        *Displays only beers belonging to specific groups*
 
     * __exclude => `"beer ids"`__ (Comma-separated list of beer IDs e.g. `"4,23,24"`)
 
@@ -179,6 +181,50 @@ These will display a formatted listing of all beers.
 
         *Sorts beer list by `orderby` value in ascending or descending order*
 
+
+### Beer Menus ###
+
+These will display a beer menu given it's Name, Slug, or ID number.
+
+* __Shortcode:__
+
+    `[beer-menu menu={menu id}]`
+
+* __Template tag:__
+
+    `<?php echo EMBM_Output_Shortcodes_Menu_display( $menu_id, $args ); ?>`
+
+    Where `$args` is a PHP array of comma-separated `key => value` pairs. For example:
+
+        <?php echo EMBM_Output_Shortcodes_Menu_display(
+            'Taproom Menu',
+            array(
+                'show_rating'       => false,
+                'show_last_updated' => true,
+                'show_thumbnail'    => true,
+                'show_description'  => false,
+            )
+        ); ?>
+
+* __Options__:
+
+    For use with both the shortcode and template code.
+
+    * __show_rating => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the Untappd beer rating*
+
+    * __show_last_updated => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the menu's last updated timestamp*
+
+    * __show_thumbnail => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the beer featured image thumbnails*
+
+    * __show_description => `"true, false"`__ (Default = `true`)
+
+        *Displays or hides the menu section descriptions*
 
 
 *****
