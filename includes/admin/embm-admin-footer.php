@@ -30,14 +30,14 @@ add_thickbox();
 
 <div class="embm-settings-footer--donate">
     <p class="embm-settings-footer--donate-text">
-        <span><?php _e('Like this plugin?', 'embm'); ?></span>
+        <span><?php _e('Like this plugin?', 'em-beer-manager'); ?></span>
         <a
             class="embm-settings-footer--donate-button thickbox"
             href="#TB_inline?width=250&height=150&inlineId=embm-settings-footer--donate-modal"
-            title="<?php _e('Buy me a beer!', 'embm'); ?>"
+            title="<?php _e('Buy me a beer!', 'em-beer-manager'); ?>"
             target="_blank"
         >
-            <?php _e('Buy me a beer!', 'embm'); ?>
+            <?php _e('Buy me a beer!', 'em-beer-manager'); ?>
         </a>
         <span class="dashicons dashicons-smiley"></span>
     </p>
@@ -53,10 +53,10 @@ add_thickbox();
         <input type="hidden" name="return" value="https://www.erinmorelli.com/thanks-paypal">
         <p>
             <select name="amount-select" id="embm-settings-footer--donate-select">
-                <option value="6.00" selected><?php printf('%s ($6)', __('A Pint', 'embm')); ?></option>
-                <option value="12.00"><?php printf('%s ($12)', __('A 6-Pack', 'embm')); ?></option>
-                <option value="24.00"><?php printf('%s ($24)', __('A Case', 'embm')); ?></option>
-                <option value="other"><?php _e('Custom Amount', 'embm'); ?></option>
+                <option value="6.00" selected><?php printf('%s ($6)', __('A Pint', 'em-beer-manager')); ?></option>
+                <option value="12.00"><?php printf('%s ($12)', __('A 6-Pack', 'em-beer-manager')); ?></option>
+                <option value="24.00"><?php printf('%s ($24)', __('A Case', 'em-beer-manager')); ?></option>
+                <option value="other"><?php _e('Custom Amount', 'em-beer-manager'); ?></option>
             </select>
             <input
                 type="number"
@@ -74,9 +74,9 @@ add_thickbox();
                 type="submit"
                 name="submit"
                 class="embm-settings-footer--donate-button"
-                value="<?php _e('Buy me a beer!', 'embm'); ?>"
+                value="<?php _e('Buy me a beer!', 'em-beer-manager'); ?>"
             ><br />
-            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/donate.png" alt="<?php _e('PayPal', 'embm'); ?>" border="0" />
+            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/donate.png" alt="<?php _e('PayPal', 'em-beer-manager'); ?>" border="0" />
         </p>
     </form>
 </div>
@@ -87,14 +87,14 @@ add_thickbox();
     <!-- Logo graphics and data from Untappd -->
     <p class="embm-settings-footer--credits-untappd">
         <a href="https://untappd.com" target="_blank" rel="nofollow">
-            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/ut-credit.png" alt="<?php _e('Powered by Untappd', 'embm'); ?>" border="0" />
+            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/ut-credit.png" alt="<?php _e('Powered by Untappd', 'em-beer-manager'); ?>" border="0" />
         </a>
     </p>
-    <p><?php printf(__('All Untappd logo graphics are the sole property of %s', 'embm'), '<strong>Untappd LLC.</strong>'); ?></p>
+    <p><?php printf(__('All Untappd logo graphics are the sole property of %s', 'em-beer-manager'), '<strong>Untappd LLC.</strong>'); ?></p>
     <!-- Admin menu beer icon from SimpleIcon.com-->
     <p>
         <?php printf(
-            __('Free beer icon from %s', 'embm'),
+            __('Free beer icon from %s', 'em-beer-manager'),
             '<a href="http://simpleicon.com" target="_blank" title="simple icon" rel="nofollow"><strong>simple icon</strong></a>'
         ); ?>.
     </p>

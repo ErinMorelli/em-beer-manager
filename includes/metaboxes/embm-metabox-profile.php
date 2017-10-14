@@ -29,7 +29,7 @@ function EMBM_Admin_Metabox_profile()
     // Add Beer Profile metabox to sidebar
     add_meta_box(
         'embm_beer_profile',
-        __('Beer Profile', 'embm'),
+        __('Beer Profile', 'em-beer-manager'),
         'EMBM_Admin_Metabox_Profile_content',
         EMBM_BEER,
         'side',
@@ -69,38 +69,38 @@ function EMBM_Admin_Metabox_Profile_content()
 <div class="embm-metabox embm-metabox--profile">
     <div class="embm-metabox__field embm-metabox--profile-malts">
         <p>
-            <label for="embm_malts"><strong><?php _e('Malts', 'embm'); ?></strong></label><br />
+            <label for="embm_malts"><strong><?php _e('Malts', 'em-beer-manager'); ?></strong></label><br />
             <input type="text" name="embm_malts" id="embm_malts" style="width:100%;" value="<?php echo $b_malts; ?>" />
         </p>
     </div>
     <div class="embm-metabox__field embm-metabox--profile-hops">
         <p>
-            <label for="embm_hops"><strong><?php _e('Hops', 'embm'); ?></strong></label><br />
+            <label for="embm_hops"><strong><?php _e('Hops', 'em-beer-manager'); ?></strong></label><br />
             <input type="text" name="embm_hops" id="embm_hops" style="width:100%;" value="<?php echo $b_hops; ?>" />
         </p>
     </div>
     <div class="embm-metabox__field embm-metabox--profile-adds">
         <p>
-            <label for="embm_adds"><strong><?php _e('Additions/Spices', 'embm'); ?></strong></label><br />
+            <label for="embm_adds"><strong><?php _e('Additions/Spices', 'em-beer-manager'); ?></strong></label><br />
             <input type="text" name="embm_adds" id="embm_adds" style="width:100%;" value="<?php echo $b_adds; ?>" />
         </p>
     </div>
     <div class="embm-metabox__field embm-metabox--profile-yeast">
         <p>
-            <label for="embm_yeast"><strong><?php _e('Yeast', 'embm'); ?></strong></label><br />
+            <label for="embm_yeast"><strong><?php _e('Yeast', 'em-beer-manager'); ?></strong></label><br />
             <input type="text" name="embm_yeast" id="embm_yeast" style="width:100%;" value="<?php echo $b_yeast; ?>" />
         </p>
     </div>
     <hr />
     <div class="embm-metabox__field embm-metabox--profile-abv">
         <p>
-            <label for="embm_abv"><strong><?php _e('ABV', 'embm'); ?></strong></label><br />
+            <label for="embm_abv"><strong><?php _e('ABV', 'em-beer-manager'); ?></strong></label><br />
             <input type="number" name="embm_abv" id="embm_abv" min="0.0" max="100.0" step="0.1" value="<?php echo $b_abv; ?>" /> %
         </p>
     </div>
     <div class="embm-metabox__field embm-metabox--profile-ibu">
         <p>
-            <label for="embm_ibu"><strong><?php _e('IBU', 'embm'); ?></strong></label><br />
+            <label for="embm_ibu"><strong><?php _e('IBU', 'em-beer-manager'); ?></strong></label><br />
             <input type="number" name="embm_ibu" id="embm_style" min="0" max="100" step="1" value="<?php echo $b_ibu; ?>" />
         </p>
     </div>

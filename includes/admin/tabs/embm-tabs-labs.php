@@ -24,14 +24,14 @@ $email_subj = '[EM Beer Manager] Issue Report';
 
 ?>
 
-<p><span class="warning"><?php _e('WARNING', 'embm'); ?>:</span> <?php printf(
+<p><span class="warning"><?php _e('WARNING', 'em-beer-manager'); ?>:</span> <?php printf(
     '%s. <span class="emphasis">%s</span>.',
-    __('The features on this page are experimental', 'embm'),
-    __('Use at your own risk', 'embm')
+    __('The features on this page are experimental', 'em-beer-manager'),
+    __('Use at your own risk', 'em-beer-manager')
 ); ?></p>
 
 <p>
-    <?php _e('If you encounter any problems when using these features, please report them to', 'embm');?>
+    <?php _e('If you encounter any problems when using these features, please report them to', 'em-beer-manager');?>
     <a href="mailto:labs@wp.erinmorelli.com?Subject=<?php echo $email_subj; ?>">labs@wp.erinmorelli.com</a>.
 </p>
 
