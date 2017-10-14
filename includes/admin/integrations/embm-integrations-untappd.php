@@ -24,15 +24,17 @@ define('EMBM_UNTAPPD_RETURN_URL', 'options-general.php?page=embm-settings&embm-%
 define('EMBM_UNTAPPD_API_URL', 'https://api.untappd.com/v4/%s?access_token=');
 define('EMBM_UNTAPPD_RSS_URL', 'https://untappd.com/rss/brewery/');
 define('EMBM_UNTAPPD_CACHE', 'embm_untappd_cache');
+define('EMBM_UNTAPPD_CACHE_TIME', 30 * MINUTE_IN_SECONDS);
 
 // Set cache names
 $GLOBALS[EMBM_UNTAPPD_CACHE] = array(
-    'beer_list'     => 'embm_untappd_beer_list',
-    'brewery'       => 'embm_untappd_brewery_info',
-    'checkins'      => 'embm_untappd_brewery_checkins_%s',
-    'xml_checkins'  => 'embm_untappd_brewery_xml_checkins_%s',
-    'user'          => 'embm_untappd_user_info',
-    'save_errors'   => 'embm_untappd_save_errors'
+    'beer_list'      => 'embm_untappd_beer_list',
+    'collaborations' => 'embm_untappd_collaborations',
+    'brewery'        => 'embm_untappd_brewery_info',
+    'checkins'       => 'embm_untappd_brewery_checkins_%s',
+    'xml_checkins'   => 'embm_untappd_brewery_xml_checkins_%s',
+    'user'           => 'embm_untappd_user_info',
+    'save_errors'    => 'embm_untappd_save_errors'
 );
 
 /**
@@ -126,7 +128,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
  */
 function EMBM_Admin_Untappd_ratelimit()
 {
-    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', 'embm');
+    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', EMBM_DOMAIN);
 }
 
 /**
@@ -175,7 +177,7 @@ function EMBM_Admin_Untappd_reload($global_name, $cache_name, $timeout, $cache_i
 function EMBM_Admin_Untappd_id($untappd_url)
 {
     // Retrieve stored brewery ID
-    $brewery_id = get_option('embm_untappd_brewery_id');
+    $brewery_id = get_option(EMBM_UNTAPPD_BREWERY);
 
     // Get brewery ID from Untappd if not set
     if (!$brewery_id || $brewery_id == '') {
@@ -195,7 +197,7 @@ function EMBM_Admin_Untappd_id($untappd_url)
 
         // Store ID
         $brewery_id = $matches[1];
-        update_option('embm_untappd_brewery_id', $brewery_id);
+        update_option(EMBM_UNTAPPD_BREWERY, $brewery_id);
     }
 
     return $brewery_id;
@@ -295,8 +297,8 @@ function EMBM_Admin_Untappd_checkins($api_root, $brewery_id, $refresh = false)
     $checkins_cache_name = sprintf($GLOBALS[EMBM_UNTAPPD_CACHE]['checkins'], $brewery_id);
     $checkins = get_transient($checkins_cache_name);
 
-    // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
+    // Check if we should attempt a reload
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'checkins', EMBM_UNTAPPD_CACHE_TIME, $brewery_id);
 
     // Get brewery checkins if it's not cached
     if (false == $checkins || $refresh || $reload) {
@@ -336,8 +338,8 @@ function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
     $xml_cache_name = sprintf($GLOBALS[EMBM_UNTAPPD_CACHE]['xml_checkins'], $brewery_id);
     $xml_data = get_transient($xml_cache_name);
 
-    // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'xml_checkins', 15 * MINUTE_IN_SECONDS, $brewery_id);
+    // Check if we should attempt a reload
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'xml_checkins', EMBM_UNTAPPD_CACHE_TIME, $brewery_id);
 
     // Get checkins info if it's not cached
     if (false === $xml_data || $refresh || $reload) {
@@ -389,18 +391,19 @@ function EMBM_Admin_Untappd_Checkins_xml($brewery_id, $refresh = false)
 /**
  * Retrieves Untappd brewery beer data from either the WP cache or API.
  *
- * @param string $api_root A templated string for the Untappd API root URL
- * @param array  $brewery  Untappd brewery data
+ * @param string $api_root        A templated string for the Untappd API root URL
+ * @param array  $brewery         Untappd brewery data
+ * @param bool   $include_collabs Whether or not to include collaboration beers
  *
  * @return array Array of all beers for the given brewery
  */
-function EMBM_Admin_Untappd_beers($api_root, $brewery)
+function EMBM_Admin_Untappd_beers($api_root, $brewery, $include_collabs = false)
 {
     // Attempt to retrieve beer list from cache
     $beer_list = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['beer_list']);
 
-    // Check if we should attempt a reload (every 15 mins)
-    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'beer_list', 15 * MINUTE_IN_SECONDS);
+    // Check if we should attempt a reload
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'beer_list', EMBM_UNTAPPD_CACHE_TIME);
 
     // Get beer list if it's not cached
     if (false === $beer_list || $reload) {
@@ -433,7 +436,81 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
         set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['beer_list'], $beer_list, DAY_IN_SECONDS);
     }
 
+    // Get any collaboration beers
+    if ($include_collabs) {
+        $collabs_list = EMBM_Admin_Untappd_Beers_collaborations($api_root, $brewery);
+
+        // Merge the two arrays
+        $beer_list = array_merge($beer_list, $collabs_list);
+    }
+
     return $beer_list;
+}
+
+/**
+ * Retrieves Untappd brewery collaboration beer data from either the WP cache or API.
+ *
+ * @param string $api_root A templated string for the Untappd API root URL
+ * @param array  $brewery  Untappd brewery data
+ *
+ * @return array Array of all beers for the given brewery
+ */
+function EMBM_Admin_Untappd_Beers_collaborations($api_root, $brewery)
+{
+    // Attempt to retrieve beer list from cache
+    $collabs_list = get_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['collaborations']);
+
+    // Check if we should attempt a reload
+    $reload = EMBM_Admin_Untappd_reload(EMBM_UNTAPPD_CACHE, 'collaborations', EMBM_UNTAPPD_CACHE_TIME);
+
+    // Get beer list if it's not cached
+    if (false === $collabs_list || $reload) {
+        $collabs_list = array();
+        $collabs_offset = 0;
+        $more_collabs = true;
+        $collabs_root = sprintf($api_root, 'brewery/collaborations/'.$brewery->brewery_id) . '&offset=%d';
+
+        while (true == $more_collabs) {
+            $collabs_url = sprintf($collabs_root, $collabs_offset);
+            $res = EMBM_Admin_Untappd_request($collabs_url);
+
+            // Handle any errors or return cached data
+            if (!$res['success']) {
+                if (false !== $collabs_list) {
+                    return $collabs_list;
+                } elseif ($res['limit']) {
+                    return EMBM_Admin_Untappd_ratelimit();
+                } else {
+                    return null;
+                }
+            }
+
+            // Get beer data from response
+            $collabs = $res['data']->response->beers;
+
+            // Check count to determine if there are more
+            if ($collabs->count > 0) {
+                $collabs_list = array_merge($collabs_list, $collabs->items);
+                if ($collabs->count < 25) {  // 25 is the current max returned by API
+                    $more_collabs = false;
+                } else {
+                    $collabs_offset += $collabs->count;
+                }
+            } else {
+                $more_collabs = false;
+            }
+        }
+
+        // Add collaboration flag to beers
+        foreach ($collabs_list as $collab) {
+            $collab->is_collab = true;
+        }
+
+        // Store for 24 hours (as per TOS)
+        set_transient($GLOBALS[EMBM_UNTAPPD_CACHE]['collaborations'], $collabs_list, DAY_IN_SECONDS);
+    }
+
+    return $collabs_list;
 }
 
 /**
@@ -449,22 +526,22 @@ function EMBM_Admin_Untappd_beers($api_root, $brewery)
 function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false)
 {
     // Set vars
-    $cache_name = 'embm_untappd_data';
     $beer = null;
+    $beer_data = null;
     $beer_cache = null;
     $reload = false;
     $expired = false;
     $now = time();
-    $cache_time = 15 * MINUTE_IN_SECONDS;
+    $cache_time = EMBM_UNTAPPD_CACHE_TIME;
     $store_time = DAY_IN_SECONDS;
 
     // Attempt to retrieve beer data from cache
-    $beer_data = get_post_meta($post_id, $cache_name, true);
+    $untappd_data = get_post_meta($post_id, EMBM_BEER_META_UNTAPPD, true);
 
     // Check for data
-    if ($beer_data && is_array($beer_data)) {
-        $beer = $beer_data['beer'];
-        $beer_cache = $beer_data['cached'];
+    if (!is_null($untappd_data) && is_array($untappd_data)) {
+        $beer = $untappd_data['beer'];
+        $beer_cache = $untappd_data['cached'];
     }
 
     // Check cached time
@@ -492,7 +569,8 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         if (!is_object($beer_res) || !property_exists($beer_res, 'bid')) {
             // Remove data if it has expired (as per TOS)
             if ($expired) {
-                delete_post_meta($post_id, $cache_name);
+                $untappd_data = null;
+                update_post_meta($post_id, EMBM_BEER_META_UNTAPPD, $untappd_data);
             }
 
             // Return cached data
@@ -506,19 +584,20 @@ function EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id, $refresh = false
         unset($beer_res->vintages);
 
         // Set up data for storage
-        $beer_data = array(
+        $untappd_data = array(
             'beer'      => $beer_res,
             'cached'    => $now
         );
 
         // Store for 6 hours
-        update_post_meta($post_id, $cache_name, $beer_data);
+        update_post_meta($post_id, EMBM_BEER_META_UNTAPPD, $untappd_data);
     } elseif ($expired) {
         // Remove data if it has expired (as per TOS)
-        delete_post_meta($post_id, $cache_name);
+        $untappd_data = null;
+        update_post_meta($post_id, EMBM_BEER_META_UNTAPPD, $untappd_data);
     }
 
-    return $beer_data;
+    return $untappd_data;
 }
 
 /**
@@ -536,10 +615,15 @@ function EMBM_Admin_Untappd_Beer_get($api_root, $beer_id)
 
     // Handle any errors
     if (!$res['success']) {
-        return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : null;
+        return $res['limit'] ? EMBM_Admin_Untappd_ratelimit() : 2;
     }
 
-    return $res['data']->response->beer;
+    // Check for success
+    if (property_exists($res['data'], 'response') && property_exists($res['data']->response, 'beer')) {
+        return $res['data']->response->beer;
+    } else {
+        return 3;
+    }
 }
 
 /**
@@ -604,6 +688,52 @@ function EMBM_Admin_Untappd_find($beer_id, $beer_list)
 }
 
 /**
+ * Search for a given Untappd brewery ID in an array of breweries
+ *
+ * @param int   $brewery_id  Untappd brewery ID
+ * @param array $collab_list Array of Untappd breweries
+ *
+ * @return array Array of brewery data
+ */
+function EMBM_Admin_Untappd_Find_collab($brewery_id, $collab_list)
+{
+    // Iteratively search breweries
+    foreach ($collab_list->items as $collab) {
+        $brewery = $collab->brewery;
+        if ($brewery->brewery_id == $brewery_id) {
+            return $brewery;
+        }
+    }
+
+    // Return null if not found
+    return null;
+}
+
+/**
+ * Retrieve Untappd ID for a given beer
+ *
+ * @param object $beer WP beer post object
+ *
+ * @return int
+ */
+function EMBM_Admin_Untappd_Find_id($beer)
+{
+    // Set meta key
+    $meta_key = EMBM_BEER_META;
+
+    // Return null if ID does not exist
+    if (!$beer->$meta_key
+        || !array_key_exists('untappd_id', $beer->$meta_key)
+        || !$beer->$meta_key['untappd_id']
+    ) {
+        return null;
+    }
+
+    // Return Untappd ID
+    return $beer->$meta_key['untappd_id'];
+}
+
+/**
  * Search for a given Untappd beer ID in DB
  *
  * @param int $beer_id Untappd beer ID
@@ -615,19 +745,20 @@ function EMBM_Admin_Untappd_exists($beer_id)
     // Get global WP database reference
     global $wpdb;
 
+    // Set up like statement for query
+    $like_query = '%"'.$beer_id.'"%';
+
     // Remove individual beer Untappd data
     return $wpdb->get_var(
         $wpdb->prepare(
             "
-            SELECT
-                post_id
-            FROM
-                $wpdb->postmeta
-            WHERE
-                meta_key = 'embm_untappd' &&
-                meta_value = %s
+            SELECT post_id,
+            FROM $wpdb->postmeta
+            WHERE meta_key = %s
+                AND meta_value LIKE %s
             ",
-            $beer_id
+            EMBM_BEER_META,
+            $like_query
         )
     );
 }
@@ -643,11 +774,21 @@ function EMBM_Admin_Untappd_exists($beer_id)
  */
 function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
 {
+    // Set initial collaboration status
+    $beer->is_collab = false;
+
+    // Check for any collaborations
+    if (property_exists($beer, 'collaborations_with')) {
+        $beer->is_collab = !is_null(
+            EMBM_Admin_Untappd_Find_collab($brewery_id, $beer->collaborations_with)
+        );
+    }
+
     // Check that beer is owned by brewery, if needed
     if ($check) {
         // Compare beer's brewery ID to user's brewery ID
-        if ($beer->brewery->brewery_id != intval($brewery_id)) {
-            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#labs');
+        if ($beer->brewery->brewery_id != intval($brewery_id) && !$beer->is_collab) {
+            return get_admin_url(null, 'options-general.php?page=embm-settings&embm-import-error=3#untappd');
         }
     }
 
@@ -657,7 +798,7 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     // Set up duplicate check args
     $dup_args = array(
         'name'           => $beer_slug,
-        'post_type'      => 'embm_beer',
+        'post_type'      => EMBM_BEER,
         'post_status'    => 'publish',
         'posts_per_page' => 1
     );
@@ -677,12 +818,6 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
     unset($beer->media);
     unset($beer->vintages);
 
-    // Set up data for storage
-    $beer_data = array(
-        'beer'      => $beer,
-        'cached'    => time()
-    );
-
     // Set up post array
     $new_beer_post = array(
         'post_author'   => get_current_user_id(),
@@ -691,16 +826,21 @@ function EMBM_Admin_Untappd_import($beer, $brewery_id, $check = false)
         'post_content'  => $beer->beer_description,
         'post_date'     => $beer_date,
         'post_status'   => 'publish',
-        'post_type'     => 'embm_beer',
+        'post_type'     => EMBM_BEER,
         'tax_input'     => array(
-            'embm_style'    => $beer->beer_style
+            EMBM_STYLE  => $beer->beer_style
         ),
         'meta_input'    => array(
-            'embm_abv'              => $beer->beer_abv,
-            'embm_ibu'              => $beer->beer_ibu,
-            'embm_untappd'          => $beer->bid,
-            'embm_untappd_data'     => $beer_data,
-            'embm_reviews_count'    => 5
+            EMBM_BEER_META         => array(
+                'abv'              => $beer->beer_abv,
+                'ibu'              => $beer->beer_ibu,
+                'untappd_id'       => $beer->bid,
+                'reviews_count'    => 5
+            ),
+            EMBM_BEER_META_UNTAPPD => array(
+                'beer'             => $beer,
+                'cached'           => time()
+            )
         )
     );
 
@@ -797,21 +937,29 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
 /**
  * Update post from Untappd
  *
- * @param int   $post_id WP post ID
- * @param array $beer    Untappd beer data
+ * @param int   $post_id        WP post ID
+ * @param array $beer           Untappd beer data
+ * @param bool  $delete_missing Whether or not to remove missing data
  *
  * @return void
  */
-function EMBM_Admin_Untappd_sync($post_id, $beer)
+function EMBM_Admin_Untappd_sync($post_id, $beer, $delete_missing = false)
 {
-    // Set up data for storage
-    $beer_data = array(
-        'beer'      => $beer,
-        'cached'    => time()
-    );
+    // Set initial collaboration status
+    $beer->is_collab = false;
+
+    // Get brewery ID
+    $brewery_id = get_option(EMBM_UNTAPPD_BREWERY);
+
+    // Check for any collaborations
+    if (property_exists($beer, 'collaborations_with')) {
+        $beer->is_collab = !is_null(
+            EMBM_Admin_Untappd_Find_collab($brewery_id, $beer->collaborations_with)
+        );
+    }
 
     // Unset beer style taxonomy
-    wp_delete_object_term_relationships($post_id, 'embm_style');
+    wp_delete_object_term_relationships($post_id, EMBM_STYLE);
 
     // Set up post array
     $updated_beer_post = array(
@@ -819,13 +967,7 @@ function EMBM_Admin_Untappd_sync($post_id, $beer)
         'post_title'    => $beer->beer_name,
         'post_content'  => $beer->beer_description,
         'tax_input'     => array(
-            'embm_style'        => $beer->beer_style
-        ),
-        'meta_input'    => array(
-            'embm_abv'          => $beer->beer_abv,
-            'embm_ibu'          => $beer->beer_ibu,
-            'embm_untappd'      => $beer->bid,
-            'embm_untappd_data' => $beer_data
+            EMBM_STYLE  => $beer->beer_style
         )
     );
 
@@ -836,6 +978,27 @@ function EMBM_Admin_Untappd_sync($post_id, $beer)
     if ($success !== 0) {
         return 'error';
     }
+
+    // Get current beer post meta
+    $post_beer_meta = get_post_meta($post_id, EMBM_BEER_META, true);
+
+    // Update beer post meta values
+    $post_beer_meta['abv'] = $beer->beer_abv;
+    $post_beer_meta['ibu'] = $beer->beer_ibu;
+    $post_beer_meta['untappd_id'] = $beer->bid;
+
+    // Save new beer post meta
+    update_post_meta($post_id, EMBM_BEER_META, $post_beer_meta);
+
+    // Update untappd post meta
+    update_post_meta(
+        $post_id,
+        EMBM_BEER_META_UNTAPPD,
+        array(
+            'beer'   => $beer,
+            'cached' => time()
+        )
+    );
 
     // Update post image
     if (property_exists($beer, 'beer_label_hd')) {

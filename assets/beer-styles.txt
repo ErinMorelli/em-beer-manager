@@ -1,9 +1,11 @@
 Altbier
+American Wild Ale
 Applewine
 Australian Sparkling Ale
 Barleywine - American
 Barleywine - English
 Barleywine - Other
+Belgian Blond(e)
 Belgian Dubbel
 Belgian Quad
 Belgian Strong Dark Ale
@@ -46,6 +48,7 @@ Grätzer / Grodziskie
 Happoshu
 Hefeweizen
 Hefeweizen Light / Leicht
+Honey Beer
 IPA - American
 IPA - Belgian
 IPA - Black / Cascadian Dark Ale
@@ -53,6 +56,7 @@ IPA - English
 IPA - Imperial / Double
 IPA - Imperial / Double Black
 IPA - International
+IPA - New England
 IPA - Red
 IPA - Session / India Session Ale
 IPA - Triple
@@ -79,14 +83,21 @@ Lager - Pale
 Lager - Red
 Lager - Vienna
 Lager - Winter
+Lambic - Faro
 Lambic - Framboise
 Lambic - Fruit
+Lambic - Gueuze
 Lambic - Kriek
-Lambic - Other
+Lambic - Traditional
 Maibock / Heller (Helles) Bock
 Malt Beer
 Malt Liquor
-Mead
+Mead - Braggot
+Mead - Cyser
+Mead - Melomel
+Mead - Metheglin
+Mead - Other
+Mead - Pyment
 Melomel
 Mumme
 Märzen
@@ -112,6 +123,7 @@ Porter - English
 Porter - Imperial / Double
 Porter - Other
 Pumpkin / Yam Beer
+Pumpkin / Yam Beer - Imperial
 Pyment
 Rauchbier
 Red Ale - American Amber / Red
@@ -154,6 +166,7 @@ Stout - Oyster
 Stout - Russian Imperial
 Strong Ale - American
 Strong Ale - English
+Table Beer
 Traditional Ale
 Weizenbock
 Wheat Wine

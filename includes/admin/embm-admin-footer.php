@@ -22,23 +22,63 @@
 // Get official plugin data
 $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true);
 
-?>
+// Enable thickbox
+add_thickbox();
 
+?>
 <br /><hr />
 
 <div class="embm-settings-footer--donate">
     <p class="embm-settings-footer--donate-text">
-        <?php _e('If you like this plugin, please consider donating to support future development. Thank you!', 'embm'); ?>
-    </p>
-    <p>
+        <span><?php _e('Like this plugin?', EMBM_DOMAIN); ?></span>
         <a
-            href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=98VZ8XS4D4VBY&amp;lc=US&amp;item_name=EM%20Beer%20Manager&amp;item_number=embm%2dplugin%2dsupport&amp;currency_code=USD&amp;bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted&amp;return=http%3A%2F%2Fwww.erinmorelli.com%2Fthanks-paypal%2F"
-            title="<?php _e('Donate', 'embm'); ?>"
+            class="embm-settings-footer--donate-button thickbox"
+            href="#TB_inline?width=250&height=150&inlineId=embm-settings-footer--donate-modal"
+            title="<?php _e('Buy me a beer!', EMBM_DOMAIN); ?>"
             target="_blank"
         >
-            <img src="<?php echo EMBM_PLUGIN_URL; ?>assets/img/donate.png" alt="<?php _e('Donate', 'embm'); ?>" border="0" />
+            <?php _e('Buy me a beer!', EMBM_DOMAIN); ?>
         </a>
+        <span class="dashicons dashicons-smiley"></span>
     </p>
+</div>
+
+<div id="embm-settings-footer--donate-modal" style="display:none;">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="embm-settings-footer--donate-form">
+        <input type="hidden" name="business" value="98VZ8XS4D4VBY">
+        <input type="hidden" name="cmd" value="_donations">
+        <input type="hidden" name="item_name" value="Buy Me a Beer!">
+        <input type="hidden" name="item_number" value="EM Beer Manager">
+        <input type="hidden" name="currency_code" value="USD">
+        <input type="hidden" name="return" value="https://www.erinmorelli.com/thanks-paypal">
+        <p>
+            <select name="amount-select" id="embm-settings-footer--donate-select">
+                <option value="6.00" selected><?php printf('%s ($6)', __('A Pint', EMBM_DOMAIN)); ?></option>
+                <option value="12.00"><?php printf('%s ($12)', __('A 6-Pack', EMBM_DOMAIN)); ?></option>
+                <option value="24.00"><?php printf('%s ($24)', __('A Case', EMBM_DOMAIN)); ?></option>
+                <option value="other"><?php _e('Custom Amount', EMBM_DOMAIN); ?></option>
+            </select>
+            <input
+                type="number"
+                name="amount"
+                step="0.01"
+                min="1.00"
+                value="6.00"
+                style="display:none;"
+                id="embm-settings-footer--donate-amount"
+            >
+            <span class="description"><?php _e('USD', EMBM); ?></span>
+        </p>
+        <p style="margin-top:5px;">
+            <input
+                type="submit"
+                name="submit"
+                class="embm-settings-footer--donate-button"
+                value="<?php _e('Buy me a beer!', EMBM_DOMAIN); ?>"
+            ><br />
+            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/donate.png" alt="<?php _e('PayPal', EMBM_DOMAIN); ?>" border="0" />
+        </p>
+    </form>
 </div>
 
 <hr />
@@ -47,14 +87,14 @@ $embm_data = get_plugin_data(EMBM_PLUGIN_DIR.'em-beer-manager.php', false, true)
     <!-- Logo graphics and data from Untappd -->
     <p class="embm-settings-footer--credits-untappd">
         <a href="https://untappd.com" target="_blank" rel="nofollow">
-            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/ut-credit.png" alt="<?php _e('Powered by Untappd', 'embm'); ?>" border="0" />
+            <img src="<?php echo EMBM_PLUGIN_URL; ?>/assets/img/ut-credit.png" alt="<?php _e('Powered by Untappd', EMBM_DOMAIN); ?>" border="0" />
         </a>
     </p>
-    <p><?php printf(__('All Untappd logo graphics are the sole property of %s', 'embm'), '<strong>Untappd LLC.</strong>'); ?></p>
+    <p><?php printf(__('All Untappd logo graphics are the sole property of %s', EMBM_DOMAIN), '<strong>Untappd LLC.</strong>'); ?></p>
     <!-- Admin menu beer icon from SimpleIcon.com-->
     <p>
         <?php printf(
-            __('Free beer icon from %s', 'embm'),
+            __('Free beer icon from %s', EMBM_DOMAIN),
             '<a href="http://simpleicon.com" target="_blank" title="simple icon" rel="nofollow"><strong>simple icon</strong></a>'
         ); ?>.
     </p>

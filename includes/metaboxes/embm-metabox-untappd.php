@@ -34,16 +34,16 @@ function EMBM_Admin_Metabox_untappd()
     // Add Untappd metabox to main content
     add_meta_box(
         'embm_beer_untappd',
-        __('Untappd', 'embm'),
+        __('Untappd', EMBM_DOMAIN),
         'EMBM_Admin_Metabox_Untappd_content',
-        'embm_beer',
+        EMBM_BEER,
         'normal',
         'core'
     );
 }
 
 // Add to beer post editor
-add_action('add_meta_boxes_embm_beer', 'EMBM_Admin_Metabox_untappd');
+add_action('add_meta_boxes_'.EMBM_BEER, 'EMBM_Admin_Metabox_untappd');
 
 /**
  * Outputs Untappd metabox content
@@ -56,34 +56,47 @@ function EMBM_Admin_Metabox_Untappd_content()
     global $post;
 
     // Get current post custom data
-    $beer_entry = get_post_custom($post->ID);
-    $untappd_data = EMBM_Core_Beer_attr($post->ID, 'untappd_data');
+    $beer_entry = get_post_meta($post->ID, EMBM_BEER_META, true);
+    $beer_entry = (null == $beer_entry) ? array() : $beer_entry;
+    $untappd_data = EMBM_Core_Beer_untappd($post->ID);
+    $utfb_data = EMBM_Core_Beer_utfb($post->ID);
 
     // Set custom post data values
-    $utfb_id = isset($beer_entry['embm_utfb']) ? esc_attr($beer_entry['embm_utfb'][0]) : '';
-    $untappd_id = isset($beer_entry['embm_untappd']) ? esc_attr($beer_entry['embm_untappd'][0]) : '';
-    $hide_rating = isset($beer_entry['embm_hide_rating']) ? esc_attr($beer_entry['embm_hide_rating'][0]) : '';
-    $hide_reviews = isset($beer_entry['embm_hide_reviews']) ? esc_attr($beer_entry['embm_hide_reviews'][0]) : '';
-    $reviews_count = isset($beer_entry['embm_reviews_count']) ? esc_attr($beer_entry['embm_reviews_count'][0]) : '5';
+    $untappd_id = array_key_exists('untappd_id', $beer_entry) ? esc_attr($beer_entry['untappd_id']) : '';
+    $hide_rating = array_key_exists('hide_rating', $beer_entry) ? esc_attr($beer_entry['hide_rating']) : '';
+    $hide_reviews = array_key_exists('hide_reviews', $beer_entry) ? esc_attr($beer_entry['hide_reviews']) : '';
+    $reviews_count = array_key_exists('reviews_count', $beer_entry) ? esc_attr($beer_entry['reviews_count']) : '5';
+    $sync_exclude = array_key_exists('sync_exclude', $beer_entry) ? esc_attr($beer_entry['sync_exclude']) : '';
 
     // Brewery account status
     $is_brewery = false;
     $api_root = '';
     $beer_found = false;
     $show_api_error = (null !== $untappd_data && !is_object($untappd_data));
-    $utfb_data = null;
 
     // Check for UTFB account
-    if ($utfb_id !== '') {
-        $utfb_data = EMBM_Core_Beer_attr($post->ID, 'utfb_data');
-
-        // Check for matching Untappd id
-        if (property_exists($utfb_data, 'untappd_id') && $utfb_data->untappd_id == $untappd_id) {
-            $beer_found = true;
-        }
+    if (is_array($utfb_data) && !empty($utfb_data)) {
+        // Mark beer as found
+        $beer_found = true;
 
         // Get the UTFB menus
-        $menus = wp_get_object_terms($post->ID, 'embm_menu', array('order' => 'DESC'));
+        $terms = wp_get_object_terms($post->ID, EMBM_MENU, array('order' => 'DESC'));
+
+        // Get all of the top level menus
+        $menus = array_filter(
+            $terms, function ($term) {
+                return !$term->parent;
+            }
+        );
+
+        // Get child sections for each menu
+        foreach ($menus as $menu) {
+            $menu->sections = array_filter(
+                $terms, function ($term) use ($menu) {
+                    return $term->parent == $menu->term_id;
+                }
+            );
+        }
     }
 
     // Get token
@@ -132,7 +145,7 @@ function EMBM_Admin_Metabox_Untappd_content()
 
     // Set reviews_count input
     $reviews_count_input = sprintf(
-        __('Show %s checkins (max. %d)', 'embm'),
+        __('Show %s checkins (max. %d)', EMBM_DOMAIN),
         '<input
             id="embm_reviews_count"
             name="embm_reviews_count"
@@ -153,7 +166,7 @@ function EMBM_Admin_Metabox_Untappd_content()
         <input type="hidden" name="embm-untappd-api-root" value="<?php echo $api_root; ?>" />
         <div class="embm-metabox__field embm-metabox--untappd-id">
             <p>
-                <label for="embm_untappd"><strong><?php _e('Beer ID', 'embm'); ?></strong></label><br />
+                <label for="embm_untappd"><strong><?php _e('Beer ID', EMBM_DOMAIN); ?></strong></label><br />
                 <input
                     type="number"
                     name="embm_untappd"
@@ -170,11 +183,11 @@ function EMBM_Admin_Metabox_Untappd_content()
         <div class="embm-metabox__field embm-metabox--untappd-select">
             <?php if ($is_brewery && !$show_api_error) : ?>
                 <p>
-                    <label for="untappd_id_select"><strong><?php _e('Brewery Beer', 'embm'); ?></strong></label><br />
+                    <label for="untappd_id_select"><strong><?php _e('Brewery Beer', EMBM_DOMAIN); ?></strong></label><br />
                     <select id="untappd_id_select" name="untappd_id_select">
                         <option value=""
                             <?php selected($beer_found, false); ?>
-                        >-- <?php _e('Custom/Unaffiliated', 'embm'); ?> --</option>
+                        >-- <?php _e('Custom/Unaffiliated', EMBM_DOMAIN); ?> --</option>
                     <?php foreach ($beer_list as $item) : $beer = $item->beer; ?>
                         <option
                             value="<?php echo $beer->bid; ?>"
@@ -186,16 +199,28 @@ function EMBM_Admin_Metabox_Untappd_content()
             <?php endif; ?>
         </div>
         <div class="embm-metabox__field embm-metabox--utfb">
-            <?php if (null !== $utfb_data && $utfb_id !== '' && !$show_api_error) : ?>
+            <?php if (null !== $utfb_data && !$show_api_error) : ?>
                 <p>
-                    <strong><?php _e('Untappd for Business Menus', 'embm'); ?></strong><br />
+                    <strong><?php _e('Untappd for Business Menus', EMBM_DOMAIN); ?></strong><br />
                     <ul>
                         <?php foreach ($menus as $menu): ?>
                             <li>
                                 <a
-                                    href="<?php echo get_term_link($menu->slug, 'embm_menu'); ?>"
+                                    href="<?php echo get_term_link($menu->slug, EMBM_MENU); ?>"
                                     title="<?php echo esc_html($menu->name); ?>"
                                 ><?php echo esc_html($menu->name); ?></a>
+                                <?php if (property_exists($menu, 'sections')) : ?>
+                                    <ul>
+                                        <?php foreach ($menu->sections as $section): ?>
+                                            <li>
+                                                <a
+                                                    href="<?php echo get_term_link($section->slug, EMBM_MENU); ?>"
+                                                    title="<?php echo esc_html($section->name); ?>"
+                                                ><?php echo esc_html($section->name); ?></a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -207,7 +232,7 @@ function EMBM_Admin_Metabox_Untappd_content()
     <?php if (null !== $token && $untappd_id !== '' && !$show_api_error) : ?>
         <div class="embm-metabox--untappd-checkboxes">
             <p>
-                <strong><?php printf('Override Display Settings', 'embm'); ?></strong>
+                <strong><?php printf('Override Display Settings', EMBM_DOMAIN); ?></strong>
             </p>
             <div class="embm-metabox--untappd-rating">
                 <p>
@@ -218,7 +243,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                         type="checkbox"
                         <?php checked('1', $hide_rating); ?>
                     >
-                    <label for="embm_hide_rating"><?php _e('Hide Untappd rating', 'embm'); ?></label>
+                    <label for="embm_hide_rating"><?php _e('Hide Untappd rating', EMBM_DOMAIN); ?></label>
                 </p>
             </div>
             <div class="embm-metabox--untappd-reviews">
@@ -230,7 +255,7 @@ function EMBM_Admin_Metabox_Untappd_content()
                         type="checkbox"
                         <?php checked('1', $hide_reviews); ?>
                     >
-                    <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', 'embm'); ?></label>
+                    <label for="embm_hide_reviews"><?php _e('Hide Untappd checkins', EMBM_DOMAIN); ?></label>
                 </p>
                 <p class="embm-metabox--untappd-review-count">
                     <label for="embm_reviews_count_style"><?php echo $reviews_count_input; ?></label>
@@ -240,29 +265,41 @@ function EMBM_Admin_Metabox_Untappd_content()
         <div class="embm-metabox--untappd-actions">
             <div class="embm-metabox--untappd-flush">
                 <p>
-                    <strong><?php _e('Refresh Untappd Beer Data', 'embm'); ?></strong>
+                    <strong><?php _e('Refresh Untappd Beer Data', EMBM_DOMAIN); ?></strong>
                 </p>
                 <p>
                     <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
-                        <?php _e('Flush Cache', 'embm'); ?>
+                        <?php _e('Flush Cache', EMBM_DOMAIN); ?>
                     </a>
                 </p>
                 <p class="description">
-                    <?php _e('This is automatically done daily.', 'embm'); ?>
+                    <?php _e('This is automatically done daily.', EMBM_DOMAIN); ?>
                 </p>
             </div>
             <div class="embm-metabox--untappd-sync">
                 <p>
-                    <strong><?php _e('Sync Untappd Beer Data', 'embm'); ?></strong>
+                    <strong><?php _e('Sync Untappd Beer Data', EMBM_DOMAIN); ?></strong>
                 </p>
                 <p>
                     <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>">
-                        <?php _e('Sync Data', 'embm'); ?>
+                        <?php _e('Sync Data', EMBM_DOMAIN); ?>
                     </a>
                 </p>
                 <p class="description">
-                    <span class="warning"><?php _e('WARNING', 'embm'); ?>:</span>
-                    <?php _e('This will override any changes you have made to this beer.', 'embm'); ?>
+                    <span class="warning"><?php _e('WARNING', EMBM_DOMAIN); ?>:</span>
+                    <?php _e('This will override any changes you have made to this beer.', EMBM_DOMAIN); ?>
+                </p>
+                <p>
+                    <input
+                        name="embm_sync_exclude"
+                        id="embm_sync_exclude"
+                        value="1"
+                        type="checkbox"
+                        <?php checked('1', $sync_exclude); ?>
+                    >
+                    <label for="embm_sync_exclude">
+                        <strong><?php _e('Exclude from Sync', EMBM_DOMAIN); ?></strong>
+                    </label>
                 </p>
             </div>
         </div>
@@ -270,17 +307,17 @@ function EMBM_Admin_Metabox_Untappd_content()
         <?php EMBM_Admin_Notices_ratelimit(null); ?>
     <?php elseif ($untappd_id == '') : ?>
         <p class="embm-metabox--untappd-empty">
-            <?php _e('Set a valid Untappd Beer ID to access additional display options.', 'embm'); ?>
+            <?php _e('Set a valid Untappd Beer ID to access additional display options.', EMBM_DOMAIN); ?>
         </p>
     <?php else : ?>
         <p class="embm-metabox--untappd-empty">
             <?php
                 printf(
-                    __('Log in to Untappd on the %s to access additional display options.', 'embm'),
+                    __('Log in to Untappd on the %s to access additional display options.', EMBM_DOMAIN),
                     sprintf(
                         '<a href="%s">%s</a>',
                         get_admin_url(null, 'options-general.php?page=embm-settings'),
-                        __('settings page', 'embm')
+                        __('settings page', EMBM_DOMAIN)
                     )
                 );
             ?>
@@ -315,27 +352,31 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
         return;
     }
 
-    // Save input
-    if (isset($_POST['embm_show_rating'])) {
-        update_post_meta($post_id, 'embm_show_rating', esc_attr($_POST['embm_show_rating']));
+    // Get current post meta
+    $beer_meta = get_post_meta($post_id, EMBM_BEER_META, true);
+    $beer_meta = (null == $beer_meta) ? array() : $beer_meta;
+
+    // Get list of attrs
+    $beer_attrs = array('hide_rating', 'rating_format', 'hide_reviews', 'reviews_count', 'sync_exclude');
+
+    // Save inputs
+    foreach ($beer_attrs as $beer_attr) {
+        $beer_meta[$beer_attr] = isset($_POST['embm_'.$beer_attr]) ? esc_attr($_POST['embm_'.$beer_attr]) : null;
     }
-    if (isset($_POST['embm_rating_format'])) {
-        update_post_meta($post_id, 'embm_rating_format', esc_attr($_POST['embm_rating_format']));
-    }
-    if (isset($_POST['embm_show_reviews'])) {
-        update_post_meta($post_id, 'embm_show_reviews', esc_attr($_POST['embm_show_reviews']));
-    }
-    if (isset($_POST['embm_reviews_count'])) {
-        update_post_meta($post_id, 'embm_reviews_count', esc_attr($_POST['embm_reviews_count']));
-    }
+
+    // Update post meta
+    update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
+
+    // Handle new Untappd ID separately
     if (isset($_POST['embm_untappd'])) {
         $beer_id = esc_attr($_POST['embm_untappd']);
-        $old_id = get_post_meta($post_id, 'embm_untappd', true);
+        $old_id = array_key_exists('untappd_id', $beer_meta) ? $beer_meta['untappd_id'] : null;
 
         // Skip if this is not a new ID
         if ($beer_id !== $old_id) {
             // Save new ID
-            update_post_meta($post_id, 'embm_untappd', $beer_id);
+            $beer_meta['untappd_id'] = $beer_id;
+            update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
 
             // Get beer data from Untappd API
             if (isset($_POST['embm-untappd-api-root']) && $_POST['embm-untappd-api-root'] !== '' && $beer_id !== '') {
@@ -354,7 +395,8 @@ function EMBM_Admin_Metabox_Untappd_save($post_id)
 
             // Remove beer data if the ID is unset
             if ($beer_id == '') {
-                delete_post_meta($post_id, 'embm_untappd_data');
+                $beer_meta['untappd_id'] = null;
+                update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
             }
         }
     }

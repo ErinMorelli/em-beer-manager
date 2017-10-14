@@ -86,6 +86,7 @@
 .embm-settings--page .embm-settings--tab-settings {
     position: relative;
 }
+.embm-settings--page .embm-settings--tab-usage .embm-usage--navbox,
 .embm-settings--page .embm-settings--tab-settings .embm-settings--navbox {
     position: fixed;
     top: 132px;
@@ -94,6 +95,7 @@
     padding: 8px 20px 10px 25px;
     border: 1px solid #ccc;
 }
+.embm-settings--page .embm-settings--tab-usage .embm-usage--navbox .dashicons,
 .embm-settings--page .embm-settings--tab-settings .embm-settings--navbox .dashicons {
     position: absolute;
     left: 0;
@@ -103,10 +105,12 @@
     cursor: pointer;
     height: 100%;
 }
+.embm-settings--page .embm-settings--tab-usage .embm-usage--navbox .dashicons::before,
 .embm-settings--page .embm-settings--tab-settings .embm-settings--navbox .dashicons::before {
     position: relative;
     top: 50%;
 }
+.embm-settings--page .embm-settings--tab-usage .embm-usage--navbox a,
 .embm-settings--page .embm-settings--tab-settings .embm-settings--navbox a {
     color: #555;
 }
@@ -192,6 +196,50 @@
 }
 .embm-settings-footer--donate-text {
     font-size: 12px;
+    position: relative;
+}
+.embm-settings-footer--donate-text span:not(.dashicons) {
+    display: inline-block;
+    font-style: italic;
+    font-weight: bold;
+    padding-right: 5px;
+}
+.embm-settings-footer--donate-text span.dashicons {
+    padding-left: 5px;
+    position: relative;
+    top: 5px;
+}
+.embm-settings-footer--donate-button {
+    background: #ffe6b0;
+    background-image: -webkit-linear-gradient(top, #ffe6b0, #ffaa00);
+    background-image: -moz-linear-gradient(top, #ffe6b0, #ffaa00);
+    background-image: -ms-linear-gradient(top, #ffe6b0, #ffaa00);
+    background-image: -o-linear-gradient(top, #ffe6b0, #ffaa00);
+    background-image: linear-gradient(to bottom, #ffe6b0, #ffaa00);
+    -webkit-border-radius: 5;
+    -moz-border-radius: 5;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px #ffffff;
+    font-family: Arial;
+    color: #000000;
+    font-size: 14px;
+    padding: 5px 10px 5px 10px;
+    border: solid #fcb934 1px;
+    text-decoration: none;
+}
+.embm-settings-footer--donate-button:hover {
+    color: #000000;
+    text-decoration: none;
+}
+#embm-settings-footer--donate-form p {
+    margin-bottom: 0;
+}
+#embm-settings-footer--donate-form input[type="submit"] {
+    cursor: pointer;
+}
+#embm-settings-footer--donate-form img {
+    height: 20px;
+    margin: 6px 0 0 1px;
 }
 .embm-settings-footer--donate a,
 .embm-settings-footer--credits-untappd > a {
@@ -261,8 +309,16 @@
     font-size: 14px;
     font-weight: 600;
 }
-.embm-settings--tab .embm-labs--import-select {
+#embm-labs-untappd .form-table th p.description {
+    font-weight: normal;
+}
+.embm-settings--tab select.embm-labs--import-select {
     margin-right: 10px;
+    max-height: 800px;
+    max-width: 800px;
+    min-height: 100px;
+    min-width: 100px;
+    resize: both;
 }
 
 
@@ -365,11 +421,16 @@
     margin: 0;
     padding: 0;
 }
-.embm-metabox--utfb ul > li {
-    display: inline-block;
+.embm-metabox--utfb ul ul {
+    font-size: 95%;
+    padding-top: 2px;
 }
-.embm-metabox--utfb ul > li:not(:last-child)::after {
-    content: '/';
+.embm-metabox--utfb ul ul > li {
+    margin-bottom: 2px;
+}
+.embm-metabox--utfb ul ul > li::before {
+    content: '\2014';
+    padding-right: 5px;
 }
 
 /**

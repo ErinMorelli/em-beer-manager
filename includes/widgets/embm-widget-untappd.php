@@ -19,6 +19,11 @@
  * @package EMBM\Widget\Untappd
  */
 
+define(
+    'EMBM_DEFAULT_UNTAPPD_AVATAR',
+    'https://i1.wp.com/untappd.akamaized.net/site/assets/images/default_avatar_v2_gravatar.jpg'
+);
+
 
 /**
  * Add Recent Untappd Check-ins widget
@@ -37,8 +42,8 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 
         // Base widget options
         $widget_options = array(
-            'classname'     => 'embm_recent_untappd_widget',
-            'description'   => __('Displays a list of recent Untappd brewery check-ins', 'embm')
+            'classname'     => EMBM_WIDGET_RECENT_UNTAPPD,
+            'description'   => __('Displays a list of recent Untappd brewery check-ins', EMBM_DOMAIN)
         );
 
         // Add contextual help for widget
@@ -46,8 +51,8 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 
         // Call parent construct
         parent::__construct(
-            'embm_recent_untappd_widget',
-            __('Recent Untappd Check-ins', 'embm'),
+            EMBM_WIDGET_RECENT_UNTAPPD,
+            __('Recent Untappd Check-ins', EMBM_DOMAIN),
             $widget_options
         );
     }
@@ -89,16 +94,16 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         $screen->add_help_tab(
             array(
                 'id'       => 'embm-untappd-brewery-id',
-                'title'    => __('Untappd Beer ID', 'embm'),
+                'title'    => __('Untappd Beer ID', EMBM_DOMAIN),
                 'content'  => '<p>'.
-                    __('Find your Untappd brewery ID number by going to your brewery\'s official page', 'embm').
+                    __('Find your Untappd brewery ID number by going to your brewery\'s official page', EMBM_DOMAIN).
                     ' (i.e. <code>https://untappd.com/BreweryName</code>). '.
                     sprintf(
-                        __('Click on the %s link in the right-hand sidebar. The link\'s URL will be formatted like this', 'embm'),
+                        __('Click on the %s link in the right-hand sidebar. The link\'s URL will be formatted like this', EMBM_DOMAIN),
                         '"Brewery Feed (RSS)"'
                     ).':</p><p><code>https://untappd.com/rss/brewery/<strong>64324</strong></code></p><p>'.
-                    __('The string of numbers at the end of the URL is your brewery ID number.', 'embm').
-                    __('If you have authenticated with Untappd in the Labs section, your brewery\'s ID will automatically populate the field.', 'embm').
+                    __('The string of numbers at the end of the URL is your brewery ID number.', EMBM_DOMAIN).
+                    __('If you have authenticated with Untappd in the Labs section, your brewery\'s ID will automatically populate the field.', EMBM_DOMAIN).
                     '</p>'
             )
         );
@@ -140,7 +145,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
         $errors = '';
 
         // Get brewery ID from Labs
-        $brewery_id = get_option('embm_untappd_brewery_id');
+        $brewery_id = get_option(EMBM_UNTAPPD_BREWERY);
 
         // If an ID was found and one is not set, auto-populate the field
         if (($brewery_id && $brewery_id != '') && (!$brewery || $brewery == '')) {
@@ -177,7 +182,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
 ?>
     <div class="embm-untappd-widget">
         <p class="embm-untappd-widget--title">
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'embm'); ?>:</label><br />
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', EMBM_DOMAIN); ?>:</label><br />
             <input
                 id="<?php echo $this->get_field_id('title'); ?>"
                 name="<?php echo $this->get_field_name('title'); ?>"
@@ -187,7 +192,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             />
         </p>
         <p class="embm-untappd-widget--brewery">
-            <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID', 'embm'); ?>&nbsp;</label>
+            <label for="<?php echo $this->get_field_id('brewery'); ?>"><?php _e('Brewery ID', EMBM_DOMAIN); ?>&nbsp;</label>
             <input
                 id="<?php echo $this->get_field_id('brewery'); ?>"
                 name="<?php echo $this->get_field_name('brewery'); ?>"
@@ -198,7 +203,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
             <a data-help="embm-untappd-brewery-id" class="embm-settings--help">?</a>
         </p>
         <p class="embm-untappd-widget--count">
-            <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show', 'embm'); ?>:&nbsp;</label>
+            <label for="<?php echo $this->get_field_id('items'); ?>"><?php _e('Number of items to show', EMBM_DOMAIN); ?>:&nbsp;</label>
             <input
                 id="<?php echo $this->get_field_id('items'); ?>"
                 name="<?php echo $this->get_field_name('items'); ?>"
@@ -209,7 +214,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 style="width:50px;"
                 value="<?php echo $items; ?>"
             /><br />
-            <small><em>(<?php printf(__('Max. %d', 'embm'), 15); ?></em>)</small>
+            <small><em>(<?php printf(__('Max. %d', EMBM_DOMAIN), 15); ?></em>)</small>
         </p>
         <hr />
         <p class="embm-untappd-widget--rating">
@@ -220,7 +225,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="1"'
                 <?php checked('1', $rating); ?>
             />
-            <label for="<?php echo $this->get_field_id('rating'); ?>"><?php _e('Show check-in ratings', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('rating'); ?>"><?php _e('Show check-in ratings', EMBM_DOMAIN); ?></label>
         </p>
         <p class="embm-untappd-widget--comment">
             <input
@@ -230,7 +235,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="1"'
                 <?php checked('1', $comment); ?>
             />
-            <label for="<?php echo $this->get_field_id('comment'); ?>"><?php _e('Show check-in comments', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('comment'); ?>"><?php _e('Show check-in comments', EMBM_DOMAIN); ?></label>
         </p>
         <p class="embm-untappd-widget--venue">
             <input
@@ -240,7 +245,7 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="1"'
                 <?php checked('1', $venue); ?>
             />
-            <label for="<?php echo $this->get_field_id('venue'); ?>"><?php _e('Show check-in venue', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('venue'); ?>"><?php _e('Show check-in venue', EMBM_DOMAIN); ?></label>
         </p>
         <p class="embm-untappd-widget--thumb" style="margin-bottom:0;">
             <input
@@ -250,10 +255,10 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="1"'
                 <?php checked('1', $thumb); ?>
             />
-            <label for="<?php echo $this->get_field_id('thumb'); ?>"><?php _e('Show check-in avatar', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('thumb'); ?>"><?php _e('Show check-in avatar', EMBM_DOMAIN); ?></label>
         </p>
         <p class="embm-untappd-widget--thumb-note" style="line-height:1;margin-top:0;padding-left:22px;">
-            <small><em>(<?php _e('Only shows default generic avatar when not authenticated with Untappd.', 'embm'); ?>)</em></small>
+            <small><em>(<?php _e('Only shows default generic avatar when not authenticated with Untappd.', EMBM_DOMAIN); ?>)</em></small>
         </p>
         <p class="embm-untappd-widget--more">
             <input
@@ -263,17 +268,17 @@ class EMBM_Widget_Untappd_Recent extends WP_Widget
                 value="1"'
                 <?php checked('1', $more); ?>
             />
-            <label for="<?php echo $this->get_field_id('more'); ?>"><?php _e('Show "View More" link', 'embm'); ?></label>
+            <label for="<?php echo $this->get_field_id('more'); ?>"><?php _e('Show "View More" link', EMBM_DOMAIN); ?></label>
         </p>
         <hr />
         <p class="embm-untappd-widget--refresh" style="margin-bottom:5px;">
-            <strong><?php _e('Refresh Untappd Check-in Data', 'embm'); ?></strong>
+            <strong><?php _e('Refresh Untappd Check-in Data', EMBM_DOMAIN); ?></strong>
         </p>
         <p class="embm-untappd-widget--refresh-button" style="margin-top:0;margin-bottom:4px;">
-            <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>"><?php _e('Flush Cache', 'embm'); ?></a>
+            <a href="#" class="button-secondary" data-api-root="<?php echo $api_root; ?>"><?php _e('Flush Cache', EMBM_DOMAIN); ?></a>
         </p>
         <p class="embm-untappd-widget--refresh-note" style="margin-top:0;">
-            <small><em><?php _e('This is automatically done daily.', 'embm'); ?></em></small>
+            <small><em><?php _e('This is automatically done daily.', EMBM_DOMAIN); ?></em></small>
         </p>
         <?php echo $errors; ?>
     </div>
@@ -433,7 +438,7 @@ function EMBM_Widget_Untappd_Recent_display($beers)
     // Fall back content for when a brewery is not defined
     if (!$brewery_id) {
         $output .= '<li class="embm-untappd-list-item">';
-        $output .= __('A brewery ID number has not been set.', 'embm');
+        $output .= __('A brewery ID number has not been set.', EMBM_DOMAIN);
         $output .= '</li>'."\n";
         $output .= '</ul>'."\n";
 
@@ -458,7 +463,7 @@ function EMBM_Widget_Untappd_Recent_display($beers)
 
     // Add 'more' link
     if ($show_more) {
-        $more_text = __('View More', 'embm');
+        $more_text = __('View More', EMBM_DOMAIN);
         $output .= '<span class="embm-untappd-list--more">';
         $output .= '<a href="https://untappd.com/brewery/'.$brewery_id.'" target="_blank" title="' . $more_text . '">';
         $output .= '<span>' . $more_text . '</span>';
@@ -467,7 +472,7 @@ function EMBM_Widget_Untappd_Recent_display($beers)
     }
 
     // Add Untappd credit
-    $credit_text = __('Powered by Untappd', 'embm');
+    $credit_text = __('Powered by Untappd', EMBM_DOMAIN);
     $credit_class = $show_more ? '' : ' embm-untappd-list--credit__left';
     $output .= '<span class="embm-untappd-list--credit'.$credit_class.'">';
     $output .= '<a href="https://untappd.com" target="_blank" rel="nofollow" title="' . $credit_text . '">';
@@ -518,7 +523,7 @@ function EMBM_Widget_Untappd_Recent_Display_api($token, $beers)
 
     // Make sure we have check-ins to show
     if (!$checkins->count || $checkins->count < 1) {
-        $error = __('This brewery has no recent check-ins!', 'embm');
+        $error = __('This brewery has no recent check-ins!', EMBM_DOMAIN);
         return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
     }
 
@@ -602,7 +607,7 @@ function EMBM_Widget_Untappd_Recent_Display_xml($beers)
 
     // Check for errors
     if (!is_object($xml)) {
-        $error = __('There was a problem retrieving Untappd check-ins. Please try again later.', 'embm');
+        $error = __('There was a problem retrieving Untappd check-ins. Please try again later.', EMBM_DOMAIN);
         return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
     }
 
@@ -611,7 +616,7 @@ function EMBM_Widget_Untappd_Recent_Display_xml($beers)
 
     // Make sure we have check-ins to show
     if (!$xml->channel->item->count() || $xml->channel->item->count() < 1) {
-        $error = __('This brewery has no recent check-ins!', 'embm');
+        $error = __('This brewery has no recent check-ins!', EMBM_DOMAIN);
         return sprintf('<p class="embm-untappd-list--empty">%s</p>', $error);
     }
 
@@ -690,9 +695,6 @@ function EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry)
     $show_venue = ($beers['venue'] == '1');
     $show_thumb = ($beers['thumb'] == '1');
 
-    // Set default avatar URL
-    $default_avatar_url = 'https://i1.wp.com/untappd.akamaized.net/site/assets/images/default_avatar_v2.jpg';
-
     // Set link format
     $link_format = '<a class="embm-untappd-list--item-link" href="%s" target="_blank">%s</a>';
 
@@ -702,7 +704,7 @@ function EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry)
     // Show thumbnail
     if ($show_thumb) {
         // Set avatar URL
-        $avatar_url = !is_null($entry['avatar']) ? $entry['avatar'] : $default_avatar_url;
+        $avatar_url = !is_null($entry['avatar']) ? $entry['avatar'] : EMBM_DEFAULT_UNTAPPD_AVATAR;
 
         // Display avatar
         $output .= '<span class="embm-untappd-list--item-thumb">';
@@ -715,12 +717,12 @@ function EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry)
     $output .= '<span class="embm-untappd-list--item-content'.$content_class.'">';
 
     // See if we need to use 'a' or 'an'
-    $determiner = preg_match('/^[aeiou]/i', $entry['beer']['name']) ? __('an', 'embm') : __('a', 'embm');
+    $determiner = preg_match('/^[aeiou]/i', $entry['beer']['name']) ? __('an', EMBM_DOMAIN) : __('a', EMBM_DOMAIN);
 
     // Entry title
     $output .= '<span class="embm-untappd-list--item-title">';
     $output .= sprintf($link_format, $entry['user']['link'], $entry['user']['name']);
-    $output .= ' '.sprintf(__('is drinking %s', 'embm'), $determiner).' ';
+    $output .= ' '.sprintf(__('is drinking %s', EMBM_DOMAIN), $determiner).' ';
     $output .= sprintf($link_format, $entry['beer']['link'], $entry['beer']['name']);
     $output .= '</span>';
 
@@ -754,7 +756,7 @@ function EMBM_Widget_Untappd_Recent_Display_entry($beers, $entry)
     }
 
     // Link to full check-in entry
-    $output .= sprintf($link_format, $entry['link'], __('View Full Check-in', 'embm'));
+    $output .= sprintf($link_format, $entry['link'], __('View Full Check-in', EMBM_DOMAIN));
 
     // End meta & content
     $output .= '</span></span>';

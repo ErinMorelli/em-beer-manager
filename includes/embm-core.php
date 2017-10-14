@@ -28,36 +28,36 @@ function EMBM_Core_beer()
 {
     // Set custom post type terminology
     $labels = array(
-        'name'                  => __('Beers', 'embm'),
-        'singular_name'         => __('Beer', 'embm'),
-        'add_new'               => __('Add New', 'embm'),
-        'add_new_item'          => __('Add New Beer', 'embm'),
-        'edit_item'             => __('Edit Beer', 'embm'),
-        'new_item'              => __('New Beer', 'embm'),
-        'all_items'             => __('All Beers', 'embm'),
-        'view_item'             => __('View Beer', 'embm'),
-        'search_items'          => __('Search Beers', 'embm'),
-        'not_found'             => __('No beers found', 'embm'),
-        'not_found_in_trash'    => __('No beers found in the Trash', 'embm'),
+        'name'                  => __('Beers', EMBM_DOMAIN),
+        'singular_name'         => __('Beer', EMBM_DOMAIN),
+        'add_new'               => __('Add New', EMBM_DOMAIN),
+        'add_new_item'          => __('Add New Beer', EMBM_DOMAIN),
+        'edit_item'             => __('Edit Beer', EMBM_DOMAIN),
+        'new_item'              => __('New Beer', EMBM_DOMAIN),
+        'all_items'             => __('All Beers', EMBM_DOMAIN),
+        'view_item'             => __('View Beer', EMBM_DOMAIN),
+        'search_items'          => __('Search Beers', EMBM_DOMAIN),
+        'not_found'             => __('No beers found', EMBM_DOMAIN),
+        'not_found_in_trash'    => __('No beers found in the Trash', EMBM_DOMAIN),
         'parent_ithwh_colon'    => '',
-        'menu_name'             => __('Beers', 'embm')
+        'menu_name'             => __('Beers', EMBM_DOMAIN)
     );
 
     // Set up custom post type options
     $args = array(
         'labels'                => $labels,
-        'description'           => __('Holds beer specific data', 'embm'),
+        'description'           => __('Holds beer specific data', EMBM_DOMAIN),
         'public'                => true,
         'capability_type'       => 'post',
         'hierarchical'          => false,
-        'taxonomies'            => array('embm_style', 'embm_group', 'embm_menu'),
+        'taxonomies'            => array(EMBM_STYLE, EMBM_GROUP, EMBM_MENU),
         'has_archive'           => true,
         'menu_position'         => 5,
         'show_in_rest'          => true,
         'rest_base'             => 'embm_beers',
         'rest_controller_class' => 'WP_REST_Posts_Controller',
         'rewrite'               => array(
-            'slug'              => __('beers', 'embm'),
+            'slug'              => __('beers', EMBM_DOMAIN),
             'with_front'        => false,
             'feeds'             => true,
             'pages'             => true
@@ -72,7 +72,7 @@ function EMBM_Core_beer()
     );
 
     // Register post type
-    register_post_type('embm_beer', $args);
+    register_post_type(EMBM_BEER, $args);
 
     // Load metaboxes
     EMBM_Core_Beer_metaboxes();
@@ -82,7 +82,7 @@ function EMBM_Core_beer()
 add_action('init', 'EMBM_Core_beer');
 
 // Add thumbnail support to custom post type
-add_theme_support('post-thumbnails', array('embm_beer'));
+add_theme_support('post-thumbnails', array(EMBM_BEER));
 
 /**
  * Add custom metaboxes to post type
@@ -120,13 +120,13 @@ function EMBM_Core_Comments_status($open, $post_id)
     $post = get_post($post_id);
 
     // Get EMBM options
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get setting for comments
     $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     // Close comments if disabled
-    if (($use_comments != '1') && ($post->post_type == 'embm_beer')) {
+    if (($use_comments != '1') && ($post->post_type == EMBM_BEER)) {
         $open = false;
     }
 
@@ -144,13 +144,13 @@ function EMBM_Core_Comments_template()
     global $post;
 
     // Get EMBM options
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get setting for comments
     $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     // Load blank template if disabled
-    if (($use_comments != '1') && ($post->post_type == 'embm_beer')) {
+    if (($use_comments != '1') && ($post->post_type == EMBM_BEER)) {
         return EMBM_PLUGIN_DIR.'includes/templates/embm-template-comments.php';
     }
 }
@@ -163,22 +163,22 @@ function EMBM_Core_Comments_template()
 function EMBM_Core_Comments_toggle()
 {
     // Get EMBM options
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_OPTIONS);
 
     // Get settings for comments
     $use_comments = isset($options['embm_comment_check']) ? $options['embm_comment_check'] : null;
 
     if ($use_comments != '1') {
         // If disabled, remove support for comments from post type
-        if (post_type_supports('embm_beer', 'comments')) {
-            remove_post_type_support('embm_beer', 'comments');
-            remove_post_type_support('embm_beer', 'trackbacks');
+        if (post_type_supports(EMBM_BEER, 'comments')) {
+            remove_post_type_support(EMBM_BEER, 'comments');
+            remove_post_type_support(EMBM_BEER, 'trackbacks');
         }
     } else {
         // If enabled, add support for comments to post type
-        if (!post_type_supports('embm_beer', 'comments')) {
-            add_post_type_support('embm_beer', 'comments');
-            add_post_type_support('embm_beer', 'trackbacks');
+        if (!post_type_supports(EMBM_BEER, 'comments')) {
+            add_post_type_support(EMBM_BEER, 'comments');
+            add_post_type_support(EMBM_BEER, 'trackbacks');
         }
     }
 
@@ -199,11 +199,7 @@ function EMBM_Core_Meta_help()
 {
     // Get the current screen
     $screen = get_current_screen();
-
-    $help_screens = array(
-        'embm_beer',
-        'edit-embm_beer'
-    );
+    $help_screens = array(EMBM_BEER, 'edit-'.EMBM_BEER);
 
     // Check if current screen is admin page
     if (!in_array($screen->id, $help_screens)) {
@@ -220,7 +216,7 @@ function EMBM_Core_Meta_help()
 
     // Help sidebar
     $screen->set_help_sidebar(
-        '<p><a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=embm-settings">' . __('EM Beer Manager Settings', 'embm') . '</a></p>' .
+        '<p><a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=embm-settings">' . __('EM Beer Manager Settings', EMBM_DOMAIN) . '</a></p>' .
         $default_help['sidebar']
     );
 }
@@ -237,7 +233,7 @@ add_action('load-edit.php', 'EMBM_Core_Meta_help');
  */
 function EMBM_Core_Beer_disabled()
 {
-    $ut_option = get_option('embm_options');
+    $ut_option = get_option(EMBM_OPTIONS);
     return (isset($ut_option['embm_untappd_check']) && $ut_option['embm_untappd_check'] == '1');
 }
 
@@ -249,52 +245,104 @@ function EMBM_Core_Beer_disabled()
  *
  * @return string
  */
-function EMBM_Core_Beer_attr($post_id, $attr)
+function EMBM_Core_Beer_meta($post_id, $attr)
 {
-    // Set attr name
-    $attr_name = 'embm_' . $attr;
+    // Get beer profile data
+    $profile = get_post_meta($post_id, EMBM_BEER_META, true);
 
-    // Get beer attribute data
-    $b_attr = get_post_meta($post_id, $attr_name, true);
+    // Exit if there's no metadata
+    if (null == $profile) {
+        return null;
+    }
 
     // Format the data
     switch ($attr) {
     case 'abv':
-        return $b_attr . '%';
+        if (array_key_exists($attr, $profile) && $profile[$attr] > 0) {
+            return $profile[$attr] . '%';
+        }
+        break;
+    case 'ibu':
+        if (array_key_exists($attr, $profile) && $profile[$attr] > 0) {
+            return $profile[$attr];
+        }
+        break;
     case 'beer_num':
-        return '#' . $b_attr;
+        if (array_key_exists($attr, $profile) && $profile[$attr] !== '') {
+            return '#' . $profile[$attr];
+        }
+        break;
     case 'notes':
-        return html_entity_decode($b_attr);
-    case 'untappd':
-        return EMBM_Core_Beer_disabled() ? null : 'https://untappd.com/beer/' . $b_attr;
-    case 'untappd_data':
-        if (EMBM_Core_Beer_disabled()) {
-            return null;
+        if (array_key_exists($attr, $profile)) {
+            return html_entity_decode($profile[$attr]);
         }
-
-        // Get token
-        $token = EMBM_Admin_Authorize_token();
-
-        // Get beer ID
-        $beer_id = get_post_meta($post_id, 'embm_untappd', true);
-        if (null == $token || $beer_id == '') {
-            return null;
+        break;
+    case 'untappd_url':
+        if (array_key_exists('untappd_id', $profile) && null !== $profile['untappd_id']) {
+            return EMBM_Core_Beer_disabled() ? null : 'https://untappd.com/beer/'.$profile['untappd_id'];
         }
-
-        // Get beer data
-        $api_root = EMBM_UNTAPPD_API_URL.$token;
-        $res = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
-
-        // Return data
-        if (!is_null($res) && array_key_exists('beer', $res)) {
-            return $res['beer'];
-        } else if (is_string($res)) {
-            return $res;
-        }
-        return null;
+        break;
     default:
-        return $b_attr;
+        if (array_key_exists($attr, $profile)) {
+            return $profile[$attr];
+        }
+        break;
     }
+
+    return null;
+}
+
+/**
+ * Retrieves Untappd data for a given beer
+ *
+ * @param int $post_id WP post ID
+ *
+ * @return object
+ */
+function EMBM_Core_Beer_untappd($post_id)
+{
+    // Check if Untappd is disabled
+    if (EMBM_Core_Beer_disabled()) {
+        return null;
+    }
+
+    // Get token
+    $token = EMBM_Admin_Authorize_token();
+
+    // Get beer ID
+    $beer_id = EMBM_Core_Beer_meta($post_id, 'untappd_id');
+    if (null == $token || is_null($beer_id) || $beer_id == '') {
+        return null;
+    }
+
+    // Get beer data
+    $api_root = EMBM_UNTAPPD_API_URL.$token;
+    $res = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
+
+    // Return data
+    if (!is_null($res) && array_key_exists('beer', $res)) {
+        return $res['beer'];
+    } else if (is_string($res)) {
+        return $res;
+    }
+
+    // Fall back to null
+    return null;
+}
+
+/**
+ * Retrieves UTFB data for a given beer
+ *
+ * @param int $post_id WP post ID
+ *
+ * @return object
+ */
+function EMBM_Core_Beer_utfb($post_id)
+{
+    // Get beer extras data
+    $beer_meta = get_post_meta($post_id, EMBM_BEER_META_UTFB, true);
+    $beer_meta = (null == $beer_meta) ? array() : $beer_meta;
+    return $beer_meta;
 }
 
 /**
@@ -321,7 +369,7 @@ function EMBM_Core_Beer_ratings()
             'form'  => $stars . ' ' . $rating . ' | ' . $count,
             'desc'  => sprintf(
                 '&starf;&starf;&starf;&starf;&star; (4.0) | 1,234 %s',
-                __('Ratings', 'embm')
+                __('Ratings', EMBM_DOMAIN)
             )
         )
     );
@@ -337,7 +385,7 @@ function EMBM_Core_Beer_ratings()
 function EMBM_Core_Beer_style($post_id)
 {
     // Get the styles for the beer
-    $types = wp_get_object_terms($post_id, 'embm_style');
+    $types = wp_get_object_terms($post_id, EMBM_STYLE);
 
     // Return the first item's name
     foreach ($types as $type) {
@@ -354,19 +402,19 @@ function EMBM_Core_styles()
 {
     // Set custom taxonomy terminology
     $labels = array(
-        'name'                          => __('Styles', 'embm'),
-        'singular_name'                 => __('Style', 'embm'),
-        'search_items'                  => __('Search Styles', 'embm'),
-        'all_items'                     => __('All Styles', 'embm'),
-        'edit_item'                     => __('Edit Style', 'embm'),
-        'update_item'                   => __('Update Style', 'embm'),
-        'add_new_item'                  => __('Add New Style', 'embm'),
-        'new_item_name'                 => __('New Style Name', 'embm'),
-        'popular_items'                 => __('Popular Styles', 'embm'),
-        'choose_from_most_used'         => __('Choose from the most used styles', 'embm'),
-        'separate_items_with_commas'    => __('Separate styles with commas', 'embm'),
-        'add_or_remove_items'           => __('Add or remove styles', 'embm'),
-        'menu_name'                     => __('Styles', 'embm')
+        'name'                          => __('Styles', EMBM_DOMAIN),
+        'singular_name'                 => __('Style', EMBM_DOMAIN),
+        'search_items'                  => __('Search Styles', EMBM_DOMAIN),
+        'all_items'                     => __('All Styles', EMBM_DOMAIN),
+        'edit_item'                     => __('Edit Style', EMBM_DOMAIN),
+        'update_item'                   => __('Update Style', EMBM_DOMAIN),
+        'add_new_item'                  => __('Add New Style', EMBM_DOMAIN),
+        'new_item_name'                 => __('New Style Name', EMBM_DOMAIN),
+        'popular_items'                 => __('Popular Styles', EMBM_DOMAIN),
+        'choose_from_most_used'         => __('Choose from the most used styles', EMBM_DOMAIN),
+        'separate_items_with_commas'    => __('Separate styles with commas', EMBM_DOMAIN),
+        'add_or_remove_items'           => __('Add or remove styles', EMBM_DOMAIN),
+        'menu_name'                     => __('Styles', EMBM_DOMAIN)
     );
 
     // Set up custom taxonomy options
@@ -377,7 +425,7 @@ function EMBM_Core_styles()
         'show_admin_column'     => true,
         'query_var'             => true,
         'rewrite'               => array(
-            'slug'              => __('beers/style', 'embm'),
+            'slug'              => __('beers/style', EMBM_DOMAIN),
             'with_front'        => false
         ),
         'show_in_rest'          => true,
@@ -386,10 +434,10 @@ function EMBM_Core_styles()
     );
 
     // Register the styles taxonomy with the EMBM custom post type
-    register_taxonomy('embm_style', array('embm_beer'), $args);
+    register_taxonomy(EMBM_STYLE, array(EMBM_BEER), $args);
 
     // Populate taxonomy with terms, if they haven't been loaded yet
-    if (!get_option('embm_styles_loaded')) {
+    if (!get_option(EMBM_STYLES_LOADED)) {
         EMBM_Core_Styles_populate();
     }
 }
@@ -413,17 +461,19 @@ function EMBM_Core_Styles_populate()
     // Read file
     while (!feof($beer_styles)) {
         // Get styles, line-by-line
-        $beer_style = fgets($beer_styles);
+        $beer_style = trim(fgets($beer_styles));
 
         // Add style as term in taxonomy
-        wp_insert_term($beer_style, 'embm_style');
+        if (false == term_exists($beer_style, EMBM_STYLE)) {
+            $res = wp_insert_term($beer_style, EMBM_STYLE);
+        }
     }
 
     // Close file
     fclose($beer_styles);
 
     // Store the fact that styles were loaded
-    update_option('embm_styles_loaded', true);
+    update_option(EMBM_STYLES_LOADED, true);
 }
 
 /**
@@ -435,26 +485,26 @@ function EMBM_Core_group()
 {
     // Set custom taxonomy terminology
     $labels = array(
-        'name'                          => __('Groups', 'embm'),
-        'singular_name'                 => __('Group', 'embm'),
-        'search_items'                  => __('Search Groups', 'embm'),
-        'all_items'                     => __('All Groups', 'embm'),
-        'edit_item'                     => __('Edit Group', 'embm'),
-        'update_item'                   => __('Update Group', 'embm'),
-        'add_new_item'                  => __('Add New Group', 'embm'),
-        'new_item_name'                 => __('New Group Name', 'embm'),
-        'popular_items'                 => __('Popular Groups', 'embm'),
-        'choose_from_most_used'         => __('Choose from the most used groups', 'embm'),
-        'separate_items_with_commas'    => __('Separate groups with commas', 'embm'),
-        'add_or_remove_items'           => __('Add or remove groups', 'embm'),
-        'menu_name'                     => __('Groups', 'embm')
+        'name'                          => __('Groups', EMBM_DOMAIN),
+        'singular_name'                 => __('Group', EMBM_DOMAIN),
+        'search_items'                  => __('Search Groups', EMBM_DOMAIN),
+        'all_items'                     => __('All Groups', EMBM_DOMAIN),
+        'edit_item'                     => __('Edit Group', EMBM_DOMAIN),
+        'update_item'                   => __('Update Group', EMBM_DOMAIN),
+        'add_new_item'                  => __('Add New Group', EMBM_DOMAIN),
+        'new_item_name'                 => __('New Group Name', EMBM_DOMAIN),
+        'popular_items'                 => __('Popular Groups', EMBM_DOMAIN),
+        'choose_from_most_used'         => __('Choose from the most used groups', EMBM_DOMAIN),
+        'separate_items_with_commas'    => __('Separate groups with commas', EMBM_DOMAIN),
+        'add_or_remove_items'           => __('Add or remove groups', EMBM_DOMAIN),
+        'menu_name'                     => __('Groups', EMBM_DOMAIN)
     );
 
     // Set default slug
     $group_slug = 'beer/group';
 
     // Override slug if user has custom option set
-    $options = get_option('embm_options');
+    $options = get_option(EMBM_GROUP);
     if (isset($options['embm_group_slug'])) {
         $new_slug = sanitize_key($options['embm_group_slug']);
         $group_slug = 'beer/'.$new_slug;
@@ -477,7 +527,7 @@ function EMBM_Core_group()
     );
 
     // Register the group taxonomy with the EMBM custom post type
-    register_taxonomy('embm_group', array('embm_beer'), $args);
+    register_taxonomy(EMBM_GROUP, array(EMBM_BEER), $args);
 }
 
 // Loads the custom Group taxonomy
@@ -492,19 +542,19 @@ function EMBM_Core_menu()
 {
     // Set custom taxonomy terminology
     $labels = array(
-        'name'                          => __('Menus', 'embm'),
-        'singular_name'                 => __('Menu', 'embm'),
-        'search_items'                  => __('Search Menus', 'embm'),
-        'all_items'                     => __('All Menus', 'embm'),
-        'edit_item'                     => __('Edit Menu', 'embm'),
-        'update_item'                   => __('Update Menu', 'embm'),
-        'add_new_item'                  => __('Add New Menu', 'embm'),
-        'new_item_name'                 => __('New Menu Name', 'embm'),
-        'popular_items'                 => __('Popular Menus', 'embm'),
-        'choose_from_most_used'         => __('Choose from the most used menus', 'embm'),
-        'separate_items_with_commas'    => __('Separate menus with commas', 'embm'),
-        'add_or_remove_items'           => __('Add or remove menus', 'embm'),
-        'menu_name'                     => __('Menus', 'embm')
+        'name'                          => __('Menus', EMBM_DOMAIN),
+        'singular_name'                 => __('Menu', EMBM_DOMAIN),
+        'search_items'                  => __('Search Menus', EMBM_DOMAIN),
+        'all_items'                     => __('All Menus', EMBM_DOMAIN),
+        'edit_item'                     => __('Edit Menu', EMBM_DOMAIN),
+        'update_item'                   => __('Update Menu', EMBM_DOMAIN),
+        'add_new_item'                  => __('Add New Menu', EMBM_DOMAIN),
+        'new_item_name'                 => __('New Menu Name', EMBM_DOMAIN),
+        'popular_items'                 => __('Popular Menus', EMBM_DOMAIN),
+        'choose_from_most_used'         => __('Choose from the most used menus', EMBM_DOMAIN),
+        'separate_items_with_commas'    => __('Separate menus with commas', EMBM_DOMAIN),
+        'add_or_remove_items'           => __('Add or remove menus', EMBM_DOMAIN),
+        'menu_name'                     => __('Menus', EMBM_DOMAIN)
     );
 
     // Set up custom taxonomy options
@@ -524,7 +574,7 @@ function EMBM_Core_menu()
     );
 
     // Register the group taxonomy with the EMBM custom post type
-    register_taxonomy('embm_menu', array('embm_beer'), $args);
+    register_taxonomy(EMBM_MENU, array(EMBM_BEER), $args);
 }
 
 // Loads the custom Group taxonomy
@@ -548,7 +598,7 @@ function EMBM_Core_Beer_api()
 
     // Register profile API field
     register_rest_field(
-        'embm_beer',
+        EMBM_BEER,
         'embm_profile',
         array(
             'get_callback'    => $get_callback,
@@ -559,7 +609,7 @@ function EMBM_Core_Beer_api()
 
     // Register extras API field
     register_rest_field(
-        'embm_beer',
+        EMBM_BEER,
         'embm_extras',
         array(
             'get_callback'    => $get_callback,
@@ -569,13 +619,13 @@ function EMBM_Core_Beer_api()
     );
 
     // Retrieve Untappd settings
-    $ut_option = get_option('embm_options');
+    $ut_option = get_option(EMBM_OPTIONS);
 
     // Check if Untappd is disabled
     if (!EMBM_Core_Beer_disabled()) {
         // Register Untappd URL API field
         register_rest_field(
-            'embm_beer',
+            EMBM_BEER,
             'embm_untappd',
             array(
                 'get_callback'    => $get_callback,
@@ -603,18 +653,22 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     // Get the beer id
     $beer_id = $object['id'];
 
+    // Get post meta for beer
+    $beer_meta = get_post_meta($beer_id, EMBM_BEER_META, true);
+    $beer_meta = (null == $beer_meta) ? array() : $beer_meta;
+
     // Return beer profile data
     if ($field_name == 'embm_profile') {
         // Get ABV and IBU as int/float
-        $abv = floatval(get_post_meta($beer_id, 'embm_abv', true));
-        $ibu = intval(EMBM_Core_Beer_attr($beer_id, 'ibu'));
+        $abv = floatval($beer_meta['abv']);
+        $ibu = intval($beer_meta['ibu']);
 
         // Return formatted info
         return array(
-            'malts'     => EMBM_Core_Beer_attr($beer_id, 'malts'),
-            'hops'      => EMBM_Core_Beer_attr($beer_id, 'hops'),
-            'additions' => EMBM_Core_Beer_attr($beer_id, 'adds'),
-            'yeast'     => EMBM_Core_Beer_attr($beer_id, 'yeast'),
+            'malts'     => $beer_meta['malts'],
+            'hops'      => $beer_meta['hops'],
+            'additions' => $beer_meta['adds'],
+            'yeast'     => $beer_meta['yeast'],
             'abv'       => ($abv == 0) ? null : $abv,
             'ibu'       => ($ibu == 0) ? null : $ibu
         );
@@ -623,12 +677,12 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     // Return beer extras data
     if ($field_name == 'embm_extras') {
         // Get Beer Number as int
-        $beer_num = intval(get_post_meta($beer_id, 'embm_beer_num', true));
+        $beer_num = intval($beer_meta['beer_num']);
 
         // Return formatted array
         return array(
-            'availability'  => EMBM_Core_Beer_attr($beer_id, 'avail'),
-            'notes'         => EMBM_Core_Beer_attr($beer_id, 'notes'),
+            'availability'  => $beer_meta['avail'],
+            'notes'         => $beer_meta['notes'],
             'beer_number'   => ($beer_num == 0) ? null : $beer_num
         );
     }
@@ -636,7 +690,7 @@ function EMBM_Core_Beer_Api_get($object, $field_name, $request)
     // Return beer Untappd information
     if ($field_name == 'embm_untappd') {
         // Get Untappd ID as int
-        $untappd_id = intval(get_post_meta($beer_id, 'embm_untappd', true));
+        $untappd_id = intval($beer_meta['untappd_id']);
 
         // Return formatted array
         return array (
@@ -664,55 +718,45 @@ function EMBM_Core_Beer_Api_update($value, $object, $field_name)
     // Get the beer id
     $beer_id = $object->ID;
 
-    // Return beer profile data
-    if ($field_name == 'embm_profile') {
-        // Save input
-        if (isset($value['malts']) && is_string($value['malts'])) {
-            update_post_meta($beer_id, 'embm_malts', esc_attr($value['malts']));
+    // Get post meta for beer
+    $beer_meta = get_post_meta($beer_id, EMBM_BEER_META, true);
+    $beer_meta = (null == $beer_meta) ? array() : $beer_meta;
+
+    // Set up attr hash
+    $fields = array(
+        'embm_profile' => array('malts', 'hops', 'adds', 'yeast', 'ibu', 'abv'),
+        'embm_extras'  => array('beer_num', 'avail', 'notes')
+    );
+
+    // Iterate over fields
+    if (array_key_exists($field_name, $fields)) {
+        // Get field attributes
+        $attrs = $fields[$field_name];
+
+        // Iterate over field attributes
+        foreach ($attrs as $attr) {
+            if (isset($value[$attr]) && is_string($value[$attr])) {
+                $beer_meta[$attr] = esc_attr($value[$attr]);
+            }
         }
-        if (isset($value['hops']) && is_string($value['hops'])) {
-            update_post_meta($beer_id, 'embm_hops', esc_attr($value['hops']));
-        }
-        if (isset($value['additions']) && is_string($value['additions'])) {
-            update_post_meta($beer_id, 'embm_adds', esc_attr($value['additions']));
-        }
-        if (isset($value['yeast']) && is_string($value['yeast'])) {
-            update_post_meta($beer_id, 'embm_yeast', esc_attr($value['yeast']));
-        }
-        if (isset($value['ibu']) && is_int($value['ibu'])) {
-            update_post_meta($beer_id, 'embm_ibu', esc_attr($value['ibu']));
-        }
-        if (isset($value['abv']) && (is_float($value['abv']) || is_int($value['abv']))) {
-            update_post_meta($beer_id, 'embm_abv', esc_attr($value['abv']));
-        }
+
+        // Save data
+        update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
     }
 
-    // Return beer extras data
-    if ($field_name == 'embm_extras') {
-        // Save input
-        if (isset($value['beer_number']) && is_int($value['beer_number'])) {
-            update_post_meta($beer_id, 'embm_beer_num', esc_attr($value['beer_number']));
-        }
-        if (isset($value['availability']) && is_string($value['availability'])) {
-            update_post_meta($beer_id, 'embm_avail', esc_attr($value['availability']));
-        }
-        if (isset($value['notes']) && is_string($value['notes'])) {
-            update_post_meta($beer_id, 'embm_notes', esc_attr($value['notes']));
-        }
-    }
-
-    // Return beer Untappd information
+    // Handle Untappd information separately
     if ($field_name == 'embm_untappd') {
         // Save input
         if (isset($value['id']) && is_int($value['id'])) {
             // Get old id
             $new_id = esc_attr($value['id']);
-            $old_id = get_post_meta($post_id, 'embm_untappd', true);
+            $old_id = $beer_meta['untappd_id'];
 
             // Skip if this is not a new ID
             if ($beer_id !== $old_id) {
                 // Save new ID
-                update_post_meta($beer_id, 'embm_untappd', $new_id);
+                $beer_meta['untappd_id'] = $new_id;
+                update_post_meta($post_id, EMBM_BEER_META, $beer_meta);
 
                 // Get token
                 $token = EMBM_Admin_Authorize_token();
@@ -743,31 +787,31 @@ function EMBM_Core_Beer_Api_schema($field_name)
     if ($field_name == 'profile') {
         return array(
             'type'          => 'object',
-            'description'   => esc_html__('The beer profile information for the object.', 'embm'),
+            'description'   => esc_html__('The beer profile information for the object.', EMBM_DOMAIN),
             'context'       => array('view', 'edit'),
             'items'         => array(
                 'malts'     => array(
-                    'description'   => esc_html__('The beer malt data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer malt data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'hops'      => array(
-                    'description'   => esc_html__('The beer hops data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer hops data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'additions' => array(
-                    'description'   => esc_html__('The beer additions/spices data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer additions/spices data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'yeast'     => array(
-                    'description'   => esc_html__('The beer yeast data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer yeast data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'ibu'       => array(
-                    'description'   => esc_html__('The beer IBU measurement for the object.', 'embm'),
+                    'description'   => esc_html__('The beer IBU measurement for the object.', EMBM_DOMAIN),
                     'type'          => 'integer'
                 ),
                 'abv'       => array(
-                    'description'   => esc_html__('The beer ABV percentage for the object.', 'embm'),
+                    'description'   => esc_html__('The beer ABV percentage for the object.', EMBM_DOMAIN),
                     'type'          => 'number'
                 )
             )
@@ -778,19 +822,19 @@ function EMBM_Core_Beer_Api_schema($field_name)
     if ($field_name == 'extras') {
         return array(
             'type'          => 'object',
-            'description'   => esc_html__('The beer extras information for the object.', 'embm'),
+            'description'   => esc_html__('The beer extras information for the object.', EMBM_DOMAIN),
             'context'       => array('view', 'edit'),
             'items'         => array(
                 'availability'  => array(
-                    'description'   => esc_html__('The beer availability data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer availability data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'notes'         => array(
-                    'description'   => esc_html__('The beer additional notes/food parings data for the object.', 'embm'),
+                    'description'   => esc_html__('The beer additional notes/food parings data for the object.', EMBM_DOMAIN),
                     'type'          => 'string'
                 ),
                 'beer_number'   => array(
-                    'description'   => esc_html__('The beer number for the object.', 'embm'),
+                    'description'   => esc_html__('The beer number for the object.', EMBM_DOMAIN),
                     'type'          => 'integer'
                 )
             )
@@ -801,11 +845,11 @@ function EMBM_Core_Beer_Api_schema($field_name)
     if ($field_name == 'untappd') {
         return array(
             'type'          => 'object',
-            'description'   => esc_html__('The Untappd information for the object.', 'embm'),
+            'description'   => esc_html__('The Untappd information for the object.', EMBM_DOMAIN),
             'context'       => array('view', 'edit'),
             'items'         => array(
                 'id'    => array(
-                    'description'   => esc_html__('The Untappd ID for the object.', 'embm'),
+                    'description'   => esc_html__('The Untappd ID for the object.', EMBM_DOMAIN),
                     'type'          => 'integer'
                 )
             )

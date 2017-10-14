@@ -30,14 +30,17 @@ define('EMBM_UNTAPPD_AUTH_URL', 'https://wp.erinmorelli.com/embm/untappd');
 function EMBM_Admin_Authorize_deauthorize()
 {
     // Deauthorize user
-    delete_option('embm_untappd_token');
-    delete_option('embm_untappd_brewery_id');
+    delete_option(EMBM_UNTAPPD_TOKEN);
+    delete_option(EMBM_UNTAPPD_BREWERY);
 
     // Flush cache
     EMBM_Admin_Untappd_flush(EMBM_UNTAPPD_CACHE);
 
     // Get global WP database reference
     global $wpdb;
+
+    // Get meta key
+    $meta_key = EMBM_BEER_META_UNTAPPD;
 
     // Remove individual beer Untappd data
     $wpdb->query(
@@ -47,20 +50,7 @@ function EMBM_Admin_Authorize_deauthorize()
         SET
             meta_value = NULL
         WHERE
-            meta_key = 'embm_untappd_data'
-        "
-    );
-    $wpdb->query(
-        "
-        UPDATE
-            $wpdb->postmeta
-        SET
-            meta_value = '1'
-        WHERE
-            meta_key IN (
-                'embm_show_rating',
-                'embm_show_reviews'
-            )
+            meta_key = '$meta_key'
         "
     );
 }
@@ -73,7 +63,7 @@ function EMBM_Admin_Authorize_deauthorize()
 function EMBM_Admin_Authorize_token()
 {
     // Get API token
-    $token = get_option('embm_untappd_token');
+    $token = get_option(EMBM_UNTAPPD_TOKEN);
 
     // Check for a token
     if (!$token || $token == '') {
@@ -101,7 +91,7 @@ function EMBM_Admin_Authorize_status()
     if (null == $token) {
 ?>
     <p>
-        <button class="embm-labs--authorize button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
+        <button class="embm-labs--authorize button-secondary"><?php _e('Log In to Authorize Untappd', EMBM_DOMAIN); ?></button>
     </p>
 <?php
         return 1;
@@ -124,7 +114,7 @@ function EMBM_Admin_Authorize_status()
 ?>
     <div class="embm-settings--status">
         <p>
-            <?php _e('You are logged in to Untappd as', 'embm'); ?>:
+            <?php _e('You are logged in to Untappd as', EMBM_DOMAIN); ?>:
             <a
                 href="<?php echo $user->untappd_url; ?>"
                 target="_blank"
@@ -133,7 +123,7 @@ function EMBM_Admin_Authorize_status()
             ><span
                 class="dashicons dashicons-<?php echo ($is_brewery ? 'groups' : 'admin-users'); ?>"
             ></span><strong><?php echo $user->first_name . ' ' . $user->last_name; ?></strong></a>
-            <a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', 'embm'); ?></a>
+            <a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', EMBM_DOMAIN); ?></a>
         </p>
     </div>
 <?php
@@ -145,5 +135,5 @@ function EMBM_Admin_Authorize_status()
 if (isset($_GET['embm-untappd-token'])) {
     // Store token
     $new_token = $_GET['embm-untappd-token'];
-    update_option('embm_untappd_token', $new_token);
+    update_option(EMBM_UNTAPPD_TOKEN, $new_token);
 }
