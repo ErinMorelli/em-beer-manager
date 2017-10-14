@@ -55,23 +55,23 @@ function EMBM_Admin_styles()
     $ajax_nonce = wp_create_nonce(EMBM_AJAX_NONCE);
 
     // Set sync confirmation text
-    $confirm = __('Are you sure you want to continue?', EMBM_DOMAIN);
+    $confirm = __('Are you sure you want to continue?', 'embm');
     $sconfirm = __(
         'WARNING: This will override any changes you have made to %s. %s',
-        EMBM_DOMAIN
+        'embm'
     );
     $uconfirm = __(
         'WARNING: This will override any custom menu-beer associations you have made '.
         'as well as any changes made to Untappd for Business-linked menus. %s',
-        EMBM_DOMAIN
+        'embm'
     );
     $urmconfirm = __(
         'WARNING: Enabling this will permanently remove any Untappd for Business-linked menus not found during the sync. %s',
-        EMBM_DOMAIN
+        'embm'
     );
     $rmconfirm = __(
         'WARNING: Enabling this will move any Untappd-linked beers not found during the sync to the trash. %s',
-        EMBM_DOMAIN
+        'embm'
     );
 
     // Share EMBM settings with admin script
@@ -82,11 +82,11 @@ function EMBM_Admin_styles()
               'ajax_nonce'           => $ajax_nonce,
               'plugin_url'           => EMBM_PLUGIN_URL,
               'options'              => get_option(EMBM_OPTIONS),
-              'error'                => __('There was a problem with your request! Please try again later.', EMBM_DOMAIN),
+              'error'                => __('There was a problem with your request! Please try again later.', 'embm'),
               'utfb_resources'       => array_keys($GLOBALS['EMBM_UTFB_RESOURCE_MAP']),
-              'utfb_section_notice'  => __('Select an option from the dropdown in the section above to enable.', EMBM_DOMAIN),
-              'sync_confirm_plural'  => sprintf($sconfirm, __('ANY Untappd-linked beers', EMBM_DOMAIN), $confirm),
-              'sync_confirm_single'  => sprintf($sconfirm, __('this beer', EMBM_DOMAIN), $confirm),
+              'utfb_section_notice'  => __('Select an option from the dropdown in the section above to enable.', 'embm'),
+              'sync_confirm_plural'  => sprintf($sconfirm, __('ANY Untappd-linked beers', 'embm'), $confirm),
+              'sync_confirm_single'  => sprintf($sconfirm, __('this beer', 'embm'), $confirm),
               'sync_confirm_utfb'    => sprintf($uconfirm, $confirm),
               'sync_confirm_utfb_rm' => sprintf($urmconfirm, $confirm),
               'sync_confirm_rm'      => sprintf($rmconfirm, $confirm)
@@ -109,25 +109,25 @@ function EMBM_Admin_columns($cols)
     // Set array of new columns
     $cols = array(
         'cb'                    => '<input type="checkbox" />',
-        'id'                    => __('ID', EMBM_DOMAIN),
-        'beer_num'              => __('Beer No.', EMBM_DOMAIN),
-        'title'                 => __('Beer', EMBM_DOMAIN),
-        'taxonomy-'.EMBM_STYLE  => __('Style', EMBM_DOMAIN),
-        'taxonomy-'.EMBM_GROUP  => __('Group(s)', EMBM_DOMAIN),
-        'taxonomy-'.EMBM_MENU   => __('Menu(s)', EMBM_DOMAIN),
-        'abv'                   => __('ABV', EMBM_DOMAIN),
-        'ibu'                   => __('IBU', EMBM_DOMAIN),
-        'avail'                 => __('Availability', EMBM_DOMAIN)
+        'id'                    => __('ID', 'embm'),
+        'beer_num'              => __('Beer No.', 'embm'),
+        'title'                 => __('Beer', 'embm'),
+        'taxonomy-'.EMBM_STYLE  => __('Style', 'embm'),
+        'taxonomy-'.EMBM_GROUP  => __('Group(s)', 'embm'),
+        'taxonomy-'.EMBM_MENU   => __('Menu(s)', 'embm'),
+        'abv'                   => __('ABV', 'embm'),
+        'ibu'                   => __('IBU', 'embm'),
+        'avail'                 => __('Availability', 'embm')
     );
 
     // Add Untappd columns, if enabled
     if (!EMBM_Core_Beer_disabled()) {
-        $cols['untappd'] = __('Untappd', EMBM_DOMAIN);
-        $cols['sync_exclude'] = __('Exclude from Sync', EMBM_DOMAIN);
+        $cols['untappd'] = __('Untappd', 'embm');
+        $cols['sync_exclude'] = __('Exclude from Sync', 'embm');
     }
 
     // Add released date column
-    $cols['date'] = __('Released', EMBM_DOMAIN);
+    $cols['date'] = __('Released', 'embm');
 
     // Return new column array
     return $cols;
@@ -314,21 +314,21 @@ function EMBM_Admin_help()
     $screen->add_help_tab(
         array(
             'id'      => 'embm-utfb-integration',
-            'title'   => __('Untappd for Business Integration', EMBM_DOMAIN),
+            'title'   => __('Untappd for Business Integration', 'embm'),
             'content' => '<p><strong>'.
-                __('Why is an Untappd account required in addition to an UTFB account?', EMBM_DOMAIN).
+                __('Why is an Untappd account required in addition to an UTFB account?', 'embm').
                 '</strong></p><p>'.
-                __('Untappd for Business (UTFB) account credentials do not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.', EMBM_DOMAIN).
+                __('Untappd for Business (UTFB) account credentials do not work with Untappd\'s API. In order to link Untappd data to beers imported from UTFB, Untappd API access is also needed.', 'embm').
                 '</p><p>'.
-                __('An Untappd brewery account is not required to work with UTFB. A standard user account will work.', EMBM_DOMAIN).
+                __('An Untappd brewery account is not required to work with UTFB. A standard user account will work.', 'embm').
                 '</p><p><strong>'.
-                __('Where do I find my API key?', EMBM_DOMAIN).
+                __('Where do I find my API key?', 'embm').
                 '</strong></p><p>'.
                 sprintf(
-                    __('You can find your API key under the "API Access Tokens" section %s.', EMBM_DOMAIN),
+                    __('You can find your API key under the "API Access Tokens" section %s.', 'embm'),
                     sprintf(
                         '<a href="https://business.untappd.com/api_tokens" target="_blank">%s</a>',
-                        __('here', EMBM_DOMAIN)
+                        __('here', 'embm')
                     )
                 ).
                 '</p>'
@@ -339,13 +339,13 @@ function EMBM_Admin_help()
     $screen->add_help_tab(
         array (
             'id'        => 'embm-untappd-api-sync',
-            'title'     => __('Syncing', EMBM_DOMAIN),
+            'title'     => __('Syncing', 'embm'),
             'content'   => '<p>'.
-                __('Use the "Sync" feature to update the beers that you have imported from Untappd or Untappd for Business (UTFB).', EMBM_DOMAIN).'</p><p>'.
-                __('This will pull in any changes you might have made on Untappd or UTFB, but will override any changes you have made to the imported beers or menus via WordPress.', EMBM_DOMAIN).'</p><p>'.
-                __('Use the "Delete Missing" feature to run a sync that will delete any of your Untappd-linked WordPress beers or UTFB-linked menus that no longer exist on Untappd or UTFB. This does not make any changes to your Untappd or UTFB accounts, only to your data in WordPress.', EMBM_DOMAIN).'</p><p>'.
-                '<strong>**'.__('IMPORTANT', EMBM_DOMAIN).'**</strong><br />'.
-                __('The "Delete Missing" feature works with ALL beers or menus that are attributed to an Untappd or UTFB ID number, not just beers or menus that were imported. This means that beers and menus added manually with an Untappd or UTFB ID associated with them WILL be affected by the "Delete Missing" feature. You can choose to override this functionality by checking the "Exclude from Sync" checkbox for each individual beer or menu on its respective edit page.', EMBM_DOMAIN).
+                __('Use the "Sync" feature to update the beers that you have imported from Untappd or Untappd for Business (UTFB).', 'embm').'</p><p>'.
+                __('This will pull in any changes you might have made on Untappd or UTFB, but will override any changes you have made to the imported beers or menus via WordPress.', 'embm').'</p><p>'.
+                __('Use the "Delete Missing" feature to run a sync that will delete any of your Untappd-linked WordPress beers or UTFB-linked menus that no longer exist on Untappd or UTFB. This does not make any changes to your Untappd or UTFB accounts, only to your data in WordPress.', 'embm').'</p><p>'.
+                '<strong>**'.__('IMPORTANT', 'embm').'**</strong><br />'.
+                __('The "Delete Missing" feature works with ALL beers or menus that are attributed to an Untappd or UTFB ID number, not just beers or menus that were imported. This means that beers and menus added manually with an Untappd or UTFB ID associated with them WILL be affected by the "Delete Missing" feature. You can choose to override this functionality by checking the "Exclude from Sync" checkbox for each individual beer or menu on its respective edit page.', 'embm').
                 '</p>'
         )
     );
@@ -354,17 +354,17 @@ function EMBM_Admin_help()
     $screen->add_help_tab(
         array(
             'id'       => 'embm-settings-faq',
-            'title'    => __('Settings FAQ', EMBM_DOMAIN),
+            'title'    => __('Settings FAQ', 'embm'),
             'content'  => '<p><strong>'.
-                __('I don\'t want to show that big grey box of information, how do I get rid of it?', EMBM_DOMAIN).
+                __('I don\'t want to show that big grey box of information, how do I get rid of it?', 'embm').
                 '</strong></p><p>'.
-                __('For each of the different displays there is the option to "Hide profile info" and "Hide extras info". Check both of these to hide the grey box.', EMBM_DOMAIN).
+                __('For each of the different displays there is the option to "Hide profile info" and "Hide extras info". Check both of these to hide the grey box.', 'embm').
                 '</p><p><strong>'.
-                __('What\'s the difference between "profile" and "extras"?', EMBM_DOMAIN).
+                __('What\'s the difference between "profile" and "extras"?', 'embm').
                 '</strong></p><p>'.
-                __('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', EMBM_DOMAIN).
+                __('The "profile" refers to all the content in the "Beer Profile" information stored for each beer. This includes ABV, IBU, Hops, Malts, Additions, and Yeast.', 'embm').
                 '</p><p>'.
-                __('The "extras" setting refers to the "Extra Beer Information" content stored for each beer. This includes Beer Number, Availability, and Additional Notes.', EMBM_DOMAIN).
+                __('The "extras" setting refers to the "Extra Beer Information" content stored for each beer. This includes Beer Number, Availability, and Additional Notes.', 'embm').
                 '</p>'
         )
     );

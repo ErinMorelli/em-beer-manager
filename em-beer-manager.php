@@ -3,7 +3,7 @@
  * Plugin Name: EM Beer Manager
  * Plugin URI: https://www.erinmorelli.com/projects/em-beer-manager
  * Description: Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
- * Version: 3.2.0
+ * Version: 3.2.1
  * Author: Erin Morelli
  * Author URI: https://www.erinmorelli.com/
  * License: GPLv2 or later
@@ -35,7 +35,6 @@
 // Define plugin constants
 define('EMBM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EMBM_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('EMBM_DOMAIN', 'embm');
 
 // WP general options
 define('EMBM_OPTIONS', 'embm_options');
@@ -92,7 +91,7 @@ function EMBM_Plugin_load()
     }
 
     // Set current version
-    $embm_curr_version = '3.2.0';
+    $embm_curr_version = '3.2.1';
 
     // Define version key name
     if (!defined('EMBM_VERSION_KEY')) {
@@ -136,7 +135,7 @@ function EMBM_Plugin_load()
     }
 
     // Plugin localization
-    load_plugin_textdomain(EMBM_DOMAIN, false, plugin_basename(dirname(__FILE__)).'/languages');
+    load_plugin_textdomain('embm', false, plugin_basename(dirname(__FILE__)).'/languages');
 }
 
 // Initial plugin load
@@ -322,7 +321,7 @@ function EMBM_Plugin_links($links)
     // Define settings link HTML
     $settings_link = '<a href="' . get_bloginfo('wpurl');
     $settings_link .= '/wp-admin/admin.php?page=embm-settings">';
-    $settings_link .= __('Settings', EMBM_DOMAIN) . '</a>';
+    $settings_link .= __('Settings', 'embm') . '</a>';
 
     // Add to to existing links array
     return array_merge(array($settings_link), $links);
@@ -381,8 +380,8 @@ function EMBM_Plugin_php()
 {
     echo '<div class="notice notice-error is-dismissible"><p>';
     printf(
-        __('%s only supports PHP version %s or higher. Please upgrade your PHP to use this plugin.', EMBM_DOMAIN),
-        sprintf('<strong>%s</strong>', __('EM Beer Manager', EMBM_DOMAIN)),
+        __('%s only supports PHP version %s or higher. Please upgrade your PHP to use this plugin.', 'embm'),
+        sprintf('<strong>%s</strong>', __('EM Beer Manager', 'embm')),
         '5.3'
     );
     echo '</p></div>';
@@ -402,44 +401,44 @@ function EMBM_Plugin_help()
     return array(
         'untappd'       => array(
             'id'        => 'embm-untappd-integration',
-            'title'     => __('Untappd Integration', EMBM_DOMAIN),
+            'title'     => __('Untappd Integration', 'embm'),
             'content'   => '<p>'.
-                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-ins widget, ratings, check-ins, check-in buttons, and any Untappd-related Labs features.', EMBM_DOMAIN).
+                __('Checking the "Disable site-wide integration" option under the EM Beer Manager "Untappd settings", will completely disable all Untappd functionality, including the Recent Check-ins widget, ratings, check-ins, check-in buttons, and any Untappd-related Labs features.', 'embm').
                 '</p><p>'.
-                __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', EMBM_DOMAIN).
+                __('You can disable the Untappd check-in button for an individual beer by simply leaving the "Beer ID" setting empty. Beers that have an active check-in button will display a square Untappd icon next to their entry on the Beers admin page.', 'embm').
                 '</p><p>'.
-                __('You can display Untappd beer ratings and recent check-ins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Check-ins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many check-ins to show.', EMBM_DOMAIN).
+                __('You can display Untappd beer ratings and recent check-ins if you are logged in to Untappd. Ratings are shown in all beer views, including shortcodes. Check-ins are only displayed on single beer pages. This option can be disabled for specific beers. You can specify how many check-ins to show.', 'embm').
                 '</p></p>'.
-                __('Data from Untappd for ratings and check-ins is refreshed automatically, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', EMBM_DOMAIN).
+                __('Data from Untappd for ratings and check-ins is refreshed automatically, or can be refreshed manually. We do not recommend doing this often as Untappd places a limit on how many API calls can be made per hour.', 'embm').
                 '</p>'
         ),
         'untappd_id'    => array(
             'id'        => 'embm-untappd-beer-id',
-            'title'     => __('Untappd Beer ID', EMBM_DOMAIN),
+            'title'     => __('Untappd Beer ID', 'embm'),
             'content'   => '<p>'.
-                __('Find your Untappd Beer ID by visiting your beer\'s official page. The URL will be formatted like this', EMBM_DOMAIN).
+                __('Find your Untappd Beer ID by visiting your beer\'s official page. The URL will be formatted like this', 'embm').
                 ':</p><p><code>https://untappd.com/b/the-alchemist-heady-topper/<strong>4691</strong></code></p><p>'.
-                __('The string of numbers at the end of the URL is your beer\'s ID.', EMBM_DOMAIN).
+                __('The string of numbers at the end of the URL is your beer\'s ID.', 'embm').
                 '</p>'
         ),
         'untappd_limit' => array (
             'id'        => 'embm-untappd-api-ratelimit',
-            'title'     => __('API Rate-Limit', EMBM_DOMAIN),
+            'title'     => __('API Rate-Limit', 'embm'),
             'content'   => '<p>'.
                 sprintf(
-                    __('From the %s', EMBM_DOMAIN).':',
+                    __('From the %s', 'embm').':',
                     sprintf(
                         '<a href="https://untappd.com/api/docs" target="_blank">%s</a>',
-                        __('Untappd API documentation', EMBM_DOMAIN)
+                        __('Untappd API documentation', 'embm')
                     )
                 ).'</p><p><blockquote><em>"'.
-                __('All API applications are rate-limited to protect against abuse and keep the platform healthy. The default limit for API access is 100 calls per hour per key.', EMBM_DOMAIN).'"</em></blockquote></p><p>'.
-                __('If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.', EMBM_DOMAIN).'</p><p>'.
-                __('In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.', EMBM_DOMAIN).
+                __('All API applications are rate-limited to protect against abuse and keep the platform healthy. The default limit for API access is 100 calls per hour per key.', 'embm').'"</em></blockquote></p><p>'.
+                __('If you see this message, it means your authenticated API session has reached this limit and any actions that require an API call will be limited until your access is reset in the next hour.', 'embm').'</p><p>'.
+                __('In most cases you should still be able to use all of the Untappd features with cached data, but rare cases may display a rate-limit warning messages when no cached data is available.', 'embm').
                 '</p>'
         ),
-        'sidebar'       => '<p><strong>' . __('For more information', EMBM_DOMAIN) . ':</strong></p>' .
-            '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', EMBM_DOMAIN) . '</a></p>' .
-            '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', EMBM_DOMAIN) . '</a></p>'
+        'sidebar'       => '<p><strong>' . __('For more information', 'embm') . ':</strong></p>' .
+            '<p><a href="https://www.erinmorelli.com/projects/em-beer-manager" target="_blank">' . __('Plugin Website', 'embm') . '</a></p>' .
+            '<p><a href="https://wordpress.org/support/plugin/em-beer-manager" target="_blank">' . __('Support Forums', 'embm') . '</a></p>'
     );
 }

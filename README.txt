@@ -4,7 +4,7 @@ Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brewery, untappd, untappd for business
 Requires at least: 3.0.1
 Tested up to: 4.8.2
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -339,6 +339,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 3.2.1 =
+* [FIXED] Issue introduced in version 3.2.0 that broke plugin localization
+
 = 3.2.0 =
 * [DEPRECATED] Ended support for PHP <= 5.2, please upgrade your PHP
 * [NEW] Added support for collaboration beers in the Untappd import feature
@@ -491,6 +494,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Upgrade Notice ==
+
+= 3.2.1 =
+Please back-up your database before upgrading! Fixed issue that broke plugin localization
 
 = 3.2.0 = 
 Please back-up your database before upgrading!

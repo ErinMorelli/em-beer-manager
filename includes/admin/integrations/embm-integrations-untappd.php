@@ -128,7 +128,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
  */
 function EMBM_Admin_Untappd_ratelimit()
 {
-    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', EMBM_DOMAIN);
+    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', 'embm');
 }
 
 /**

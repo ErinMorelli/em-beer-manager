@@ -29,7 +29,7 @@ function EMBM_Admin_Metabox_extras()
     // Add More Beer Information metabox to main content
     add_meta_box(
         'embm_beer_extras',
-        __('Extra Beer Information', EMBM_DOMAIN),
+        __('Extra Beer Information', 'embm'),
         'EMBM_Admin_Metabox_Extras_content',
         EMBM_BEER,
         'normal',
@@ -75,13 +75,13 @@ function EMBM_Admin_Metabox_Extras_content()
     <div class="embm-metabox__left">
         <div class="embm-metabox__field embm-metabox--extras-num">
             <p>
-                <label for="embm_beer_num"><strong><?php _e('Beer Number', EMBM_DOMAIN); ?></strong></label><br />
+                <label for="embm_beer_num"><strong><?php _e('Beer Number', 'embm'); ?></strong></label><br />
                 <input type="number" name="embm_beer_num" id="embm_beer_num" min="0000" max="9999" step="1" value="<?php echo $b_num; ?>" />
             </p>
         </div>
         <div class="embm-metabox__field embm-metabox--extras-avail">
             <p>
-                <label for="embm_avail"><strong><?php _e('Availability', EMBM_DOMAIN); ?></strong></label><br />
+                <label for="embm_avail"><strong><?php _e('Availability', 'embm'); ?></strong></label><br />
                 <input type="text" name="embm_avail" id="embm_avail" value="<?php echo $b_avail; ?>" />
             </p>
         </div>
@@ -89,7 +89,7 @@ function EMBM_Admin_Metabox_Extras_content()
     <div class="embm-metabox__right">
         <div class="embm-metabox--extras-notes">
             <p class="embm-metabox--extras-notes-title">
-                <label for="embm_notes"><strong><?php _e('Additional Notes/Food Pairings', EMBM_DOMAIN); ?></strong></label>
+                <label for="embm_notes"><strong><?php _e('Additional Notes/Food Pairings', 'embm'); ?></strong></label>
             </p>
             <?php wp_editor($b_notes, 'embm_notes', $notes_settings); ?>
         </div>

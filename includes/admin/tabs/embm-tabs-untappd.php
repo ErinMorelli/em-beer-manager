@@ -29,11 +29,11 @@ require EMBM_PLUGIN_DIR.'includes/admin/tabs/embm-tabs-labs.php';
 function EMBM_Admin_Labs_Import_error()
 {
 ?>
-    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', EMBM_DOMAIN); ?></p>
-    <p><?php _e('Please re-authorize with a brewery account to use this feature.', EMBM_DOMAIN); ?></p>
+    <p class="warning"><?php _e('Sorry, Untappd importing is only supported for brewery accounts.', 'embm'); ?></p>
+    <p><?php _e('Please re-authorize with a brewery account to use this feature.', 'embm'); ?></p>
     <p>
-        <button class="embm-labs--reauthorize button-secondary"><?php _e('Re-authorize with Untappd', EMBM_DOMAIN); ?></button><br />
-        <small><em><?php _e('You will need to log out of the Untappd.com website before re-authorizing.', EMBM_DOMAIN); ?></em></small>
+        <button class="embm-labs--reauthorize button-secondary"><?php _e('Re-authorize with Untappd', 'embm'); ?></button><br />
+        <small><em><?php _e('You will need to log out of the Untappd.com website before re-authorizing.', 'embm'); ?></em></small>
     <p>
 <?php
 }
@@ -165,9 +165,9 @@ ksort($collab_sections, SORT_STRING);
         <tbody>
             <tr>
                 <th scope="row">
-                    <?php _e('Import Specific Beers', EMBM_DOMAIN); ?>
+                    <?php _e('Import Specific Beers', 'embm'); ?>
                     <p class="description">
-                        <?php _e('Includes collaboration beers, listed by co-brewer after your brewery\'s beers', EMBM_DOMAIN); ?>
+                        <?php _e('Includes collaboration beers, listed by co-brewer after your brewery\'s beers', 'embm'); ?>
                     </p>
                 </th>
                 <td>
@@ -192,12 +192,12 @@ ksort($collab_sections, SORT_STRING);
                         </select>
                     </p>
                     <p>
-                        <a class="button-primary embm-untappd--import" data-type="1"><?php _e('Import Selected Beer(s)', EMBM_DOMAIN); ?></a>
+                        <a class="button-primary embm-untappd--import" data-type="1"><?php _e('Import Selected Beer(s)', 'embm'); ?></a>
                     </p>
                     <p class="description">
                         <?php
                             printf(
-                                __('Use the %s and %s/%s keys to select multiple beers.', EMBM_DOMAIN),
+                                __('Use the %s and %s/%s keys to select multiple beers.', 'embm'),
                                 '<code>shift</code>',
                                 '<code>ctrl</code>',
                                 '<code>command</code>'
@@ -208,11 +208,11 @@ ksort($collab_sections, SORT_STRING);
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Import All Beers', EMBM_DOMAIN); ?></th>
+                <th scope="row"><?php _e('Import All Beers', 'embm'); ?></th>
                 <td>
                     <p>
                         <a class="button-primary embm-untappd--import" data-type="3">
-                            <?php echo __('Import All Beers', EMBM_DOMAIN).' ('.count($beer_list).')'; ?>
+                            <?php echo __('Import All Beers', 'embm').' ('.count($beer_list).')'; ?>
                         </a>
                     </p>
                     <p>
@@ -222,44 +222,44 @@ ksort($collab_sections, SORT_STRING);
                             type="checkbox"
                         />
                         <label for="embm-untappd--import-collabs">
-                            <?php echo __('Include Collaboration Beers', EMBM_DOMAIN).' ('.count($collab_list).')'; ?>
+                            <?php echo __('Include Collaboration Beers', 'embm').' ('.count($collab_list).')'; ?>
                         </label>
                     </p>
-                    <p class="description"><?php _e('If you have a lot of beers, this could take a while.', EMBM_DOMAIN); ?></p>
+                    <p class="description"><?php _e('If you have a lot of beers, this could take a while.', 'embm'); ?></p>
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Import Beer By ID', EMBM_DOMAIN); ?></th>
+                <th scope="row"><?php _e('Import Beer By ID', 'embm'); ?></th>
                 <td>
                     <p>
                         <input
                             id="embm-untappd-beer-id"
                             name="embm-untappd-beer-id"
                             type="number"
-                            placeholder="<?php _e('Untappd Beer ID', EMBM_DOMAIN); ?>"
+                            placeholder="<?php _e('Untappd Beer ID', 'embm'); ?>"
                         />
-                        <a class="button-primary embm-untappd--import" data-type="2"><?php _e('Import Beer', EMBM_DOMAIN); ?></a>
+                        <a class="button-primary embm-untappd--import" data-type="2"><?php _e('Import Beer', 'embm'); ?></a>
                         <a data-help="embm-untappd-beer-id" class="embm-settings--help">?</a>
                     </p>
                     <p class="description">
-                        <?php _e('Import beers from your brewery account that are not accessible in the features above.', EMBM_DOMAIN); ?>
+                        <?php _e('Import beers from your brewery account that are not accessible in the features above.', 'embm'); ?>
                     </p>
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Refresh Untappd Data', EMBM_DOMAIN); ?></th>
+                <th scope="row"><?php _e('Refresh Untappd Data', 'embm'); ?></th>
                 <td>
-                    <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', EMBM_DOMAIN); ?></a></p>
+                    <p><a href="#" class="embm-untappd--flush button-secondary"><?php _e('Flush Cache', 'embm'); ?></a></p>
                     <p class="description">
-                        <?php _e('Update the data from Untappd used in the above features. This is automatically done daily.', EMBM_DOMAIN); ?>
+                        <?php _e('Update the data from Untappd used in the above features. This is automatically done daily.', 'embm'); ?>
                     </p>
                 </td>
             </tr>
             <tr>
-                <th scope="row"><?php _e('Sync Untappd Data', EMBM_DOMAIN); ?></th>
+                <th scope="row"><?php _e('Sync Untappd Data', 'embm'); ?></th>
                 <td>
                     <p>
-                        <a href="#" class="embm-untappd--sync button-secondary"><?php _e('Sync Data', EMBM_DOMAIN); ?></a>
+                        <a href="#" class="embm-untappd--sync button-secondary"><?php _e('Sync Data', 'embm'); ?></a>
                     </p>
                     <p>
                         <input
@@ -268,12 +268,12 @@ ksort($collab_sections, SORT_STRING);
                             type="checkbox"
                         />
                         <label for="embm-untappd--sync-delete">
-                            <?php _e('Delete Missing', EMBM_DOMAIN); ?>
+                            <?php _e('Delete Missing', 'embm'); ?>
                         </label>
                         <a data-help="embm-untappd-api-sync" class="embm-settings--help">?</a>
                     </p>
                     <p class="description">
-                        <?php _e('Update your WordPress beers with data from Untappd.', EMBM_DOMAIN); ?>
+                        <?php _e('Update your WordPress beers with data from Untappd.', 'embm'); ?>
                     </p>
                 </td>
             </tr>

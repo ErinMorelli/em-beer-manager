@@ -39,14 +39,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.2.0 - Feature Release](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.2.0/em-beer-manager.3.2.0.zip) ###
-* [DEPRECATED] Ended support for PHP <= 5.2, please upgrade your PHP
-* [NEW] Added support for collaboration beers in the Untappd import feature
-* [NEW] Display multiple styles or groups with the `beer-list` shortcode
-* [NEW] Added `beer-menu` shortcode for displaying beer menus
-* [NEW] Added view settings for beer menu pages
-* [LABS] Added new "Delete Missing" option for Untappd and UTFB syncing
-* [FIXED] Issue with UTFB importing and syncing where beers in multiple menus were only getting associated with one menu
+### [Version 3.2.1 - Quick Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.2.1/em-beer-manager.3.2.1.zip) ###
+* [FIXED] Issue introduced in version 3.2.0 that broke plugin localization
 
 
 ### Installation ###
