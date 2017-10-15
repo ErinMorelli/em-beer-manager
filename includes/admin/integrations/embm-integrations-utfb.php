@@ -785,6 +785,10 @@ function EMBM_Admin_Utfb_import($resources)
         $section->term = EMBM_Admin_Utfb_taxonomy($section, $section_menu);
     }
 
+    // Update list of existing attachment data to the cache
+    EMBM_Admin_attachments();
+    error_log(print_r(get_transient(EMBM_ATTACHMENT_CACHE),true));
+
     // Set error tracker
     $has_errors = false;
 
@@ -802,6 +806,11 @@ function EMBM_Admin_Utfb_import($resources)
             $has_errors = true;
         }
     }
+
+    error_log(print_r(get_transient(EMBM_ATTACHMENT_CACHE),true));
+
+    // Remove attachment cache
+    // delete_transient(EMBM_ATTACHMENT_CACHE);
 
     // Return response code
     return $has_errors ? 3 : 0;
@@ -888,8 +897,10 @@ function EMBM_Admin_Utfb_Import_beer($beer, $section_term, $menu_term)
         )
     );
 
+    // TODO: uncomment
     // Insert post
-    $post_id = wp_insert_post($new_beer_post, true);
+    // $post_id = wp_insert_post($new_beer_post, true);
+    $post_id = 123;
 
     // Add post image
     if (property_exists($beer, 'label_image')) {
