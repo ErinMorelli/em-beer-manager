@@ -19,6 +19,9 @@
  * @package EMBM\Admin
  */
 
+// Set constants
+define('EMBM_ATTACHMENT_CACHE', 'embm_attachment_cache');
+
 // Include additional Admin functions
 require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-untappd.php';
 require EMBM_PLUGIN_DIR.'includes/admin/integrations/embm-integrations-utfb.php';
@@ -285,6 +288,59 @@ function EMBM_Admin_Columns_load()
 
 // Only load custom columns in the admin.
 add_action('load-edit.php', 'EMBM_Admin_Columns_load');
+
+/**
+ * Get an array of MD5 image hashes with the associated IDs
+ * Also creates a transient cache instance with the data
+ *
+ * @return array
+ */
+function EMBM_Admin_attachments()
+{
+    global $wpdb;
+
+    // Get all image attachment posts
+    $attachments = $wpdb->get_results(
+        $wpdb->prepare(
+            "
+            SELECT image.ID image_id, beer.ID beer_id
+            FROM $wpdb->posts image, $wpdb->posts beer
+            WHERE image.post_parent = beer.ID
+                AND image.post_mime_type LIKE 'image%'
+                AND image.post_type = 'attachment'
+                AND beer.post_type = '%s'
+            ORDER BY beer.post_date
+            ",
+            EMBM_BEER
+        )
+    );
+
+    // Start an array of MD5 image hashes
+    $image_hashes = array();
+
+    // Iterate over each image attachment
+    foreach ($attachments as $attachment) {
+        // Get local path to file
+        $file_path = get_attached_file($attachment->image_id, true);
+
+        // Get MD5 hash for file
+        $image_hash = md5(file_get_contents($file_path));
+
+        // Update array with hash and post ID
+        if (in_array($image_hash, array_keys($image_hashes))) {
+            array_push($image_hashes[$image_hash], $attachment);
+        } else {
+            $image_hashes[$image_hash] = array($attachment);
+        }
+    }
+
+    // Store data to cache
+    delete_transient(EMBM_ATTACHMENT_CACHE);
+    set_transient(EMBM_ATTACHMENT_CACHE, $image_hashes);
+
+    // Return array of hashes
+    return $image_hashes;
+}
 
 /**
  * Add custom contextual help menu to admin
