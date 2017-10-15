@@ -109,6 +109,9 @@ function EMBM_Upgrade_v330()
             wp_delete_attachment($image_obj->image_id, true);
         }
     }
+
+    // Remove cache
+    delete_transient(EMBM_ATTACHMENT_CACHE);
 }
 
 /**
