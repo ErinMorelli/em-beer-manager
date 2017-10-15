@@ -388,6 +388,9 @@ function EMBM_Admin_Actions_Untappd_import()
         $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'import', 'error', 4, 'untappd'));
     }
 
+    // Remove cache
+    delete_transient(EMBM_ATTACHMENT_CACHE);
+
     // Send response
     wp_send_json($response);
 }
@@ -539,6 +542,9 @@ function EMBM_Admin_Actions_Untappd_sync()
         // Setup return URL
         $response['redirect'] = get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'error', 1, 'untappd'));
     }
+
+    // Remove cache
+    delete_transient(EMBM_ATTACHMENT_CACHE);
 
     // Send response
     wp_send_json($response);
