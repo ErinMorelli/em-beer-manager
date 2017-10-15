@@ -26,7 +26,8 @@ define('EMBM_LEGACY_VERSION', '1.7.0');
 $GLOBALS['EMBM_UPGRADE_MAP'] = array(
     '1.7.0' => 'EMBM_Upgrade_v170',
     '3.0.0' => 'EMBM_Upgrade_v300',
-    '3.2.0' => 'EMBM_Upgrade_v320'
+    '3.2.0' => 'EMBM_Upgrade_v320',
+    '3.3.0' => 'EMBM_Upgrade_v330'
 );
 
 /**
@@ -72,6 +73,42 @@ function EMBM_Upgrade_check()
 
     // Save upgrade status to DB
     update_option(EMBM_DB_VERSION, EMBM_VERSION_NUM);
+}
+
+/**
+ * Perform v3.3.0 upgrades
+ *  - Check for and remove duplicate beer image attachments
+ *
+ * @return void
+ */
+function EMBM_Upgrade_v330()
+{
+    // Load our admin data functions if they haven't already been loaded
+    if (!function_exists('EMBM_Admin_attachments')) {
+        include_once EMBM_PLUGIN_DIR.'includes/embm-admin.php';
+    }
+
+    // Get all image hashes and their IDs
+    $image_hashes = EMBM_Admin_attachments();
+
+    // Iterate over all the hashes
+    foreach ($image_hashes as $image_hash => $image_objs) {
+        if (count($image_objs) <= 1) {
+            continue;
+        }
+
+        // Get first ID
+        $thumbnail = array_shift($image_objs);
+
+        // Iterate over the duplicate IDs
+        foreach ($image_objs as $image_obj) {
+            // Update existing post thumbnail
+            set_post_thumbnail($image_obj->beer_id, $thumbnail->image_id);
+
+            // Remove unused attachment, if update was successful
+            wp_delete_attachment($image_obj->image_id, true);
+        }
+    }
 }
 
 /**

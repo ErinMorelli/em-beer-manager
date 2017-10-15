@@ -258,6 +258,9 @@ function EMBM_Admin_Actions_Untappd_import()
         return;
     }
 
+    // Update list of existing attachment data to the cache
+    EMBM_Admin_attachments();
+
     // Handle import types
     switch ($import_type) {
 
@@ -411,6 +414,9 @@ function EMBM_Admin_Actions_Untappd_sync()
     $response = array(
         'redirect' => get_admin_url(null, sprintf(EMBM_UNTAPPD_RETURN_URL, 'sync', 'success', 1, 'untappd'))
     );
+
+    // Store list of existing attachment data to the cache
+    EMBM_Admin_attachments();
 
     // Handle sync types
     switch ($sync_type) {

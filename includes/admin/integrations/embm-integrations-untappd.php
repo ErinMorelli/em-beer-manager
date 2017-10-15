@@ -908,27 +908,48 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
         return;
     }
 
-    // Save image data to file
-    file_put_contents($filename, $img_res['data']);
+    // Get MD5 hash of image
+    $image_hash = md5($response['data']);
 
-    // Check the type of file
-    $filetype = wp_check_filetype(basename($filename), null);
+    // Get existing attachment data from cache
+    $existing_images = get_transient(EMBM_ATTACHMENT_CACHE);
+    $attach_id = null;
 
-    // Prepare an post data for attachment
-    $attachment = array(
-        'guid'           => $upload_dir['url'] . '/' . basename($filename),
-        'post_mime_type' => $filetype['type'],
-        'post_title'     => $slug,
-        'post_content'   => '',
-        'post_status'    => 'inherit'
-    );
+    // Look for image hash in existing data
+    if (is_array($existing_images) && array_key_exists($image_hash, $existing_images)) {
+        // Get existing image data
+        $existing_image = $existing_images[$image_hash];
 
-    // Insert the attachment
-    $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
+        // Get first result
+        if (!empty($existing_image)) {
+            $attach_id = property_exists('image_id', $existing_image[0]) ? $existing_image[0]->image_id : null;
+        }
+    }
 
-    // Generate the metadata for the attachment, and update the database record.
-    $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
-    wp_update_attachment_metadata($attach_id, $attach_data);
+    // Save new image if we didn't find one
+    if (is_null($attach_id)) {
+        // Save image data to file
+        file_put_contents($filename, $img_res['data']);
+
+        // Check the type of file
+        $filetype = wp_check_filetype(basename($filename), null);
+
+        // Prepare an post data for attachment
+        $attachment = array(
+            'guid'           => $upload_dir['url'] . '/' . basename($filename),
+            'post_mime_type' => $filetype['type'],
+            'post_title'     => $slug,
+            'post_content'   => '',
+            'post_status'    => 'inherit'
+        );
+
+        // Insert the attachment
+        $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
+
+        // Generate the metadata for the attachment, and update the database record.
+        $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+        wp_update_attachment_metadata($attach_id, $attach_data);
+    }
 
     // Set as thumbnail for beer
     set_post_thumbnail($post_id, $attach_id);
@@ -1007,6 +1028,26 @@ function EMBM_Admin_Untappd_sync($post_id, $beer, $delete_missing = false)
 
         // Continue if we got an image ID
         if (!is_null($image_id)) {
+            // Get local path to image file
+            $image_file_path = get_attached_file($image_id, true);
+
+            // Get MD5 hash for file
+            $image_hash = md5(file_get_contents($image_file_path));
+
+            // Get image data from URL
+            $img_res = EMBM_Admin_Untappd_request($beer->beer_label_hd, false);
+
+            // Make sure we got data
+            if ($img_res['success']) {
+                 // Get MD5 hash for image
+                $new_image_hash = md5($img_res['data']);
+
+                // Compare hashes and exit if the image hasn't changed
+                if ($image_hash == $new_image_hash) {
+                    return null;
+                }
+            }
+
             // Delete image
             wp_delete_attachment($image_id, true);
 
