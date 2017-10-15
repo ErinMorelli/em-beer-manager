@@ -91,7 +91,7 @@ function EMBM_Admin_Authorize_status()
     if (null == $token) {
 ?>
     <p>
-        <button class="embm-labs--authorize button-secondary"><?php _e('Log In to Authorize Untappd', 'embm'); ?></button>
+        <button class="embm-labs--authorize button-secondary"><?php _e('Log In to Authorize Untappd', 'em-beer-manager'); ?></button>
     </p>
 <?php
         return 1;
@@ -114,7 +114,7 @@ function EMBM_Admin_Authorize_status()
 ?>
     <div class="embm-settings--status">
         <p>
-            <?php _e('You are logged in to Untappd as', 'embm'); ?>:
+            <?php _e('You are logged in to Untappd as', 'em-beer-manager'); ?>:
             <a
                 href="<?php echo $user->untappd_url; ?>"
                 target="_blank"
@@ -123,7 +123,7 @@ function EMBM_Admin_Authorize_status()
             ><span
                 class="dashicons dashicons-<?php echo ($is_brewery ? 'groups' : 'admin-users'); ?>"
             ></span><strong><?php echo $user->first_name . ' ' . $user->last_name; ?></strong></a>
-            <a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', 'embm'); ?></a>
+            <a href="#" class="embm-untappd--deauthorize button button-small"><?php _e('Log Out', 'em-beer-manager'); ?></a>
         </p>
     </div>
 <?php

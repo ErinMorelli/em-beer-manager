@@ -38,8 +38,8 @@ function EMBM_Admin_menu()
 
     // Setup admin page
     $embm_admin_page = add_options_page(
-        __('EM Beer Manager Settings', 'embm'),
-        __('EM Beer Manager', 'embm'),
+        __('EM Beer Manager Settings', 'em-beer-manager'),
+        __('EM Beer Manager', 'em-beer-manager'),
         'manage_options',
         'embm-settings',
         'EMBM_Admin_Settings_page'
@@ -66,64 +66,64 @@ function EMBM_Admin_settings()
     $logged_in = !is_null(EMBM_Admin_Authorize_token());
 
     // Untappd Settings
-    add_settings_section('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_untappd', 'embm');
-    add_settings_field('embm_untappd_integration', __('Site-wide Integration', 'embm'), 'EMBM_Admin_Settings_Untappd_integration', 'embm', 'embm_untappd_settings');
-    add_settings_field('embm_untappd_icons', __('Icon Set', 'embm'), 'EMBM_Admin_Settings_Untappd_icons', 'embm', 'embm_untappd_settings');
+    add_settings_section('embm_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_untappd', 'em-beer-manager');
+    add_settings_field('embm_untappd_integration', __('Site-wide Integration', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_integration', 'em-beer-manager', 'embm_untappd_settings');
+    add_settings_field('embm_untappd_icons', __('Icon Set', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_icons', 'em-beer-manager', 'embm_untappd_settings');
     if ($logged_in) {
-        add_settings_field('embm_untappd_rating_format', __('Rating Display Format', 'embm'), 'EMBM_Admin_Settings_Untappd_rating', 'embm', 'embm_untappd_settings');
-        add_settings_field('embm_untappd_rating_color', __('Rating Star Color', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_color', 'embm', 'embm_untappd_settings');
-        add_settings_field('embm_untappd_rating_opacity', __('Rating Star Empty Opacity', 'embm'), 'EMBM_Admin_Settings_Untappd_Rating_opacity', 'embm', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_rating_format', __('Rating Display Format', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_rating', 'em-beer-manager', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_rating_color', __('Rating Star Color', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_Rating_color', 'em-beer-manager', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_rating_opacity', __('Rating Star Empty Opacity', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_Rating_opacity', 'em-beer-manager', 'embm_untappd_settings');
     } else {
-        add_settings_field('embm_untappd_logged_out', '', 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_untappd_settings');
+        add_settings_field('embm_untappd_logged_out', '', 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_untappd_settings');
     }
 
     // Global settings
-    add_settings_section('embm_global_settings', __('Global Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
-    add_settings_field('embm_css_url', __('Custom Stylesheet (URL)', 'embm'), 'EMBM_Admin_Settings_Global_css', 'embm', 'embm_global_settings', array('label_for' => 'embm_css_url'));
-    add_settings_field('embm_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Global_display', 'embm', 'embm_global_settings');
+    add_settings_section('embm_global_settings', __('Global Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_section', 'em-beer-manager');
+    add_settings_field('embm_css_url', __('Custom Stylesheet (URL)', 'em-beer-manager'), 'EMBM_Admin_Settings_Global_css', 'em-beer-manager', 'embm_global_settings', array('label_for' => 'embm_css_url'));
+    add_settings_field('embm_display_settings', __('Display Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Global_display', 'em-beer-manager', 'embm_global_settings');
     if ($logged_in) {
-        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Global_untappd', 'embm', 'embm_global_settings');
+        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Global_untappd', 'em-beer-manager', 'embm_global_settings');
     } else {
-        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_global_settings');
+        add_settings_field('embm_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_global_settings');
     }
 
     // Group Tax Settings
-    add_settings_section('embm_group_settings', __('Beer Group Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
-    add_settings_field('embm_group_slug', __('Custom Taxonomy Slug', 'embm'), 'EMBM_Admin_Settings_Group_slug', 'embm', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
-    add_settings_field('embm_group_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Group_display', 'embm', 'embm_group_settings');
+    add_settings_section('embm_group_settings', __('Beer Group Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_section', 'em-beer-manager');
+    add_settings_field('embm_group_slug', __('Custom Taxonomy Slug', 'em-beer-manager'), 'EMBM_Admin_Settings_Group_slug', 'em-beer-manager', 'embm_group_settings', array('label_for' => 'embm_group_slug'));
+    add_settings_field('embm_group_display_settings', __('Display Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Group_display', 'em-beer-manager', 'embm_group_settings');
     if ($logged_in) {
-        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Group_untappd', 'embm', 'embm_group_settings');
+        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Group_untappd', 'em-beer-manager', 'embm_group_settings');
     } else {
-        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_group_settings');
+        add_settings_field('embm_group_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_group_settings');
     }
 
     // Style Tax Settings
-    add_settings_section('embm_style_settings', __('Beer Style Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
-    add_settings_field('embm_style_rest', __('Restore Styles', 'embm'), 'EMBM_Admin_Settings_Style_reset', 'embm', 'embm_style_settings');
-    add_settings_field('embm_style_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Style_display', 'embm', 'embm_style_settings');
+    add_settings_section('embm_style_settings', __('Beer Style Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_section', 'em-beer-manager');
+    add_settings_field('embm_style_rest', __('Restore Styles', 'em-beer-manager'), 'EMBM_Admin_Settings_Style_reset', 'em-beer-manager', 'embm_style_settings');
+    add_settings_field('embm_style_display_settings', __('Display Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Style_display', 'em-beer-manager', 'embm_style_settings');
     if ($logged_in) {
-        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Style_untappd', 'embm', 'embm_style_settings');
+        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Style_untappd', 'em-beer-manager', 'embm_style_settings');
     } else {
-        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_style_settings');
+        add_settings_field('embm_style_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_style_settings');
     }
 
     // Menu Tax Settings
-    add_settings_section('embm_menu_settings', __('Beer Menu Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
-    add_settings_field('embm_menu_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Menu_display', 'embm', 'embm_menu_settings');
+    add_settings_section('embm_menu_settings', __('Beer Menu Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_section', 'em-beer-manager');
+    add_settings_field('embm_menu_display_settings', __('Display Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Menu_display', 'em-beer-manager', 'embm_menu_settings');
     if ($logged_in) {
-        add_settings_field('embm_menu_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Menu_untappd', 'embm', 'embm_menu_settings');
+        add_settings_field('embm_menu_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Menu_untappd', 'em-beer-manager', 'embm_menu_settings');
     } else {
-        add_settings_field('embm_menu_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_menu_settings');
+        add_settings_field('embm_menu_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_menu_settings');
     }
 
     // Single Beer Settings
-    add_settings_section('embm_single_settings', __('Single Beer Page Settings', 'embm'), 'EMBM_Admin_Settings_section', 'embm');
-    add_settings_field('embm_comments_toggle', __('Comments', 'embm'), 'EMBM_Admin_Settings_Single_comments', 'embm', 'embm_single_settings');
-    add_settings_field('embm_single_display_settings', __('Display Settings', 'embm'), 'EMBM_Admin_Settings_Single_display', 'embm', 'embm_single_settings');
+    add_settings_section('embm_single_settings', __('Single Beer Page Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_section', 'em-beer-manager');
+    add_settings_field('embm_comments_toggle', __('Comments', 'em-beer-manager'), 'EMBM_Admin_Settings_Single_comments', 'em-beer-manager', 'embm_single_settings');
+    add_settings_field('embm_single_display_settings', __('Display Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Single_display', 'em-beer-manager', 'embm_single_settings');
     if ($logged_in) {
-        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Single_untappd', 'embm', 'embm_single_settings');
+        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Single_untappd', 'em-beer-manager', 'embm_single_settings');
     } else {
-        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'embm'), 'EMBM_Admin_Settings_Untappd_login', 'embm', 'embm_single_settings');
+        add_settings_field('embm_single_untappd_settings', __('Untappd Settings', 'em-beer-manager'), 'EMBM_Admin_Settings_Untappd_login', 'em-beer-manager', 'embm_single_settings');
     }
 }
 
@@ -189,7 +189,7 @@ function EMBM_Admin_Settings_untappd($section)
  */
 function EMBM_Admin_Settings_Untappd_login()
 {
-    echo '<p class="description">'.__('Log in to Untappd to access additional display options.', 'embm').'</p>';
+    echo '<p class="description">'.__('Log in to Untappd to access additional display options.', 'em-beer-manager').'</p>';
 }
 
 /**
@@ -207,7 +207,7 @@ function EMBM_Admin_Settings_Untappd_integration()
     }
 
     echo '<p><input name="embm_options[embm_untappd_check]" type="checkbox" id="embm_untappd_check" value="1"'.checked('1', $use_untappd, false).' /> ';
-    echo '<label for="embm_untappd_check">'.__('Disable site-wide integration', 'embm').'</label>';
+    echo '<label for="embm_untappd_check">'.__('Disable site-wide integration', 'em-beer-manager').'</label>';
     echo '<a data-help="embm-untappd-integration" class="embm-settings--help">?</a></p>';
 }
 
@@ -274,8 +274,8 @@ function EMBM_Admin_Settings_Untappd_icons()
 
     // Set up possible options
     $icon_sets = array(
-        '1' => __('Original', 'embm').' (v1)',
-        '2' => __('Modern', 'embm').' (v2)'
+        '1' => __('Original', 'em-beer-manager').' (v1)',
+        '2' => __('Modern', 'em-beer-manager').' (v2)'
     );
 
     echo '<p><select name="embm_options[embm_untappd_icons]" class="embm-settings--untappd-select" id="embm_untappd_icons">';
@@ -330,14 +330,14 @@ function EMBM_Admin_Settings_Section_display($title, $section = null)
     $output = '<p><input name="embm_options['.$show_profile.']" type="checkbox" id="'.$show_profile.'" value="1"';
     $output .= checked('1', $view_profile, false).' /> ';
     $output .= '<label for="'.$show_profile.'">';
-    $output .= sprintf(__('Hide "profile" info %s', 'embm'), __($title, 'embm'));
+    $output .= sprintf(__('Hide "profile" info %s', 'em-beer-manager'), __($title, 'em-beer-manager'));
     $output .= '</label><a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
 
     // Output extras settings
     $output .= '<p><input name="embm_options['.$show_extras.']" type="checkbox" id="'.$show_extras.'" value="1"';
     $output .= checked('1', $view_extras, false).' /> ';
     $output .= '<label for="'.$show_extras.'">';
-    $output .= sprintf(__('Hide "extras" info %s', 'embm'), __($title, 'embm'));
+    $output .= sprintf(__('Hide "extras" info %s', 'em-beer-manager'), __($title, 'em-beer-manager'));
     $output .= '</label><a data-help="embm-settings-faq" class="embm-settings--help">?</a></p>';
 
     // Return display output
@@ -367,7 +367,7 @@ function EMBM_Admin_Settings_Section_untappd($title, $section = null)
     $output = '<p><input name="embm_options['.$show_rating.']" type="checkbox" id="'.$show_rating.'" value="1"';
     $output .= checked('1', $view_rating, false).' /> ';
     $output .= '<label for="'.$show_rating.'">';
-    $output .= sprintf(__('Hide Untappd rating %s', 'embm'), __($title, 'embm'));
+    $output .= sprintf(__('Hide Untappd rating %s', 'em-beer-manager'), __($title, 'em-beer-manager'));
     $output .= '</label></p>';
 
     // Return Untappd output
@@ -386,7 +386,7 @@ function EMBM_Admin_Settings_Global_css()
 
     echo '<p><input id="embm_css_url" name="embm_options[embm_css_url]" size="50" type="url" value="'.esc_url($options['embm_css_url']).'" /></p>';
     echo '<p class="description">';
-    echo __('Enter a full URL that points to a stylesheet file to override default EM Beer Manager styles.', 'embm');
+    echo __('Enter a full URL that points to a stylesheet file to override default EM Beer Manager styles.', 'em-beer-manager');
     echo '</p>';
 }
 
@@ -397,7 +397,7 @@ function EMBM_Admin_Settings_Global_css()
  */
 function EMBM_Admin_Settings_Global_display()
 {
-    echo EMBM_Admin_Settings_Section_display(__('globally', 'embm'));
+    echo EMBM_Admin_Settings_Section_display(__('globally', 'em-beer-manager'));
 }
 
 /**
@@ -407,7 +407,7 @@ function EMBM_Admin_Settings_Global_display()
  */
 function EMBM_Admin_Settings_Global_untappd()
 {
-    echo EMBM_Admin_Settings_Section_untappd(__('globally', 'embm'));
+    echo EMBM_Admin_Settings_Section_untappd(__('globally', 'em-beer-manager'));
 }
 
 /**
@@ -422,12 +422,12 @@ function EMBM_Admin_Settings_Group_slug()
     echo '<p><input id="embm_group_slug" name="embm_options[embm_group_slug]" size="15" type="text" value="';
     echo sanitize_key($options['embm_group_slug']);
     echo '" /></p><p class="description">';
-    echo __('Rename the beer group URLs with your own custom slug name.', 'embm') . '<br />';
+    echo __('Rename the beer group URLs with your own custom slug name.', 'em-beer-manager') . '<br />';
     echo sprintf(
-        __('You must %s after changing this.', 'embm'),
-        sprintf('<a href="options-permalink.php">%s</a>', __('refresh your permalinks', 'embm'))
+        __('You must %s after changing this.', 'em-beer-manager'),
+        sprintf('<a href="options-permalink.php">%s</a>', __('refresh your permalinks', 'em-beer-manager'))
     ).'</p><p class="timezone-info">';
-    echo __('By default URLs will look like', 'embm').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
+    echo __('By default URLs will look like', 'em-beer-manager').': <code>yoursite.com/<strong>group</strong>/your-group-name</code>.</p>';
 }
 
 /**
@@ -437,7 +437,7 @@ function EMBM_Admin_Settings_Group_slug()
  */
 function EMBM_Admin_Settings_Group_display()
 {
-    echo EMBM_Admin_Settings_Section_display(__('in groups', 'embm'), 'group');
+    echo EMBM_Admin_Settings_Section_display(__('in groups', 'em-beer-manager'), 'group');
 }
 
 /**
@@ -447,7 +447,7 @@ function EMBM_Admin_Settings_Group_display()
  */
 function EMBM_Admin_Settings_Group_untappd()
 {
-    echo EMBM_Admin_Settings_Section_untappd(__('in groups', 'embm'), 'group');
+    echo EMBM_Admin_Settings_Section_untappd(__('in groups', 'em-beer-manager'), 'group');
 }
 
 /**
@@ -457,8 +457,8 @@ function EMBM_Admin_Settings_Group_untappd()
  */
 function EMBM_Admin_Settings_Style_reset()
 {
-    echo '<p><button class="embm-settings--styles-button button-secondary">'.__('Restore Styles', 'embm').'</button></p>';
-    echo '<p class="description">'.__('Restore missing or deleted beer styles from the pre-loaded list.', 'embm').'</p>';
+    echo '<p><button class="embm-settings--styles-button button-secondary">'.__('Restore Styles', 'em-beer-manager').'</button></p>';
+    echo '<p class="description">'.__('Restore missing or deleted beer styles from the pre-loaded list.', 'em-beer-manager').'</p>';
 
     // Add modal prompt
     add_thickbox();
@@ -466,19 +466,19 @@ function EMBM_Admin_Settings_Style_reset()
 ?>
     <div id="embm-styles-reset-prompt" style="display:none;">
         <div class="embm-styles-reset-prompt--content">
-            <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded Untappd list.', 'embm'); ?></p>
+            <p><?php _e('This will restore any missing or deleted beer styles from the pre-loaded Untappd list.', 'em-beer-manager'); ?></p>
             <p>
                 <?php
                     printf(
-                        __('Your custom or modified styles will %s be affected by this action.', 'embm'),
-                        sprintf('<span class="emphasis">%s</span>', __('NOT', 'embm'))
+                        __('Your custom or modified styles will %s be affected by this action.', 'em-beer-manager'),
+                        sprintf('<span class="emphasis">%s</span>', __('NOT', 'em-beer-manager'))
                     );
                 ?>
             </p>
-            <p><strong><?php _e('Do you wish to proceed?', 'embm'); ?></strong></p>
+            <p><strong><?php _e('Do you wish to proceed?', 'em-beer-manager'); ?></strong></p>
             <p>
-                <a href="#" id="embm-styles-reset-prompt--yes" class="button-primary"><?php _e('YES', 'embm'); ?></a>
-                <a href="#" id="embm-styles-reset-prompt--no" class="button-secondary"><?php _e('NO', 'embm'); ?></a>
+                <a href="#" id="embm-styles-reset-prompt--yes" class="button-primary"><?php _e('YES', 'em-beer-manager'); ?></a>
+                <a href="#" id="embm-styles-reset-prompt--no" class="button-secondary"><?php _e('NO', 'em-beer-manager'); ?></a>
             </p>
         </div>
     </div>
@@ -486,7 +486,7 @@ function EMBM_Admin_Settings_Style_reset()
         href="#TB_inline?width=550&height=155&inlineId=embm-styles-reset-prompt"
         class="thickbox"
         id="embm-styles-reset-prompt--button"
-        title="<?php _e('Restore EM Beer Manager Styles', 'embm'); ?>"
+        title="<?php _e('Restore EM Beer Manager Styles', 'em-beer-manager'); ?>"
         style="display:none;"
     ></a>
 <?php
@@ -499,7 +499,7 @@ function EMBM_Admin_Settings_Style_reset()
  */
 function EMBM_Admin_Settings_Style_display()
 {
-    echo EMBM_Admin_Settings_Section_display(__('on style pages', 'embm'), 'style');
+    echo EMBM_Admin_Settings_Section_display(__('on style pages', 'em-beer-manager'), 'style');
 }
 
 /**
@@ -509,7 +509,7 @@ function EMBM_Admin_Settings_Style_display()
  */
 function EMBM_Admin_Settings_Style_untappd()
 {
-    echo EMBM_Admin_Settings_Section_untappd(__('on style pages', 'embm'), 'style');
+    echo EMBM_Admin_Settings_Section_untappd(__('on style pages', 'em-beer-manager'), 'style');
 }
 
 /**
@@ -519,7 +519,7 @@ function EMBM_Admin_Settings_Style_untappd()
  */
 function EMBM_Admin_Settings_Menu_display()
 {
-    echo EMBM_Admin_Settings_Section_display(__('on menu pages', 'embm'), 'menu');
+    echo EMBM_Admin_Settings_Section_display(__('on menu pages', 'em-beer-manager'), 'menu');
 }
 
 /**
@@ -529,7 +529,7 @@ function EMBM_Admin_Settings_Menu_display()
  */
 function EMBM_Admin_Settings_Menu_untappd()
 {
-    echo EMBM_Admin_Settings_Section_untappd(__('on menu pages', 'embm'), 'menu');
+    echo EMBM_Admin_Settings_Section_untappd(__('on menu pages', 'em-beer-manager'), 'menu');
 }
 
 /**
@@ -547,7 +547,7 @@ function EMBM_Admin_Settings_Single_comments()
     }
 
     echo '<p><input name="embm_options[embm_comment_check]" type="checkbox" id="embm_comment_check" value="1"'.checked('1', $use_comments, false).' /> ';
-    echo '<label for="embm_comment_check">'.__('Enable comments on single beer pages', 'embm').'</label></p>';
+    echo '<label for="embm_comment_check">'.__('Enable comments on single beer pages', 'em-beer-manager').'</label></p>';
 }
 
 /**
@@ -557,7 +557,7 @@ function EMBM_Admin_Settings_Single_comments()
  */
 function EMBM_Admin_Settings_Single_display()
 {
-    echo EMBM_Admin_Settings_Section_display(__('on single beer pages', 'embm'), 'single');
+    echo EMBM_Admin_Settings_Section_display(__('on single beer pages', 'em-beer-manager'), 'single');
 }
 
 /**
@@ -574,20 +574,20 @@ function EMBM_Admin_Settings_Single_untappd()
     $reviews_count = isset($options['embm_reviews_count_single']) ? $options['embm_reviews_count_single'] : 5;
 
     // Output ratings setting
-    echo EMBM_Admin_Settings_Section_untappd(__('on single beer pages', 'embm'), 'single');
+    echo EMBM_Admin_Settings_Section_untappd(__('on single beer pages', 'em-beer-manager'), 'single');
 
     // Output review setting
     echo '<p><input name="embm_options[embm_reviews_show_single]" type="checkbox" id="embm_reviews_show_single" value="1"'.checked('1', $view_reviews, false).' /> ';
-    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd check-ins on single beer pages', 'embm').'</label>';
+    echo '<label for="embm_reviews_show_single">'.__('Hide Untappd check-ins on single beer pages', 'em-beer-manager').'</label>';
 
     // Output review count setting
-    echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_single">'.__('Show', 'embm');
+    echo '<p class="embm-settings--review-count"><label for="embm_reviews_count_single">'.__('Show', 'em-beer-manager');
     echo '<input id="embm_reviews_count_single" name="embm_options[embm_reviews_count_single]" type="number" min="1" max="15" value="'.$reviews_count.'" />';
-    echo sprintf(__('check-ins (max. %d)', 'embm'), 15);
+    echo sprintf(__('check-ins (max. %d)', 'em-beer-manager'), 15);
     echo '</label></p>';
 
     // Output section description
-    echo '<p class="description">('.__('This setting may be overridden for individual beers.', 'embm').')</p>';
+    echo '<p class="description">('.__('This setting may be overridden for individual beers.', 'em-beer-manager').')</p>';
 }
 
 /**
@@ -601,28 +601,28 @@ function EMBM_Admin_Settings_page()
     $tabs = array(
         array(
             'id'      => 'untappd',
-            'name'    => sprintf('%s <span>%s</span>', __('Untappd Import', 'embm'), __('Labs', 'embm')),
+            'name'    => sprintf('%s <span>%s</span>', __('Untappd Import', 'em-beer-manager'), __('Labs', 'em-beer-manager')),
             'hide'    => EMBM_Core_Beer_disabled()
         ),
         array(
             'id'      => 'utfb',
-            'name'    => sprintf('%s <span>%s</span>', __('Untappd for Business Import', 'embm'), __('Labs', 'embm')),
+            'name'    => sprintf('%s <span>%s</span>', __('Untappd for Business Import', 'em-beer-manager'), __('Labs', 'em-beer-manager')),
             'hide'    => EMBM_Core_Beer_disabled()
         ),
         array(
             'id'      => 'usage',
-            'name'    => __('Usage', 'embm'),
+            'name'    => __('Usage', 'em-beer-manager'),
             'hide'    => false
         )
     );
 
     // Get settings page sections
     global $wp_settings_sections;
-    $sections = $wp_settings_sections['embm'];
+    $sections = $wp_settings_sections['em-beer-manager'];
 
     // Check user permissions
     if (!current_user_can('manage_options')) {
-        wp_die(__('You do not have sufficient permissions to access this page.', 'embm'));
+        wp_die(__('You do not have sufficient permissions to access this page.', 'em-beer-manager'));
     }
 
     // Show any notices
@@ -632,7 +632,7 @@ function EMBM_Admin_Settings_page()
 <div class="wrap embm-settings--page">
 
     <h1 class="embm-settings--title">
-        <?php _e('EM Beer Manager', 'embm'); ?>
+        <?php _e('EM Beer Manager', 'em-beer-manager'); ?>
         <span class="embm-settings--title-version"><?php echo 'v'.get_option(EMBM_VERSION_KEY); ?></span>
     </h1>
 
@@ -640,7 +640,7 @@ function EMBM_Admin_Settings_page()
         <ul class="nav-tab-wrapper">
             <li>
                 <a href="#settings" class="embm-nav-tab nav-tab nav-tab-active nav-tab-settings">
-                    <?php _e('Settings', 'embm'); ?>
+                    <?php _e('Settings', 'em-beer-manager'); ?>
                 </a>
             </li>
             <?php foreach ($tabs as $tab) : ?>
@@ -658,12 +658,12 @@ function EMBM_Admin_Settings_page()
             <div class="embm-settings--navbox">
                 <span
                     class="dashicons dashicons-arrow-right-alt2"
-                    title="<?php _e('Collpase/Expand Panel', 'embm'); ?>"
+                    title="<?php _e('Collpase/Expand Panel', 'em-beer-manager'); ?>"
                     id="embm-settings--navbox-toggle">
                 </span>
                 <ul>
                     <li><strong>Jump to:</strong></li>
-                    <li><a href="#top"><?php _e('Top', 'embm'); ?></a></li>
+                    <li><a href="#top"><?php _e('Top', 'em-beer-manager'); ?></a></li>
                     <?php foreach ($sections as $section): ?>
                         <li><a href="#<?php echo $section['id']; ?>"><?php echo $section['title']; ?></a></li>
                     <?php endforeach; ?>
@@ -672,10 +672,10 @@ function EMBM_Admin_Settings_page()
             <form method="post" action="options.php" class="embm-settings--form">
                 <?php
                     settings_fields(EMBM_OPTIONS);
-                    do_settings_sections('embm');
+                    do_settings_sections('em-beer-manager');
                 ?>
                 <p style="margin-top:1em;">
-                    <input name="Submit" type="submit" class="button-primary" value="<?php _e('Save Changes', 'embm'); ?>" />
+                    <input name="Submit" type="submit" class="button-primary" value="<?php _e('Save Changes', 'em-beer-manager'); ?>" />
                 </p>
             </form>
         </div>

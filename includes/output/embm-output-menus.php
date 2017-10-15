@@ -33,7 +33,7 @@ function EMBM_Output_Menus_display($args)
 
     // Make sure we're authorized
     if (null == $credentials) {
-        return __('Please log in to Untappd for Business to use this shortcode.', 'embm');
+        return __('Please log in to Untappd for Business to use this shortcode.', 'em-beer-manager');
     }
 
     // Set up display options
@@ -51,7 +51,7 @@ function EMBM_Output_Menus_display($args)
         return __(
             'Could not locate Untappd for Business data for this Menu. '.
             'Please make sure an ID is set in the Menus admin',
-            'embm'
+            'em-beer-manager'
         );
     }
 
@@ -76,7 +76,7 @@ function EMBM_Output_Menus_display($args)
     // Display menu last updated
     if ($showupdated) {
         $output .= '<p class="embm-beer-menu--updated">';
-        $output .= __('Last updated', 'embm').': ';
+        $output .= __('Last updated', 'em-beer-manager').': ';
         $output .= $menu_updated_formatted.'</p>';
     }
 
@@ -134,10 +134,10 @@ function EMBM_Output_Menus_display($args)
             // Display beer data
             $output .= '<p class="embm-beer-menu--beer-data">';
             if ($beer_abv != '') {
-                $output .= '<span class="embm-beer-menu--beer-abv">'.$beer_abv.' '.__('ABV', 'embm').'</span>';
+                $output .= '<span class="embm-beer-menu--beer-abv">'.$beer_abv.' '.__('ABV', 'em-beer-manager').'</span>';
             }
             if ($beer_ibu != '') {
-                $output .= '<span class="embm-beer-menu--beer-ibu">'.$beer_ibu.' '.__('IBU', 'embm').'</span>';
+                $output .= '<span class="embm-beer-menu--beer-ibu">'.$beer_ibu.' '.__('IBU', 'em-beer-manager').'</span>';
             }
 
             // Optionally display rating

@@ -19,9 +19,9 @@
  * @package EMBM\Admin\Notices
  */
 
-$SUCCESS_TITLE = __('Success!', 'embm');
-$ERROR_TITLE   = __('ERROR', 'embm') . ':';
-$WARNING_TITLE = __('WARNING', 'embm') . ':';
+$SUCCESS_TITLE = __('Success!', 'em-beer-manager');
+$ERROR_TITLE   = __('ERROR', 'em-beer-manager') . ':';
+$WARNING_TITLE = __('WARNING', 'em-beer-manager') . ':';
 
 // Map of notices
 $GLOBALS['EMBM_NOTICE_MAP'] = array(
@@ -29,142 +29,142 @@ $GLOBALS['EMBM_NOTICE_MAP'] = array(
         '1' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beer styles have been restored.', 'embm')
+            'message'   => __('Your beer styles have been restored.', 'em-beer-manager')
         )
     ),
     'import-success' => array(
         '1' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beer has been imported from Untappd.', 'embm')
+            'message'   => __('Your beer has been imported from Untappd.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beers have been imported from Untappd.', 'embm')
+            'message'   => __('Your beers have been imported from Untappd.', 'em-beer-manager')
         )
     ),
     'import-error' => array(
         '1' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
+            'message'   => __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem during the import! The beer you specified was not found on Untappd.', 'embm')
+            'message'   => __('There was a problem during the import! The beer you specified was not found on Untappd.', 'em-beer-manager')
         ),
         '3' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'embm')
+            'message'   => __('This beer does not belong to your brewery! You can only import beers that are owned by your Untappd brewery account.', 'em-beer-manager')
         ),
         '4' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem during the import! Please try again later.', 'embm')
+            'message'   => __('There was a problem during the import! Please try again later.', 'em-beer-manager')
         ),
         '5' => array(
             'type'      => 'warning',
             'title'     => $WARNING_TITLE,
-            'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'embm')
+            'message'   => __('There was a problem during the import! One or more beers was not imported. Please try again later.', 'em-beer-manager')
         )
     ),
     'sync-success' => array(
         '1' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beers have been updated from Untappd.', 'embm')
+            'message'   => __('Your beers have been updated from Untappd.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beer has been updated from Untappd.', 'embm')
+            'message'   => __('Your beer has been updated from Untappd.', 'em-beer-manager')
         )
     ),
     'sync-error' => array(
         '1' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem during the sync! Please try again later.', 'embm')
+            'message'   => __('There was a problem during the sync! Please try again later.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'warning',
             'title'     => $WARNING_TITLE,
-            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'em-beer-manager')
         ),
         '3' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem during the sync! The selected beer does not have an Untappd ID.', 'embm')
+            'message'   => __('There was a problem during the sync! The selected beer does not have an Untappd ID.', 'em-beer-manager')
         ),
     ),
     'save-error' => array(
         '1' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem saving your beer\'s Untappd data!', 'embm').' '.
-                __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
+            'message'   => __('There was a problem saving your beer\'s Untappd data!', 'em-beer-manager').' '.
+                __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem saving your menu\'s Untappd for Business data!', 'embm').' '.
-                __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm')
+            'message'   => __('There was a problem saving your menu\'s Untappd for Business data!', 'em-beer-manager').' '.
+                __('You may have reached your API token\'s rate limit for the hour. Please try again later.', 'em-beer-manager')
         )
     ),
     'widget-error' => array(
         '1' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem retrieving check-in data from Untappd!', 'embm').' '.
-                __('Please try again later.', 'embm')
+            'message'   => __('There was a problem retrieving check-in data from Untappd!', 'em-beer-manager').' '.
+                __('Please try again later.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem refreshing check-in data from Untappd!', 'embm').' '.
-                __('Please try again later.', 'embm')
+            'message'   => __('There was a problem refreshing check-in data from Untappd!', 'em-beer-manager').' '.
+                __('Please try again later.', 'em-beer-manager')
         )
     ),
     'utfb-error' => array(
         '1' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem connecting your Untappd for Business account! Please try again later.', 'embm')
+            'message'   => __('There was a problem connecting your Untappd for Business account! Please try again later.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'error',
             'title'     => $ERROR_TITLE,
-            'message'   => __('There was a problem during the import! Please try again later.', 'embm')
+            'message'   => __('There was a problem during the import! Please try again later.', 'em-beer-manager')
         ),
         '3' => array(
             'type'      => 'warning',
             'title'     => $WARNING_TITLE,
-            'message'   => __('There was a problem during the import! One or more beers were not imported. Please try again later.', 'embm')
+            'message'   => __('There was a problem during the import! One or more beers were not imported. Please try again later.', 'em-beer-manager')
         ),
         '4' => array(
             'type'      => 'warning',
             'title'     => $WARNING_TITLE,
-            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'embm')
+            'message'   => __('There was a problem during the sync! One or more beers were not updated. Please try again later.', 'em-beer-manager')
         )
     ),
     'utfb-success' => array(
         '1' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your Untappd for Business account has been connected.', 'embm')
+            'message'   => __('Your Untappd for Business account has been connected.', 'em-beer-manager')
         ),
         '2' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beers have been imported from your Untappd for Business account.', 'embm')
+            'message'   => __('Your beers have been imported from your Untappd for Business account.', 'em-beer-manager')
         ),
         '3' => array(
             'type'      => 'updated',
             'title'     => $SUCCESS_TITLE,
-            'message'   => __('Your beers have been synced with your Untappd for Business menus.', 'embm')
+            'message'   => __('Your beers have been synced with your Untappd for Business menus.', 'em-beer-manager')
         )
     )
 );
@@ -220,7 +220,7 @@ function EMBM_Admin_Notices_ratelimit($msg = null)
 {
     // Set fallback message
     if (is_null($msg)) {
-        $msg = __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'embm');
+        $msg = __('There was a problem! You may have reached your API token\'s rate limit for the hour. Please try again later.', 'em-beer-manager');
     }
 
     // Display notice

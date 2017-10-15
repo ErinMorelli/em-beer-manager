@@ -128,7 +128,7 @@ function EMBM_Admin_Untappd_request($request_url, $decode = true)
  */
 function EMBM_Admin_Untappd_ratelimit()
 {
-    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', 'embm');
+    return __('Your Untappd API rate-limit has been reached for this hour. Please try again later.', 'em-beer-manager');
 }
 
 /**
@@ -752,7 +752,7 @@ function EMBM_Admin_Untappd_exists($beer_id)
     return $wpdb->get_var(
         $wpdb->prepare(
             "
-            SELECT post_id,
+            SELECT post_id
             FROM $wpdb->postmeta
             WHERE meta_key = %s
                 AND meta_value LIKE %s
@@ -972,10 +972,10 @@ function EMBM_Admin_Untappd_sync($post_id, $beer, $delete_missing = false)
     );
 
     // Update post
-    $success = wp_update_post($updated_beer_post);
+    $response = wp_update_post($updated_beer_post, true);
 
     // Check for success
-    if ($success !== 0) {
+    if (is_wp_error($response)) {
         return 'error';
     }
 

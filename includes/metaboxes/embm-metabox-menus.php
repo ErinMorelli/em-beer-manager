@@ -35,7 +35,7 @@ function EMBM_Admin_Metabox_menus($taxonomy)
 ?>
     <div class="form-field term-utfb-id">
         <label for="embm_utfb_id">
-            <?php _e('Untappd for Business ID', 'embm'); ?>
+            <?php _e('Untappd for Business ID', 'em-beer-manager'); ?>
         </label>
         <input type="number" name="embm_utfb_id" id="embm_utfb_id" value="" />
     </div>
@@ -47,7 +47,7 @@ function EMBM_Admin_Metabox_menus($taxonomy)
                 value="1"
                 type="checkbox"
             >
-            <span><?php _e('Exclude from Sync', 'embm'); ?></span>
+            <span><?php _e('Exclude from Sync', 'em-beer-manager'); ?></span>
         </label>
     </div>
 <?php
@@ -82,7 +82,7 @@ function EMBM_Admin_Metabox_Menus_edit($term)
     <tr class="form-field">
         <th scope="row" valign="top">
             <label for="embm_utfb_id">
-                <?php _e('Untappd for Business ID', 'embm'); ?>
+                <?php _e('Untappd for Business ID', 'em-beer-manager'); ?>
             </label>
         </th>
         <td>
@@ -92,7 +92,7 @@ function EMBM_Admin_Metabox_Menus_edit($term)
     <tr class="form-field">
         <th scope="row" valign="top">
             <label for="embm_sync_exclude">
-                <strong><?php _e('Exclude from Sync', 'embm'); ?></strong>
+                <strong><?php _e('Exclude from Sync', 'em-beer-manager'); ?></strong>
             </label>
         </th>
         <td>
@@ -187,8 +187,8 @@ function EMBM_Admin_Metabox_Menus_column($columns)
 {
     // Add UTFB columns, if enabled
     if (!EMBM_Core_Beer_disabled()) {
-        $columns['embm_utfb_id'] = __('Untappd for Business ID', 'embm');
-        $columns['embm_sync_exclude'] = __('Exclude from Sync', 'embm');
+        $columns['embm_utfb_id'] = __('Untappd for Business ID', 'em-beer-manager');
+        $columns['embm_sync_exclude'] = __('Exclude from Sync', 'em-beer-manager');
     }
     return $columns;
 }

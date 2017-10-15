@@ -250,7 +250,7 @@ function EMBM_Output_Filters_title($title, $id=null)
         $output = !is_singular(EMBM_BEER) ? '</a>' : '';
         $output .= '<span class="embm-beer--header-style">(';
         $output .= '<a href="'.get_term_link($style, EMBM_STYLE).'" title="';
-        $output .= sprintf(__('View all %s beers', 'embm'), $style).'">';
+        $output .= sprintf(__('View all %s beers', 'em-beer-manager'), $style).'">';
         $output .= $style;
         $output .= '</a>)</span>'."\n";
 
