@@ -340,12 +340,16 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Changelog ==
 
+= 3.3.0 =
+* ??
+
 = 3.2.3 =
 * [FIXED] Issue with Untappd for Business import failing
 
 = 3.2.2 =
 * [FIXED] Updated plugin to work with new WordPress.org translation system
 * [FIXED] Issue with Untappd import hanging, or showing incorrect error
+* [NEW] Improved logic around importing to avoid duplicate thumbnail image uploads
 
 = 3.2.1 =
 * [FIXED] Issue introduced in version 3.2.0 that broke plugin localization

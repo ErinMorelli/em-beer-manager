@@ -902,6 +902,8 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
     // Set file save path
     $filename = $upload_dir['path'] . '/' . $slug . '.' . $img_type;
 
+    error_log($image_url);
+
     // Get image file contents
     $img_res = EMBM_Admin_Untappd_request($image_url, false);
     if (!$img_res['success']) {
@@ -910,6 +912,7 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
 
     // Get MD5 hash of image
     $image_hash = md5($response['data']);
+    error_log($image_hash);
 
     // Get existing attachment data from cache
     $existing_images = get_transient(EMBM_ATTACHMENT_CACHE);
@@ -917,42 +920,65 @@ function EMBM_Admin_Untappd_Import_image($post_id, $image_url, $slug)
 
     // Look for image hash in existing data
     if (is_array($existing_images) && array_key_exists($image_hash, $existing_images)) {
+        error_log('ONE');
         // Get existing image data
         $existing_image = $existing_images[$image_hash];
+        error_log(print_r($existing_image,true));
 
         // Get first result
         if (!empty($existing_image)) {
+            error_log('TWO');
             $attach_id = property_exists('image_id', $existing_image[0]) ? $existing_image[0]->image_id : null;
         }
     }
 
     // Save new image if we didn't find one
     if (is_null($attach_id)) {
-        // Save image data to file
-        file_put_contents($filename, $img_res['data']);
+        error_log('THREE');
+        // // Save image data to file
+        // file_put_contents($filename, $img_res['data']);
 
-        // Check the type of file
-        $filetype = wp_check_filetype(basename($filename), null);
+        // // Check the type of file
+        // $filetype = wp_check_filetype(basename($filename), null);
 
-        // Prepare an post data for attachment
-        $attachment = array(
-            'guid'           => $upload_dir['url'] . '/' . basename($filename),
-            'post_mime_type' => $filetype['type'],
-            'post_title'     => $slug,
-            'post_content'   => '',
-            'post_status'    => 'inherit'
-        );
+        // // Prepare an post data for attachment
+        // $attachment = array(
+        //     'guid'           => $upload_dir['url'] . '/' . basename($filename),
+        //     'post_mime_type' => $filetype['type'],
+        //     'post_title'     => $slug,
+        //     'post_content'   => '',
+        //     'post_status'    => 'inherit'
+        // );
 
-        // Insert the attachment
-        $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
+        // // Insert the attachment
+        // $attach_id = wp_insert_attachment($attachment, $filename, $post_id);
 
-        // Generate the metadata for the attachment, and update the database record.
-        $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
-        wp_update_attachment_metadata($attach_id, $attach_data);
+        // // Generate the metadata for the attachment, and update the database record.
+        // $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+        // wp_update_attachment_metadata($attach_id, $attach_data);
+        $attach_id = 456;
     }
 
+    // TODO: uncomment
     // Set as thumbnail for beer
-    set_post_thumbnail($post_id, $attach_id);
+    // set_post_thumbnail($post_id, $attach_id);
+
+    // Set up new attachment hash data
+    $new_image_hash_data = (object) array(
+        'image_id' => $attach_id,
+        'beer_id'  => $post_id
+    );
+
+    // Update attachment hash
+    if (array_key_exists($image_hash, $existing_images) && is_array($existing_images[$image_hash])) {
+        array_push($existing_images[$image_hash], $new_image_hash_data);
+    } else {
+        $existing_images[$image_hash] = array($new_image_hash_data);
+    }
+
+    // Save new attachment cache data
+    delete_transient(EMBM_ATTACHMENT_CACHE);
+    set_transient(EMBM_ATTACHMENT_CACHE, $existing_images);
 }
 
 /**

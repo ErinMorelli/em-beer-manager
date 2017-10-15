@@ -327,7 +327,7 @@ function EMBM_Admin_attachments()
         $image_hash = md5(file_get_contents($file_path));
 
         // Update array with hash and post ID
-        if (in_array($image_hash, array_keys($image_hashes))) {
+        if (array_key_exists($image_hash, $image_hashes) && is_array($image_hashes[$image_hash])) {
             array_push($image_hashes[$image_hash], $attachment);
         } else {
             $image_hashes[$image_hash] = array($attachment);
