@@ -176,7 +176,7 @@ class EMBM_Widget_List extends WP_Widget
 }
 
 // Load the widget
-add_action('widgets_init', create_function('', 'return register_widget("EMBM_Widget_List");'));
+add_action('widgets_init', function() { return register_widget("EMBM_Widget_List"); });
 
 /**
  * Generate HTML content of Beer List widget
