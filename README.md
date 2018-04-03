@@ -39,9 +39,8 @@ This plugin allows beer creators from home brewers to professional breweries to 
 
 ## Latest Release ##
 
-### [Version 3.2.2 - Bug Fixes](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.2.2/em-beer-manager.3.2.2.zip) ###
-* [FIXED] Updated plugin to work with new WordPress.org translation system
-* [FIXED] Issue with Untappd import hanging, or showing incorrect error
+### [Version 3.2.3 - Bug Fix](https://github.com/ErinMorelli/em-beer-manager/releases/download/v3.2.3/em-beer-manager.3.2.3.zip) ###
+* [FIXED] Issue with Untappd for Business import failing
 
 
 ### Installation ###

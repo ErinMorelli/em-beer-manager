@@ -67,7 +67,7 @@ add_thickbox();
                 style="display:none;"
                 id="embm-settings-footer--donate-amount"
             >
-            <span class="description"><?php _e('USD', EMBM); ?></span>
+            <span class="description"><?php _e('USD', 'em-beer-manager'); ?></span>
         </p>
         <p style="margin-top:5px;">
             <input

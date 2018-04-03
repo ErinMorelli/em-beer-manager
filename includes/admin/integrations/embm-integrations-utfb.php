@@ -558,8 +558,19 @@ function EMBM_Admin_Utfb_taxonomy($menu, $parent = null)
         $term = $exists;
         wp_update_term($term['term_id'], EMBM_MENU, $term_data);
     } else {
+        // Remove parent, if set
+        if(array_key_exists('parent', $term_data)) {
+            unset($term_data['parent']);
+        }
+
         // Add term
         $term = wp_insert_term($menu->name, EMBM_MENU, $term_data);
+
+        // Check for WP_Error
+        if (is_wp_error($term)) {
+            error_log('[EMBM] Error "'.$term->get_error_message().'" for menu "'.$menu->name.'"');
+            return null;
+        }
     }
 
     // Set term meta

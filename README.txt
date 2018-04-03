@@ -3,8 +3,9 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brew, homebrew, brewery, untappd, untappd for business
 Requires at least: 3.0.1
-Tested up to: 4.8.2
-Stable tag: 3.2.2
+Tested up to: 4.9.5
+Requires PHP: 5.3
+Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -338,6 +339,9 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 
 == Changelog ==
+
+= 3.2.3 =
+* [FIXED] Issue with Untappd for Business import failing
 
 = 3.2.2 =
 * [FIXED] Updated plugin to work with new WordPress.org translation system
