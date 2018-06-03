@@ -987,7 +987,7 @@ function EMBM_Admin_Utfb_sync($resources, $delete_missing = false)
     $menu_errors = EMBM_Admin_Utfb_Sync_menus($resources, $delete_missing);
 
     // Next sync beers
-    $beer_errors = EMBM_Admin_Utfb_Sync_beers($resources);
+    $beer_errors = EMBM_Admin_Utfb_Sync_beers($resources, $delete_missing);
 
     // Return with appropriate response code
     return ($menu_errors || $beer_errors) ? 4 : 0;
@@ -1128,7 +1128,7 @@ function EMBM_Admin_Utfb_Sync_menus($resources, $delete_missing)
  *
  * @return bool
  */
-function EMBM_Admin_Utfb_Sync_beers($resources)
+function EMBM_Admin_Utfb_Sync_beers($resources, $delete_missing = false)
 {
     // Get all WP beers
     $beers = get_posts(
