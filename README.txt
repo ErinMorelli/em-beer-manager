@@ -3,6 +3,7 @@ Contributors: ErinMorelli
 Donate link: http://www.erinmorelli.com/projects/em-beer-manager/
 Tags: beer, beers, brew, homebrew, brewery, untappd, untappd for business
 Requires at least: 3.0.1
+
 Tested up to: 4.9.5
 Requires PHP: 5.3
 Stable tag: 3.3.0
@@ -217,9 +218,9 @@ For a UTFB sync, this means that if any menus associated with an UTFB ID are no 
 If you do not want the sync feature to make any changes to or delete a specific beer or menu, enable the "Exclude from Sync" checkbox, located on both the menu and beer edit pages.
 
 
-= Can I use content filters with EM Beer Manager? = 
+= Can I use content filters with EM Beer Manager? =
 
-Yes! New in v3.1.0, you can apply content filters to different parts of EM Beer Manager's output: 
+Yes! New in v3.1.0, you can apply content filters to different parts of EM Beer Manager's output:
 
 * `embm_beer_filter_beer` = The full beer post content
 * `embm_beer_filter_untappd` = The Untappd check-in button
@@ -238,7 +239,7 @@ Untappd for Business (UTFB) account credentials do not work with Untappd's API. 
 An Untappd brewery account is not required to work with UTFB. A standard user account will work.
 
 
-= Where do I find my Untappd for Business API key? = 
+= Where do I find my Untappd for Business API key? =
 
 You can find your API key under the ["API Access Tokens"](https://business.untappd.com/api_tokens) section of your account.
 
@@ -507,13 +508,13 @@ Try refreshing your permalinks by going to "Settings" -> "Permalinks" and clicki
 
 == Upgrade Notice ==
 
-= 3.2.2 = 
+= 3.2.2 =
 Please back-up your database before upgrading! Fixed issue with Untappd importing
 
 = 3.2.1 =
 Please back-up your database before upgrading! Fixed issue that broke plugin localization
 
-= 3.2.0 = 
+= 3.2.0 =
 Please back-up your database before upgrading!
 
 = 3.1.0 =
