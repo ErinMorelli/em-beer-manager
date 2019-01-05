@@ -1,3 +1,6 @@
+#### NOTICE: _This plugin is no longer being actively developed or supported._ ####
+
+---
 # EM Beer Manager #
 
 *by Erin Morelli*
