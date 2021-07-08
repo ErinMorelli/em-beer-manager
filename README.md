@@ -7,6 +7,9 @@
 
 Manage and display your beers with WordPress. Integrates simply with Untappd and Untappd for Business. Great for everyone from home brewers to professional breweries!
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ErinMorelli_em-beer-manager&metric=alert_status)](https://sonarcloud.io/dashboard?id=ErinMorelli_em-beer-manager)
+
+---
 
 ## Overview ###
 
