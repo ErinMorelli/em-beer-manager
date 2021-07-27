@@ -320,7 +320,7 @@ function EMBM_Core_Beer_untappd($post_id)
     $res = EMBM_Admin_Untappd_beer($api_root, $beer_id, $post_id);
 
     // Return data
-    if (!is_null($res) && array_key_exists('beer', $res)) {
+    if (!is_null($res) && is_array($res) && array_key_exists('beer', $res)) {
         return $res['beer'];
     } else if (is_string($res)) {
         return $res;
