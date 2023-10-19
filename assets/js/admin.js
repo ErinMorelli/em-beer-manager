@@ -188,7 +188,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Toggle contextual help for '?' link clicks
-    $('.embm-settings--help').on('click', function (e) {
+    $('.embm-settings--help').on('click', function () {
         // Get tab name from link
         var tab = $(this).data('help');
 
@@ -211,7 +211,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Settings page nav panel toggle
-    $('#embm-settings--navbox-toggle').on('click', function (e) {
+    $('#embm-settings--navbox-toggle').on('click', function () {
         var icon = $(this),
             hidden = (localStorage.embm_hide_settings_nav === 'true'),
             offset = isInternetExplorer() ? '-170px' : '-185px',
@@ -226,7 +226,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Usage page nav panel toggle
-    $('#embm-usage--navbox-toggle').on('click', function (e) {
+    $('#embm-usage--navbox-toggle').on('click', function () {
         var icon = $(this),
             hidden = (localStorage.embm_hide_usage_nav === 'true'),
             offset = isInternetExplorer() ? '-130px' : '-145px',
@@ -258,7 +258,7 @@ jQuery(document).ready(function ($) {
             $('#embm_untappd_rating_opacity').val(ui.value);
             $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(ui.value + '%');
         },
-        create: function (event, ui) {
+        create: function (event) {
             $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(
                 $(this).slider('value') + '%'
             );
@@ -269,7 +269,7 @@ jQuery(document).ready(function ($) {
     $('#embm_untappd_icons').val(embm_settings.options.embm_untappd_icons);
 
     // Toggle icon image on select change
-    $('.embm-settings--untappd-select').on('change', function (e) {
+    $('.embm-settings--untappd-select').on('change', function () {
         var img_src = embm_settings.plugin_url + 'assets/img/checkin-button-' + this.value + '.png';
         $('.embm-settings--untappd-icon').attr('src', img_src);
     });
@@ -294,7 +294,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Donation form
-    $('#embm-settings-footer--donate-select').on('change', function (e) {
+    $('#embm-settings-footer--donate-select').on('change', function () {
         var new_value = $(this).val(),
             amount_input = $('#embm-settings-footer--donate-amount');
 
@@ -335,7 +335,7 @@ jQuery(document).ready(function ($) {
     /* ---- UNTAPPD METABOX ---- */
 
     // Toggle beer selection dropdown
-    $('.embm-metabox--untappd-select select').on('change', function (e) {
+    $('.embm-metabox--untappd-select select').on('change', function () {
         var id_input = $('#embm_untappd'),
             is_reset = (this.value === ''),
             new_value = is_reset ? id_input.data('value') : this.value;
@@ -500,7 +500,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Confirm delete missing checkbox
-    $('#embm-untappd--sync-delete').on('click', function (e) {
+    $('#embm-untappd--sync-delete').on('click', function () {
         if ($(this).is(':checked')) {
             return window.confirm(embm_settings.sync_confirm_rm);
         }
@@ -705,7 +705,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Confirm delete missing checkbox
-    $('#embm-utfb--sync-delete').on('click', function (e) {
+    $('#embm-utfb--sync-delete').on('click', function () {
         if ($(this).is(':checked')) {
             return window.confirm(embm_settings.sync_confirm_utfb_rm);
         }
