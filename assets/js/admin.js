@@ -258,7 +258,7 @@ jQuery(document).ready(function ($) {
             $('#embm_untappd_rating_opacity').val(ui.value);
             $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(ui.value + '%');
         },
-        create: function (event) {
+        create: function () {
             $('#embm-settings--rating-opacity--slider .ui-slider-handle').text(
                 $(this).slider('value') + '%'
             );
